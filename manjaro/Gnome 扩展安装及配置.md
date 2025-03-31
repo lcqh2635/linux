@@ -98,11 +98,10 @@ gsettings set org.gnome.shell.extensions.blur-my-shell.hidetopbar compatibility 
 gsettings set org.gnome.shell.extensions.blur-my-shell.appfolder style-dialogs 2
 gsettings set org.gnome.shell.extensions.blur-my-shell.dash-to-dock style-dash-to-dock 1
 
-
 yay -S --noconfirm gnome-shell-extension-hidetopbar
 gsettings list-recursively org.gnome.shell.extensions.hidetopbar
 gsettings set org.gnome.shell.extensions.hidetopbar mouse-sensitive true
-gsettings set org.gnome.shell.extensions.hidetopbar mouse-sensitive-fullscreen-window false
+gsettings set org.gnome.shell.extensions.hidetopbar mouse-sensitive-fullscreen-window true
 gsettings set org.gnome.shell.extensions.hidetopbar show-in-overview true
 gsettings set org.gnome.shell.extensions.hidetopbar hot-corner false
 gsettings set org.gnome.shell.extensions.hidetopbar mouse-triggers-overview false
@@ -114,9 +113,8 @@ gsettings set org.gnome.shell.extensions.hidetopbar animation-time-overview 0.5
 gsettings set org.gnome.shell.extensions.hidetopbar shortcut-keybind ['<Alt>p']
 gsettings set org.gnome.shell.extensions.hidetopbar shortcut-delay 3.0
 gsettings set org.gnome.shell.extensions.hidetopbar shortcut-toggles true
-gsettings set org.gnome.shell.extensions.hidetopbar enable-intellihide true
+gsettings set org.gnome.shell.extensions.hidetopbar enable-intellihide false
 gsettings set org.gnome.shell.extensions.hidetopbar enable-active-window false
-
 
 yay -S --noconfirm gnome-shell-extension-gtk4-desktop-icons-ng
 gsettings list-recursively org.gnome.shell.extensions.gtk4-ding
