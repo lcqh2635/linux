@@ -125,7 +125,6 @@
        # 安装动态壁纸，壁纸随时间变化
        sudo ./install-gnome-backgrounds.sh
        
-       
        # 列出所有已安装的 Schema
        gsettings list-schemas
        # 列出某个 Schema 下的所有键
@@ -318,8 +317,6 @@
    
 2. **编程语言支持**  
    ```bash
-   yay -S python nodejs npm jdk-openjdk
-   
    # 添加 Rust 下载加速
    echo 'export RUSTUP_DIST_SERVER=https://mirrors.ustc.edu.cn/rust-static' >> ~/.profile
    echo 'export RUSTUP_UPDATE_ROOT=https://mirrors.ustc.edu.cn/rust-static/rustup' >> ~/.profile
