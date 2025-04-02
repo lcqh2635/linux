@@ -313,6 +313,8 @@
    yay -S jetbrains-toolbox visual-studio-code-bin apifox switchhosts tabby
    yay -S vagrant virtualbox
    yay -S docker docker-compose docker-desktop
+   docker --version
+   docker-compose --version
    ```
    
 2. **编程语言支持**  
