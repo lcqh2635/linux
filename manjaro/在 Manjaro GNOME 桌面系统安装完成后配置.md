@@ -110,6 +110,9 @@
        cd $HOME/下载
        git clone https://github.com/vinceliuice/WhiteSur-gtk-theme.git --depth=1
        cd WhiteSur-gtk-theme
+       # 在 WhiteSur-gtk-theme 主题中提到的 “Fix for libadwaita (not perfect)” 是指该主题对基于 libadwaita 的应用程序（如 GNOME 42+ 的默认应用）的视觉兼容性调整，但尚未达到完美适配的状态。
+       ./install.sh -l                # Default is the normal dark theme
+       ./install.sh -l -c light       # install light theme for libadwaita
        # 安装 Firefox 主题
        ./tweaks.sh -f flat
        # 安装 GDM 主题
@@ -159,8 +162,12 @@
        echo 'export QT_QPA_PLATFORMTHEME=gtk3' >> ~/.profile
        echo 'export QT_WAYLAND_DECORATION=whitesur-gtk' >> ~/.profile
        echo 'export GTK_USE_PORTAL=1' >> ~/.profile
+       echo 'export GTK_THEME=WhiteSur-Light' >> ~/.profile
        source ~/.profile
        cat ~/.profile
+       
+       kvantummanager
+       yay -S libadwaita-demos
        ```
    
 2. **GNOME 扩展推荐**  
@@ -225,6 +232,38 @@
        gsettings set org.gnome.shell.extensions.blur-my-shell.hidetopbar compatibility true
        gsettings set org.gnome.shell.extensions.blur-my-shell.appfolder style-dialogs 2
        gsettings set org.gnome.shell.extensions.blur-my-shell.dash-to-dock style-dash-to-dock 1
+       
+       
+       Alphabetical App Grid
+       Bluetooth Quick Connect
+       # 点击标题栏中的铅笔形状的编辑按钮，将 Animaion Type 的值从 Any 改为 Closing Windows 这样就可以关闭窗口打开时的动画效果
+       Burn My Windows
+       Clipboard Indicator
+       Compiz alike magic lamp effect
+       ddterm
+       Just Perfection
+       # yay -S cpio
+       # https://gitlab.gnome.org/Nei/ChineseCalendar/-/archive/20250205/ChineseCalendar-20250205.tar.gz
+       # tar -xzvf ChineseCalendar-20250205.tar.gz
+       # cd ChineseCalendar-20250205
+       # ./install.sh
+       Lunar Calendar 农历
+       Night Theme Switcher
+       Notification Banner Reloaded
+       Quick Settings Tweaks
+       Rounded Corners
+       Rounded Window Corners Reborn
+       Search Light
+       SettingsCenter
+       Top Bar Organizer
+       Tray Icons: Reloaded
+       User Avatar In Quick Settings
+       Window Gestures
+       
+       yay -S cpio
+       
+       
+       logout
        ```
 
 ---
@@ -310,7 +349,15 @@
 1. **基础开发工具**  
    
    ```bash
-   sudo pacman -S git base-devel code
+   sudo pacman -S git base-devel code wl-clipboard
+   git config --global user.name "龙茶清欢"
+   git config --global user.email "2320391937@qq.com"
+   ssh-keygen -t rsa -b 4096 -C "2320391937@qq.com"
+   # 需要安装 wl-clipboard 工具
+   cat ~/.ssh/id_rsa.pub | wl-copy
+   # https://gitee.com/profile/sshkeys
+   # https://github.com/settings/keys
+   
    yay -S jetbrains-toolbox visual-studio-code-bin apifox switchhosts tabby
    yay -S vagrant virtualbox
    yay -S --needed docker docker-compose docker-desktop
