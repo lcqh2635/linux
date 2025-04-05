@@ -87,6 +87,8 @@
      yay -Sc      # 清理未安装的缓存包
      yay -Scc     # 清理所有缓存（包括已安装包的缓存）
      yay -Yc      # 清理不再需要的依赖（类似 pacman -Qdtq）
+     # 清理无用的软件包并清除以下载的软件包缓存
+     yay -Rns $(yay -Qdtq) && yay -Scc
      ```
 
 ---
@@ -110,6 +112,17 @@
        cd $HOME/下载
        git clone https://github.com/vinceliuice/WhiteSur-gtk-theme.git --depth=1
        cd WhiteSur-gtk-theme
+       # 将文件管理 nautilus 的侧边栏透明度调整为不透明
+       # 参考官网issues https://github.com/vinceliuice/WhiteSur-gtk-theme/issues/1127
+       # 可以直接使用 sed 命令精确修改目标文件，无需递归查找。
+       # -i：直接修改文件（原地替换）。
+       # s/旧内容/新内容/g：全局替换。
+       # 使用 \' 转义单引号（因为整个命令用单引号包裹）。
+       # 对 $、. 等特殊字符用 \ 转义。
+       # 直接替换（精确匹配原字符串）
+       sed -i 's/\$opacity: if(\$gnome_version == '\''new'\'', 0\.92, 0\.95);/\$opacity: 1;/g' ~/下载/WhiteSur-gtk-theme/src/sass/_colors.scss
+       # 简化版（匹配任意条件内容）
+       sed -i 's/\$opacity: if([^;]*);/\$opacity: 1;/g' ~/下载/WhiteSur-gtk-theme/src/sass/_colors.scss
        # 在 WhiteSur-gtk-theme 主题中提到的 “Fix for libadwaita (not perfect)” 是指该主题对基于 libadwaita 的应用程序（如 GNOME 42+ 的默认应用）的视觉兼容性调整，但尚未达到完美适配的状态。
        ./install.sh -l                # Default is the normal dark theme
        ./install.sh -l -c light       # install light theme for libadwaita
@@ -194,7 +207,7 @@
        
        # 以下扩展来自 AUR 仓库
        yay -S --noconfirm gnome-shell-extension-blur-my-shell
-       yay -S --noconfirm gnome-shell-extension-hidetopbar
+       yay -S gnome-shell-extension-hidetopbar
        
        # dash-to-dock 插件初始化配置
        gsettings set org.gnome.shell.extensions.dash-to-dock autohide true
@@ -211,19 +224,19 @@
        
        # hide-top-bar 插件初始化配置，参考官网 https://gitlab.gnome.org/tuxor1337/hidetopbar
        gsettings set org.gnome.shell.extensions.hidetopbar mouse-sensitive true
-       gsettings set org.gnome.shell.extensions.hidetopbar mouse-sensitive-fullscreen-window true
-       gsettings set org.gnome.shell.extensions.hidetopbar show-in-overview true
+       gsettings set org.gnome.shell.extensions.hidetopbar mouse-sensitive-fullscreen-window false
+       gsettings set org.gnome.shell.extensions.hidetopbar show-in-overview false
        gsettings set org.gnome.shell.extensions.hidetopbar hot-corner false
        gsettings set org.gnome.shell.extensions.hidetopbar mouse-triggers-overview false
        gsettings set org.gnome.shell.extensions.hidetopbar keep-round-corners false
        gsettings set org.gnome.shell.extensions.hidetopbar pressure-threshold 500
-       gsettings set org.gnome.shell.extensions.hidetopbar pressure-timeout 500
+       gsettings set org.gnome.shell.extensions.hidetopbar pressure-timeout 2000
        gsettings set org.gnome.shell.extensions.hidetopbar animation-time-autohide 0.5
        gsettings set org.gnome.shell.extensions.hidetopbar animation-time-overview 0.5
        gsettings set org.gnome.shell.extensions.hidetopbar shortcut-keybind ['<Alt>p']
        gsettings set org.gnome.shell.extensions.hidetopbar shortcut-delay 3.0
        gsettings set org.gnome.shell.extensions.hidetopbar shortcut-toggles true
-       gsettings set org.gnome.shell.extensions.hidetopbar enable-intellihide true
+       gsettings set org.gnome.shell.extensions.hidetopbar enable-intellihide false
        gsettings set org.gnome.shell.extensions.hidetopbar enable-active-window false
        
        # blur-my-shell 插件初始化配置
@@ -242,8 +255,9 @@
        Compiz alike magic lamp effect
        ddterm
        Just Perfection
+       # 安装 Lunar Calendar 农历 扩展插件需要如下内容
        # yay -S cpio
-       # https://gitlab.gnome.org/Nei/ChineseCalendar/-/archive/20250205/ChineseCalendar-20250205.tar.gz
+       #https://gitlab.gnome.org/Nei/ChineseCalendar/-/archive/20250205/ChineseCalendar-20250205.tar.gz
        # tar -xzvf ChineseCalendar-20250205.tar.gz
        # cd ChineseCalendar-20250205
        # ./install.sh
@@ -259,9 +273,7 @@
        Tray Icons: Reloaded
        User Avatar In Quick Settings
        Window Gestures
-       
-       yay -S cpio
-       
+       VirtualBox applet
        
        logout
        ```
@@ -274,7 +286,7 @@
    yay -S --needed firefox firefox-i18n-zh-cn	# 浏览器          
    yay -S --noconfirm microsoft-edge-stable-bin
    yay -S google-chrome
-   yay -S libreoffice-still-zh-cn		# 办公套件
+   yay -S libreoffice-fresh-zh-cn		# 办公套件
    yay -S clash-verge-rev
    
    # 绑定全局快捷键：在 GNOME 设置 → 键盘 中添加自定义快捷键，命令为 flameshot gui
