@@ -1,0 +1,24 @@
+6c3d8f41b941500911678fa2db22216db19c2089152d1a4dcbfbc431039209b4
+f7ba66f884e45e7f21b2eeebf2f5d4311f30d5883def258f587a5e715e4cd3d7
+重定向地址
+http://localhost:9001/login/oauth2/code/gitee
+
+1、用户点击 gitee 授权登录图标将发送该请求将用户引导到 gitee 授权页面。
+特别注意：出现授权页面的前提是用户必须已经提前登录了 gitee 。如果用户没有提前登录 gitee 则不会直接将用户引导到 gitee 授权登录页面，而是 gitee 的登录页面。
+2、用户点击同意授权后将重定向到上面配置的重定向地址。并在地址上携带上授权码 code。这个授权码 code 就相当于是 gitee 根据已经登录的用户的用户名和密码生成的令牌。该过程相当于常规用户名密码登录过程中的，输入用户名和密码，然后点击登录
+https://gitee.com/oauth/authorize?client_id=6c3d8f41b941500911678fa2db22216db19c2089152d1a4dcbfbc431039209b4&redirect_uri=http://localhost:9001/login/oauth2/code/gitee&response_type=code
+
+bdcaba35a2af430000c02fec7cedf1a9e57eb3e27362527cb3de840c9f601c10	授权码就相当于用户名和密码的作用，且一定是正确的用户名和密码，因为他是根据已经登录的 gitee 用户的用户名和密码生成的
+
+3、当用户点击同意授权后，将使用授权码发送如下格式的 POST 请求，用授权码向 gitee 认证服务器换取 access_token、refresh_token 等信息。这一步就相当于常规登录中的用户认证通过生成 jwt token  过程
+https://gitee.com/oauth/token?grant_type=authorization_code&code={code}&client_id={client_id}&redirect_uri={redirect_uri}&client_secret={client_secret}
+
+当 access_token 过期后（有效期为一天），你可以通过以下 refresh_token 方式重新获取 access_token（ POST请求 ）
+https://gitee.com/oauth/token?grant_type=refresh_token&refresh_token={refresh_token}
+
+4、当用户客户端应用通过上面的请求使用授权码取获到 access_token 等信息后，还需要通过获取的 access_token 发送如下 GET 请求来从 gitee 资源服务器获取用户信息。这一过程相当于常规登录中的用户已经登录后访问受保护资源过程，这一过程中 gitee 资源服务器需要验证 access_token 的有效性。
+https://gitee.com/api/v5/user?access_token={access_token}
+
+f1b54484fc038c5fd646313a5021288d		这是一个 access_token 示例
+
+总结：oauth2 授权登录的过程只不过是 spring security + jwt 实现常规登录的另一种形式，只不过对 spring security + jwt 登录过程中的角色进行了更为细致的划分，从原本的一个服务实现完整流程划分为多个服务完成，但原理和流程是一样的。

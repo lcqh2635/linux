@@ -372,47 +372,6 @@
    
    yay -S jetbrains-toolbox visual-studio-code-bin apifox switchhosts tabby
    yay -S vagrant virtualbox
-   yay -S --needed docker docker-compose docker-desktop
-   docker --version
-   docker-compose --version
-   # 启用并立即启动服务
-   sudo systemctl enable --now docker
-   # 将当前用户加入 docker 组（避免每次用 sudo）
-   sudo usermod -aG docker $USER
-   newgrp docker  # 立即生效（或重新登录）
-   # 检查 Docker 服务是否运行
-   systemctl status docker
-   docker info  # 显示 Docker 系统信息（版本、容器数、镜像数等）
-   docker stats # 实时监控所有运行中容器的资源占用（CPU/内存）
-   sudo systemctl start docker
-   sudo systemctl stop docker
-   sudo systemctl restart docker
-   sudo systemctl enable docker
-   sudo systemctl disable docker
-   # 停止所有容器后再停止服务（谨慎操作）
-   docker stop $(docker ps -aq)  # 停止所有容器
-   sudo systemctl stop docker    # 再停止 Docker 服务
-   # 如果文件不存在或不需要保留原有配置，直接覆盖写入（推荐）
-   sudo bash -c 'mkdir -p /etc/docker && cat > /etc/docker/daemon.json <<EOF
-   {
-     "registry-mirrors": [
-       "https://docker.1ms.run",
-       "https://registry.cn-hangzhou.aliyuncs.com",
-       "https://docker.mirrors.ustc.edu.cn",
-       "https://hub-mirror.c.163.com"
-     ]
-   }
-   EOF'
-   cat /etc/docker/daemon.json
-   sudo systemctl restart docker
-   
-   # docker-desktop 登录需要，参考官网 https://docs.docker.com/desktop/setup/sign-in/
-   # 真实名称：龙茶清欢
-   # 邮箱地址: 2320391937@qq.com
-   # 输入密码：@lf20180205049
-   gpg --generate-key
-   pass init A8779853B05CA8CC67DE9FE25D7F65C7C84A6F9E
-   cat ~/.password-store/.gpg-id
    ```
    
 2. **编程语言支持**  
@@ -517,11 +476,42 @@
    
    # 安装数据库
    yay -S mariadb postgresql redis chat2db-bin
+   yay -S --needed docker docker-compose
+   docker --version
+   docker-compose --version
+   # 启用并立即启动服务
+   sudo systemctl enable --now docker
+   # 将当前用户加入 docker 组（避免每次用 sudo）
+   sudo usermod -aG docker $USER
+   newgrp docker  # 立即生效（或重新登录）
+   # 检查 Docker 服务是否运行
+   systemctl status docker
+   docker info  # 显示 Docker 系统信息（版本、容器数、镜像数等）
+   docker stats # 实时监控所有运行中容器的资源占用（CPU/内存）
+   sudo systemctl start docker
+   sudo systemctl stop docker
+   sudo systemctl restart docker
+   sudo systemctl enable docker
+   sudo systemctl disable docker
+   # 停止所有容器后再停止服务（谨慎操作）
+   docker stop $(docker ps -aq)  # 停止所有容器
+   sudo systemctl stop docker    # 再停止 Docker 服务
+   # 如果文件不存在或不需要保留原有配置，直接覆盖写入（推荐）
+   sudo bash -c 'mkdir -p /etc/docker && cat > /etc/docker/daemon.json <<EOF
+   {
+     "registry-mirrors": [
+       "https://docker.1ms.run",
+       "https://registry.cn-hangzhou.aliyuncs.com",
+       "https://docker.mirrors.ustc.edu.cn",
+       "https://hub-mirror.c.163.com"
+     ]
+   }
+   EOF'
+   cat /etc/docker/daemon.json
+   sudo systemctl restart docker
+   
    nvm install lts/hydrogen
    nvm use lts/hydrogen
-   
-   nvm install lts/jod
-   nvm use lts/jod
    ```
 
 ---
