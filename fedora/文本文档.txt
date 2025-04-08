@@ -1,1 +1,88 @@
-﻿
+sudo flatpak override --filesystem=xdg-config/gtk-3.0
+
+sudo flatpak override --filesystem=xdg-config/gtk-4.0
+
+
+
+https://itsfoss.com/flatpak-app-apply-theme/
+参考 https://docs.flatpak.org/zh-cn/latest/desktop-integration.html
+
+
+
+官网 https://github.com/FengZhongShaoNian/QWhiteSurGtkDecorations
+
+export QT_QPA_PLATFORM=wayland
+
+export QT_WAYLAND_DECORATION=whitesur-gtk
+
+export QT_STYLE_OVERRIDE=kvantum
+
+```
+sudo dnf install -y git cmake gtk3-devel gtk4-devel
+sudo dnf install -y qt5-qtbase-devel qt5-qttools-devel qt5-qtwayland qt6-qtwayland
+sudo dnf install qt5-qtsvg-devel
+sudo dnf install qt5-qtwayland-devel
+sudo dnf install cmake make qt5-qtsvg qt5-qtwayland qt6-qtsvg qt6-qtwayland
+
+git clone https://github.com/nedrysoft/ThemeSupport.git
+cd ThemeSupport
+mkdir build && cd build
+cmake -DCMAKE_PREFIX_PATH=/usr/lib64/cmake ..
+
+
+
+
+
+https://aur.archlinux.org/packages/qwhitesurgtkdecorations-qt6
+
+cd ~/下载
+git clone https://github.com/FengZhongShaoNian/QWhiteSurGtkDecorations.git
+cd QWhiteSurGtkDecorations
+
+# 编译安装
+mkdir build && cd build
+sudo find /usr -name "Qt5SvgConfig.cmake"
+sudo find /usr -name "Qt5WaylandClientConfig.cmake"
+cmake -DCMAKE_PREFIX_PATH=/usr/lib64/cmake ..
+make
+sudo make install
+```
+
+
+
+flatpak remote-ls --columns=application flathub | grep org.kde.KStyle
+flatpak install flathub org.kde.KStyle.Kvantum
+
+sudo flatpak override --filesystem=$HOME/.themes
+sudo flatpak override --filesystem=$HOME/.icons
+sudo flatpak override --env=GTK_THEME=my-theme
+sudo flatpak override --env=ICON_THEME=my-icon-theme
+
+sudo flatpak override org.gnome.Calculator --filesystem=$HOME/.themes
+sudo flatpak override org.gnome.Calculator --filesystem=$HOME/.icons
+sudo flatpak override org.gnome.Calculator --env=GTK_THEME=my-theme 
+sudo flatpak override org.gnome.Calculator --env=ICON_THEME=my-icon-theme 
+
+flatpak install org.kde.KStyle.Kvantum
+sudo flatpak override --env=QT_STYLE_OVERRIDE=kvantum --filesystem=xdg-config/Kvantum:ro <name of flatpak app>
+sudo flatpak override --reset
+
+sudo flatpak override --show
+
+# 列出所有已安装的 Flatpak 应用和运行时
+flatpak list
+# 查看应用使用的运行时等信息
+flatpak list --app
+
+sudo flatpak override --reset org.example.app
+
+
+# 参考 https://docs.flatpak.org/zh-cn/latest/desktop-integration.html#theming
+On Wayland, starting from the 5.15-22.08+ and 6.5+ branches of the org.kde.Platform runtime, org.kde.WaylandDecoration.QAdwaitaDecorations and org.kde.WaylandDecoration.QGnomePlatform-decoration need to be installed. Please see the upstream usage instructions as well.
+
+For older runtimes, org.kde.PlatformTheme.QGnomePlatform and org.kde.WaylandDecoration.QGnomePlatform-decoration need to be installed.
+
+org.kde.Platform runtime
+org.kde.WaylandDecoration.QAdwaitaDecorations
+org.kde.WaylandDecoration.QGnomePlatform-decoration
+org.kde.PlatformTheme.QGnomePlatform

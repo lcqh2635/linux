@@ -37,6 +37,9 @@ echo "
 # GitHub Start
 20.27.177.113    github.com
 185.199.108.133    raw.githubusercontent.com
+
+103.200.30.143    archive.org
+
 # GitHub End
 " | sudo tee -a /etc/hosts
 # 简化版（匹配任意条件内容）
@@ -46,6 +49,12 @@ sudo sed -i 's/^[0-9]\+\.[0-9]\+\.[0-9]\+\.[0-9]\+\([[:space:]]\+raw\.githubuser
 # 验证
 grep 'github.com' /etc/hosts
 grep 'raw.githubusercontent.com' /etc/hosts
+
+echo "103.200.30.143    archive.org" | sudo tee -a /etc/hosts
+
+cat /etc/hosts | grep archive.org  # 检查是否添加成功
+ping archive.org                  # 测试域名解析是否指向目标 IP
+
 # 检查是否解析为新IP
 ping github.com
 ping raw.githubusercontent.com
@@ -75,6 +84,7 @@ sudo flatpak override --filesystem=xdg-config/gtk-3.0
 sudo flatpak override --filesystem=xdg-config/gtk-4.0
 sudo flatpak override --filesystem=/usr/share/themes  # 系统主题目录
 sudo flatpak override --filesystem=~/.themes          # 用户主题目录（如果有自定义主题）
+
 # 列出所有应用，获取 <应用ID>
 flatpak list --app
 flatpak override org.videolan.VLC --filesystem=xdg-config/gtk-3.0
@@ -89,10 +99,21 @@ git clone https://github.com/vinceliuice/WhiteSur-cursors.git --depth=1
 git clone https://github.com/vinceliuice/WhiteSur-wallpapers.git --depth=1
 sudo ./install-gnome-backgrounds.sh
 
-# 安装 qt5ct（Qt 主题配置工具）
-sudo dnf install qt5ct
+# 安装 kvantum（Qt 主题配置工具）
+sudo dnf install kvantum
+
+kvantum 主题存放在 ~/.config/Kvantum/
+
+ls ~/.config/Kvantum/  # 查看用户主题，我么安装的就在这里面
+ls /usr/share/Kvantum/ # 查看系统主题
+
+nautilus admin:/usr/share/Kvantum/
+
+git clone https://github.com/vinceliuice/WhiteSur-kde.git --depth=1
+./install.sh -w opaque
+
 # 设置环境变量
-echo 'export QT_QPA_PLATFORMTHEME=qt5ct' >> ~/.bashrc
+echo 'export QT_STYLE_OVERRIDE=kvantum' >> ~/.bashrc
 source ~/.bashrc
 sudo flatpak override --filesystem=$HOME/.themes
 sudo flatpak override --filesystem=$HOME/.local/share/icons
@@ -100,17 +121,18 @@ ls $HOME/.themes
 ls $HOME/.local/share/icons
 sudo flatpak override --env=GTK_THEME=WhiteSur-Dark
 sudo flatpak override --env=ICON_THEME=WhiteSur-Dark
+
 # 对于单个应用程序
 sudo flatpak override org.fedoraproject.MediaWriter --env=GTK_THEME=WhiteSur-Dark
 sudo flatpak override org.fedoraproject.MediaWriter --env=ICON_THEME=WhiteSur-Dark
-# 对所有 Flatpak 应用生效
-flatpak override --user --env=QT_QPA_PLATFORMTHEME=gtk2
+
 # 若需更深度适配（如 Kvantum）
 flatpak override --user --env=QT_STYLE_OVERRIDE=kvantum
 # 允许读写取系统主题，默认权限为 读写（Read-Write），应用可以读取和修改目录中的文件。
 # ro 表示 只读（Read-Only）。它的作用是限制 Flatpak 应用对指定目录的访问权限，仅允许 读取 文件，而 禁止写入或修改。
 flatpak override --user --filesystem=/usr/share/themes:ro
 flatpak override --user --filesystem=~/.themes:ro  # 若使用用户级主题
+
 # 指定主题名称（如 WhiteSur-Light）
 flatpak override --user --env=GTK_THEME=WhiteSur-Light
 # 例如强制 Media Writer 使用 GTK 主题
@@ -151,6 +173,9 @@ gsettings set org.gnome.desktop.interface icon-theme 'WhiteSur-light'
 gsettings set org.gnome.shell.extensions.user-theme name 'WhiteSur-Light'
 gsettings set org.gnome.desktop.interface gtk-theme 'WhiteSur-Light'
 gsettings set org.gnome.desktop.wm.preferences theme 'WhiteSur-Light'
+
+gsettings set org.gnome.desktop.background picture-uri 'file:///usr/share/backgrounds/WhiteSur/WhiteSur-timed.xml'
+gsettings get org.gnome.desktop.background picture-uri
 
 
 # 安装配置系统字体
@@ -243,6 +268,8 @@ sudo dnf install fastfetch.x86_64
 fastfetch
 # 自定义 GNOME 的方方面面，类似 gnome-tweaks
 flatpak install flathub page.tesk.Refine -y
+
+flatpak install flathub io.github.realmazharhussain.GdmSettings -y
 
 flatpak install flathub io.typora.Typora -y
 flatpak install flathub md.obsidian.Obsidian -y
