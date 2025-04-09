@@ -13,16 +13,28 @@ https://itsfoss.com/flatpak-app-apply-theme/
 
 export QT_QPA_PLATFORM=wayland
 
+export QT_WAYLAND_DECORATION=adwaita
+
 export QT_WAYLAND_DECORATION=whitesur-gtk
 
 export QT_STYLE_OVERRIDE=kvantum
 
-```
+source ~/.bashrc
+
+```bash
 sudo dnf install -y git cmake gtk3-devel gtk4-devel
 sudo dnf install -y qt5-qtbase-devel qt5-qttools-devel qt5-qtwayland qt6-qtwayland
 sudo dnf install qt5-qtsvg-devel
 sudo dnf install qt5-qtwayland-devel
 sudo dnf install cmake make qt5-qtsvg qt5-qtwayland qt6-qtsvg qt6-qtwayland
+
+
+git clone https://github.com/nedrysoft/SettingsDialog.git
+cd SettingsDialog
+mkdir build && cd build
+cmake ..
+make
+sudo make install
 
 git clone https://github.com/nedrysoft/ThemeSupport.git
 cd ThemeSupport
@@ -30,15 +42,22 @@ mkdir build && cd build
 cmake -DCMAKE_PREFIX_PATH=/usr/lib64/cmake ..
 
 
-
+sudo dnf install -y qt5-designer.x86_64
 
 
 https://aur.archlinux.org/packages/qwhitesurgtkdecorations-qt6
 
+# QWhiteSurGtkDecorations 基于 QAdwaitaDecorations 改造而来
+sudo dnf install -y qadwaitadecorations-qt5 qadwaitadecorations-qt6
+# 但是仓库中没有 qwhitesurgtkdecorations-qt5 qwhitesurgtkdecorations-qt6
+sudo dnf install -y qwhitesurgtkdecorations-qt5 qwhitesurgtkdecorations-qt6
+git clone https://aur.archlinux.org/qwhitesurgtkdecorations.git
+
+
+
 cd ~/下载
 git clone https://github.com/FengZhongShaoNian/QWhiteSurGtkDecorations.git
 cd QWhiteSurGtkDecorations
-
 # 编译安装
 mkdir build && cd build
 sudo find /usr -name "Qt5SvgConfig.cmake"
@@ -46,6 +65,13 @@ sudo find /usr -name "Qt5WaylandClientConfig.cmake"
 cmake -DCMAKE_PREFIX_PATH=/usr/lib64/cmake ..
 make
 sudo make install
+
+# 清理并重新生成构建目录
+rm -rf build/
+mkdir build
+cd build
+cmake ..
+make
 ```
 
 

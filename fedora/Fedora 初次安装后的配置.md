@@ -33,6 +33,11 @@
    
 3. **安装多媒体编解码器**  
    ```bash
+   # 作为 Fedora 用户和系统管理员，您可以使用这些步骤来安装额外的多媒体插件，使您能够播放各种视频和音频类型。参考 https://docs.fedoraproject.org/zh_Hans/quick-docs/installing-plugins-for-playing-movies-and-music/
+   sudo dnf group install multimedia
+   
+   sudo dnf install gstreamer1-plugin-openh264 mozilla-openh264
+   
    sudo dnf install \
    ffmpeg \                    # 通用音视频处理框架（支持多种格式）
    gstreamer1-plugins-bad-* \  # "Bad"插件集（非自由/实验性编解码器，如MPEG-2、DTS）
@@ -63,10 +68,11 @@
 
 ### **三、软件管理**
 1. **启用 Flathub 软件仓库**  
+   
    ```bash
    flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
    ```
-
+   
 2. **安装常用工具**  
    ```bash
    sudo dnf install \
@@ -75,9 +81,114 @@
    unzip p7zip \           # 压缩工具
    timeshift \             # 系统备份工具
    gnome-shell-extension-appindicator  # 托盘图标支持
+   
+   sudo dnf install google-chrome-stable.x86_64
+   sudo dnf install libreoffice-langpack-zh-Hans.x86_64
+   sudo dnf install evolution.x86_64 obs-studio.x86_64
+   # evolution配置qq邮箱授权码： embwnsuwkdjrebge
+   sudo dnf install fastfetch.x86_64
+   fastfetch
+   
+   sudo dnf install vagrant VirtualBox virtualbox-guest-additions
+   
+   
+   # 安装常用 Flathub 软件
+   # 自定义 GNOME 的方方面面，类似 gnome-tweaks
+   flatpak install flathub page.tesk.Refine -y
+   # GDM 设置
+   flatpak install flathub io.github.realmazharhussain.GdmSettings -y
+   flatpak install flathub org.gnome.Evolution -y
+   flatpak install flathub io.typora.Typora -y
+   flatpak install flathub md.obsidian.Obsidian -y
+   flatpak install flathub com.qq.QQ -y
+   flatpak install flathub com.tencent.WeChat -y
+   flatpak install flathub com.tencent.wemeet -y
+   flatpak install flathub com.baidu.NetDisk -y
+   flatpak install flathub io.github.qier222.YesPlayMusic -y
+   flatpak install flathub com.microsoft.Edge -y
+   flatpak install flathub com.google.Chrome -y
+   flatpak install flathub org.videolan.VLC -y
+   # 管理 Flatpak 权限
+   flatpak install flathub com.github.tchx84.Flatseal -y
+   # 管理 Flatpak 的所有内容
+   flatpak install flathub io.github.flattool.Warehouse -y
+   # 管理 AppImages 应用
+   flatpak install flathub it.mijorus.gearlever -y
+   # 使用 Linux 设备作为第二屏幕
+   flatpak install flathub eu.nokun.MirrorHall -y
+   # Telegram
+   flatpak install flathub org.telegram.desktop -y
+   # 翻译
+   flatpak install flathub app.drey.Dialect -y
+   # 办公软件
+   flatpak install flathub org.libreoffice.LibreOffice -y
+   # RustDesk
+   flatpak install flathub com.rustdesk.RustDesk -y
+   # 制作 ISO 系统启动盘
+   # Fedora 启动盘写入工具t
+   flatpak install flathub org.fedoraproject.MediaWriter -y
+   flatpak install flathub com.system76.Popsicle -y
+   flatpak install flathub io.gitlab.adhami3310.Impression -y
+   # 快捷、安全的文件传输工具
+   flatpak install flathub app.drey.Warp -y
+   # 下载、使用且能自适应的 GTK 应用程序字体
+   flatpak install flathub org.gustavoperedo.FontDownloader -y
+   # 管理您的密码和密钥t
+   flatpak install flathub org.gnome.seahorse.Application -y
+   # 用于编辑 dconf 数据库的图形化工具
+   flatpak install flathub ca.desrt.dconf-editor -y
+   # 对应用程序和库进行翻译和本地化，它能处理所有形式的 gettext po 文件
+   flatpak install flathub org.gnome.Gtranslator -y
+   # 保护您的数据安全、数据备份
+   flatpak install flathub org.gnome.World.PikaBackup -y
+   # 在设备上安装固件管理
+   flatpak install flathub org.gnome.Firmware -y
+   # 种子下载器
+   flatpak install flathub com.transmissionbt.Transmission -y
+   # 保存您的桌面环境配置
+   flatpak install flathub io.github.vikdevelop.SaveDesktop -y
+   # Podman 虚拟容器化管理器，需要本地安装 Podman 或者提供远程连接地址
+   flatpak install flathub com.github.marhkb.Pods -y
+   # 一个系统 systemd 服务管理器
+   flatpak install flathub io.github.plrigaux.sysd-manager -y
+   # VPN 软件
+   flatpak install flathub com.protonvpn.www -y
+   flatpak install flathub io.github.Fndroid.clash_for_windows -y
+   
+   
+   # 开发常用软件
+   flatpak install flathub com.jetbrains.IntelliJ-IDEA-Ultimate -y
+   flatpak install flathub com.visualstudio.code -y
+   flatpak install flathub cn.apipost.apipost -y
+   # 触手可及的开发工具箱
+   flatpak install flathub me.iepure.devtoolbox -y
+   # 下载 jetbrains-toolbox
+   https://www.jetbrains.com/zh-cn/toolbox-app/download/download-thanks.html?platform=linux
+   
+   
+   
+   # 一键安装 Watt Toolkit 软件脚本，参考 https://steampp.net/
+   # 安装后还需要额外处理一些问题 https://steampp.net/liunxSetupCer
+   curl -sSL https://steampp.net/Install/Linux.sh | bash
+   # 处理 Watt Toolkit 程序没有 Host 文件权限
+   sudo chmod a+w /etc/hosts
+   # 在网络加速中点击 加速设置 然后点击 安装证书
+   # 在设置中将 背景不透明度 调到最高，禁用背景透明效果
+   
+   # 火狐浏览器导入 Watt Toolkit 证书
+   # 打开 设置 - 隐私与安全 - 安全 - 证书 - 查看证书。
+   # 选择 证书颁发机构 然后点击导入
+   # 证书地址为 /home/lcqh/.local/share/Steam++/Plugins/Accelerator/SteamTools.Certificate.cer
+   # 勾选 信任由此证书颁发机构来标识网站
+   
+   # Google浏览器导入 Watt Toolkit 证书
+   # 打开 设置 - 隐私与安全 - 安全 - 管理证书
+   # 本地证书 - 自定义 - 可信证书 - 导入
+   # 证书地址为 /home/lcqh/.local/share/Steam++/Plugins/Accelerator/SteamTools.Certificate.cer
    ```
-
+   
 3. **推荐通过 Flatpak 安装的软件**  
+   
    ```bash
    flatpak install flathub \
    com.spotify.Client \    # 音乐

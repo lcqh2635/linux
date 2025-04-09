@@ -2,7 +2,12 @@ Fedora Workstation 主要使用 **`dnf`**（新一代 RPM 包管理器）和 **`
 
 ---
 
+Fedora 使用手册 https://docs.fedoraproject.org/zh_Hans/quick-docs/autoupdates/
+
+
+
 # 添加中科大 Fedora 镜像源，参考 https://mirrors.ustc.edu.cn/help/fedora.html
+
 sudo sed -e 's|^metalink=|#metalink=|g' \
          -e 's|^#baseurl=http://download.example/pub/fedora/linux|baseurl=https://mirrors.ustc.edu.cn/fedora|g' \
          -i.bak \
@@ -347,8 +352,25 @@ flatpak install flathub dev.geopjr.Calligraphy -y
 flatpak install flathub com.protonvpn.www -y
 # Clash's graphical client, based on Electron.
 flatpak install flathub io.github.Fndroid.clash_for_windows -y
+
+# 安装 Steam
+
+```
+sudo dnf install -y steam-devices
+```
+
+flatpak install flathub com.valvesoftware.Steam -y
+
 # Give Steam the Adwaita treatment
 flatpak install flathub io.github.Foldex.AdwSteamGtk -y
+
+音乐软件
+
+flatpak install flathub com.spotify.Client -y
+
+
+
+
 
 # Flaypak 中 KDE 应用 https://flathub.org/zh-Hans/apps/collection/developer/KDE/1
 # Flaypak 中 Gnome 应用 https://flathub.org/zh-Hans/apps/collection/developer/The%20GNOME%20Project/1
