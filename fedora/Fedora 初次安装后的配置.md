@@ -20,18 +20,50 @@
             -i.bak \
             /etc/yum.repos.d/fedora.repo \
             /etc/yum.repos.d/fedora-updates.repo
-   
-   
    # 最后运行 sudo dnf makecache 生成缓存
    sudo dnf makecache
    # 添加中科大 Flatpak 镜像源，参考 https://mirrors.ustc.edu.cn/help/flathub.html
    sudo flatpak remote-modify flathub --url=https://mirrors.ustc.edu.cn/flathub
    # 恢复默认值
    sudo flatpak remote-modify flathub --url=https://dl.flathub.org/repo
-   # 
+   
+   # 网站国内可用 DNS 测试 ping https://ping.chinaz.com/www.youtube.com
+   # 配置Github访问加速
+   echo "
+   # GitHub Start
+   20.27.177.113    github.com
+   185.199.108.133    raw.githubusercontent.com
+   103.200.30.143    archive.org
+   # GitHub End
+   " | sudo tee -a /etc/hosts
+   # 简化版（匹配任意条件内容）
+   # 修改（将 20.27.177.113 替换为 192.168.1.100）
+   sudo sed -i 's/^[0-9]\+\.[0-9]\+\.[0-9]\+\.[0-9]\+\([[:space:]]\+github\.com\)/20.205.243.166\1/' /etc/hosts
+   sudo sed -i 's/^[0-9]\+\.[0-9]\+\.[0-9]\+\.[0-9]\+\([[:space:]]\+raw\.githubusercontent\.com\)/185.199.111.133\1/' /etc/hosts
+   # 验证是否添加成功
+   grep 'github.com' /etc/hosts
+   grep 'raw.githubusercontent.com' /etc/hosts
+   # 检查是否解析为新IP
+   ping github.com
+   ping raw.githubusercontent.com
+   cat /etc/hosts
+   nautilus admin:/etc/hosts
+   
+   # 安装基础依赖包 https://v2.tauri.app/zh-cn/start/prerequisites/#linux
+   sudo dnf install -y git wl-clipboard
+   git config --global user.name "龙茶清欢"
+   git config --global user.email "2320391937@qq.com"
+   ssh-keygen -t rsa -b 4096 -C "2320391937@qq.com"
+   # 需要安装 wl-clipboard 工具
+   cat ~/.ssh/id_rsa.pub | wl-copy
+   # https://gitee.com/profile/sshkeys
+   # https://github.com/settings/keys
    ```
    
-3. **安装多媒体编解码器**  
+3. 配置
+
+4. **安装多媒体编解码器**  
+
    ```bash
    # 作为 Fedora 用户和系统管理员，您可以使用这些步骤来安装额外的多媒体插件，使您能够播放各种视频和音频类型。参考 https://docs.fedoraproject.org/zh_Hans/quick-docs/installing-plugins-for-playing-movies-and-music/
    sudo dnf group install multimedia
@@ -76,11 +108,11 @@
 2. **安装常用工具**  
    ```bash
    sudo dnf install \
-   gnome-tweaks \          # Gnome 优化工具
-   vlc \                   # 视频播放器
-   unzip p7zip \           # 压缩工具
-   timeshift \             # 系统备份工具
-   gnome-shell-extension-appindicator  # 托盘图标支持
+   gnome-tweaks \          
+   vlc \                   
+   unzip p7zip \           
+   timeshift \            
+   gnome-shell-extension-appindicator
    
    sudo dnf install google-chrome-stable.x86_64
    sudo dnf install libreoffice-langpack-zh-Hans.x86_64
@@ -112,6 +144,8 @@
    flatpak install flathub com.github.tchx84.Flatseal -y
    # 管理 Flatpak 的所有内容
    flatpak install flathub io.github.flattool.Warehouse -y
+   # Flatpak残留清理器
+   flatpak install flathub io.github.giantpinkrobots.flatsweep -y
    # 管理 AppImages 应用
    flatpak install flathub it.mijorus.gearlever -y
    # 使用 Linux 设备作为第二屏幕
@@ -122,6 +156,7 @@
    flatpak install flathub app.drey.Dialect -y
    # 办公软件
    flatpak install flathub org.libreoffice.LibreOffice -y
+   flatpak install flathub com.wps.Office -y
    # RustDesk
    flatpak install flathub com.rustdesk.RustDesk -y
    # 制作 ISO 系统启动盘
@@ -133,8 +168,9 @@
    flatpak install flathub app.drey.Warp -y
    # 下载、使用且能自适应的 GTK 应用程序字体
    flatpak install flathub org.gustavoperedo.FontDownloader -y
-   # 管理您的密码和密钥t
+   # 管理您的密码和密钥
    flatpak install flathub org.gnome.seahorse.Application -y
+   flatpak install flathub com.bitwarden.desktop -y
    # 用于编辑 dconf 数据库的图形化工具
    flatpak install flathub ca.desrt.dconf-editor -y
    # 对应用程序和库进行翻译和本地化，它能处理所有形式的 gettext po 文件
@@ -149,22 +185,33 @@
    flatpak install flathub io.github.vikdevelop.SaveDesktop -y
    # Podman 虚拟容器化管理器，需要本地安装 Podman 或者提供远程连接地址
    flatpak install flathub com.github.marhkb.Pods -y
+   flatpak install flathub io.podman_desktop.PodmanDesktop -y
    # 一个系统 systemd 服务管理器
    flatpak install flathub io.github.plrigaux.sysd-manager -y
    # VPN 软件
    flatpak install flathub com.protonvpn.www -y
    flatpak install flathub io.github.Fndroid.clash_for_windows -y
-   
+   # 用于运行 Windows 游戏的软件
+   flatpak install flathub ru.linux_gaming.PortProton -y
+   # Lutris 可帮您安装和运行大多数平台上几乎所有时代的电子游戏。通过对现有的模拟器、兼容层、第三方游戏引擎等进行整合利用，Lutris 可为您提供一个统一的界面来启动您的所有游戏。
+   flatpak install flathub net.lutris.Lutris -y
+   # 创建图像或编辑照片
+   flatpak install flathub org.gimp.GIMP -y
+   # 保持专注,浏览更快。zen是浏览网之妙法. 设计精美,注重隐私,并装有特色. 我们关心你的经验 而不是你的数据.
+   flatpak install flathub app.zen_browser.zen -y
+   flatpak install flathub org.flameshot.Flameshot -y
    
    # 开发常用软件
    flatpak install flathub com.jetbrains.IntelliJ-IDEA-Ultimate -y
+   flatpak install flathub com.google.AndroidStudio -y
+   flatpak install flathub dev.zed.Zed -y
+   flatpak install flathub io.github.shiftey.Desktop -y
    flatpak install flathub com.visualstudio.code -y
    flatpak install flathub cn.apipost.apipost -y
    # 触手可及的开发工具箱
    flatpak install flathub me.iepure.devtoolbox -y
    # 下载 jetbrains-toolbox
    https://www.jetbrains.com/zh-cn/toolbox-app/download/download-thanks.html?platform=linux
-   
    
    
    # 一键安装 Watt Toolkit 软件脚本，参考 https://steampp.net/
@@ -204,8 +251,10 @@
    ```bash
    sudo dnf groupinstall "Development Tools"
    sudo dnf install git python3 nodejs java-latest-openjdk
+   
+   
    ```
-
+   
 2. **Docker 安装**  
    ```bash
    sudo dnf install dnf-plugins-core
@@ -220,31 +269,62 @@
 ### **五、系统优化与美化**
 1. **Gnome 扩展管理**  
    - 浏览器安装插件 [GNOME Shell Integration](https://extensions.gnome.org/)
-   - 安装扩展管理器：  
+   - 安装优化和扩展：  
      ```bash
-     sudo dnf install gnome-extensions-app
+     sudo dnf install -y gnome-tweaks gnome-extensions-app
+     
+     
      ```
-
+   
 2. **主题与图标**  
    - 下载主题（如 [Arc](https://github.com/NicoHood/arc-theme)）：  
      ```bash
      sudo dnf install arc-theme
+     
+     yaru-gtk4-theme.noarch
+     yaru-gtksourceview-theme.noarch
+     yaru-icon-theme.noarch
+     yaru-sound-theme.noarch
+     
      ```
+     
    - 图标包（如 [Papirus](https://github.com/PapirusDevelopmentTeam/papirus-icon-theme)）：  
      ```bash
      sudo dnf install papirus-icon-theme
+     
      ```
+     
    - 在 `Gnome Tweaks` 中启用主题和图标。
+   
+     ```bash
+     
+     ```
 
 ---
 
 ### **六、安全与网络**
 1. **防火墙配置**  
    ```bash
-   sudo firewall-cmd --permanent --add-service=http  # 开放 HTTP 端口
+   # Fedora Workstation 默认已启用 firewalld（动态防火墙守护进程），无需额外安装防火墙，但可能需要根据需求调整配置。
+   
+   # 检查状态
+   sudo firewall-cmd --state  # 查看是否运行
+   sudo firewall-cmd --list-all  # 查看当前规则
+   # 启用/禁用
+   sudo systemctl enable --now firewalld  # 启用并立即启动
+   sudo systemctl disable --now firewalld  # 禁用（不推荐）
+   # 开放端口（例如 HTTP）
+   sudo firewall-cmd --add-service=http --permanent  # 永久允许 HTTP
+   sudo firewall-cmd --add-port=8080/tcp --permanent # 或直接指定端口
+   sudo firewall-cmd --reload  # 重载配置
+   # 阻止端口
+   sudo firewall-cmd --remove-service=ssh --permanent  # 阻止 SSH
    sudo firewall-cmd --reload
+   # 图形化工具
+   sudo dnf install firewall-config  # 安装图形界面
+   firewall-config  # 运行（需 root 权限）
    ```
-
+   
 2. **SSH 服务**  
    ```bash
    sudo dnf install openssh-server
