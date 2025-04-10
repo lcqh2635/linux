@@ -6,6 +6,14 @@
 1. **更新系统**  
    ```bash
    sudo dnf update -y && sudo dnf upgrade -y
+   
+   # 使用 Gnome 软件升级到预发布版本
+   gsettings set org.gnome.software show-upgrade-prerelease true
+   # 升级完成后，强烈建议禁用该功能，这样您就不会收到不需要的未来预发布版。
+   gsettings set org.gnome.software show-upgrade-prerelease false
+   
+   # 从预发布版（beta）升级到最终公开版（stable）
+   如果您使用的是 Fedora Linux 的预发行版，则无需执行任何操作来获取最终的公开发行版，只需在软件包可用时对其进行更新即可。您可以使用 sudo dnf upgrade 或等待桌面通知。当预发布版本作为最终版本发布时，fedora-repos 软件包将被更新，并且您的 updates-testing 仓库将被禁用。一旦发生这种情况（在发布当天），强烈建议运行 sudo dnf distro-sync，以便使软件包版本与当前版本保持一致。
    ```
    
 2. **启用 RPM Fusion 仓库**（提供非自由软件支持）  
@@ -68,7 +76,19 @@
    # 作为 Fedora 用户和系统管理员，您可以使用这些步骤来安装额外的多媒体插件，使您能够播放各种视频和音频类型。参考 https://docs.fedoraproject.org/zh_Hans/quick-docs/installing-plugins-for-playing-movies-and-music/
    sudo dnf group install multimedia
    
-   sudo dnf install gstreamer1-plugin-openh264 mozilla-openh264
+   dnf list installed
+   sudo dnf install gnome-terminal
+   sudo dnf install dnf-plugins-core
+   # 参考 https://docs.fedoraproject.org/zh_CN/quick-docs/openh264/#_firefox_config_changes
+   sudo dnf install gstreamer1-plugin-openh264 mozilla-openh264 mozilla-ublock-origin
+   # 配置 Firefox
+   在 Firefox 地址栏中键入 about:config 并接受警告。
+   在搜索字段中，输入 264，将出现一些选项。通过双击 false，为以下 Preference Names 指定 true 值：
+   media.gmp-gmpopenh264.autoupdate
+   media.gmp-gmpopenh264.enabled
+   media.gmp-gmpopenh264.provider.enabled
+   media.peerconnection.video.h264_enabled
+   
    
    sudo dnf install \
    ffmpeg \                    # 通用音视频处理框架（支持多种格式）
@@ -107,12 +127,13 @@
    
 2. **安装常用工具**  
    ```bash
-   sudo dnf install \
+   sudo dnf install -y \                 
+   git unzip p7zip \   
    gnome-tweaks \          
-   vlc \                   
-   unzip p7zip \           
-   timeshift \            
-   gnome-shell-extension-appindicator
+   gnome-extensions-app \ 
+   timeshift \ 
+   
+   
    
    sudo dnf install google-chrome-stable
    sudo dnf install libreoffice-langpack-zh-Hans
@@ -202,6 +223,8 @@
    # 创建图像或编辑照片
    flatpak install flathub org.gimp.GIMP -y
    flatpak install flathub com.wps.Office -y
+   flatpak install flathub com.valvesoftware.Steam -y
+   flatpak install flathub io.github.Foldex.AdwSteamGtk -y
    
    
    # 开发常用软件
@@ -303,17 +326,22 @@
    
    # Waydroid 基于 Linux 容器（LXC）运行完整的 Android 系统，性能接近原生。
    # 与主机 Fedora 共享内核但隔离用户空间，类似 Docker。
-   # 启用 Waydroid 仓库：
-   sudo dnf copr enable aleasto/waydroid
-   sudo dnf install waydroid
+   sudo dnf install -y waydroid
+   System OTA	https://ota.waydro.id/system
+   Vendor OTA	https://ota.waydro.id/vendor
+   VANILLA	纯净版 Android，不包含 Google 服务（GMS/GApps）
+   GAPPS	预装了 Google 移动服务（Google Play 商店、框架等） 的 Android
    # 初始化环境：
    sudo waydroid init
    sudo systemctl enable --now waydroid-container
    # 启动 Waydroid：
    waydroid session start &  # 后台运行会话
    waydroid show-full-ui     # 显示安卓界面
-   
-   
+   # 安装 VPN https://steampp.net/download
+   https://gitee.com/rmbgame/SteamTools/releases/download/2.8.3/Steam%20%20_android_v2.8.3.apk
+   # https://raw.githubusercontent.com/sharmajv/vpn/main/3VPN-release.apk
+   # 设置 - 关于手机 - 版本号（最后一个菜单，快速点击启用开发者模式）
+   # 设置 - 系统 - 高级 - 开发者选项
    
    
    # 安装 sdkman 工具，官网 https://sdkman.io/install
@@ -357,6 +385,7 @@
    ```
    
 2. **Docker 安装**  
+   
    ```bash
    sudo dnf install podman
    
@@ -530,6 +559,7 @@
      ```
    
 2. **主题与图标**  
+   
    - 下载主题（如 [Arc](https://github.com/NicoHood/arc-theme)）：  
      ```bash
      sudo dnf install arc-theme
@@ -563,20 +593,19 @@
      sudo ./install-gnome-backgrounds.sh
      
      
-     sudo flatpak override --reset
-     
-     sudo flatpak override --filesystem=$HOME/.themes
-     sudo flatpak override --filesystem=$HOME/.icons
-     sudo flatpak override --filesystem=$HOME/.local/share/icons
-     ls $HOME/.themes
-     ls $HOME/.local/share/icons
+     sudo flatpak override --filesystem=~/.themes
+     sudo flatpak override --filesystem=~/.icons
+     sudo flatpak override --filesystem=~/.local/share/icons
+     ls ~/.themes
+     ls ~/.icons
+     ls ~/.local/share/icons
      # sudo flatpak override --env=GTK_THEME=WhiteSur-Dark
      # sudo flatpak override --env=ICON_THEME=WhiteSur-Dark
      # 列出所有应用，获取 <应用ID>
      flatpak list --app
      # 对于单个应用程序
      sudo flatpak override org.fedoraproject.MediaWriter --env=GTK_THEME=WhiteSur-Dark
-     sudo flatpak override org.fedoraproject.MediaWriter --env=ICON_THEME=WhiteSur-Dark
+     sudo flatpak override org.fedoraproject.MediaWriter --env=ICON_THEME=WhiteSur-dark
      # 若需更深度适配（如 Kvantum）
      flatpak override --user --env=QT_STYLE_OVERRIDE=kvantum
      # 允许读写取系统主题，默认权限为 读写（Read-Write），应用可以读取和修改目录中的文件。
@@ -586,13 +615,38 @@
      flatpak override --user --env=GTK_THEME=WhiteSur-Light
      # 例如强制 Media Writer 使用 GTK 主题
      flatpak override --user org.fedoraproject.MediaWriter --env=QT_STYLE_OVERRIDE=kvantum
+     
+     flatpak override --user org.fedoraproject.MediaWriter --env=ICON_THEME=WhiteSur-dark
+     flatpak override --user org.fedoraproject.MediaWriter --env=GTK_THEME=WhiteSur-Dark
+     flatpak override --user org.fedoraproject.MediaWriter --env=GTK_THEME=WhiteSur-Dark
+     
+     flatpak override --user cn.apipost.apipost --env=ICON_THEME=WhiteSur-dark
+     flatpak override --user cn.apipost.apipost --env=GTK_THEME=WhiteSur-Dark
+     
      flatpak run --env=GTK_THEME=WhiteSur-Light org.fedoraproject.MediaWriter
+     flatpak run org.fedoraproject.MediaWriter
+     # Breeze, Windows, Fusion
+     flatpak run --env=QT_STYLE_OVERRIDE=Breeze org.fedoraproject.MediaWriter
+     
+     flatpak run --env=GTK_THEME=WhiteSur-Dark cn.apipost.apipost
+     flatpak run cn.apipost.apipost
+     
+     flatpak run --env=QT_STYLE_OVERRIDE=gtk3 com.obsproject.Studio
+     # 安装主机依赖
+     locate libcanberra-gtk-module
+     sudo dnf install libcanberra-gtk3 PackageKit-gtk3-module
+     sudo dnf -y install libcanberra-gtk3
+     
+     flatpak run --command=gsettings set org.gnome.desktop.wm.preferences theme 'WhiteSur-Dark' org.fedoraproject.MediaWriter
      # 列出所有已安装的 Flatpak 应用和运行时
      flatpak list
      # 查看应用使用的运行时等信息
      flatpak list --app
      # 查看所有应用的全局覆盖配置
      flatpak override --show
+     flatpak override org.fedoraproject.MediaWriter --show
+     sudo flatpak override --reset
+     sudo flatpak override org.fedoraproject.MediaWriter --reset
      flatpak run --env=GTK_DEBUG=all <应用ID>
      flatpak run --env=GTK_DEBUG=all org.fedoraproject.MediaWriter
      
@@ -600,14 +654,18 @@
      flatpak info com.obsproject.Studio
      flatpak info org.videolan.VLC
      flatpak info cn.apipost.apipost
-     flatpak info org.gnome.Extensions
-     flatpak info io.typora.Typora
-     flatpak info md.obsidian.Obsidian
      flatpak search org.gtk.Gtk3theme
+     flatpak search QAdwaitaDecorations
+     dnf search QAdwaitaDecorations
+     dnf search Decorations
+     sudo dnf install -y qadwaitadecorations-qt5 qadwaitadecorations-qt6
      
      # 在 Linux 中的 Flatpak 应用程序上应用 GTK 系统主题，参考 https://cn.linux-console.net/?p=18267
      # 安装 Kvantum 软件
+     sudo dnf install -y qt5ct qt6ct kvantum
      flatpak install -y org.kde.KStyle.Kvantum
+     # 参考 https://wiki.archlinuxcn.org/wiki/%E7%BB%9F%E4%B8%80_Qt_%E5%92%8C_GTK_%E5%BA%94%E7%94%A8%E7%A8%8B%E5%BA%8F%E7%9A%84%E5%A4%96%E8%A7%82
+     flatpak install flathub org.kde.KStyle.Adwaita
      kvantummanager  # 在 "Change/Delete Theme" 中微调 WhiteSur 参数
      sudo flatpak override --env=QT_STYLE_OVERRIDE=kvantum --filesystem=xdg-config/Kvantum:ro org.fedoraproject.MediaWriter
      ```
@@ -615,7 +673,6 @@
    - 图标包（如 [Papirus](https://github.com/PapirusDevelopmentTeam/papirus-icon-theme)）：  
      ```bash
      sudo dnf install papirus-icon-theme
-     
      ```
      
    - 在 `Gnome Tweaks` 中启用主题和图标。
@@ -686,8 +743,10 @@
    
 2. **电源管理**  
    ```bash
-   sudo dnf install tlp tlp-rdw  # 笔记本续航优化
+   sudo dnf install tlp tlp-rdw  # 笔记本续航优化，默认已安装，但没有启用
+   systemctl status tlp
    sudo systemctl enable tlp
+   sudo systemctl start tlp
    ```
 
 ---
