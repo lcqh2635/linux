@@ -189,6 +189,7 @@
    flatpak uninstall --unused -y
    # 列出已配置的远程仓库
    flatpak remote-list -d
+   sudo flatpak override --reset
    
    # 以下软件为适配主题，依旧使用自带默认主题
    flatpak install flathub com.qq.QQ -y
@@ -311,6 +312,48 @@
    # 启动 Waydroid：
    waydroid session start &  # 后台运行会话
    waydroid show-full-ui     # 显示安卓界面
+   
+   
+   
+   
+   # 安装 sdkman 工具，官网 https://sdkman.io/install
+   curl -s "https://get.sdkman.io" | bash
+   # 安装 nvm，参考官方文档 https://nvm.p6p.net/
+   # nodejs 官网 https://nodejs.cn/
+   curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.2/install.sh | bash
+   
+   # 最新地址 淘宝 NPM 镜像站喊你切换新域名啦!
+   npm config set registry https://registry.npmmirror.com
+   npm config get registry
+   npm install -g bun
+   echo 你刚安装的 bun 版本号为： $(bun --version)
+   # 将 bunfig.toml 作为隐藏文件添加到用户主目录
+   echo '[install]
+   # 使用阿里云加速仓库，仓库地址可从阿里云官方获取，地址为 https://developer.aliyun.com/mirror/
+   registry = "https://registry.npmmirror.com/"
+   ' >> ~/.bunfig.toml
+   cat ~/.bunfig.toml
+   # 使用 bun 创建一个基于 vue-ts 模板的项目，bun即是一个包管理器也是JS运行时
+   bun create vite bun-vue3-ts --template vue-ts
+   bun install
+   bun run dev
+   # 是用 bun 创建一个 tauri 2.0 项目，参考 https://v2.tauri.app/zh-cn/
+   bun create tauri-app
+   cd tauri-app
+   bun install
+   # 需要提前安装并配置好 Android Studio  参考 https://tauri.app/zh-cn/start/prerequisites/#android
+   bun run tauri android init
+   # For Desktop development, run:
+   bun run tauri dev
+   # 对于 Android 开发: 需要提前安装并配置好 Android Studio  参考 https://tauri.app/zh-cn/start/prerequisites/#android
+   bun run tauri android dev
+   
+   # 安装 go 直接打开 manjaro自带的应用商城搜索 go 并安装即可
+   sudo dnf install golang.x86_64
+   go version
+   # 配置加速代理
+   go env -w GOPROXY=https://goproxy.cn,direct
+   go env
    ```
    
 2. **Docker 安装**  
@@ -333,6 +376,156 @@
      ```bash
      sudo dnf install -y gnome-tweaks gnome-extensions-app
      
+     # 列出所有已安装的 Schema
+     gsettings list-schemas
+     # 列出某个 Schema 下的所有键
+     gsettings list-keys org.gnome.desktop.interface
+     gsettings list-keys org.gnome.nautilus.preferences
+     gsettings list-keys org.gnome.software
+     # 查看键的取值类型和描述
+     gsettings describe org.gnome.desktop.interface font-name
+     # 递归列出某个 Schema 的键值（例如 org.gnome.desktop.interface）
+     gsettings list-recursively org.gnome.desktop.interface
+     gsettings list-recursively org.gnome.nautilus.preferences
+     gsettings list-recursively org.gnome.shell.extensions.just-perfection
+     
+     # 安装配置系统字体
+     sudo dnf install adobe-source-han-sans-cn-fonts
+     sudo dnf install adobe-source-han-serif-cn-fonts
+     sudo dnf install jetbrains-mono-fonts
+     logout
+     gsettings set org.gnome.desktop.interface font-name '思源黑体 CN Medium 12'
+     gsettings set org.gnome.desktop.interface document-font-name '思源宋体 CN Medium 12'
+     gsettings set org.gnome.desktop.interface monospace-font-name 'JetBrains Mono Medium 12'
+     gsettings set org.gnome.desktop.wm.preferences titlebar-font '思源黑体 CN Bold 12'
+     
+     gsettings reset org.gnome.desktop.interface font-name
+     gsettings reset org.gnome.desktop.interface document-font-name
+     gsettings reset org.gnome.desktop.wm.preferences titlebar-font
+     gsettings get org.gnome.desktop.wm.preferences theme
+     
+     gsettings set org.gnome.desktop.interface cursor-size 20
+     gsettings get org.gnome.desktop.interface cursor-size
+     
+     
+     # 卸载自带的无用扩展插件
+     sudo dnf uninstall gnome-shell-extension-window-list gnome-shell-extension-launch-new-instance
+     # 系统扩展插件
+     sudo dnf install -y \
+     gnome-shell-extension-user-theme \          
+     gnome-shell-extension-dash-to-dock \                 
+     gnome-shell-extension-blur-my-shell \           
+     gnome-shell-extension-just-perfection \
+     gnome-shell-extension-drive-menu
+     gnome-shell-extension-caffeine
+     gnome-shell-extension-disconnect-wifi
+     gnome-shell-extension-refresh-wifi
+     gnome-shell-extension-no-overview
+     gnome-shell-extension-workspace-indicator
+     gnome-shell-extension-appindicator
+     
+     sudo dnf install gnome-shell-extension-user-theme 
+     gnome-shell-extension-dash-to-dock
+     gnome-shell-extension-blur-my-shell.noarch
+     gnome-shell-extension-just-perfection.noarch
+     gnome-shell-extension-drive-menu.noarch
+     gnome-shell-extension-caffeine.noarch
+     gnome-shell-extension-disconnect-wifi.noarch
+     gnome-shell-extension-refresh-wifi.noarch
+     gnome-shell-extension-no-overview.noarch
+     gnome-shell-extension-workspace-indicator.noarch
+     gnome-shell-extension-appindicator.noarch
+     gnome-shell-extension-apps-menu.noarch
+     gnome-shell-extension-auto-move-windows.noarch
+     gnome-shell-extension-forge.noarch
+     gnome-shell-extension-gsconnect.x86_64
+     gnome-shell-extension-screenshot-window-sizer.noarch
+     gnome-shell-extension-windowsNavigator.noarch
+     gnome-shell-extension-workspace-indicator.noarch
+     gnome-shell-extension-unite.noarch
+     
+     
+     
+     Alphabetical App Grid
+     Bluetooth Quick Connect
+     Clipboard Indicator
+     Gtk4 Desktop Icons NG (DING)
+     Add to Desktop
+     # 安装 Lunar Calendar 农历 扩展插件需要如下内容
+     #https://gitlab.gnome.org/Nei/ChineseCalendar/-/archive/20250205/ChineseCalendar-20250205.tar.gz
+     # tar -xzvf ChineseCalendar-20250205.tar.gz
+     # cd ChineseCalendar-20250205
+     # ./install.sh
+     Lunar Calendar 农历
+     Night Theme Switcher
+     # 到 Gnome设置、显示器、夜灯 来调整系统 Dark/Light 主题切换的逻辑。使其和 Night Theme Switcher 插件对应一直
+     # 参考官方解决方案 https://github.com/vinceliuice/WhiteSur-gtk-theme/issues/1059
+     # 白天执行命令
+     gsettings set org.gnome.desktop.interface color-scheme 'default'
+     gsettings set org.gnome.desktop.interface cursor-theme 'WhiteSur-cursors'
+     gsettings set org.gnome.desktop.interface icon-theme 'WhiteSur-light'
+     gsettings set org.gnome.shell.extensions.user-theme name 'WhiteSur-Light'
+     gsettings set org.gnome.desktop.interface gtk-theme 'WhiteSur-Light'
+     gsettings set org.gnome.desktop.wm.preferences theme 'WhiteSur-Light'
+     ln -fs $HOME/.config/gtk-4.0/gtk-Light.css $HOME/.config/gtk-4.0/gtk.css
+     # 夜晚执行命令
+     gsettings set org.gnome.desktop.interface color-scheme 'prefer-dark'
+     gsettings set org.gnome.desktop.interface cursor-theme 'WhiteSur-cursors'
+     gsettings set org.gnome.desktop.interface icon-theme 'WhiteSur-dark'
+     gsettings set org.gnome.shell.extensions.user-theme name 'WhiteSur-Dark'
+     gsettings set org.gnome.desktop.interface gtk-theme 'WhiteSur-Dark'
+     gsettings set org.gnome.desktop.wm.preferences theme 'WhiteSur-Dark'
+     ln -fs $HOME/.config/gtk-4.0/gtk-Dark.css $HOME/.config/gtk-4.0/gtk.css
+     
+     # 确认它们是否在后台运行？
+     pgrep -l nautilus
+     pgrep -l gnome-software
+     # 彻底关闭 Nautilus
+     pkill nautilus
+     nautilus -q  # 完全退出
+     nautilus &   # 重新启动（可选）
+     # 彻底关闭 GNOME Software
+     pkill gnome-software
+     
+     # 以下是推荐安装的用户扩展插件
+     Notification Banner Reloaded
+     Quick Settings Tweaks
+     Rounded Corners
+     Rounded Window Corners Reborn
+     Search Light
+     SettingsCenter
+     Top Bar Organizer
+     Tray Icons: Reloaded
+     User Avatar In Quick Settings
+     gsettings set org.gnome.shell.extensions.user-theme name 'WhiteSur-Dark'
+     Window Gestures
+     VirtualBox applet
+     
+     
+     # 应用主题
+     gsettings set org.gnome.desktop.interface cursor-theme 'WhiteSur-cursors'
+     gsettings set org.gnome.desktop.interface icon-theme 'WhiteSur-light'
+     gsettings set org.gnome.shell.extensions.user-theme name 'WhiteSur-Light'
+     gsettings set org.gnome.desktop.interface gtk-theme 'WhiteSur-Light'
+     gsettings set org.gnome.desktop.wm.preferences theme 'WhiteSur-Light'
+     gsettings set org.gnome.desktop.background picture-uri 'file:///usr/share/backgrounds/WhiteSur/WhiteSur-timed.xml'
+     org.gnome.shell.extensions.just-perfection events-button false
+     gsettings set org.gnome.shell.extensions.just-perfection world-clock false
+     gsettings set org.gnome.shell.extensions.just-perfection weather false
+     gsettings set org.gnome.shell.extensions.just-perfection window-demands-attention-focus true
+     gsettings set org.gnome.shell.extensions.just-perfection startup-status 0
+     gsettings set org.gnome.desktop.interface show-battery-percentage true
+     gsettings set org.gnome.mutter center-new-windows true
+     gsettings set org.gnome.desktop.wm.preferences button-layout 'appmenu:minimize,maximize,close'
+     gsettings set org.gnome.shell.extensions.dash-to-dock scroll-action 'cycle-windows'
+     gsettings set org.gnome.shell.extensions.dash-to-dock custom-theme-shrink true
+     gsettings set org.gnome.shell.extensions.dash-to-dock running-indicator-style 'DASHES'
+     gsettings set org.gnome.shell.extensions.dash-to-dock running-indicator-dominant-color true
+     gsettings set org.gnome.shell.extensions.blur-my-shell.panel force-light-text true
+     gsettings set org.gnome.shell.extensions.blur-my-shell.panel style-panel 1
+     gsettings set org.gnome.shell.extensions.blur-my-shell.hidetopbar compatibility true
+     gsettings set org.gnome.shell.extensions.blur-my-shell.appfolder style-dialogs 2
+     gsettings set org.gnome.shell.extensions.blur-my-shell.dash-to-dock style-dash-to-dock 1
      
      ```
    
