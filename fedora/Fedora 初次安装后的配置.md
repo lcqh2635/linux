@@ -120,7 +120,6 @@
    # evolution配置qq邮箱授权码： embwnsuwkdjrebge
    sudo dnf install fastfetch
    fastfetch
-   
    sudo dnf install vagrant VirtualBox virtualbox-guest-additions
    
    
@@ -180,15 +179,16 @@
    # VPN 软件
    flatpak install flathub com.protonvpn.www -y
    flatpak install flathub io.github.Fndroid.clash_for_windows -y
-   # 用于运行 Windows 游戏的软件
-   flatpak install flathub ru.linux_gaming.PortProton -y
    # Lutris 可帮您安装和运行大多数平台上几乎所有时代的电子游戏。通过对现有的模拟器、兼容层、第三方游戏引擎等进行整合利用，Lutris 可为您提供一个统一的界面来启动您的所有游戏。
    flatpak install flathub net.lutris.Lutris -y
-   # 创建图像或编辑照片
-   flatpak install flathub org.gimp.GIMP -y
-   # 保持专注,浏览更快。zen是浏览网之妙法. 设计精美,注重隐私,并装有特色. 我们关心你的经验 而不是你的数据.
-   flatpak install flathub app.zen_browser.zen -y
-   flatpak install flathub org.flameshot.Flameshot -y
+   # 屏幕录制
+   flatpak install -y flathub com.obsproject.Studio
+   # 彻底删除应用及数据：
+   flatpak uninstall --delete-data flathub com.obsproject.Studio -y
+   # 定期运行 flatpak uninstall --unused 删除旧版本运行时。
+   flatpak uninstall --unused -y
+   # 列出已配置的远程仓库
+   flatpak remote-list -d
    
    # 以下软件为适配主题，依旧使用自带默认主题
    flatpak install flathub com.qq.QQ -y
@@ -198,8 +198,9 @@
    flatpak install flathub com.rustdesk.RustDesk -y
    # Fedora 自带启动盘 ISO 写入工具
    flatpak install flathub org.fedoraproject.MediaWriter -y
+   # 创建图像或编辑照片
+   flatpak install flathub org.gimp.GIMP -y
    flatpak install flathub com.wps.Office -y
-   flatpak install flathub org.telegram.desktop -y
    
    
    # 开发常用软件
@@ -239,11 +240,14 @@
 3. **推荐通过 Flatpak 安装的软件**  
    
    ```bash
-   flatpak install flathub \
+   flatpak install -y flathub \
    com.spotify.Client \    # 音乐
    com.discordapp.Discord \
    com.slack.Slack \
    com.visualstudio.code   # VS Code
+   
+   
+   
    ```
 
 ---
