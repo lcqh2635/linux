@@ -7,7 +7,7 @@
    ```bash
    sudo dnf update -y && sudo dnf upgrade -y
    ```
-
+   
 2. **启用 RPM Fusion 仓库**（提供非自由软件支持）  
    ```bash
    sudo dnf install https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm \
@@ -114,11 +114,11 @@
    timeshift \            
    gnome-shell-extension-appindicator
    
-   sudo dnf install google-chrome-stable.x86_64
-   sudo dnf install libreoffice-langpack-zh-Hans.x86_64
-   sudo dnf install evolution.x86_64 obs-studio.x86_64
+   sudo dnf install google-chrome-stable
+   sudo dnf install libreoffice-langpack-zh-Hans
+   sudo dnf install evolution obs-studio
    # evolution配置qq邮箱授权码： embwnsuwkdjrebge
-   sudo dnf install fastfetch.x86_64
+   sudo dnf install fastfetch
    fastfetch
    
    sudo dnf install vagrant VirtualBox virtualbox-guest-additions
@@ -132,9 +132,6 @@
    flatpak install flathub org.gnome.Evolution -y
    flatpak install flathub io.typora.Typora -y
    flatpak install flathub md.obsidian.Obsidian -y
-   flatpak install flathub com.qq.QQ -y
-   flatpak install flathub com.tencent.WeChat -y
-   flatpak install flathub com.tencent.wemeet -y
    flatpak install flathub com.baidu.NetDisk -y
    flatpak install flathub io.github.qier222.YesPlayMusic -y
    flatpak install flathub com.microsoft.Edge -y
@@ -150,25 +147,17 @@
    flatpak install flathub it.mijorus.gearlever -y
    # 使用 Linux 设备作为第二屏幕
    flatpak install flathub eu.nokun.MirrorHall -y
-   # Telegram
-   flatpak install flathub org.telegram.desktop -y
    # 翻译
    flatpak install flathub app.drey.Dialect -y
    # 办公软件
    flatpak install flathub org.libreoffice.LibreOffice -y
-   flatpak install flathub com.wps.Office -y
-   # RustDesk
-   flatpak install flathub com.rustdesk.RustDesk -y
    # 制作 ISO 系统启动盘
-   # Fedora 启动盘写入工具t
-   flatpak install flathub org.fedoraproject.MediaWriter -y
-   flatpak install flathub com.system76.Popsicle -y
    flatpak install flathub io.gitlab.adhami3310.Impression -y
    # 快捷、安全的文件传输工具
    flatpak install flathub app.drey.Warp -y
    # 下载、使用且能自适应的 GTK 应用程序字体
    flatpak install flathub org.gustavoperedo.FontDownloader -y
-   # 管理您的密码和密钥
+   # 管理您的密码和密钥，优先使用 bitwarden
    flatpak install flathub org.gnome.seahorse.Application -y
    flatpak install flathub com.bitwarden.desktop -y
    # 用于编辑 dconf 数据库的图形化工具
@@ -201,13 +190,24 @@
    flatpak install flathub app.zen_browser.zen -y
    flatpak install flathub org.flameshot.Flameshot -y
    
+   # 以下软件为适配主题，依旧使用自带默认主题
+   flatpak install flathub com.qq.QQ -y
+   flatpak install flathub com.tencent.WeChat -y
+   flatpak install flathub com.tencent.wemeet -y
+   flatpak install flathub cn.apipost.apipost -y
+   flatpak install flathub com.rustdesk.RustDesk -y
+   # Fedora 自带启动盘 ISO 写入工具
+   flatpak install flathub org.fedoraproject.MediaWriter -y
+   flatpak install flathub com.wps.Office -y
+   flatpak install flathub org.telegram.desktop -y
+   
+   
    # 开发常用软件
    flatpak install flathub com.jetbrains.IntelliJ-IDEA-Ultimate -y
    flatpak install flathub com.google.AndroidStudio -y
    flatpak install flathub dev.zed.Zed -y
    flatpak install flathub io.github.shiftey.Desktop -y
    flatpak install flathub com.visualstudio.code -y
-   flatpak install flathub cn.apipost.apipost -y
    # 触手可及的开发工具箱
    flatpak install flathub me.iepure.devtoolbox -y
    # 下载 jetbrains-toolbox
@@ -230,8 +230,10 @@
    
    # Google浏览器导入 Watt Toolkit 证书
    # 打开 设置 - 隐私与安全 - 安全 - 管理证书
+   # chrome 搜索栏输入chrome://settings/certificates，选择导入证书
    # 本地证书 - 自定义 - 可信证书 - 导入
    # 证书地址为 /home/lcqh/.local/share/Steam++/Plugins/Accelerator/SteamTools.Certificate.cer
+   # 点击 Steam 左上角 stream 菜单 - Settings - interface 在其中设置界面为中文
    ```
    
 3. **推荐通过 Flatpak 安装的软件**  
@@ -252,11 +254,65 @@
    sudo dnf groupinstall "Development Tools"
    sudo dnf install git python3 nodejs java-latest-openjdk
    
+   # dnf 安装编程语言和数据库 https://developer.fedoraproject.org/tech.html
+   # 参考 https://developer.fedoraproject.org/tech/languages/rust/rust-installation.html
+   sudo dnf install rust cargo
+   sudo dnf install rustup
    
+   # https://developer.fedoraproject.org/tech/languages/go/go-installation.html
+   sudo dnf install golang
+   
+   
+   # PostgreSQL 数据库 https://developer.fedoraproject.org/tech/database/postgresql/about.html
+   sudo dnf install postgresql postgresql-server    # install client/server
+   sudo postgresql-setup --initdb --unit postgresql # initialize PG cluster
+   sudo systemctl start postgresql                  # start cluster
+   sudo su - postgres                               # login as DB admin
+   
+   # MariaDB 数据库 https://developer.fedoraproject.org/tech/database/mariadb/about.html
+   sudo dnf install mariadb
+   sudo dnf install mariadb-server
+   sudo systemctl start mariadb
+   sudo systemctl enable mariadb
+   sudo mysql_secure_installation
+   sudo mysql -u root -p
+   
+   # Redis 数据库 https://developer.fedoraproject.org/tech/database/redis/about.html
+   sudo dnf install redis     # Install redis cli and server
+   sudo systemctl start redis # Initialize redis server
+   sudo systemctl enable redis
+   
+   # QEMU 安装 https://developer.fedoraproject.org/tools/virtualization/installing-qemu-on-fedora-linux.html
+   sudo dnf install qemu -y
+   sudo dnf install libvirt -y
+   sudo dnf install virt-install -y
+   # 安装组件
+   sudo dnf install qemu-kvm libvirt virt-manager
+   sudo systemctl enable --now libvirtd
+   
+   # 使用图形界面
+   virt-manager
+   # 使用 QEMU 浏览 DBus 的虚拟化查看器
+   # QEMU的虚拟化查看器. 应用程序在 DBus 上与运行的QEMU 实例进行通信 。 它支持键盘,鼠标和多触摸手势.
+   flatpak install flathub com.belmoussaoui.snowglobe -y
+   
+   # Waydroid 基于 Linux 容器（LXC）运行完整的 Android 系统，性能接近原生。
+   # 与主机 Fedora 共享内核但隔离用户空间，类似 Docker。
+   # 启用 Waydroid 仓库：
+   sudo dnf copr enable aleasto/waydroid
+   sudo dnf install waydroid
+   # 初始化环境：
+   sudo waydroid init
+   sudo systemctl enable --now waydroid-container
+   # 启动 Waydroid：
+   waydroid session start &  # 后台运行会话
+   waydroid show-full-ui     # 显示安卓界面
    ```
    
 2. **Docker 安装**  
    ```bash
+   sudo dnf install podman
+   
    sudo dnf install dnf-plugins-core
    sudo dnf config-manager --add-repo https://download.docker.com/linux/fedora/docker-ce.repo
    sudo dnf install docker-ce docker-ce-cli containerd.io
@@ -286,6 +342,77 @@
      yaru-icon-theme.noarch
      yaru-sound-theme.noarch
      
+     
+     # 主题美化，参考 https://www.gnome-look.org/browse?ord=rating
+     git clone https://github.com/vinceliuice/WhiteSur-gtk-theme.git --depth=1
+     sed -i 's/\$opacity: if([^;]*);/\$opacity: 1;/g' ~/下载/WhiteSur-gtk-theme/src/sass/_colors.scss
+     ./install.sh       # 同时安装Dark/Light两种主题
+     ./tweaks.sh -f flat
+     sudo ./tweaks.sh -g
+     sudo ./tweaks.sh -g -b "my picture.jpg"
+     # 授予全局访问 GTK 配置和主题文件的权限
+     # 允许所有 Flatpak 应用访问宿主机的 ~/.config/gtk-3.0 目录。该目录包含 GTK 3 的配置文件（如主题、图标、字体设置等）。
+     sudo flatpak override --filesystem=xdg-config/gtk-3.0
+     # 允许所有 Flatpak 应用访问宿主机的 ~/.config/gtk-4.0 目录。
+     sudo flatpak override --filesystem=xdg-config/gtk-4.0
+     # 将 WhiteSur 主题包连接到 Flatpak 仓库
+     ./tweaks.sh -F
+     
+     git clone https://github.com/vinceliuice/WhiteSur-icon-theme.git --depth=1
+     ./install.sh
+     git clone https://github.com/vinceliuice/WhiteSur-cursors.git --depth=1
+     ./install.sh
+     git clone https://github.com/vinceliuice/WhiteSur-wallpapers.git --depth=1
+     sudo ./install-gnome-backgrounds.sh
+     
+     
+     sudo flatpak override --reset
+     
+     sudo flatpak override --filesystem=$HOME/.themes
+     sudo flatpak override --filesystem=$HOME/.icons
+     sudo flatpak override --filesystem=$HOME/.local/share/icons
+     ls $HOME/.themes
+     ls $HOME/.local/share/icons
+     # sudo flatpak override --env=GTK_THEME=WhiteSur-Dark
+     # sudo flatpak override --env=ICON_THEME=WhiteSur-Dark
+     # 列出所有应用，获取 <应用ID>
+     flatpak list --app
+     # 对于单个应用程序
+     sudo flatpak override org.fedoraproject.MediaWriter --env=GTK_THEME=WhiteSur-Dark
+     sudo flatpak override org.fedoraproject.MediaWriter --env=ICON_THEME=WhiteSur-Dark
+     # 若需更深度适配（如 Kvantum）
+     flatpak override --user --env=QT_STYLE_OVERRIDE=kvantum
+     # 允许读写取系统主题，默认权限为 读写（Read-Write），应用可以读取和修改目录中的文件。
+     # ro 表示 只读（Read-Only）。它的作用是限制 Flatpak 应用对指定目录的访问权限，仅允许 读取 文件，而 禁止写入或修改。
+     flatpak override --user --filesystem=~/.themes:ro  # 若使用用户级主题
+     # 指定主题名称（如 WhiteSur-Light）
+     flatpak override --user --env=GTK_THEME=WhiteSur-Light
+     # 例如强制 Media Writer 使用 GTK 主题
+     flatpak override --user org.fedoraproject.MediaWriter --env=QT_STYLE_OVERRIDE=kvantum
+     flatpak run --env=GTK_THEME=WhiteSur-Light org.fedoraproject.MediaWriter
+     # 列出所有已安装的 Flatpak 应用和运行时
+     flatpak list
+     # 查看应用使用的运行时等信息
+     flatpak list --app
+     # 查看所有应用的全局覆盖配置
+     flatpak override --show
+     flatpak run --env=GTK_DEBUG=all <应用ID>
+     flatpak run --env=GTK_DEBUG=all org.fedoraproject.MediaWriter
+     
+     flatpak info org.fedoraproject.MediaWriter
+     flatpak info com.obsproject.Studio
+     flatpak info org.videolan.VLC
+     flatpak info cn.apipost.apipost
+     flatpak info org.gnome.Extensions
+     flatpak info io.typora.Typora
+     flatpak info md.obsidian.Obsidian
+     flatpak search org.gtk.Gtk3theme
+     
+     # 在 Linux 中的 Flatpak 应用程序上应用 GTK 系统主题，参考 https://cn.linux-console.net/?p=18267
+     # 安装 Kvantum 软件
+     flatpak install -y org.kde.KStyle.Kvantum
+     kvantummanager  # 在 "Change/Delete Theme" 中微调 WhiteSur 参数
+     sudo flatpak override --env=QT_STYLE_OVERRIDE=kvantum --filesystem=xdg-config/Kvantum:ro org.fedoraproject.MediaWriter
      ```
      
    - 图标包（如 [Papirus](https://github.com/PapirusDevelopmentTeam/papirus-icon-theme)）：  
@@ -297,7 +424,14 @@
    - 在 `Gnome Tweaks` 中启用主题和图标。
    
      ```bash
-     
+     # 应用主题
+     gsettings set org.gnome.desktop.interface cursor-theme 'WhiteSur-cursors'
+     gsettings set org.gnome.desktop.interface icon-theme 'WhiteSur-light'
+     gsettings set org.gnome.shell.extensions.user-theme name 'WhiteSur-Light'
+     gsettings set org.gnome.desktop.interface gtk-theme 'WhiteSur-Light'
+     gsettings set org.gnome.desktop.wm.preferences theme 'WhiteSur-Light'
+     gsettings set org.gnome.desktop.background picture-uri 'file:///usr/share/backgrounds/WhiteSur/WhiteSur-timed.xml'
+     gsettings get org.gnome.desktop.background picture-uri
      ```
 
 ---
@@ -336,11 +470,23 @@
 ### **七、其他实用调整**
 1. **DNF 提速**  
    编辑 `/etc/dnf/dnf.conf`，添加：  
+   
    ```ini
+   # 择网络延迟最低的镜像。但 延迟低 ≠ 下载速度快，还需要镜像带宽高
+   cat /etc/dnf/dnf.conf
+   # 查看当前 DNF 配置
+   # 如果已手动配置高质量镜像（如国内清华、阿里源）。则不建议配置。延迟和带宽均最优
+   
    fastestmirror=True
    max_parallel_downloads=10
+   
+   
+   # 测试默认配置的下载速度
+   time sudo dnf update --downloadonly
+   # 测试启用优化后的速度
+   time sudo dnf update --downloadonly
    ```
-
+   
 2. **电源管理**  
    ```bash
    sudo dnf install tlp tlp-rdw  # 笔记本续航优化

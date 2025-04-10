@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "fedora/Fedora 包管理器.md",
+                "file": "fedora/Fedora 初次安装后的配置.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "Fedora 包管理器"
+              "title": "Fedora 初次安装后的配置"
             }
           }
         ]
@@ -179,6 +179,7 @@
   },
   "active": "0643edd570733c22",
   "lastOpenFiles": [
+    "fedora/Fedora 包管理器.md",
     "manjaro/在 Manjaro GNOME 桌面系统安装完成后配置.md",
     "manjaro/Gnome 主题安装及配置.md",
     "manjaro/Gnome安装后的初始化配置.md",
