@@ -7,7 +7,7 @@
    ```bash
    sudo dnf update -y && sudo dnf upgrade -y
    
-   # 使用 Gnome 软件升级到预发布版本
+   # 如果想使用 Gnome 软件升级到预发布版本
    gsettings set org.gnome.software show-upgrade-prerelease true
    # 升级完成后，强烈建议禁用该功能，这样您就不会收到不需要的未来预发布版。
    gsettings set org.gnome.software show-upgrade-prerelease false
@@ -18,22 +18,63 @@
    
 2. **启用 RPM Fusion 仓库**（提供非自由软件支持）  
    ```bash
-   sudo dnf install https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm \
-   https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm
+   # 国内加速仓库
+   清华   https://mirrors.tuna.tsinghua.edu.cn
+   中科大 https://mirrors.ustc.edu.cn
+   腾讯云 https://mirrors.cloud.tencent.com
+   华为云 https://mirrors.huaweicloud.com
+   阿里云 https://mirrors.aliyun.com
+   
+   https://developer.aliyun.com/mirror/fedora
+   https://developer.aliyun.com/mirror/rustup
    
    
-   # 添加中科大 Fedora 镜像源，参考 https://mirrors.ustc.edu.cn/help/fedora.html
+   # 中科大 Fedora 镜像源 https://mirrors.ustc.edu.cn/help/fedora.html
    sudo sed -e 's|^metalink=|#metalink=|g' \
             -e 's|^#baseurl=http://download.example/pub/fedora/linux|baseurl=https://mirrors.ustc.edu.cn/fedora|g' \
             -i.bak \
             /etc/yum.repos.d/fedora.repo \
             /etc/yum.repos.d/fedora-updates.repo
+   # 清华 Fedora 镜像源 https://mirrors.tuna.tsinghua.edu.cn/help/fedora/
+   sed -e 's|^metalink=|#metalink=|g' \
+       -e 's|^#baseurl=http://download.example/pub/fedora/linux|baseurl=https://mirrors.tuna.tsinghua.edu.cn/fedora|g' \
+       -i.bak \
+       /etc/yum.repos.d/fedora.repo \
+       /etc/yum.repos.d/fedora-updates.repo
+   # 清华 RPMFusion 镜像源 https://mirrors.tuna.tsinghua.edu.cn/help/rpmfusion/
+   # 1、安装基础包。首先安装提供基础配置文件和 GPG 密钥的 rpmfusion-*.rpm。
+   sudo yum install --nogpgcheck https://mirrors.tuna.tsinghua.edu.cn/rpmfusion/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm https://mirrors.tuna.tsinghua.edu.cn/rpmfusion/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm
+   # 2、修改链接指向镜像站
+   sudo sed -e 's!^metalink=!#metalink=!g' \
+            -e 's!^mirrorlist=!#mirrorlist=!g' \
+            -e 's!^#baseurl=!baseurl=!g' \
+            -e 's!https\?://download1\.rpmfusion\.org/!https://mirrors.aliyun.com/rpmfusion/!g' \
+            -i.bak /etc/yum.repos.d/rpmfusion*.repo
+   
+   https://mirrors.aliyun.com/mirror/rpmfusion
+   # 阿里云 RPMFusion 镜像源 https://developer.aliyun.com/mirror/rpmfusion
+   sudo yum install --nogpgcheck https://mirrors.aliyun.com/rpmfusion/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm https://mirrors.tuna.tsinghua.edu.cn/rpmfusion/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm
+            
+   sudo sed -e 's!^metalink=!#metalink=!g' \
+            -e 's!^mirrorlist=!#mirrorlist=!g' \
+            -e 's!^#baseurl=!baseurl=!g' \
+            -e 's!https\?://download1\.rpmfusion\.org/!https://mirrors.tuna.tsinghua.edu.cn/rpmfusion/!g' \
+            -i.bak /etc/yum.repos.d/rpmfusion*.repo         
+   # 查看配置结果
+   cat /etc/yum.repos.d/rpmfusion-free.repo
+   
    # 最后运行 sudo dnf makecache 生成缓存
    sudo dnf makecache
-   # 添加中科大 Flatpak 镜像源，参考 https://mirrors.ustc.edu.cn/help/flathub.html
+   # 中科大 Flatpak 镜像源 https://mirrors.ustc.edu.cn/help/flathub.html
    sudo flatpak remote-modify flathub --url=https://mirrors.ustc.edu.cn/flathub
+   # 上海交大 Flatpak 镜像源 https://mirrors.sjtug.sjtu.edu.cn/docs/flathub
+   sudo flatpak remote-modify flathub --url=https://mirror.sjtu.edu.cn/flathub
+   
    # 恢复默认值
    sudo flatpak remote-modify flathub --url=https://dl.flathub.org/repo
+   
+   sudo dnf update -y && sudo dnf upgrade -y && flatpak update -y
+   
    
    # 网站国内可用 DNS 测试 ping https://ping.chinaz.com/www.youtube.com
    # 配置Github访问加速
@@ -326,14 +367,45 @@
    
    # Waydroid 基于 Linux 容器（LXC）运行完整的 Android 系统，性能接近原生。
    # 与主机 Fedora 共享内核但隔离用户空间，类似 Docker。
-   sudo dnf install -y waydroid
+   sudo dnf install -y waydroid android-tools
+   waydroid --help
+   waydroid --version
+   adb --version
+   adb kill-server
+   adb start-server
+   # 查看确保 Waydroid 正在运行
+   waydroid status
+   sudo systemctl status waydroid-container
+   sudo systemctl restart waydroid-container
+   waydroid first-launch
+   # 如果显示 Session: STOPPED，先启动 Waydroid：
+   waydroid session start
+   # 启动图形界面：
+   waydroid show-full-ui
+   # 检查设备连接
+   adb devices
+   # 打开 设置 → 应用 → 选择需要权限的应用（如文件管理器）。
+   # 点击 权限 → 存储，确保已授予 读写存储空间 权限。
+   adb shell mount | grep sdcard
+   adb shell chmod -R 777 /sdcard/Download/
+   adb push ~/下载/3VPN-release.apk /sdcard/Download/
+   adb push ~/下载/Steam _android_v2.8.3.apk /sdcard/
+   
+   # 手动绑定 ADB 到 Waydroid 容器
+   adb connect 192.168.240.112:5555
    System OTA	https://ota.waydro.id/system
    Vendor OTA	https://ota.waydro.id/vendor
-   VANILLA	纯净版 Android，不包含 Google 服务（GMS/GApps）
+   VANILLA	纯净版 Android，不包含 Google 服务（GMS/GApps）选这个！
    GAPPS	预装了 Google 移动服务（Google Play 商店、框架等） 的 Android
+   
+   sudo firewall-cmd --zone=public --add-port=5555/tcp --permanent
+   sudo firewall-cmd --reload
+   
    # 初始化环境：
    sudo waydroid init
    sudo systemctl enable --now waydroid-container
+   sudo waydroid container start
+   sudo waydroid session start
    # 启动 Waydroid：
    waydroid session start &  # 后台运行会话
    waydroid show-full-ui     # 显示安卓界面
@@ -342,6 +414,18 @@
    # https://raw.githubusercontent.com/sharmajv/vpn/main/3VPN-release.apk
    # 设置 - 关于手机 - 版本号（最后一个菜单，快速点击启用开发者模式）
    # 设置 - 系统 - 高级 - 开发者选项
+   waydroid app install ~/下载/3VPN-release.apk
+   waydroid app install 3VPN-release.apk
+   waydroid app list
+   
+   sudo systemctl restart waydroid-container
+   # 重装系统
+   sudo systemctl stop waydroid-container
+   # /var/lib/waydroid：存放系统镜像（system.img、vendor.img）和用户数据。
+   # /home/.waydroid：用户配置文件（可选删除以彻底重置）。
+   sudo rm -rf /var/lib/waydroid /home/.waydroid ~/waydroid ~/.share/waydroid ~/.local/share/waydroid
+   # Android 类型：选 VANILLA（无 GApps）
+   sudo waydroid init
    
    
    # 安装 sdkman 工具，官网 https://sdkman.io/install
@@ -486,6 +570,9 @@
      # cd ChineseCalendar-20250205
      # ./install.sh
      Lunar Calendar 农历
+     Hide Top Bar
+     # 修复 Hide Top Bar 闪跳 BUG
+     Disable unredirect fullscreen windows
      Night Theme Switcher
      # 到 Gnome设置、显示器、夜灯 来调整系统 Dark/Light 主题切换的逻辑。使其和 Night Theme Switcher 插件对应一直
      # 参考官方解决方案 https://github.com/vinceliuice/WhiteSur-gtk-theme/issues/1059
