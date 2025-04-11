@@ -521,22 +521,25 @@
      gsettings set org.gnome.desktop.interface cursor-size 20
      gsettings get org.gnome.desktop.interface cursor-size
      
-     
+     dnf search gnome-shell-extension
      # 卸载自带的无用扩展插件
-     sudo dnf uninstall gnome-shell-extension-window-list gnome-shell-extension-launch-new-instance
+     sudo dnf remove -y \
+     gnome-shell-extension-window-list \
+     gnome-shell-extension-launch-new-instance \
      # 系统扩展插件
      sudo dnf install -y \
      gnome-shell-extension-user-theme \          
      gnome-shell-extension-dash-to-dock \                 
      gnome-shell-extension-blur-my-shell \           
      gnome-shell-extension-just-perfection \
-     gnome-shell-extension-drive-menu
-     gnome-shell-extension-caffeine
-     gnome-shell-extension-disconnect-wifi
-     gnome-shell-extension-refresh-wifi
-     gnome-shell-extension-no-overview
-     gnome-shell-extension-workspace-indicator
-     gnome-shell-extension-appindicator
+     gnome-shell-extension-drive-menu \
+     gnome-shell-extension-caffeine \
+     gnome-shell-extension-disconnect-wifi \
+     gnome-shell-extension-refresh-wifi \
+     gnome-shell-extension-workspace-indicator \
+     gnome-shell-extension-auto-move-windows \
+     gnome-shell-extension-appindicator \
+     gnome-shell-extension-screenshot-window-sizer
      
      sudo dnf install gnome-shell-extension-user-theme 
      gnome-shell-extension-dash-to-dock
@@ -549,32 +552,115 @@
      gnome-shell-extension-no-overview.noarch
      gnome-shell-extension-workspace-indicator.noarch
      gnome-shell-extension-appindicator.noarch
-     gnome-shell-extension-apps-menu.noarch
      gnome-shell-extension-auto-move-windows.noarch
      gnome-shell-extension-forge.noarch
      gnome-shell-extension-gsconnect.x86_64
      gnome-shell-extension-screenshot-window-sizer.noarch
-     gnome-shell-extension-windowsNavigator.noarch
      gnome-shell-extension-workspace-indicator.noarch
      gnome-shell-extension-unite.noarch
+     # 这两个可以安装，不建议启用
+     gnome-shell-extension-apps-menu
+     gnome-shell-extension-places-menu
      
-     
-     
+     Add to Desktop
      Alphabetical App Grid
      Bluetooth Quick Connect
      Clipboard Indicator
+     Coverflow Alt-Tab
+     Compiz windows effect
+     Compiz alike magic lamp effect
+     Desktop Cube
+     Dash2Dock Animated
      Gtk4 Desktop Icons NG (DING)
-     Add to Desktop
      # 安装 Lunar Calendar 农历 扩展插件需要如下内容
      #https://gitlab.gnome.org/Nei/ChineseCalendar/-/archive/20250205/ChineseCalendar-20250205.tar.gz
      # tar -xzvf ChineseCalendar-20250205.tar.gz
      # cd ChineseCalendar-20250205
      # ./install.sh
      Lunar Calendar 农历
+     Logo Menu
      Hide Top Bar
      # 修复 Hide Top Bar 闪跳 BUG
      Disable unredirect fullscreen windows
      Night Theme Switcher
+     Notification Banner Reloaded
+     Quick Settings Tweaks
+     Rounded Corners
+     Rounded Window Corners Reborn
+     Search Light
+     SettingsCenter
+     Status Area Horizontal Spacing
+     Top Bar Organizer
+     Tray Icons: Reloaded
+     User Avatar In Quick Settings
+     Window Gestures
+     VirtualBox applet
+     # https://github.com/Sominemo/Fildem-Gnome-45
+     
+     
+     Dynamic Panel
+     
+     
+     # 应用主题
+     gsettings set org.gnome.desktop.interface cursor-theme 'WhiteSur-cursors'
+     gsettings set org.gnome.desktop.interface icon-theme 'WhiteSur-light'
+     gsettings set org.gnome.shell.extensions.user-theme name 'WhiteSur-Light'
+     gsettings set org.gnome.desktop.interface gtk-theme 'WhiteSur-Light'
+     gsettings set org.gnome.desktop.wm.preferences theme 'WhiteSur-Light'
+     gsettings set org.gnome.desktop.background picture-uri 'file:///usr/share/backgrounds/WhiteSur/WhiteSur-timed.xml'
+     org.gnome.shell.extensions.just-perfection events-button false
+     gsettings set org.gnome.shell.extensions.just-perfection world-clock false
+     gsettings set org.gnome.shell.extensions.just-perfection weather false
+     gsettings set org.gnome.shell.extensions.just-perfection window-demands-attention-focus true
+     gsettings set org.gnome.shell.extensions.just-perfection startup-status 0
+     gsettings set org.gnome.desktop.interface show-battery-percentage true
+     gsettings set org.gnome.mutter center-new-windows true
+     gsettings set org.gnome.desktop.wm.preferences button-layout 'appmenu:minimize,maximize,close'
+     gsettings set org.gnome.shell.extensions.dash-to-dock scroll-action 'cycle-windows'
+     gsettings set org.gnome.shell.extensions.dash-to-dock custom-theme-shrink true
+     gsettings set org.gnome.shell.extensions.dash-to-dock running-indicator-style 'DASHES'
+     gsettings set org.gnome.shell.extensions.dash-to-dock running-indicator-dominant-color true
+     gsettings set org.gnome.shell.extensions.blur-my-shell.panel force-light-text true
+     gsettings set org.gnome.shell.extensions.blur-my-shell.panel style-panel 1
+     gsettings set org.gnome.shell.extensions.blur-my-shell.hidetopbar compatibility true
+     gsettings set org.gnome.shell.extensions.blur-my-shell.appfolder style-dialogs 2
+     gsettings set org.gnome.shell.extensions.blur-my-shell.dash-to-dock style-dash-to-dock 1
+     
+     # dash-to-dock
+     gsettings list-recursively org.gnome.shell.extensions.dash-to-dock
+     gsettings set org.gnome.shell.extensions.dash-to-dock autohide true
+     gsettings set org.gnome.shell.extensions.dash-to-dock animation-time 0.5
+     gsettings set org.gnome.shell.extensions.dash-to-dock show-trash true
+     gsettings set org.gnome.shell.extensions.dash-to-dock scroll-action 'cycle-windows'
+     gsettings set org.gnome.shell.extensions.dash-to-dock shift-click-action 'minimize'
+     gsettings set org.gnome.shell.extensions.dash-to-dock custom-theme-shrink true
+     gsettings set org.gnome.shell.extensions.dash-to-dock running-indicator-style 'DASHES'
+     gsettings set org.gnome.shell.extensions.dash-to-dock running-indicator-dominant-color true
+     gsettings set org.gnome.shell.extensions.dash-to-dock custom-background-color true
+     gsettings set org.gnome.shell.extensions.dash-to-dock transparency-mode 'FIXED'
+     gsettings set org.gnome.shell.extensions.dash-to-dock background-opacity 0.6
+     gsettings set org.gnome.shell.extensions.dash-to-dock background-color 'rgb(255,255,255)'
+     
+     gsettings set org.gnome.shell.extensions.dash-to-dock background-color 'rgb(119,118,123)'
+     
+     # blur-my-shell
+     gsettings list-recursively org.gnome.shell.extensions.blur-my-shell
+     org.gnome.shell.extensions.blur-my-shell.panel force-light-text true
+     gsettings set org.gnome.shell.extensions.blur-my-shell.panel style-panel 1
+     gsettings set org.gnome.shell.extensions.blur-my-shell.hidetopbar compatibility true
+     gsettings set org.gnome.shell.extensions.blur-my-shell.overview style-components 1
+     gsettings set org.gnome.shell.extensions.blur-my-shell.appfolder style-dialogs 2
+     gsettings set org.gnome.shell.extensions.blur-my-shell.dash-to-dock style-dash-to-dock 1
+     gsettings set org.gnome.shell.extensions.blur-my-shell.applications blur true
+     gsettings set org.gnome.shell.extensions.blur-my-shell.applications dynamic-opacity false
+     gsettings set org.gnome.shell.extensions.blur-my-shell.applications enable-all true
+     gsettings set org.gnome.shell.extensions.blur-my-shell hacks-level 2
+     
+     gsettings set org.gnome.shell.extensions.blur-my-shell.panel style-panel 2
+     gsettings set org.gnome.shell.extensions.blur-my-shell.overview style-components 2
+     gsettings set org.gnome.shell.extensions.blur-my-shell.appfolder style-dialogs 3
+     gsettings set org.gnome.shell.extensions.blur-my-shell.dash-to-dock style-dash-to-dock 2
+     
      # 到 Gnome设置、显示器、夜灯 来调整系统 Dark/Light 主题切换的逻辑。使其和 Night Theme Switcher 插件对应一直
      # 参考官方解决方案 https://github.com/vinceliuice/WhiteSur-gtk-theme/issues/1059
      # 白天执行命令
@@ -603,89 +689,6 @@
      nautilus &   # 重新启动（可选）
      # 彻底关闭 GNOME Software
      pkill gnome-software
-     
-     # 以下是推荐安装的用户扩展插件
-     Notification Banner Reloaded
-     Quick Settings Tweaks
-     Rounded Corners
-     Rounded Window Corners Reborn
-     Search Light
-     SettingsCenter
-     Top Bar Organizer
-     Tray Icons: Reloaded
-     User Avatar In Quick Settings
-     gsettings set org.gnome.shell.extensions.user-theme name 'WhiteSur-Dark'
-     Window Gestures
-     VirtualBox applet
-     
-     
-     # 应用主题
-     gsettings set org.gnome.desktop.interface cursor-theme 'WhiteSur-cursors'
-     gsettings set org.gnome.desktop.interface icon-theme 'WhiteSur-light'
-     gsettings set org.gnome.shell.extensions.user-theme name 'WhiteSur-Light'
-     gsettings set org.gnome.desktop.interface gtk-theme 'WhiteSur-Light'
-     gsettings set org.gnome.desktop.wm.preferences theme 'WhiteSur-Light'
-     gsettings set org.gnome.desktop.background picture-uri 'file:///usr/share/backgrounds/WhiteSur/WhiteSur-timed.xml'
-     org.gnome.shell.extensions.just-perfection events-button false
-     gsettings set org.gnome.shell.extensions.just-perfection world-clock false
-     gsettings set org.gnome.shell.extensions.just-perfection weather false
-     gsettings set org.gnome.shell.extensions.just-perfection window-demands-attention-focus true
-     gsettings set org.gnome.shell.extensions.just-perfection startup-status 0
-     gsettings set org.gnome.desktop.interface show-battery-percentage true
-     gsettings set org.gnome.mutter center-new-windows true
-     gsettings set org.gnome.desktop.wm.preferences button-layout 'appmenu:minimize,maximize,close'
-     gsettings set org.gnome.shell.extensions.dash-to-dock scroll-action 'cycle-windows'
-     gsettings set org.gnome.shell.extensions.dash-to-dock custom-theme-shrink true
-     gsettings set org.gnome.shell.extensions.dash-to-dock running-indicator-style 'DASHES'
-     gsettings set org.gnome.shell.extensions.dash-to-dock running-indicator-dominant-color true
-     gsettings set org.gnome.shell.extensions.blur-my-shell.panel force-light-text true
-     gsettings set org.gnome.shell.extensions.blur-my-shell.panel style-panel 1
-     gsettings set org.gnome.shell.extensions.blur-my-shell.hidetopbar compatibility true
-     gsettings set org.gnome.shell.extensions.blur-my-shell.appfolder style-dialogs 2
-     gsettings set org.gnome.shell.extensions.blur-my-shell.dash-to-dock style-dash-to-dock 1
-     
-     
-     
-     
-     # dash-to-dock
-     gsettings list-recursively org.gnome.shell.extensions.dash-to-dock
-     gsettings set org.gnome.shell.extensions.dash-to-dock autohide true
-     gsettings set org.gnome.shell.extensions.dash-to-dock animation-time 0.5
-     gsettings set org.gnome.shell.extensions.dash-to-dock show-trash true
-     gsettings set org.gnome.shell.extensions.dash-to-dock scroll-action 'cycle-windows'
-     gsettings set org.gnome.shell.extensions.dash-to-dock shift-click-action 'minimize'
-     gsettings set org.gnome.shell.extensions.dash-to-dock custom-theme-shrink true
-     gsettings set org.gnome.shell.extensions.dash-to-dock running-indicator-style 'DASHES'
-     gsettings set org.gnome.shell.extensions.dash-to-dock running-indicator-dominant-color true
-     gsettings set org.gnome.shell.extensions.dash-to-dock custom-background-color true
-     gsettings set org.gnome.shell.extensions.dash-to-dock transparency-mode 'FIXED'
-     gsettings set org.gnome.shell.extensions.dash-to-dock background-opacity 0.6
-     gsettings set org.gnome.shell.extensions.dash-to-dock background-color 'rgb(255,255,255)'
-     
-     gsettings set org.gnome.shell.extensions.dash-to-dock background-color 'rgb(119,118,123)'
-     
-     
-     # blur-my-shell
-     gsettings list-recursively org.gnome.shell.extensions.blur-my-shell
-     org.gnome.shell.extensions.blur-my-shell.panel force-light-text true
-     gsettings set org.gnome.shell.extensions.blur-my-shell.panel style-panel 1
-     gsettings set org.gnome.shell.extensions.blur-my-shell.hidetopbar compatibility true
-     gsettings set org.gnome.shell.extensions.blur-my-shell.overview style-components 1
-     gsettings set org.gnome.shell.extensions.blur-my-shell.appfolder style-dialogs 2
-     gsettings set org.gnome.shell.extensions.blur-my-shell.dash-to-dock style-dash-to-dock 1
-     gsettings set org.gnome.shell.extensions.blur-my-shell.applications blur true
-     gsettings set org.gnome.shell.extensions.blur-my-shell.applications dynamic-opacity false
-     gsettings set org.gnome.shell.extensions.blur-my-shell.applications enable-all true
-     gsettings set org.gnome.shell.extensions.blur-my-shell hacks-level 2
-     
-     
-     gsettings set org.gnome.shell.extensions.blur-my-shell.panel style-panel 2
-     gsettings set org.gnome.shell.extensions.blur-my-shell.overview style-components 2
-     gsettings set org.gnome.shell.extensions.blur-my-shell.appfolder style-dialogs 3
-     gsettings set org.gnome.shell.extensions.blur-my-shell.dash-to-dock style-dash-to-dock 2
-     # hidetopbar
-     gsettings list-recursively org.gnome.shell.extensions.hidetopbar
-     
      ```
    
 2. **主题与图标**  
@@ -721,6 +724,37 @@
      ./install.sh
      git clone https://github.com/vinceliuice/WhiteSur-wallpapers.git --depth=1
      sudo ./install-gnome-backgrounds.sh
+     
+     # https://github.com/lassekongo83/adw-gtk3
+     dnf install adw-gtk3-theme
+     sudo flatpak override --filesystem=xdg-data/themes
+     sudo flatpak mask org.gtk.Gtk3theme.adw-gtk3 && sudo flatpak mask org.gtk.Gtk3theme.adw-gtk3-dark
+     
+     
+     # MacOS 3D 作者 https://m.youtube.com/watch?v=2-uPje43Zg8&pp=ygUJZmVkb3JhIDQy
+     使用 Evolve-core 应用程序应用主题：https://github.com/arcnations-united/evolve-core
+     GTK Theme: https://www.pling.com/p/2278127/
+     ICONS Theme: https://www.pling.com/p/2023325/
+     SHELL Theme: https://www.pling.com/p/2278187/
+     https://github.com/Macintosh98/MacOS-3D-Cursor
+     git clone https://github.com/Macintosh98/MacOS-3D-Cursor.git
+     图标放在 	~/.icons/
+     Shell 和 GTK主题放在		~/.themes/
+     
+     /usr/share/themes/
+     /usr/local/share/themes/  # 本地安装的第三方主题
+     ~/.themes/  # 传统路径（部分旧版GNOME使用）
+     ~/.local/share/themes/  # 新版GNOME推荐路径
+     gsettings set org.gnome.desktop.interface cursor-theme 'MacOS-3D-Cursor-Light'
+     gsettings set org.gnome.desktop.interface icon-theme 'MacOS-3D'
+     gsettings set org.gnome.shell.extensions.user-theme name 'MacOS-3D-Shell'
+     gsettings set org.gnome.desktop.interface gtk-theme 'MacOS-3D-Gtk'
+     gsettings set org.gnome.desktop.wm.preferences theme 'WhiteSur-Light'
+     
+     gsettings set org.gnome.desktop.interface cursor-theme 'MacOS-3D-Cursor-Dark'
+     gsettings set org.gnome.desktop.interface icon-theme 'MacOS-3D'
+     gsettings set org.gnome.shell.extensions.user-theme name 'MacOS-3D-Shell'
+     gsettings set org.gnome.desktop.interface gtk-theme 'MacOS-3D-Gtk-Dark'
      
      
      sudo flatpak override --filesystem=~/.themes
