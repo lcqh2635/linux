@@ -500,6 +500,7 @@
      # 递归列出某个 Schema 的键值（例如 org.gnome.desktop.interface）
      gsettings list-recursively org.gnome.desktop.interface
      gsettings list-recursively org.gnome.nautilus.preferences
+     gsettings list-recursively org.gnome.shell.extensions.blur-my-shell
      gsettings list-recursively org.gnome.shell.extensions.just-perfection
      
      # 安装配置系统字体
@@ -642,6 +643,48 @@
      gsettings set org.gnome.shell.extensions.blur-my-shell.hidetopbar compatibility true
      gsettings set org.gnome.shell.extensions.blur-my-shell.appfolder style-dialogs 2
      gsettings set org.gnome.shell.extensions.blur-my-shell.dash-to-dock style-dash-to-dock 1
+     
+     
+     
+     
+     # dash-to-dock
+     gsettings list-recursively org.gnome.shell.extensions.dash-to-dock
+     gsettings set org.gnome.shell.extensions.dash-to-dock autohide true
+     gsettings set org.gnome.shell.extensions.dash-to-dock animation-time 0.5
+     gsettings set org.gnome.shell.extensions.dash-to-dock show-trash true
+     gsettings set org.gnome.shell.extensions.dash-to-dock scroll-action 'cycle-windows'
+     gsettings set org.gnome.shell.extensions.dash-to-dock shift-click-action 'minimize'
+     gsettings set org.gnome.shell.extensions.dash-to-dock custom-theme-shrink true
+     gsettings set org.gnome.shell.extensions.dash-to-dock running-indicator-style 'DASHES'
+     gsettings set org.gnome.shell.extensions.dash-to-dock running-indicator-dominant-color true
+     gsettings set org.gnome.shell.extensions.dash-to-dock custom-background-color true
+     gsettings set org.gnome.shell.extensions.dash-to-dock transparency-mode 'FIXED'
+     gsettings set org.gnome.shell.extensions.dash-to-dock background-opacity 0.6
+     gsettings set org.gnome.shell.extensions.dash-to-dock background-color 'rgb(255,255,255)'
+     
+     gsettings set org.gnome.shell.extensions.dash-to-dock background-color 'rgb(119,118,123)'
+     
+     
+     # blur-my-shell
+     gsettings list-recursively org.gnome.shell.extensions.blur-my-shell
+     org.gnome.shell.extensions.blur-my-shell.panel force-light-text true
+     gsettings set org.gnome.shell.extensions.blur-my-shell.panel style-panel 1
+     gsettings set org.gnome.shell.extensions.blur-my-shell.hidetopbar compatibility true
+     gsettings set org.gnome.shell.extensions.blur-my-shell.overview style-components 1
+     gsettings set org.gnome.shell.extensions.blur-my-shell.appfolder style-dialogs 2
+     gsettings set org.gnome.shell.extensions.blur-my-shell.dash-to-dock style-dash-to-dock 1
+     gsettings set org.gnome.shell.extensions.blur-my-shell.applications blur true
+     gsettings set org.gnome.shell.extensions.blur-my-shell.applications dynamic-opacity false
+     gsettings set org.gnome.shell.extensions.blur-my-shell.applications enable-all true
+     gsettings set org.gnome.shell.extensions.blur-my-shell hacks-level 2
+     
+     
+     gsettings set org.gnome.shell.extensions.blur-my-shell.panel style-panel 2
+     gsettings set org.gnome.shell.extensions.blur-my-shell.overview style-components 2
+     gsettings set org.gnome.shell.extensions.blur-my-shell.appfolder style-dialogs 3
+     gsettings set org.gnome.shell.extensions.blur-my-shell.dash-to-dock style-dash-to-dock 2
+     # hidetopbar
+     gsettings list-recursively org.gnome.shell.extensions.hidetopbar
      
      ```
    
