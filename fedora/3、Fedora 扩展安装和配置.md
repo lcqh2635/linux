@@ -8,6 +8,50 @@
 ### **安装 GNOME 扩展管理器**
 ```bash
 sudo dnf install -y gnome-tweaks gnome-extensions-app
+
+gsettings list-schemas | grep "keybindings"
+# 窗口快捷键
+org.gnome.desktop.wm.keybindings
+# 窗口快捷键
+org.gnome.mutter.keybindings
+org.gnome.mutter.wayland.keybindings
+# 扩展提供的快捷键
+org.gnome.shell.extensions.paperwm.keybindings
+org.gnome.shell.keybindings
+
+gsettings list-recursively org.gnome.settings-daemon.plugins.media-keys
+gsettings list-recursively org.gnome.desktop.wm.keybindings
+
+
+# 自定义媒体快捷键
+org.gnome.settings-daemon.plugins.media-keys media ['<Super>F9']
+org.gnome.settings-daemon.plugins.media-keys mic-mute ['F2']
+org.gnome.settings-daemon.plugins.media-keys volume-down ['F3']
+org.gnome.settings-daemon.plugins.media-keys volume-up ['F4']
+org.gnome.settings-daemon.plugins.media-keys next ['F8']
+org.gnome.settings-daemon.plugins.media-keys play ['F9']
+org.gnome.settings-daemon.plugins.media-keys previous ['F10']
+
+# 自定义系统快捷键
+org.gnome.desktop.wm.keybindings close ['<Super>c']
+org.gnome.desktop.wm.keybindings maximize ['<Super>Up']
+gsettings set org.gnome.desktop.wm.keybindings minimize ['<Super>Down']
+org.gnome.desktop.wm.keybindings show-desktop ['<Super>h']
+org.gnome.desktop.wm.keybindings switch-to-workspace-1 ['<Super>1']
+org.gnome.desktop.wm.keybindings switch-to-workspace-2 ['<Super>2']
+org.gnome.desktop.wm.keybindings switch-to-workspace-3 ['<Super>3']
+org.gnome.desktop.wm.keybindings switch-to-workspace-4 ['<Super>4']
+org.gnome.desktop.wm.keybindings switch-to-workspace-last ['<Super>End']
+org.gnome.desktop.wm.keybindings switch-to-workspace-left ['<Super>Left']
+org.gnome.desktop.wm.keybindings switch-to-workspace-right ['<Super>Right']
+org.gnome.desktop.wm.keybindings switch-to-workspace-down ['<Control><Alt>Down']
+org.gnome.desktop.wm.keybindings switch-to-workspace-up ['<Control><Alt>Up']
+org.gnome.desktop.wm.keybindings toggle-fullscreen ['<Super>f']
+org.gnome.desktop.wm.keybindings toggle-maximized ['<Super>F10']
+org.gnome.desktop.wm.keybindings unmaximize ['<Super>r']
+
+
+
 ```
 或通过浏览器安装扩展：
 1. 安装浏览器插件 [GNOME Shell Integration](https://extensions.gnome.org/)
@@ -55,6 +99,8 @@ gsettings list-recursively org.gnome.shell.extensions.dash-to-dock
 # MacOS-like 配置，其他使用默认即可
 # 动画速度 (0.2=流畅不拖沓)
 gsettings set org.gnome.shell.extensions.dash-to-dock animation-time 0.5
+# 使用键盘快捷键激活应用，默认开启。此处选择关闭
+gsettings set org.gnome.shell.extensions.dash-to-dock hot-keys false
 # 点击动作 (0: 最小化, 1: 聚焦, 2: 启动新实例)
 gsettings set org.gnome.shell.extensions.dash-to-dock click-action 'minimize'
 # 滚动动作 (0: 无, 1: 切换应用窗口)
@@ -702,6 +748,7 @@ gsettings set org.gnome.shell.extensions.coverflow-alttab blur-background true
 sudo dnf install gnome-shell-extension-night-theme-switcher
 ```
 **配置命令**：
+
 ```bash
 # 恢复默认设置
 gsettings reset-recursively org.gnome.shell.extensions.nightthemeswitcher.time
@@ -712,7 +759,6 @@ gsettings list-schemas
 # 列出某个 Schema 下的所有键
 gsettings list-keys org.gnome.shell.extensions.nightthemeswitcher
 # 递归列出某个 Schema 的键值
-gsettings list-recursively org.gnome.shell.extensions.nightthemeswitcher.color-scheme
 gsettings list-recursively org.gnome.shell.extensions.nightthemeswitcher.commands
 
 
@@ -720,9 +766,10 @@ gsettings list-recursively org.gnome.shell.extensions.nightthemeswitcher.command
 gsettings set org.gnome.shell.extensions.night-theme-switcher day-theme 'Adwaita'
 gsettings set org.gnome.shell.extensions.night-theme-switcher night-theme 'Adwaita-dark'
 
-org.gnome.shell.extensions.nightthemeswitcher.commands enabled true
-org.gnome.shell.extensions.nightthemeswitcher.commands sunrise ''
-org.gnome.shell.extensions.nightthemeswitcher.commands sunset ''
+
+gsettings set org.gnome.shell.extensions.nightthemeswitcher.commands enabled true
+gsettings set org.gnome.shell.extensions.nightthemeswitcher.commands sunrise "gsettings set org.gnome.desktop.interface cursor-theme 'MacOS-3D-Cursor-Light'\ngsettings set org.gnome.desktop.interface icon-theme 'MacOS-3D'\ngsettings set org.gnome.shell.extensions.user-theme name 'MacOS-3D-Shell'\ngsettings set org.gnome.desktop.interface gtk-theme 'MacOS-3D-Gtk'\ngsettings set org.gnome.desktop.wm.preferences theme 'MacOS-3D-Gtk'"
+gsettings set org.gnome.shell.extensions.nightthemeswitcher.commands sunset "gsettings set org.gnome.desktop.interface cursor-theme 'MacOS-3D-Cursor-Dark'\ngsettings set org.gnome.desktop.interface icon-theme 'MacOS-3D'\ngsettings set org.gnome.shell.extensions.user-theme name 'MacOS-3D-Shell'\ngsettings set org.gnome.desktop.interface gtk-theme 'MacOS-3D-Gtk-Dark'\ngsettings set org.gnome.desktop.wm.preferences theme 'MacOS-3D-Gtk-Dark'"
 ```
 
 #### 6. **Proxy Switcher**  

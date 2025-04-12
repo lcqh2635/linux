@@ -4,17 +4,17 @@
     "type": "split",
     "children": [
       {
-        "id": "9c99c28176858e3d",
+        "id": "398e605bfa6efde1",
         "type": "tabs",
         "children": [
           {
-            "id": "0643edd570733c22",
+            "id": "d505fa1d93e2e9bb",
             "type": "leaf",
             "state": {
-              "type": "graph",
+              "type": "empty",
               "state": {},
-              "icon": "lucide-git-fork",
-              "title": "关系图谱"
+              "icon": "lucide-file",
+              "title": "新标签页"
             }
           }
         ]
@@ -174,7 +174,7 @@
       "table-editor-obsidian:Advanced Tables Toolbar": false
     }
   },
-  "active": "0643edd570733c22",
+  "active": "746e66e10ef8f587",
   "lastOpenFiles": [
     "fedora/Fedora 初次安装后的配置.md",
     "fedora/5、Fedora 安装常用软件.md",
