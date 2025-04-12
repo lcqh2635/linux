@@ -7,7 +7,7 @@
 ## **1. 必备扩展安装工具**
 ### **安装 GNOME 扩展管理器**
 ```bash
-sudo dnf install gnome-extensions-app
+sudo dnf install -y gnome-tweaks gnome-extensions-app
 ```
 或通过浏览器安装扩展：
 1. 安装浏览器插件 [GNOME Shell Integration](https://extensions.gnome.org/)
@@ -318,15 +318,26 @@ sudo dnf install gnome-shell-extension-tray-icons-reloaded
 
 ---
 
-#### 2. **Quick Settings Tweaker**  
+#### 2. **Quick Settings Tweaks**  
 **评分**: ★★★★☆ (20万+ 用户)  
 **作用**: 自定义顶部面板的快捷设置菜单（隐藏无用按钮、添加夜间模式开关等）。  
 **安装**:
+
 ```bash
 sudo dnf install gnome-shell-extension-quick-settings-tweaker
 ```
 **实用配置**：
 ```bash
+# 恢复默认设置
+gsettings reset-recursively org.gnome.shell.extensions.hidetopbar
+
+# 列出所有已安装的 Schema
+gsettings list-schemas
+# 列出某个 Schema 下的所有键
+gsettings list-keys org.gnome.shell.extensions.hidetopbar
+# 递归列出某个 Schema 的键值
+gsettings list-recursively org.gnome.shell.extensions.hidetopbar
+
 # 添加电池百分比显示
 gsettings set org.gnome.shell.extensions.quick-settings-tweaker battery-show-percentage true
 ```

@@ -449,3 +449,227 @@ dconf dump /org/gnome/shell/ >> ~/gnome-visual-settings.dconf
 | 固定色温          | 智能夜间模式                 |
 
 通过以上调整，Fedora 41 可同时获得 **macOS 级的美观** 和 **电竞级的流畅度**。根据硬件性能适当取舍特效即可。
+
+
+
+
+
+
+
+在 GNOME 桌面环境中，`gsettings set org.gnome.desktop.wm.preferences theme` 命令用于设置 **窗口管理器（Window Manager）的主题**，它控制的是 **窗口边框、标题栏、最小化/最大化/关闭按钮等非客户区（non-client area）的视觉样式**。以下是详细说明：
+
+---
+
+### **1. 作用解析**
+- **影响的元素**：
+  - 窗口标题栏（包括按钮、文字、图标）
+  - 窗口边框（如阴影、边框粗细）
+  - 窗口菜单（右键点击标题栏时的弹出菜单）
+
+- **不影响的元素**：
+  - 应用程序内部界面（由 GTK 主题控制，需通过 `org.gnome.desktop.interface gtk-theme` 设置）
+  - 图标（由图标主题控制，需通过 `org.gnome.desktop.interface icon-theme` 设置）
+  - Shell 主题（如顶栏、概览，需通过 `org.gnome.shell.extensions.user-theme` 设置）
+
+---
+
+### **2. 主题的实际用途**
+- **视觉一致性**：使窗口装饰与系统整体风格统一（如暗色模式、圆角设计）。
+- **功能区分**：通过颜色或形状区分活动窗口与非活动窗口。
+- **用户体验优化**：调整按钮大小、间距等提升操作舒适度。
+
+---
+
+### **3. 常用操作示例**
+#### **查看当前窗口管理器主题**
+```bash
+gsettings get org.gnome.desktop.wm.preferences theme
+```
+默认值通常为 `Adwaita`（GNOME 默认主题）。
+
+#### **设置新主题（需先安装主题包）**
+```bash
+# 例如切换到 Adwaita-dark（深色窗口装饰）
+gsettings set org.gnome.desktop.wm.preferences theme 'Adwaita-dark'
+```
+
+#### **与其他主题的关系**
+```bash
+# 设置 GTK 主题（应用内部样式）
+gsettings set org.gnome.desktop.interface gtk-theme 'Adwaita-dark'
+
+# 设置图标主题
+gsettings set org.gnome.desktop.interface icon-theme 'Papirus-Dark'
+```
+
+---
+
+### **4. 主题文件存放位置**
+窗口管理器主题通常安装在以下目录：
+- `/usr/share/themes/`（系统全局）
+- `~/.themes/`（用户自定义）
+
+例如，`Adwaita` 主题的窗口管理器样式文件位于：  
+`/usr/share/themes/Adwaita/metacity-1/`
+
+---
+
+### **5. 常见问题**
+#### **Q：为什么改了窗口主题没效果？**
+- **原因1**：主题未正确安装（检查 `/usr/share/themes/` 是否存在对应主题）。
+- **原因2**：Wayland 下部分主题兼容性差（可尝试切换到 X11 会话）。
+- **原因3**：使用了不支持 GNOME 的旧主题（如 Metacity 主题需适配 GNOME Shell）。
+
+#### **Q：如何自定义窗口按钮布局？**
+通过 `gsettings` 调整按钮顺序和显示：
+```bash
+# 将关闭按钮移到左侧
+gsettings set org.gnome.desktop.wm.preferences button-layout 'close,minimize,maximize:'
+```
+
+---
+
+### **6. 主题效果对比**
+| **主题类型**       | **控制范围**                | **设置命令示例**                                             |
+| ------------------ | --------------------------- | ------------------------------------------------------------ |
+| **窗口管理器主题** | 窗口边框/标题栏             | `gsettings set org.gnome.desktop.wm.preferences theme 'Adwaita-dark'` |
+| **GTK 主题**       | 应用内部控件（按钮/输入框） | `gsettings set org.gnome.desktop.interface gtk-theme 'Adwaita-dark'` |
+| **图标主题**       | 文件管理器/应用图标         | `gsettings set org.gnome.desktop.interface icon-theme 'Papirus-Dark'` |
+
+---
+
+### **总结**
+- `org.gnome.desktop.wm.preferences theme` **仅控制窗口装饰**，需搭配 GTK 主题和图标主题实现完整视觉统一。
+- 推荐使用 **Adwaita** 或 **匹配 GTK 主题的窗口主题** 以避免风格冲突。
+- 调试时可使用 [GNOME Tweaks](https://wiki.gnome.org/Apps/Tweaks) 工具直观调整。
+
+
+
+
+
+
+
+
+
+sudo flatpak override --filesystem=xdg-config/gtk-3.0
+
+sudo flatpak override --filesystem=xdg-config/gtk-4.0
+
+
+
+https://itsfoss.com/flatpak-app-apply-theme/
+参考 https://docs.flatpak.org/zh-cn/latest/desktop-integration.html
+
+
+
+官网 https://github.com/FengZhongShaoNian/QWhiteSurGtkDecorations
+
+export QT_QPA_PLATFORM=wayland
+
+sudo dnf install -y qadwaitadecorations-qt5 qadwaitadecorations-qt6
+
+export QT_WAYLAND_DECORATION=adwaita
+
+需要自行安装 QWhiteSurGtkDecorations
+
+export QT_WAYLAND_DECORATION=whitesur-gtk
+
+export QT_STYLE_OVERRIDE=kvantum
+
+source ~/.bashrc
+
+```bash
+sudo dnf install -y git cmake gtk3-devel gtk4-devel
+sudo dnf install -y qt5-qtbase-devel qt5-qttools-devel qt5-qtwayland qt6-qtwayland
+sudo dnf install qt5-qtsvg-devel
+sudo dnf install qt5-qtwayland-devel
+sudo dnf install cmake make qt5-qtsvg qt5-qtwayland qt6-qtsvg qt6-qtwayland
+sudo dnf install gtk4-devel libadwaita-devel
+# 提供 统一的桌面服务接口，允许 Flatpak/Snap 等沙箱应用与宿主桌面环境（如 GNOME、KDE）安全交互。
+xdg-desktop-portal
+# 通用（GTK 基础实现）提供基本的 GTK 对话框，兼容所有环境，但功能较简陋。
+xdg-desktop-portal-gtk
+# 深度集成 GNOME 原生服务（如 GNOME 风格的文件选择器、截图工具）。
+xdg-desktop-portal-gnome
+
+git clone https://github.com/nedrysoft/SettingsDialog.git
+cd SettingsDialog
+mkdir build && cd build
+cmake ..
+make
+sudo make install
+
+git clone https://github.com/nedrysoft/ThemeSupport.git
+cd ThemeSupport
+mkdir build && cd build
+cmake -DCMAKE_PREFIX_PATH=/usr/lib64/cmake ..
+sudo dnf install -y qt5-designer.x86_64
+https://aur.archlinux.org/packages/qwhitesurgtkdecorations-qt6
+
+# QWhiteSurGtkDecorations 基于 QAdwaitaDecorations 改造而来
+sudo dnf install -y qadwaitadecorations-qt5 qadwaitadecorations-qt6
+# 但是仓库中没有 qwhitesurgtkdecorations-qt5 qwhitesurgtkdecorations-qt6
+sudo dnf install -y qwhitesurgtkdecorations-qt5 qwhitesurgtkdecorations-qt6
+git clone https://aur.archlinux.org/qwhitesurgtkdecorations.git
+
+cd ~/下载
+git clone https://github.com/FengZhongShaoNian/QWhiteSurGtkDecorations.git
+cd QWhiteSurGtkDecorations
+# 编译安装
+mkdir build && cd build
+sudo find /usr -name "Qt5SvgConfig.cmake"
+sudo find /usr -name "Qt5WaylandClientConfig.cmake"
+cmake -DCMAKE_PREFIX_PATH=/usr/lib64/cmake ..
+make
+sudo make install
+
+# 清理并重新生成构建目录
+rm -rf build/
+mkdir build
+cd build
+cmake ..
+make
+```
+
+
+
+flatpak remote-ls --columns=application flathub | grep org.kde.KStyle
+flatpak install flathub org.kde.KStyle.Kvantum
+
+sudo flatpak override --filesystem=$HOME/.themes
+sudo flatpak override --filesystem=$HOME/.icons
+sudo flatpak override --env=GTK_THEME=my-theme
+sudo flatpak override --env=ICON_THEME=my-icon-theme
+
+sudo flatpak override org.gnome.Calculator --filesystem=$HOME/.themes
+sudo flatpak override org.gnome.Calculator --filesystem=$HOME/.icons
+sudo flatpak override org.gnome.Calculator --env=GTK_THEME=my-theme 
+sudo flatpak override org.gnome.Calculator --env=ICON_THEME=my-icon-theme 
+
+flatpak install org.kde.KStyle.Kvantum
+sudo flatpak override --env=QT_STYLE_OVERRIDE=kvantum --filesystem=xdg-config/Kvantum:ro <name of flatpak app>
+sudo flatpak override --reset
+
+sudo flatpak override --show
+
+# 列出所有已安装的 Flatpak 应用和运行时
+
+flatpak list
+
+# 查看应用使用的运行时等信息
+
+flatpak list --app
+
+sudo flatpak override --reset org.example.app
+
+
+# 参考 https://docs.flatpak.org/zh-cn/latest/desktop-integration.html#theming
+
+On Wayland, starting from the 5.15-22.08+ and 6.5+ branches of the org.kde.Platform runtime, org.kde.WaylandDecoration.QAdwaitaDecorations and org.kde.WaylandDecoration.QGnomePlatform-decoration need to be installed. Please see the upstream usage instructions as well.
+
+For older runtimes, org.kde.PlatformTheme.QGnomePlatform and org.kde.WaylandDecoration.QGnomePlatform-decoration need to be installed.
+
+org.kde.Platform runtime
+org.kde.WaylandDecoration.QAdwaitaDecorations
+org.kde.WaylandDecoration.QGnomePlatform-decoration
+org.kde.PlatformTheme.QGnomePlatform
