@@ -16,6 +16,21 @@ sudo dnf install gnome-extensions-app
 ---
 
 ## **2. 常用扩展推荐及配置**
+### **① User Themes**
+
+**作用**: 允许使用自定义 Shell 主题（必备基础扩展）。  
+**安装**:
+
+```bash
+sudo dnf install gnome-shell-extension-user-theme
+```
+
+**`gsettings` 配置示例**：
+
+```bash
+gsettings set org.gnome.shell.extensions.user-theme name 'WhiteSur-Light'
+```
+
 ### **① Dash to Dock（macOS 式 Dock 栏）**
 
 **作用**：将 GNOME 默认的 Dash 改为类似 macOS 的 Dock，支持自动隐藏、图标放大、任务指示器等。  
@@ -27,23 +42,30 @@ sudo dnf install gnome-shell-extension-dash-to-dock
 **`gsettings` 配置示例**：（调整成 macOS 风格）：
 
 ```bash
-# 设置 Dock 位置（'BOTTOM' 或 'LEFT'）
-gsettings set org.gnome.shell.extensions.dash-to-dock dock-position 'BOTTOM'
+# 恢复默认设置
+gsettings reset-recursively org.gnome.shell.extensions.dash-to-dock
 
-# 启用自动隐藏（类似 macOS）
-gsettings set org.gnome.shell.extensions.dash-to-dock dock-fixed false
-gsettings set org.gnome.shell.extensions.dash-to-dock autohide true
+# 列出所有已安装的 Schema
+gsettings list-schemas
+# 列出某个 Schema 下的所有键
+gsettings list-keys org.gnome.shell.extensions.dash-to-dock
+# 递归列出某个 Schema 的键值（例如 org.gnome.shell.extensions.dash-to-dock）
+gsettings list-recursively org.gnome.shell.extensions.dash-to-dock
 
-# 图标大小和放大效果
-gsettings set org.gnome.shell.extensions.dash-to-dock dash-max-icon-size 48
-gsettings set org.gnome.shell.extensions.dash-to-dock apply-custom-theme true
-
-# 任务指示器（当前应用高亮）
-gsettings set org.gnome.shell.extensions.dash-to-dock show-running true
-gsettings set org.gnome.shell.extensions.dash-to-dock show-apps-at-top false
+# MacOS-like 配置，其他使用默认即可
+# 动画速度 (0.2=流畅不拖沓)
+gsettings set org.gnome.shell.extensions.dash-to-dock animation-time 0.5
+# 点击动作 (0: 最小化, 1: 聚焦, 2: 启动新实例)
+gsettings set org.gnome.shell.extensions.dash-to-dock click-action 'minimize'
+# 滚动动作 (0: 无, 1: 切换应用窗口)
+gsettings set org.gnome.shell.extensions.dash-to-dock scroll-action 'cycle-windows'
+# 收缩 Dash 紧凑模式
+gsettings set org.gnome.shell.extensions.dash-to-dock custom-theme-shrink true
+# 正在运行的应用的视觉指示器样式，使用短横线
+gsettings set org.gnome.shell.extensions.dash-to-dock running-indicator-style 'DASHES'
+# 让运行指示器 使用应用图标的主色调（而非默认主题颜色）
+gsettings set org.gnome.shell.extensions.dash-to-dock running-indicator-dominant-color true
 ```
-
----
 
 ### **② ArcMenu**  
 **作用**：替换 GNOME 默认应用菜单为现代化布局（类似 Windows 开始菜单或 macOS Launchpad）。  
@@ -65,8 +87,6 @@ gsettings set org.gnome.shell.extensions.arcmenu menu-button-icon 'MacOS'
 gsettings set org.gnome.shell.extensions.arcmenu enable-animations false
 ```
 
----
-
 ### ③ Blur My Shell（毛玻璃效果）
 **作用**：为 GNOME Shell 添加 macOS 风格的毛玻璃模糊效果（顶栏、Dock、概述、侧边栏等）。 
 
@@ -77,6 +97,19 @@ sudo dnf install gnome-shell-extension-blur-my-shell
 ```
 **`gsettings` 配置示例**：
 ```bash
+# 恢复默认设置
+gsettings reset-recursively org.gnome.shell.extensions.blur-my-shell
+
+# 列出所有已安装的 Schema
+gsettings list-schemas
+# 列出某个 Schema 下的所有键
+gsettings list-keys org.gnome.shell.extensions.blur-my-shell
+# 递归列出某个 Schema 的键值
+gsettings list-recursively org.gnome.shell.extensions.blur-my-shell
+
+gsettings set org.gnome.shell.extensions.blur-my-shell sigma 10  # 模糊强度
+gsettings set org.gnome.shell.extensions.blur-my-shell blur-panel true  # 模糊顶栏
+
 # 启用顶栏模糊
 gsettings set org.gnome.shell.extensions.blur-my-shell blur-panel true
 
@@ -87,8 +120,6 @@ gsettings set org.gnome.shell.extensions.blur-my-shell sigma 10
 gsettings set org.gnome.shell.extensions.blur-my-shell blur-dash false
 ```
 
----
-
 ### **④ Just Perfection**  
 **作用**：微调 GNOME Shell 的细节（隐藏冗余元素、调整动画速度等）。  
 **安装**：
@@ -97,6 +128,19 @@ sudo dnf install gnome-shell-extension-just-perfection
 ```
 **`gsettings` 配置示例**：
 ```bash
+# 恢复默认设置
+gsettings reset-recursively org.gnome.shell.extensions.just-perfection
+
+# 列出所有已安装的 Schema
+gsettings list-schemas
+# 列出某个 Schema 下的所有键
+gsettings list-keys org.gnome.shell.extensions.just-perfection
+# 递归列出某个 Schema 的键值
+gsettings list-recursively org.gnome.shell.extensions.just-perfection
+
+gsettings set org.gnome.shell.extensions.just-perfection hide-activities-button true  # 隐藏活动按钮
+gsettings set org.gnome.shell.extensions.just-perfection animation-speed 0.7  # 加快动画
+
 # 隐藏活动按钮（左上角）
 gsettings set org.gnome.shell.extensions.just-perfection hide-activities-button true
 
@@ -107,9 +151,58 @@ gsettings set org.gnome.shell.extensions.just-perfection workspace-switcher-shou
 gsettings set org.gnome.shell.extensions.just-perfection animation-speed 0.7
 ```
 
----
+#### **6. AppIndicator and KStatusNotifierItem Support**  
+
+**评分**: ★★★★☆ (解决托盘图标缺失问题)  
+**作用**: 显示传统托盘图标（如 Discord、Steam、微信）。  
+**安装**:
+
+```bash
+sudo dnf install gnome-shell-extension-appindicator
+```
+
+**启用所有图标**:
+
+```bash
+gsettings set org.gnome.shell.extensions.appindicator show-menus true
+```
+
+#### **7. Hide Top Bar**  
+
+**作用**: 自动隐藏 GNOME 顶栏（面板），节省屏幕空间，鼠标悬停顶部时显示（类似 macOS 行为）。 
+**安装**:
+
+```bash
+sudo dnf install gnome-shell-extension-hidetopbar
+```
+
+**配置命令**:
+
+```bash
+# 恢复默认设置
+gsettings reset-recursively org.gnome.shell.extensions.hidetopbar
+
+# 列出所有已安装的 Schema
+gsettings list-schemas
+# 列出某个 Schema 下的所有键
+gsettings list-keys org.gnome.shell.extensions.hidetopbar
+# 递归列出某个 Schema 的键值
+gsettings list-recursively org.gnome.shell.extensions.hidetopbar
+
+# 启用自动隐藏（必需）
+gsettings set org.gnome.shell.extensions.hidetopbar enable-autohide true
+# 设置鼠标触发灵敏度（true/false）
+gsettings set org.gnome.shell.extensions.hidetopbar mouse-sensitive true
+# 禁用鼠标悬停时显示概览（仅显示顶栏）
+gsettings set org.gnome.shell.extensions.hidetopbar mouse-triggers-overview false
+# 设置隐藏延迟（毫秒，默认200ms）
+gsettings set org.gnome.shell.extensions.hidetopbar hide-delay 200
+# 设置显示延迟（毫秒，默认300ms）
+gsettings set org.gnome.shell.extensions.hidetopbar show-delay 300
+```
 
 ### **⑤ Clipboard Indicator**  
+
 **作用**：记录剪贴板历史，支持快捷键粘贴。  
 **安装**：
 ```bash
@@ -124,9 +217,30 @@ gsettings set org.gnome.shell.extensions.clipboard-indicator history-size 50
 gsettings set org.gnome.shell.extensions.clipboard-indicator show-preview false
 ```
 
----
+### **② ArcMenu**  
+
+**作用**：替换 GNOME 默认应用菜单为现代化布局（类似 Windows 开始菜单或 macOS Launchpad）。  
+**安装**：
+
+```bash
+sudo dnf install gnome-shell-extension-arcmenu
+```
+
+**`gsettings` 配置示例**：
+
+```bash
+# 设置菜单样式（'Windows'、'Mac'、'Ubuntu' 等）
+gsettings set org.gnome.shell.extensions.arcmenu menu-layout 'Mac'
+
+# 设置 Launchpad 图标（使用 macOS 风格图标）
+gsettings set org.gnome.shell.extensions.arcmenu menu-button-icon 'MacOS'
+
+# 禁用搜索栏动画（更流畅）
+gsettings set org.gnome.shell.extensions.arcmenu enable-animations false
+```
 
 ### **⑥ GSConnect**  
+
 **作用**：实现与 Android 设备的无缝连接（文件传输、通知同步等）。  
 **安装**：
 ```bash
@@ -177,231 +291,22 @@ gsettings set org.gnome.shell.extensions.caffeine enable-fullscreen true
 gsettings set org.gnome.shell.extensions.caffeine user-enabled false
 ```
 
-### **① 全局菜单（Top Bar 显示应用菜单）**
-
-```bash
-sudo dnf install gnome-shell-extension-appindicator
-gsettings set org.gnome.shell.extensions.appindicator show-menus true
-```
-
-### **③ 触控板手势（类似 macOS）**
-
-```bash
-# 安装触摸板手势扩展
-sudo dnf install gnome-shell-extension-gesture-improved
-
-# 设置三指拖拽（类似 macOS）
-gsettings set org.gnome.desktop.peripherals.touchpad click-method 'fingers'
-gsettings set org.gnome.desktop.peripherals.touchpad tap-to-click true
-```
-
----
-
-## 
-
-
-
-
-
-以下是 **下载量高、用户好评度极高** 的 GNOME 扩展列表（数据来自 [GNOME Extensions 官网](https://extensions.gnome.org/) 的评分和下载量统计），这些扩展经过大量用户验证，兼具实用性和稳定性：
-
----
-
-### **🌟 顶级热门扩展推荐**
-#### **1. User Themes**  
-**评分**: ★★★★★ (几乎所有用户必备)  
-**作用**: 允许使用自定义 Shell 主题（必备基础扩展）。  
-**安装**:
-```bash
-sudo dnf install gnome-shell-extension-user-theme
-```
-**配置**:
-```bash
-gsettings set org.gnome.shell.extensions.user-theme name "Your-Theme-Name"
-```
-
----
-
-#### **2. Dash to Dock**  
-**评分**: ★★★★★ (超 100 万用户)  
-**作用**: 将 GNOME 默认 Dash 转换为可定制的 Dock 栏（支持 macOS 风格自动隐藏）。  
-**安装**:
-```bash
-sudo dnf install gnome-shell-extension-dash-to-dock
-```
-**配置命令**（macOS 风格）:
-```bash
-# 恢复默认设置
-gsettings reset-recursively org.gnome.shell.extensions.dash-to-dock
-
-# 列出所有已安装的 Schema
-gsettings list-schemas
-# 列出某个 Schema 下的所有键
-gsettings list-keys org.gnome.shell.extensions.dash-to-dock
-# 递归列出某个 Schema 的键值（例如 org.gnome.shell.extensions.dash-to-dock）
-gsettings list-recursively org.gnome.shell.extensions.dash-to-dock
-
-# MacOS-like 配置，其他使用默认即可
-# 动画速度 (0.2=流畅不拖沓)
-gsettings set org.gnome.shell.extensions.dash-to-dock animation-time 0.4
-# 点击动作 (0: 最小化, 1: 聚焦, 2: 启动新实例)
-gsettings set org.gnome.shell.extensions.dash-to-dock click-action 'minimize'
-# 滚动动作 (0: 无, 1: 切换应用窗口)
-gsettings set org.gnome.shell.extensions.dash-to-dock scroll-action 'cycle-windows'
-# 收缩 Dash 紧凑模式
-gsettings set org.gnome.shell.extensions.dash-to-dock custom-theme-shrink true
-# 正在运行的应用的视觉指示器样式，使用短横线
-gsettings set org.gnome.shell.extensions.dash-to-dock running-indicator-style 'DASHES'
-# 让运行指示器 使用应用图标的主色调（而非默认主题颜色）
-gsettings set org.gnome.shell.extensions.dash-to-dock running-indicator-dominant-color true
-```
-
----
-
-#### **3. GSConnect**  
-**评分**: ★★★★★ (KDE Connect 的 GNOME 版)  
-**作用**: 手机与电脑无缝连接（文件传输、剪贴板同步、通知转发）。  
-**安装**:
-
-```bash
-sudo dnf install gnome-shell-extension-gsconnect
-```
-**无需配置**，安装后与手机端 KDE Connect 配对即可。
-
----
-
-#### **4. Clipboard Indicator**  
-**评分**: ★★★★★ (50 万+ 用户)  
-**作用**: 记录剪贴板历史，支持快捷键粘贴。  
-**安装**:
-```bash
-sudo dnf install gnome-shell-extension-clipboard-indicator
-```
-**优化配置**:
-```bash
-gsettings set org.gnome.shell.extensions.clipboard-indicator history-size 50
-gsettings set org.gnome.shell.extensions.clipboard-indicator toggle-menu '<Primary><Alt>v'
-```
-
----
-
-#### **5. Blur My Shell**  
-**评分**: ★★★★★ (视觉美化首选)  
-**作用**: 为顶栏、概览等添加毛玻璃模糊效果。  
-**安装**:
-
-```bash
-sudo dnf install gnome-shell-extension-blur-my-shell
-```
-**配置命令**:
-```bash
-gsettings set org.gnome.shell.extensions.blur-my-shell sigma 10  # 模糊强度
-gsettings set org.gnome.shell.extensions.blur-my-shell blur-panel true  # 模糊顶栏
-```
-
----
-
-#### **6. AppIndicator and KStatusNotifierItem Support**  
-**评分**: ★★★★☆ (解决托盘图标缺失问题)  
-**作用**: 显示传统托盘图标（如 Discord、Steam、微信）。  
-**安装**:
-```bash
-sudo dnf install gnome-shell-extension-appindicator
-```
-**启用所有图标**:
-```bash
-gsettings set org.gnome.shell.extensions.appindicator show-menus true
-```
-
----
-
-#### **7. OpenWeather**  
-**评分**: ★★★★☆ (天气扩展榜首)  
-**作用**: 在顶栏显示实时天气和预报。  
-**安装**:
-```bash
-sudo dnf install gnome-shell-extension-openweather
-```
-**配置命令**:
-```bash
-gsettings set org.gnome.shell.extensions.openweather city 'Beijing'
-gsettings set org.gnome.shell.extensions.openweather unit 'celsius'
-```
-
----
-
-#### **8. Caffeine**  
-**评分**: ★★★★☆ (防止休眠神器)  
-**作用**: 临时禁用屏幕休眠和锁屏（适合演示/观影）。  
-**安装**:
-```bash
-sudo dnf install gnome-shell-extension-caffeine
-```
-**快捷键**: 点击顶栏咖啡图标或 `Super+Esc` 切换状态。
-
----
-
-#### **9. Just Perfection**  
-**评分**: ★★★★★ (极简主义必备)  
-**作用**: 微调 GNOME Shell 的每个细节（隐藏冗余元素、调整动画速度）。  
-**安装**:
-```bash
-sudo dnf install gnome-shell-extension-just-perfection
-```
-**常用配置**:
-```bash
-gsettings set org.gnome.shell.extensions.just-perfection hide-activities-button true  # 隐藏活动按钮
-gsettings set org.gnome.shell.extensions.just-perfection animation-speed 0.7  # 加快动画
-```
-
----
-
 #### **10. Vitals**  
+
 **评分**: ★★★★☆ (硬件监控最佳)  
 **作用**: 在顶栏显示 CPU/内存/温度/网络等实时数据。  
 **安装**:
+
 ```bash
 sudo dnf install gnome-shell-extension-vitals
 ```
+
 **配置命令**:
+
 ```bash
 gsettings set org.gnome.shell.extensions.vitals monitors "['cpu', 'memory', 'temperature']"
 ```
 
----
-
-### **📊 用户评价最高的功能扩展**
-| **扩展名称**            | **核心功能**      | **安装量** | **评分** |
-| ----------------------- | ----------------- | ---------- | -------- |
-| **Dash to Dock**        | macOS 式 Dock 栏  | 100 万+    | ★★★★★    |
-| **GSConnect**           | 手机与电脑互联    | 80 万+     | ★★★★★    |
-| **Blur My Shell**       | 毛玻璃特效        | 60 万+     | ★★★★★    |
-| **Clipboard Indicator** | 剪贴板历史        | 50 万+     | ★★★★★    |
-| **User Themes**         | 自定义 Shell 主题 | 必备       | ★★★★★    |
-
----
-
-### **💡 使用建议**
-1. **按需安装**：避免同时启用过多扩展（可能影响性能）。
-2. **定期更新**：
-   ```bash
-   sudo dnf upgrade --refresh
-   ```
-3. **冲突排查**：若遇到问题，通过 `gnome-extensions list` 检查冲突扩展。
-
-这些扩展经过全球用户验证，能显著提升 GNOME 桌面的功能和美观度！ 🚀
-
-
-
-
-
-
-
-以下是更多 **高人气、高评分** 的 GNOME 扩展，这些扩展在功能和用户体验上都经过广泛验证，适合不同场景需求：
-
----
-
-### **🔧 系统增强类**
 #### 1. **Tray Icons: Reloaded**  
 **评分**: ★★★★★ (解决 GNOME 40+ 托盘图标兼容性问题)  
 **作用**: 完美支持传统应用托盘图标（如 QQ、Steam、WPS）。  
@@ -437,9 +342,6 @@ sudo dnf install gnome-shell-extension-grand-theft-focus
 ```
 **快捷键**: `Super` + `F` 一键锁定。
 
----
-
-### **🎨 视觉美化类**
 #### 4. **Rounded Window Corners**  
 **评分**: ★★★★★ (50万+ 用户)  
 **作用**: 为所有窗口添加圆角效果（类似 macOS）。  
@@ -475,12 +377,19 @@ sudo dnf install gnome-shell-extension-burn-my-windows
 ```
 **特效切换**：
 ```bash
+# 恢复默认设置
+gsettings reset-recursively org.gnome.shell.extensions.just-perfection
+
+# 列出所有已安装的 Schema
+gsettings list-schemas
+# 列出某个 Schema 下的所有键
+gsettings list-keys org.gnome.shell.extensions.just-perfection
+# 递归列出某个 Schema 的键值
+gsettings list-recursively org.gnome.shell.extensions.just-perfection
+
 gsettings set org.gnome.shell.extensions.burn-my-windows animation-type 'fire'
 ```
 
----
-
-### **⚡ 效率工具类**
 #### 7. **Forge**  
 **评分**: ★★★★★ (进阶窗口管理)  
 **作用**: 比 Tiling Assistant 更强大的分屏工具，支持自定义布局和快捷键。  
@@ -549,29 +458,6 @@ Window Gestures
 VirtualBox applet
 # https://github.com/Sominemo/Fildem-Gnome-45
 ```
-**排除应用**：
-```bash
-gsettings set org.gnome.shell.extensions.espresso whitelist "['vlc.desktop', 'chrome.desktop']"
-```
-
----
-
-### **📊 用户投票TOP扩展**
-| 扩展名称            | 核心功能      | 适合人群      | 安装量 |
-| ------------------- | ------------- | ------------- | ------ |
-| **Dash to Dock**    | macOS式任务栏 | 所有用户      | 100万+ |
-| **GSConnect**       | 手机电脑互联  | 多设备用户    | 80万+  |
-| **Blur My Shell**   | 毛玻璃特效    | 视觉党        | 60万+  |
-| **Forge**           | 超级分屏管理  | 程序员/设计师 | 40万+  |
-| **Burn My Windows** | 炫酷窗口动画  | 游戏玩家      | 30万+  |
-
----
-
-### **💡 使用建议**
-1. **性能优先**：低配设备建议关闭动画类扩展（如 Burn My Windows）。
-2. **快捷键冲突检查**：通过 `Settings > Keyboard Shortcuts` 调整冲突快捷键。
-3. **扩展管理器**：使用 `Extensions` 应用（Fedora 预装）一键开关扩展。
-
 ---
 
 ### **🚀 一键安装所有推荐扩展**
@@ -588,7 +474,29 @@ sudo dnf install \
 
 
 
+22
 
+### **① 全局菜单（Top Bar 显示应用菜单）**
+
+```bash
+sudo dnf install gnome-shell-extension-appindicator
+gsettings set org.gnome.shell.extensions.appindicator show-menus true
+```
+
+### **③ 触控板手势（类似 macOS）**
+
+```bash
+# 安装触摸板手势扩展
+sudo dnf install gnome-shell-extension-gesture-improved
+
+# 设置三指拖拽（类似 macOS）
+gsettings set org.gnome.desktop.peripherals.touchpad click-method 'fingers'
+gsettings set org.gnome.desktop.peripherals.touchpad tap-to-click true
+```
+
+---
+
+## 22
 
 
 
@@ -626,18 +534,6 @@ gsettings set org.gnome.shell.extensions.runcat animation-type 'cat'
 gsettings set org.gnome.shell.extensions.runcat show-cpu-usage true
 ```
 
-#### 3. **Grand Theft Focus**  
-**作用**：强制将焦点锁定在当前窗口（防止弹窗打断全屏工作/游戏）。  
-**安装**：
-```bash
-sudo dnf install gnome-shell-extension-grand-theft-focus
-```
-**快捷键**：  
-- `Super`+`F` 锁定/解锁焦点（可自定义）
-
----
-
-### **二、系统级黑科技**
 #### 4. **Gnome 4x UI Improvements**  
 **作用**：修复 GNOME 4x 系列的细节问题（如窗口按钮错位、菜单间距不合理）。  
 **安装**：
@@ -661,19 +557,6 @@ gsettings set org.gnome.shell.extensions.tophat show-gpu true
 gsettings set org.gnome.shell.extensions.tophat warning-temperature 80
 ```
 
-
-
-
-
-
-
-
-
-当然！以下是一些 **更加小众但充满惊喜** 的 GNOME 扩展，涵盖 **创意交互、系统增强、视觉黑科技**，适合追求极致个性化和高效工作流的用户：
-
----
-
-### **一、创意交互 & 效率神器**
 #### 2. **Coverflow Alt-Tab**  
 **作用**：将传统的 Alt-Tab 窗口切换变成 **macOS 式的 3D 卡片翻转效果**。  
 **安装**：
@@ -682,16 +565,22 @@ sudo dnf install gnome-shell-extension-coverflow-alttab
 ```
 **配置命令**：
 ```bash
+# 恢复默认设置
+gsettings reset-recursively org.gnome.shell.extensions.just-perfection
+
+# 列出所有已安装的 Schema
+gsettings list-schemas
+# 列出某个 Schema 下的所有键
+gsettings list-keys org.gnome.shell.extensions.just-perfection
+# 递归列出某个 Schema 的键值
+gsettings list-recursively org.gnome.shell.extensions.just-perfection
+
 # 设置动画速度（1-10）
 gsettings set org.gnome.shell.extensions.coverflow-alttab animation-duration 3
-
 # 启用模糊背景
 gsettings set org.gnome.shell.extensions.coverflow-alttab blur-background true
 ```
 
----
-
-### **二、系统级增强工具**
 #### 5. **Night Theme Switcher**  
 **作用**：根据日出日落时间 **自动切换 GTK 主题和壁纸**（比默认夜间模式更强大）。  
 **安装**：
@@ -700,6 +589,16 @@ sudo dnf install gnome-shell-extension-night-theme-switcher
 ```
 **配置命令**：
 ```bash
+# 恢复默认设置
+gsettings reset-recursively org.gnome.shell.extensions.just-perfection
+
+# 列出所有已安装的 Schema
+gsettings list-schemas
+# 列出某个 Schema 下的所有键
+gsettings list-keys org.gnome.shell.extensions.just-perfection
+# 递归列出某个 Schema 的键值
+gsettings list-recursively org.gnome.shell.extensions.just-perfection
+
 # 设置白天/黑夜主题
 gsettings set org.gnome.shell.extensions.night-theme-switcher day-theme 'Adwaita'
 gsettings set org.gnome.shell.extensions.night-theme-switcher night-theme 'Adwaita-dark'
@@ -731,28 +630,21 @@ sudo dnf install gnome-shell-extension-dynamic-panel
 ```
 **配置命令**：
 ```bash
+# 恢复默认设置
+gsettings reset-recursively org.gnome.shell.extensions.just-perfection
+
+# 列出所有已安装的 Schema
+gsettings list-schemas
+# 列出某个 Schema 下的所有键
+gsettings list-keys org.gnome.shell.extensions.just-perfection
+# 递归列出某个 Schema 的键值
+gsettings list-recursively org.gnome.shell.extensions.just-perfection
+
 # 设置最小透明度（0-255）
 gsettings set org.gnome.shell.extensions.dynamic-panel-transparency min-opacity 50
-
 # 启用智能颜色反色（浅色背景时自动变深色）
 gsettings set org.gnome.shell.extensions.dynamic-panel-transparency smart-text-color true
 ```
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
