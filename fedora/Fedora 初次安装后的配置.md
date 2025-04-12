@@ -526,41 +526,47 @@
      sudo dnf remove -y \
      gnome-shell-extension-window-list \
      gnome-shell-extension-launch-new-instance \
+     gnome-shell-extension-apps-menu \
+     gnome-shell-extension-places-menu \
+     
      # 系统扩展插件
      sudo dnf install -y \
-     gnome-shell-extension-user-theme \          
-     gnome-shell-extension-dash-to-dock \                 
-     gnome-shell-extension-blur-my-shell \           
+     gnome-shell-extension-user-theme \
+     gnome-shell-extension-dash-to-dock \
+     gnome-shell-extension-blur-my-shell \
      gnome-shell-extension-just-perfection \
      gnome-shell-extension-drive-menu \
      gnome-shell-extension-caffeine \
-     gnome-shell-extension-disconnect-wifi \
-     gnome-shell-extension-refresh-wifi \
      gnome-shell-extension-workspace-indicator \
      gnome-shell-extension-auto-move-windows \
-     gnome-shell-extension-appindicator \
-     gnome-shell-extension-screenshot-window-sizer
+     gnome-shell-extension-appindicator
      
-     sudo dnf install gnome-shell-extension-user-theme 
-     gnome-shell-extension-dash-to-dock
-     gnome-shell-extension-blur-my-shell.noarch
-     gnome-shell-extension-just-perfection.noarch
-     gnome-shell-extension-drive-menu.noarch
-     gnome-shell-extension-caffeine.noarch
-     gnome-shell-extension-disconnect-wifi.noarch
-     gnome-shell-extension-refresh-wifi.noarch
-     gnome-shell-extension-no-overview.noarch
-     gnome-shell-extension-workspace-indicator.noarch
-     gnome-shell-extension-appindicator.noarch
-     gnome-shell-extension-auto-move-windows.noarch
      gnome-shell-extension-forge.noarch
      gnome-shell-extension-gsconnect.x86_64
-     gnome-shell-extension-screenshot-window-sizer.noarch
-     gnome-shell-extension-workspace-indicator.noarch
      gnome-shell-extension-unite.noarch
      # 这两个可以安装，不建议启用
      gnome-shell-extension-apps-menu
      gnome-shell-extension-places-menu
+     
+     nautilus ~/.local/share/gnome-shell/extensions
+     ls ~/.local/share/gnome-shell/extensions
+     # 扩展在 metadata.json 中声明 schema 和 Gnome 版本信息
+     # 用户安装的Gnome扩展有 settings-schema 但无法显示和使用，未自动注册到全局 GSettings 数据库
+     # 进入扩展目录（示例扩展名：hidetopbar@mathieu.bidon.ca）
+     cd ~/.local/share/gnome-shell/extensions/hidetopbar@mathieu.bidon.ca/
+     # 1. 检查是否存在 schemas 文件
+     ls schemas/
+     # 2. 编译 schemas（需 glib2 工具）
+     glib-compile-schemas schemas/
+     # 3. 将 schemas 注册到用户数据库
+     mkdir -p ~/.local/share/glib-2.0/schemas/
+     cp schemas/*.gschema.xml ~/.local/share/glib-2.0/schemas/
+     glib-compile-schemas ~/.local/share/glib-2.0/schemas/
+     ls ~/.local/share/glib-2.0/schemas/
+     gsettings list-schemas
+     # 系统级扩展的 Schemas 目录
+     ls /usr/share/glib-2.0/schemas/
+     
      
      Add to Desktop
      Alphabetical App Grid
@@ -570,6 +576,7 @@
      Compiz windows effect
      Compiz alike magic lamp effect
      Desktop Cube
+     Dynamic Panel
      Dash2Dock Animated
      Gtk4 Desktop Icons NG (DING)
      # 安装 Lunar Calendar 农历 扩展插件需要如下内容
@@ -589,6 +596,7 @@
      Rounded Window Corners Reborn
      Search Light
      SettingsCenter
+     # 数值设置为 4
      Status Area Horizontal Spacing
      Top Bar Organizer
      Tray Icons: Reloaded
@@ -596,9 +604,6 @@
      Window Gestures
      VirtualBox applet
      # https://github.com/Sominemo/Fildem-Gnome-45
-     
-     
-     Dynamic Panel
      
      
      # 应用主题
@@ -741,6 +746,7 @@
      图标放在 	~/.icons/
      Shell 和 GTK主题放在		~/.themes/
      
+     
      /usr/share/themes/
      /usr/local/share/themes/  # 本地安装的第三方主题
      ~/.themes/  # 传统路径（部分旧版GNOME使用）
@@ -749,12 +755,13 @@
      gsettings set org.gnome.desktop.interface icon-theme 'MacOS-3D'
      gsettings set org.gnome.shell.extensions.user-theme name 'MacOS-3D-Shell'
      gsettings set org.gnome.desktop.interface gtk-theme 'MacOS-3D-Gtk'
-     gsettings set org.gnome.desktop.wm.preferences theme 'WhiteSur-Light'
+     gsettings set org.gnome.desktop.wm.preferences theme 'MacOS-3D-Gtk'
      
      gsettings set org.gnome.desktop.interface cursor-theme 'MacOS-3D-Cursor-Dark'
      gsettings set org.gnome.desktop.interface icon-theme 'MacOS-3D'
      gsettings set org.gnome.shell.extensions.user-theme name 'MacOS-3D-Shell'
      gsettings set org.gnome.desktop.interface gtk-theme 'MacOS-3D-Gtk-Dark'
+     gsettings set org.gnome.desktop.wm.preferences theme 'MacOS-3D-Shell'
      
      
      sudo flatpak override --filesystem=~/.themes
