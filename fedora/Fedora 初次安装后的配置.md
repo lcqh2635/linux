@@ -596,6 +596,7 @@
      Hide Top Bar
      # 修复 Hide Top Bar 闪跳 BUG
      Disable unredirect fullscreen windows
+     IBus Tweaker
      Night Theme Switcher
      Notification Banner Reloaded
      Quick Settings Tweaks
