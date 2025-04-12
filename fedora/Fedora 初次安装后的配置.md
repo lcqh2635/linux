@@ -548,6 +548,7 @@
      gnome-shell-extension-apps-menu
      gnome-shell-extension-places-menu
      
+     # 请务必在使用 SaveDesktop 备份所有配置
      nautilus ~/.local/share/gnome-shell/extensions
      ls ~/.local/share/gnome-shell/extensions
      # 扩展在 metadata.json 中声明 schema 和 Gnome 版本信息
@@ -569,6 +570,10 @@
      ls /usr/share/glib-2.0/schemas/
      
      
+     quick-settings-avatar@d-go
+     
+     
+     
      Add to Desktop
      Alphabetical App Grid
      Bluetooth Quick Connect
@@ -579,6 +584,7 @@
      Desktop Cube
      Dynamic Panel
      Dash2Dock Animated
+     Extension List
      Gtk4 Desktop Icons NG (DING)
      # 安装 Lunar Calendar 农历 扩展插件需要如下内容
      #https://gitlab.gnome.org/Nei/ChineseCalendar/-/archive/20250205/ChineseCalendar-20250205.tar.gz
