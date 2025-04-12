@@ -300,15 +300,34 @@ gsettings reset-recursively org.gnome.desktop.background
   adw-gtk3-theme \
   adwaita-cursor-theme \
   adwaita-icon-theme \
-  adwaita-fonts-all
+  adwaita-fonts-all \
+  adwaita-qt5 \
+  adwaita-qt6 \
+  qadwaitadecorations-qt5 \
+  qadwaitadecorations-qt6
+  
+  flatpak install -y \
+  org.kde.WaylandDecoration.QAdwaitaDecorations \
+  org.kde.KStyle.Adwaita \
+  org.gtk.Gtk3theme.Adwaita-dark
+  
+  theme-switcher
+  libadwaita-demo.noarch
   
   gsettings set org.gnome.desktop.interface cursor-theme 'Adwaita'
   gsettings set org.gnome.desktop.interface icon-theme 'Adwaita'
+  # 更改 GNOME Shell 顶部栏和活动概述的视觉主题（需启用 `User Themes` 扩展）。
   gsettings set org.gnome.shell.extensions.user-theme name 'Adwaita'
+  # 设置旧版应用主题（例如改为 "Adwaita-dark"）应用程序内部界面（由 GTK 主题控制，
   gsettings set org.gnome.desktop.interface gtk-theme 'Adwaita'
+  # 设置窗口管理器（Window Manager）的主题，它控制的是窗口边框、标题栏、最小化/最大化/关闭按钮等非客户区（non-client area）的视觉样式。
+  gsettings set org.gnome.desktop.wm.preferences theme 'Adwaita'
   
   
-  theme-switcher.noarch
+  gsettings set org.gnome.desktop.interface gtk-theme 'Adw-gtk3'
+  gsettings set org.gnome.desktop.interface gtk-theme 'Adw-gtk3-dark'
+  
+  
   
   yaru-gtk3-theme.noarch
   yaru-gtk4-theme.noarch
