@@ -563,7 +563,8 @@
      cp schemas/*.gschema.xml ~/.local/share/glib-2.0/schemas/
      glib-compile-schemas ~/.local/share/glib-2.0/schemas/
      ls ~/.local/share/glib-2.0/schemas/
-     gsettings list-schemas
+     # 列出所有可用的 schema
+     gsettings list-schemas | grep hidetopbar
      # 系统级扩展的 Schemas 目录
      ls /usr/share/glib-2.0/schemas/
      
