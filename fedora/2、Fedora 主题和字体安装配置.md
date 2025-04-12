@@ -33,6 +33,11 @@ sudo dnf install materia-theme
 
 # 安装 Adwaita 暗色变体
 sudo dnf install adwaita-dark
+
+# https://github.com/lassekongo83/adw-gtk3
+dnf install adw-gtk3-theme
+sudo flatpak override --filesystem=xdg-data/themes
+sudo flatpak mask org.gtk.Gtk3theme.adw-gtk3 && sudo flatpak mask org.gtk.Gtk3theme.adw-gtk3-dark
 ```
 
 ### **方法 2：手动安装第三方主题**
@@ -41,6 +46,137 @@ sudo dnf install adwaita-dark
    ```bash
    mkdir -p ~/.themes
    tar -xzvf theme-name.tar.gz -C ~/.themes
+   
+   
+   # 主题美化，参考 https://www.gnome-look.org/browse?ord=rating
+   git clone https://github.com/vinceliuice/WhiteSur-gtk-theme.git --depth=1
+   sed -i 's/\$opacity: if([^;]*);/\$opacity: 1;/g' ~/下载/WhiteSur-gtk-theme/src/sass/_colors.scss
+   ./install.sh       # 同时安装Dark/Light两种主题
+   ./tweaks.sh -f flat
+   sudo ./tweaks.sh -g
+   sudo ./tweaks.sh -g -b "my picture.jpg"
+   # 授予全局访问 GTK 配置和主题文件的权限
+   # 允许所有 Flatpak 应用访问宿主机的 ~/.config/gtk-3.0 目录。该目录包含 GTK 3 的配置文件（如主题、图标、字体设置等）。
+   sudo flatpak override --filesystem=xdg-config/gtk-3.0
+   # 允许所有 Flatpak 应用访问宿主机的 ~/.config/gtk-4.0 目录。
+   sudo flatpak override --filesystem=xdg-config/gtk-4.0
+   # 将 WhiteSur 主题包连接到 Flatpak 仓库
+   ./tweaks.sh -F
+   
+   git clone https://github.com/vinceliuice/WhiteSur-icon-theme.git --depth=1
+   ./install.sh
+   git clone https://github.com/vinceliuice/WhiteSur-cursors.git --depth=1
+   ./install.sh
+   git clone https://github.com/vinceliuice/WhiteSur-wallpapers.git --depth=1
+   sudo ./install-gnome-backgrounds.sh
+   
+   
+   # MacOS-3D 系列主题基于Gnome官方默认主题 adw-gtk3 构建，完美适配 Gnome 所有应用
+   # 不存在像 WhiteSur-gtk-theme 一样对基于 libadwaita 构建的应用无法切换主题的问题
+   # MacOS 3D 作者 https://m.youtube.com/watch?v=2-uPje43Zg8&pp=ygUJZmVkb3JhIDQy
+   使用 Evolve-core 应用程序应用主题：https://github.com/arcnations-united/evolve-core
+   GTK Theme: https://www.pling.com/p/2278127/
+   ICONS Theme: https://www.pling.com/p/2023325/
+   SHELL Theme: https://www.pling.com/p/2278187/
+   https://github.com/Macintosh98/MacOS-3D-Cursor
+   git clone https://github.com/Macintosh98/MacOS-3D-Cursor.git
+   # 图标放在 					~/.icons/
+   # Shell 和 GTK主题放在		~/.themes/
+   
+   /usr/share/themes/
+   /usr/local/share/themes/  # 本地安装的第三方主题
+   ~/.themes/  # 传统路径（部分旧版GNOME使用）
+   ~/.local/share/themes/  # 新版GNOME推荐路径
+   
+   gsettings set org.gnome.desktop.interface cursor-theme 'MacOS-3D-Cursor-Dark'
+   gsettings set org.gnome.desktop.interface icon-theme 'MacOS-3D'
+   gsettings set org.gnome.shell.extensions.user-theme name 'MacOS-3D-Shell'
+   gsettings set org.gnome.desktop.interface gtk-theme 'MacOS-3D-Gtk'
+   gsettings set org.gnome.desktop.wm.preferences theme 'MacOS-3D-Gtk'
+   # 窗口装饰主题（标题栏、边框、按钮）通常与 GTK 主题捆绑。若 MacOS-3D-Gtk-Dark 主题包已包含对应的窗口装饰，直接使用同一名称即可保持风格一致。
+   
+   gsettings set org.gnome.desktop.interface cursor-theme 'MacOS-3D-Cursor-Light'
+   gsettings set org.gnome.desktop.interface icon-theme 'MacOS-3D'
+   gsettings set org.gnome.shell.extensions.user-theme name 'MacOS-3D-Shell'
+   gsettings set org.gnome.desktop.interface gtk-theme 'MacOS-3D-Gtk-Dark'
+   gsettings set org.gnome.desktop.wm.preferences theme 'MacOS-3D-Gtk-Dark'
+   
+   
+   sudo flatpak override --filesystem=~/.themes
+   sudo flatpak override --filesystem=~/.icons
+   sudo flatpak override --filesystem=~/.local/share/icons
+   ls ~/.themes
+   ls ~/.icons
+   ls ~/.local/share/icons
+   # sudo flatpak override --env=GTK_THEME=WhiteSur-Dark
+   # sudo flatpak override --env=ICON_THEME=WhiteSur-Dark
+   # 列出所有应用，获取 <应用ID>
+   flatpak list --app
+   # 对于单个应用程序
+   sudo flatpak override org.fedoraproject.MediaWriter --env=GTK_THEME=WhiteSur-Dark
+   sudo flatpak override org.fedoraproject.MediaWriter --env=ICON_THEME=WhiteSur-dark
+   # 若需更深度适配（如 Kvantum）
+   flatpak override --user --env=QT_STYLE_OVERRIDE=kvantum
+   # 允许读写取系统主题，默认权限为 读写（Read-Write），应用可以读取和修改目录中的文件。
+   # ro 表示 只读（Read-Only）。它的作用是限制 Flatpak 应用对指定目录的访问权限，仅允许 读取 文件，而 禁止写入或修改。
+   flatpak override --user --filesystem=~/.themes:ro  # 若使用用户级主题
+   # 指定主题名称（如 WhiteSur-Light）
+   flatpak override --user --env=GTK_THEME=WhiteSur-Light
+   # 例如强制 Media Writer 使用 GTK 主题
+   flatpak override --user org.fedoraproject.MediaWriter --env=QT_STYLE_OVERRIDE=kvantum
+   
+   flatpak override --user org.fedoraproject.MediaWriter --env=ICON_THEME=WhiteSur-dark
+   flatpak override --user org.fedoraproject.MediaWriter --env=GTK_THEME=WhiteSur-Dark
+   flatpak override --user org.fedoraproject.MediaWriter --env=GTK_THEME=WhiteSur-Dark
+   
+   flatpak override --user cn.apipost.apipost --env=ICON_THEME=WhiteSur-dark
+   flatpak override --user cn.apipost.apipost --env=GTK_THEME=WhiteSur-Dark
+   
+   flatpak run --env=GTK_THEME=WhiteSur-Light org.fedoraproject.MediaWriter
+   flatpak run org.fedoraproject.MediaWriter
+   # Breeze, Windows, Fusion
+   flatpak run --env=QT_STYLE_OVERRIDE=Breeze org.fedoraproject.MediaWriter
+   
+   flatpak run --env=GTK_THEME=WhiteSur-Dark cn.apipost.apipost
+   flatpak run cn.apipost.apipost
+   
+   flatpak run --env=QT_STYLE_OVERRIDE=gtk3 com.obsproject.Studio
+   # 安装主机依赖
+   locate libcanberra-gtk-module
+   sudo dnf install libcanberra-gtk3 PackageKit-gtk3-module
+   sudo dnf -y install libcanberra-gtk3
+   
+   flatpak run --command=gsettings set org.gnome.desktop.wm.preferences theme 'WhiteSur-Dark' org.fedoraproject.MediaWriter
+   # 列出所有已安装的 Flatpak 应用和运行时
+   flatpak list
+   # 查看应用使用的运行时等信息
+   flatpak list --app
+   # 查看所有应用的全局覆盖配置
+   flatpak override --show
+   flatpak override org.fedoraproject.MediaWriter --show
+   sudo flatpak override --reset
+   sudo flatpak override org.fedoraproject.MediaWriter --reset
+   flatpak run --env=GTK_DEBUG=all <应用ID>
+   flatpak run --env=GTK_DEBUG=all org.fedoraproject.MediaWriter
+   
+   flatpak info org.fedoraproject.MediaWriter
+   flatpak info com.obsproject.Studio
+   flatpak info org.videolan.VLC
+   flatpak info cn.apipost.apipost
+   flatpak search org.gtk.Gtk3theme
+   flatpak search QAdwaitaDecorations
+   dnf search QAdwaitaDecorations
+   dnf search Decorations
+   sudo dnf install -y qadwaitadecorations-qt5 qadwaitadecorations-qt6
+   
+   # 在 Linux 中的 Flatpak 应用程序上应用 GTK 系统主题，参考 https://cn.linux-console.net/?p=18267
+   # 安装 Kvantum 软件
+   sudo dnf install -y qt5ct qt6ct kvantum
+   flatpak install -y org.kde.KStyle.Kvantum
+   # 参考 https://wiki.archlinuxcn.org/wiki/%E7%BB%9F%E4%B8%80_Qt_%E5%92%8C_GTK_%E5%BA%94%E7%94%A8%E7%A8%8B%E5%BA%8F%E7%9A%84%E5%A4%96%E8%A7%82
+   flatpak install flathub org.kde.KStyle.Adwaita
+   kvantummanager  # 在 "Change/Delete Theme" 中微调 WhiteSur 参数
+   sudo flatpak override --env=QT_STYLE_OVERRIDE=kvantum --filesystem=xdg-config/Kvantum:ro org.fedoraproject.MediaWriter
    ```
 3. 在 **GNOME Tweaks** → **Appearance** → **Themes** 中选择新主题。
 
@@ -289,6 +425,7 @@ gsettings reset-recursively org.gnome.desktop.background
 ### **一、主题与外观深度定制**
 #### 1. **GTK 主题 + Shell 主题**
 - **推荐组合**：
+  
   - **现代扁平风**：`adw-gtk3`（GTK4/GTK3 统一风格） + `Orchis Shell`
   - **暗黑科技感**：`Juno`（GTK） + `Fluent Shell`
   - **macOS 风格**：`WhiteSur`（GTK + Shell + 图标全家桶）

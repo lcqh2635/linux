@@ -76,17 +76,18 @@ sudo chmod a+w /etc/hosts
 ---
 
 ### **📚 办公与生产力**
-| 软件名称        | 功能描述            | 安装命令                                                | 备注         |
-| --------------- | ------------------- | ------------------------------------------------------- | ------------ |
-| **LibreOffice** | 开源办公套件        | `sudo dnf install libreoffice`                          | 默认已安装   |
-| **OnlyOffice**  | 兼容 MS Office 格式 | `flatpak install flathub org.onlyoffice.desktopeditors` | 界面更现代   |
-| **Zotero**      | 文献管理工具        | `flatpak install flathub org.zotero.Zotero`             | 学术研究必备 |
-| **Obsidian**    | Markdown 笔记工具   | `flatpak install flathub md.obsidian.Obsidian`          | 支持插件扩展 |
+| 软件名称        | 功能描述                   | 安装命令                                                    | 备注         |
+| --------------- | -------------------------- | ----------------------------------------------------------- | ------------ |
+| **LibreOffice** | 开源办公套件               | `sudo dnf install libreoffice-langpack-zh-Hans`             | 默认已安装   |
+| **OnlyOffice**  | 兼容 MS Office 格式        | `flatpak install flathub org.onlyoffice.desktopeditors`     | 界面更现代   |
+| **Apostrophe**  | 官方推荐的 Markdown 编辑器 | `flatpak install flathub org.gnome.gitlab.somas.Apostrophe` | 学术研究必备 |
+| **Obsidian**    | Markdown 笔记工具          | `flatpak install flathub md.obsidian.Obsidian`              | 支持插件扩展 |
 
 ```bash
 sudo dnf install libreoffice-langpack-zh-Hans
 
-
+# GNOME 官方推荐的 Markdown 编辑器，界面极简，支持实时预览、数学公式（LaTeX）、导出 PDF/HTML。
+flatpak install -y flathub org.gnome.gitlab.somas.Apostrophe
 ```
 
 ---

@@ -1,3 +1,4 @@
 {
-  "cssTheme": "Typora-Vue"
+  "cssTheme": "Typora-Vue",
+  "nativeMenus": false
 }
