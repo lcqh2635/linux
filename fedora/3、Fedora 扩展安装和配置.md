@@ -329,17 +329,120 @@ sudo dnf install gnome-shell-extension-quick-settings-tweaker
 **实用配置**：
 ```bash
 # 恢复默认设置
-gsettings reset-recursively org.gnome.shell.extensions.hidetopbar
+gsettings reset-recursively org.gnome.shell.extensions.quick-settings-tweaks
 
 # 列出所有已安装的 Schema
 gsettings list-schemas
 # 列出某个 Schema 下的所有键
-gsettings list-keys org.gnome.shell.extensions.hidetopbar
+gsettings list-keys org.gnome.shell.extensions.quick-settings-tweaks
 # 递归列出某个 Schema 的键值
-gsettings list-recursively org.gnome.shell.extensions.hidetopbar
+gsettings list-recursively org.gnome.shell.extensions.quick-settings-tweaks
 
-# 添加电池百分比显示
-gsettings set org.gnome.shell.extensions.quick-settings-tweaker battery-show-percentage true
+# 控制 GNOME 顶部面板快捷设置菜单（Quick Settings）的弹出样式和动画效果
+# 启用或禁用 覆盖式菜单样式（即快捷设置面板以独立浮层形式弹出，而非传统的下拉样式）。
+gsettings set org.gnome.shell.extensions.quick-settings-tweaks overlay-menu-enabled true
+# 控制菜单弹出/关闭的 动画时长（毫秒）推荐 200-500（值越大动画越慢）。
+gsettings set org.gnome.shell.extensions.quick-settings-tweaks overlay-menu-animate-duration 500
+gsettings set org.gnome.shell.extensions.quick-settings-tweaks menu-animation-enabled true
+gsettings set org.gnome.shell.extensions.quick-settings-tweaks menu-animation-close-duration 500
+gsettings set org.gnome.shell.extensions.quick-settings-tweaks menu-animation-open-duration 500
+
+
+
+
+org.gnome.shell.extensions.quick-settings-tweaks datemenu-disable-menu false
+org.gnome.shell.extensions.quick-settings-tweaks datemenu-hide-left-box true
+org.gnome.shell.extensions.quick-settings-tweaks datemenu-hide-media-control true
+org.gnome.shell.extensions.quick-settings-tweaks datemenu-hide-notifications true
+org.gnome.shell.extensions.quick-settings-tweaks datemenu-hide-right-box false
+org.gnome.shell.extensions.quick-settings-tweaks dnd-quick-toggle-enabled true
+org.gnome.shell.extensions.quick-settings-tweaks dnd-quick-toggle-indicator-position 'system-tray'
+org.gnome.shell.extensions.quick-settings-tweaks input-always-show false
+org.gnome.shell.extensions.quick-settings-tweaks input-menu-icon 'open-menu-symbolic'
+org.gnome.shell.extensions.quick-settings-tweaks input-show-selected false
+org.gnome.shell.extensions.quick-settings-tweaks layout {'weather-widget': [0, 0], 'notifications-widget': [0, 0], 'media-widget': [0, 0], 'mixer-widget': [0, 0]}
+org.gnome.shell.extensions.quick-settings-tweaks media-compact true
+org.gnome.shell.extensions.quick-settings-tweaks media-contorl-opacity 230
+org.gnome.shell.extensions.quick-settings-tweaks media-contorl-show-next-button true
+org.gnome.shell.extensions.quick-settings-tweaks media-contorl-show-pause-button true
+org.gnome.shell.extensions.quick-settings-tweaks media-contorl-show-prev-button true
+org.gnome.shell.extensions.quick-settings-tweaks media-enabled true
+org.gnome.shell.extensions.quick-settings-tweaks media-gradient-background-color [127, 127, 127]
+org.gnome.shell.extensions.quick-settings-tweaks media-gradient-enabled true
+org.gnome.shell.extensions.quick-settings-tweaks media-gradient-end-mix 180
+org.gnome.shell.extensions.quick-settings-tweaks media-gradient-end-opaque 160
+org.gnome.shell.extensions.quick-settings-tweaks media-gradient-start-mix 820
+org.gnome.shell.extensions.quick-settings-tweaks media-gradient-start-opaque 340
+org.gnome.shell.extensions.quick-settings-tweaks media-progress-active-background-color @ai []
+org.gnome.shell.extensions.quick-settings-tweaks media-progress-background-color @ai []
+org.gnome.shell.extensions.quick-settings-tweaks media-progress-enabled true
+org.gnome.shell.extensions.quick-settings-tweaks media-progress-handle-color @ai []
+org.gnome.shell.extensions.quick-settings-tweaks media-progress-handle-radius 0
+org.gnome.shell.extensions.quick-settings-tweaks media-progress-height 0
+org.gnome.shell.extensions.quick-settings-tweaks media-progress-style 'slim'
+org.gnome.shell.extensions.quick-settings-tweaks media-remove-shadow true
+org.gnome.shell.extensions.quick-settings-tweaks media-round-clip-enabled true
+org.gnome.shell.extensions.quick-settings-tweaks media-round-clip-padding-adjustment-enabled false
+org.gnome.shell.extensions.quick-settings-tweaks media-round-clip-padding-adjustment-value [0, 0, 0, 0]
+org.gnome.shell.extensions.quick-settings-tweaks media-show-header true
+org.gnome.shell.extensions.quick-settings-tweaks media-smooth-scroll-speed 16
+org.gnome.shell.extensions.quick-settings-tweaks notifications-autohide true
+org.gnome.shell.extensions.quick-settings-tweaks notifications-compact true
+org.gnome.shell.extensions.quick-settings-tweaks notifications-enabled true
+org.gnome.shell.extensions.quick-settings-tweaks notifications-fade-offset 46
+org.gnome.shell.extensions.quick-settings-tweaks notifications-max-height 292
+org.gnome.shell.extensions.quick-settings-tweaks notifications-remove-shadow true
+org.gnome.shell.extensions.quick-settings-tweaks notifications-show-header true
+org.gnome.shell.extensions.quick-settings-tweaks notifications-show-scrollbar true
+org.gnome.shell.extensions.quick-settings-tweaks notifications-use-native-controls false
+org.gnome.shell.extensions.quick-settings-tweaks output-menu-icon 'open-menu-symbolic'
+org.gnome.shell.extensions.quick-settings-tweaks output-show-selected false
+org.gnome.shell.extensions.quick-settings-tweaks overlay-menu-animate-duration 360
+org.gnome.shell.extensions.quick-settings-tweaks overlay-menu-animate-style 'dialog'
+org.gnome.shell.extensions.quick-settings-tweaks overlay-menu-enabled false
+org.gnome.shell.extensions.quick-settings-tweaks overlay-menu-width 380
+org.gnome.shell.extensions.quick-settings-tweaks system-indicator-layout-enabled false
+org.gnome.shell.extensions.quick-settings-tweaks system-indicator-layout-order [{'nonOrdered': <true>, 'hide': <false>}, {'hide': <false>, 'isSystem': <true>, 'gtypeName': <'Gjs_toggle_dndQuickToggle_DndIndicator'>}, {'hide': <false>, 'isSystem': <true>, 'gtypeName': <'Gjs_status_remoteAccess_RemoteAccessApplet'>}, {'hide': <false>, 'isSystem': <true>, 'gtypeName': <'Gjs_status_camera_Indicator'>}, {'hide': <false>, 'isSystem': <true>, 'gtypeName': <'Gjs_status_volume_InputIndicator'>}, {'hide': <false>, 'isSystem': <true>, 'gtypeName': <'Gjs_status_location_Indicator'>}, {'hide': <false>, 'isSystem': <true>, 'gtypeName': <'Gjs_status_thunderbolt_Indicator'>}, {'hide': <false>, 'isSystem': <true>, 'gtypeName': <'Gjs_status_nightLight_Indicator'>}, {'hide': <false>, 'isSystem': <true>, 'gtypeName': <'Gjs_status_network_Indicator'>}, {'hide': <false>, 'isSystem': <true>, 'gtypeName': <'Gjs_status_bluetooth_Indicator'>}, {'hide': <false>, 'isSystem': <true>, 'gtypeName': <'Gjs_status_rfkill_Indicator'>}, {'hide': <false>, 'isSystem': <true>, 'gtypeName': <'Gjs_status_volume_OutputIndicator'>}, {'hide': <false>, 'isSystem': <true>, 'gtypeName': <'Gjs_ui_panel_UnsafeModeIndicator'>}, {'hide': <false>, 'isSystem': <true>, 'gtypeName': <'Gjs_status_system_Indicator'>}]
+org.gnome.shell.extensions.quick-settings-tweaks system-indicator-privacy-indicator-style 'default'
+org.gnome.shell.extensions.quick-settings-tweaks system-indicator-screen-recording-indicator-use-accent false
+org.gnome.shell.extensions.quick-settings-tweaks system-indicator-screen-sharing-indicator-use-accent false
+org.gnome.shell.extensions.quick-settings-tweaks system-items-layout-enabled false
+org.gnome.shell.extensions.quick-settings-tweaks system-items-layout-hide false
+org.gnome.shell.extensions.quick-settings-tweaks system-items-layout-hide-battery false
+org.gnome.shell.extensions.quick-settings-tweaks system-items-layout-hide-lock false
+org.gnome.shell.extensions.quick-settings-tweaks system-items-layout-hide-screenshot false
+org.gnome.shell.extensions.quick-settings-tweaks system-items-layout-hide-settings false
+org.gnome.shell.extensions.quick-settings-tweaks system-items-layout-hide-shutdown false
+org.gnome.shell.extensions.quick-settings-tweaks system-items-layout-order ['battery', 'laptopSpacer', 'screenshot', 'settings', 'desktopSpacer', 'lock', 'shutdown']
+org.gnome.shell.extensions.quick-settings-tweaks toggles-layout-enabled false
+
+org.gnome.shell.extensions.quick-settings-tweaks toggles-layout-order [{'hide': <false>, 'isSystem': <true>, 'constructorName': <'NMWiredToggle'>}, {'hide': <false>, 'isSystem': <true>, 'constructorName': <'NMWirelessToggle'>}, {'hide': <false>, 'isSystem': <true>, 'constructorName': <'NMModemToggle'>}, {'hide': <false>, 'isSystem': <true>, 'constructorName': <'NMBluetoothToggle'>}, {'hide': <false>, 'isSystem': <true>, 'constructorName': <'NMVpnToggle'>}, {'hide': <false>, 'isSystem': <true>, 'constructorName': <'BluetoothToggle'>}, {'hide': <false>, 'isSystem': <true>, 'constructorName': <'PowerProfilesToggle'>}, {'hide': <false>, 'isSystem': <true>, 'constructorName': <'NightLightToggle'>}, {'hide': <false>, 'isSystem': <true>, 'constructorName': <'DarkModeToggle'>}, {'hide': <false>, 'isSystem': <true>, 'constructorName': <'KeyboardBrightnessToggle'>}, {'hide': <false>, 'isSystem': <true>, 'constructorName': <'RfkillToggle'>}, {'hide': <false>, 'isSystem': <true>, 'constructorName': <'RotationToggle'>}, {'hide': <false>, 'isSystem': <true>, 'constructorName': <'DndQuickToggle'>}, {'hide': <false>, 'isSystem': <true>, 'constructorName': <'UnsafeQuickToggle'>}, {'nonOrdered': <true>, 'hide': <false>}]
+org.gnome.shell.extensions.quick-settings-tweaks unsafe-quick-toggle-enabled false
+org.gnome.shell.extensions.quick-settings-tweaks unsafe-quick-toggle-last-state false
+org.gnome.shell.extensions.quick-settings-tweaks unsafe-quick-toggle-save-last-state true
+org.gnome.shell.extensions.quick-settings-tweaks volume-mixer-enabled true
+org.gnome.shell.extensions.quick-settings-tweaks volume-mixer-fade-offset 46
+org.gnome.shell.extensions.quick-settings-tweaks volume-mixer-group-by @aa{sv} []
+org.gnome.shell.extensions.quick-settings-tweaks volume-mixer-ignore @aa{sv} []
+org.gnome.shell.extensions.quick-settings-tweaks volume-mixer-ignore-mode 'block'
+org.gnome.shell.extensions.quick-settings-tweaks volume-mixer-label-opacity 220
+org.gnome.shell.extensions.quick-settings-tweaks volume-mixer-label-text 'both'
+org.gnome.shell.extensions.quick-settings-tweaks volume-mixer-max-height 0
+org.gnome.shell.extensions.quick-settings-tweaks volume-mixer-menu-enabled true
+org.gnome.shell.extensions.quick-settings-tweaks volume-mixer-menu-icon 'open-menu-symbolic'
+org.gnome.shell.extensions.quick-settings-tweaks volume-mixer-only-playing true
+org.gnome.shell.extensions.quick-settings-tweaks volume-mixer-order @aa{sv} []
+org.gnome.shell.extensions.quick-settings-tweaks volume-mixer-show-header true
+org.gnome.shell.extensions.quick-settings-tweaks volume-mixer-show-icon true
+org.gnome.shell.extensions.quick-settings-tweaks volume-mixer-show-scrollbar true
+org.gnome.shell.extensions.quick-settings-tweaks weather-click-command ''
+org.gnome.shell.extensions.quick-settings-tweaks weather-compact true
+org.gnome.shell.extensions.quick-settings-tweaks weather-enabled false
+org.gnome.shell.extensions.quick-settings-tweaks weather-interval-hour 1
+org.gnome.shell.extensions.quick-settings-tweaks weather-max-forecasts 5
+org.gnome.shell.extensions.quick-settings-tweaks weather-remove-shadow true
+org.gnome.shell.extensions.quick-settings-tweaks weather-show-header true
+org.gnome.shell.extensions.quick-settings-tweaks weather-show-location true
 ```
 
 ---
@@ -601,21 +704,25 @@ sudo dnf install gnome-shell-extension-night-theme-switcher
 **配置命令**：
 ```bash
 # 恢复默认设置
-gsettings reset-recursively org.gnome.shell.extensions.just-perfection
+gsettings reset-recursively org.gnome.shell.extensions.nightthemeswitcher.time
+gsettings reset-recursively org.gnome.shell.extensions.nightthemeswitcher.commands
 
 # 列出所有已安装的 Schema
 gsettings list-schemas
 # 列出某个 Schema 下的所有键
-gsettings list-keys org.gnome.shell.extensions.just-perfection
+gsettings list-keys org.gnome.shell.extensions.nightthemeswitcher
 # 递归列出某个 Schema 的键值
-gsettings list-recursively org.gnome.shell.extensions.just-perfection
+gsettings list-recursively org.gnome.shell.extensions.nightthemeswitcher.color-scheme
+gsettings list-recursively org.gnome.shell.extensions.nightthemeswitcher.commands
+
 
 # 设置白天/黑夜主题
 gsettings set org.gnome.shell.extensions.night-theme-switcher day-theme 'Adwaita'
 gsettings set org.gnome.shell.extensions.night-theme-switcher night-theme 'Adwaita-dark'
 
-# 同步壁纸切换
-gsettings set org.gnome.shell.extensions.night-theme-switcher change-wallpaper true
+org.gnome.shell.extensions.nightthemeswitcher.commands enabled true
+org.gnome.shell.extensions.nightthemeswitcher.commands sunrise ''
+org.gnome.shell.extensions.nightthemeswitcher.commands sunset ''
 ```
 
 #### 6. **Proxy Switcher**  
@@ -642,22 +749,39 @@ sudo dnf install gnome-shell-extension-dynamic-panel
 **配置命令**：
 ```bash
 # 恢复默认设置
-gsettings reset-recursively org.gnome.shell.extensions.just-perfection
+gsettings reset-recursively org.gnome.shell.extensions.dynamic-panel
 
 # 列出所有已安装的 Schema
 gsettings list-schemas
 # 列出某个 Schema 下的所有键
-gsettings list-keys org.gnome.shell.extensions.just-perfection
+gsettings list-keys org.gnome.shell.extensions.dynamic-panel
 # 递归列出某个 Schema 的键值
-gsettings list-recursively org.gnome.shell.extensions.just-perfection
+gsettings list-recursively org.gnome.shell.extensions.dynamic-panel
 
-# 设置最小透明度（0-255）
-gsettings set org.gnome.shell.extensions.dynamic-panel-transparency min-opacity 50
-# 启用智能颜色反色（浅色背景时自动变深色）
-gsettings set org.gnome.shell.extensions.dynamic-panel-transparency smart-text-color true
+org.gnome.shell.extensions.dynamic-panel addon-trigger-center false
+org.gnome.shell.extensions.dynamic-panel addon-trigger-left false
+org.gnome.shell.extensions.dynamic-panel addon-trigger-right false
+org.gnome.shell.extensions.dynamic-panel auto-background false
+org.gnome.shell.extensions.dynamic-panel auto-width false
+org.gnome.shell.extensions.dynamic-panel background-mode 0
+org.gnome.shell.extensions.dynamic-panel blur false
+org.gnome.shell.extensions.dynamic-panel colors-use-in-static false
+org.gnome.shell.extensions.dynamic-panel dark-bg-color 'rgb(0, 0, 0)'
+org.gnome.shell.extensions.dynamic-panel dark-fg-color 'rgb(240, 240, 240)'
+org.gnome.shell.extensions.dynamic-panel detection-mode 0
+org.gnome.shell.extensions.dynamic-panel duration 250
+org.gnome.shell.extensions.dynamic-panel float-align 1
+org.gnome.shell.extensions.dynamic-panel float-width 99
+org.gnome.shell.extensions.dynamic-panel light-bg-color 'rgb(250, 250, 250)'
+org.gnome.shell.extensions.dynamic-panel light-fg-color 'rgb(0, 0, 0)'
+org.gnome.shell.extensions.dynamic-panel radius-times 100
+org.gnome.shell.extensions.dynamic-panel side-margin 10
+org.gnome.shell.extensions.dynamic-panel solid-type 0
+org.gnome.shell.extensions.dynamic-panel top-margin 10
+org.gnome.shell.extensions.dynamic-panel transparent 75
+org.gnome.shell.extensions.dynamic-panel transparent-menus true
+org.gnome.shell.extensions.dynamic-panel transparent-menus-keep-alpha false
 ```
-
-
 
 ## **3. 扩展管理命令**
 

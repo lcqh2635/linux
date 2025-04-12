@@ -23,6 +23,8 @@ done
 
 # 最终编译用户全局 schemas
 glib-compile-schemas ~/.local/share/glib-2.0/schemas/
+ls ~/.local/share/glib-2.0/schemas/
+gsettings list-schemas | grep "org.gnome.shell.extensions"
 
 # 重启 GNOME Shell
 killall -3 gnome-shell

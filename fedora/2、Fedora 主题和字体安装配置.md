@@ -293,11 +293,34 @@ gsettings reset-recursively org.gnome.desktop.background
   - **暗黑科技感**：`Juno`（GTK） + `Fluent Shell`
   - **macOS 风格**：`WhiteSur`（GTK + Shell + 图标全家桶）
 - **安装与切换**：
+  
   ```bash
   # 安装 adw-gtk3（适配 libadwaita 应用）
-  sudo dnf install adw-gtk3-theme
-  gsettings set org.gnome.desktop.interface gtk-theme 'adw-gtk3'
-  gsettings set org.gnome.shell.extensions.user-theme name 'Orchis'
+  sudo dnf install -y \
+  adw-gtk3-theme \
+  adwaita-cursor-theme \
+  adwaita-icon-theme \
+  adwaita-fonts-all
+  
+  gsettings set org.gnome.desktop.interface cursor-theme 'Adwaita'
+  gsettings set org.gnome.desktop.interface icon-theme 'Adwaita'
+  gsettings set org.gnome.shell.extensions.user-theme name 'Adwaita'
+  gsettings set org.gnome.desktop.interface gtk-theme 'Adwaita'
+  
+  
+  theme-switcher.noarch
+  
+  yaru-gtk3-theme.noarch
+  yaru-gtk4-theme.noarch
+  yaru-icon-theme.noarch
+  yaru-sound-theme.noarch
+  yaru-gtksourceview-theme.noarch
+  gnome-shell-theme-yaru.noarch
+  
+  flat-remix-icon-theme.noarch
+  flat-remix-theme.noarch
+  flat-remix-gtk4-theme.noarch
+  flat-remix-gtk3-theme.noarch
   ```
 
 #### 2. **图标与光标**
