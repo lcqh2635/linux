@@ -31,7 +31,7 @@ sudo dnf install gnome-shell-extension-user-theme
 gsettings set org.gnome.shell.extensions.user-theme name 'WhiteSur-Light'
 ```
 
-### **① Dash to Dock（macOS 式 Dock 栏）**
+### **① Dash to Dock**
 
 **作用**：将 GNOME 默认的 Dash 改为类似 macOS 的 Dock，支持自动隐藏、图标放大、任务指示器等。  
 **安装**：
@@ -42,9 +42,6 @@ sudo dnf install gnome-shell-extension-dash-to-dock
 **`gsettings` 配置示例**：（调整成 macOS 风格）：
 
 ```bash
-# 恢复默认设置
-gsettings reset-recursively org.gnome.shell.extensions.dash-to-dock
-
 # 列出所有已安装的 Schema
 gsettings list-schemas
 # 列出某个 Schema 下的所有键
@@ -67,29 +64,13 @@ gsettings set org.gnome.shell.extensions.dash-to-dock custom-theme-shrink true
 gsettings set org.gnome.shell.extensions.dash-to-dock running-indicator-style 'DASHES'
 # 让运行指示器 使用应用图标的主色调（而非默认主题颜色）
 gsettings set org.gnome.shell.extensions.dash-to-dock running-indicator-dominant-color true
-```
 
-### **② ArcMenu**  
-**作用**：替换 GNOME 默认应用菜单为现代化布局（类似 Windows 开始菜单或 macOS Launchpad）。  
-**安装**：
-
-```bash
-sudo dnf install gnome-shell-extension-arcmenu
-```
-**`gsettings` 配置示例**：
-
-```bash
-# 设置菜单样式（'Windows'、'Mac'、'Ubuntu' 等）
-gsettings set org.gnome.shell.extensions.arcmenu menu-layout 'Mac'
-
-# 设置 Launchpad 图标（使用 macOS 风格图标）
-gsettings set org.gnome.shell.extensions.arcmenu menu-button-icon 'MacOS'
-
-# 禁用搜索栏动画（更流畅）
-gsettings set org.gnome.shell.extensions.arcmenu enable-animations false
+# 恢复默认设置
+gsettings reset-recursively org.gnome.shell.extensions.dash-to-dock
 ```
 
 ### ③ Blur My Shell（毛玻璃效果）
+
 **作用**：为 GNOME Shell 添加 macOS 风格的毛玻璃模糊效果（顶栏、Dock、概述、侧边栏等）。 
 
 **安装**：
@@ -1054,12 +1035,40 @@ gsettings reset-recursively org.gnome.shell.extensions.com.github.hermes83.compi
 sudo dnf install gnome-shell-extension-space-bar
 ```
 **配置命令**：
-```bash
-# 显示工作区名称（而非编号）
-gsettings set org.gnome.shell.extensions.space-bar show-workspace-name true
 
-# 自定义颜色
-gsettings set org.gnome.shell.extensions.space-bar active-workspace-color 'rgb(255,100,100)'
+```bash
+# 列出所有已安装的 Schema
+gsettings list-schemas
+# 列出某个 Schema 下的所有键
+gsettings list-keys org.gnome.shell.extensions.com.github.hermes83.compiz-windows-effect
+# 递归列出某个 Schema 的键值（例如 org.gnome.desktop.interface）
+gsettings list-recursively org.gnome.shell.extensions.com.github.hermes83.compiz-windows-effect
+
+org.gnome.shell.extensions.space-bar.behavior enable-custom-label true
+org.gnome.shell.extensions.space-bar.behavior custom-label-named '工作区'
+org.gnome.shell.extensions.space-bar.behavior custom-label-unnamed '休闲区'
+
+org.gnome.shell.extensions.space-bar.behavior enable-custom-label-in-menu true
+org.gnome.shell.extensions.space-bar.behavior indicator-style 'workspaces-bar'
+org.gnome.shell.extensions.space-bar.behavior position 'left'
+org.gnome.shell.extensions.space-bar.behavior position-index 1
+org.gnome.shell.extensions.space-bar.behavior reevaluate-smart-workspace-names true
+org.gnome.shell.extensions.space-bar.behavior scroll-wheel 'panel'
+org.gnome.shell.extensions.space-bar.behavior scroll-wheel-debounce true
+org.gnome.shell.extensions.space-bar.behavior scroll-wheel-debounce-time 200
+org.gnome.shell.extensions.space-bar.behavior scroll-wheel-horizontal 'disabled'
+org.gnome.shell.extensions.space-bar.behavior scroll-wheel-vertical 'normal'
+org.gnome.shell.extensions.space-bar.behavior scroll-wheel-wrap-around false
+org.gnome.shell.extensions.space-bar.behavior show-empty-workspaces true
+org.gnome.shell.extensions.space-bar.behavior smart-workspace-names true
+org.gnome.shell.extensions.space-bar.behavior system-workspace-indicator false
+org.gnome.shell.extensions.space-bar.behavior toggle-overview true
+
+
+# 恢复默认设置
+gsettings reset-recursively org.gnome.shell.extensions.space-bar.appearance
+gsettings reset-recursively org.gnome.shell.extensions.space-bar.behavior
+gsettings reset-recursively org.gnome.shell.extensions.space-bar.state
 ```
 
 #### 7. **Systemd Manager**  
