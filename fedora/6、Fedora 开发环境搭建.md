@@ -7,6 +7,8 @@
 ```bash
 sudo dnf update -y
 sudo dnf install -y curl wget git tar gzip openssl-devel zlib-devel make gcc-c++ 
+
+sudo dnf install vagrant VirtualBox virtualbox-guest-additions
 ```
 
 #### **启用 RPM Fusion（可选）**
@@ -34,6 +36,8 @@ sdk install gradle
 
 #### **🔹 Rust**
 ```bash
+
+
 sudo dnf install -y rust
 # 通过 rustup 安装
 curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh

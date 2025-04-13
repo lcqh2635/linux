@@ -13,6 +13,47 @@ sudo dnf install gnome-extensions-app
 
 # 安装插件支持（可选，用于手动安装主题）
 sudo dnf install gnome-shell-extension-user-theme
+
+gsettings list-schemas | grep "keybindings"
+# 窗口快捷键
+org.gnome.desktop.wm.keybindings
+# 窗口快捷键
+org.gnome.mutter.keybindings
+org.gnome.mutter.wayland.keybindings
+# 扩展提供的快捷键
+org.gnome.shell.extensions.paperwm.keybindings
+org.gnome.shell.keybindings
+
+gsettings list-recursively org.gnome.settings-daemon.plugins.media-keys
+gsettings list-recursively org.gnome.desktop.wm.keybindings
+
+
+# 自定义媒体快捷键
+org.gnome.settings-daemon.plugins.media-keys media ['<Super>F9']
+org.gnome.settings-daemon.plugins.media-keys mic-mute ['F2']
+org.gnome.settings-daemon.plugins.media-keys volume-down ['F3']
+org.gnome.settings-daemon.plugins.media-keys volume-up ['F4']
+org.gnome.settings-daemon.plugins.media-keys next ['F8']
+org.gnome.settings-daemon.plugins.media-keys play ['F9']
+org.gnome.settings-daemon.plugins.media-keys previous ['F10']
+
+# 自定义系统快捷键
+org.gnome.desktop.wm.keybindings close ['<Super>c']
+org.gnome.desktop.wm.keybindings maximize ['<Super>Up']
+gsettings set org.gnome.desktop.wm.keybindings minimize ['<Super>Down']
+org.gnome.desktop.wm.keybindings show-desktop ['<Super>h']
+org.gnome.desktop.wm.keybindings switch-to-workspace-1 ['<Super>1']
+org.gnome.desktop.wm.keybindings switch-to-workspace-2 ['<Super>2']
+org.gnome.desktop.wm.keybindings switch-to-workspace-3 ['<Super>3']
+org.gnome.desktop.wm.keybindings switch-to-workspace-4 ['<Super>4']
+org.gnome.desktop.wm.keybindings switch-to-workspace-last ['<Super>End']
+org.gnome.desktop.wm.keybindings switch-to-workspace-left ['<Super>Left']
+org.gnome.desktop.wm.keybindings switch-to-workspace-right ['<Super>Right']
+org.gnome.desktop.wm.keybindings switch-to-workspace-down ['<Control><Alt>Down']
+org.gnome.desktop.wm.keybindings switch-to-workspace-up ['<Control><Alt>Up']
+org.gnome.desktop.wm.keybindings toggle-fullscreen ['<Super>f']
+org.gnome.desktop.wm.keybindings toggle-maximized ['<Super>F10']
+org.gnome.desktop.wm.keybindings unmaximize ['<Super>r']
 ```
 启用 `User Themes` 扩展：
 - 打开 **GNOME Extensions**（`Alt+F2` 输入 `extensions`）  
@@ -88,18 +129,33 @@ sudo flatpak mask org.gtk.Gtk3theme.adw-gtk3 && sudo flatpak mask org.gtk.Gtk3th
    ~/.themes/  # 传统路径（部分旧版GNOME使用）
    ~/.local/share/themes/  # 新版GNOME推荐路径
    
-   gsettings set org.gnome.desktop.interface cursor-theme 'MacOS-3D-Cursor-Dark'
+   
+   # Shell 主题更改 GNOME 顶部栏和活动概述的视觉主题（需启用 `User Themes` 扩展）。
+   # GTK 主题为 GTK2/GTK3/GTK4 应用（如 GIMP、Thunderbird）指定主题。应用程序内部界面
+   # wm.preferences theme 主题用于设置窗口管理器（Window Manager）的主题，它控制的是 窗口边框、标题栏、最小化/最大化/关闭按钮等非客户区（non-client area）的视觉样式。
+   
+   fastfetch | grep "WM Theme:"	# 这里的值应该对应 Shell 主题
+   # fastfetch 中的 WM Theme: 的值对应的是 gnome-tweaks 中的 Shell 主题，也就是 user-theme
+   # 而 fastfetch 中 Theme: 的值对应的是 gnome-tweaks 中的 过时应用程序 主题，也就是 gtk-theme
+   
+   gsettings set org.gnome.desktop.interface color-scheme 'default'
+   gsettings set org.gnome.desktop.interface cursor-theme 'MacOS-3D-Cursor-Light'
    gsettings set org.gnome.desktop.interface icon-theme 'MacOS-3D'
    gsettings set org.gnome.shell.extensions.user-theme name 'MacOS-3D-Shell'
    gsettings set org.gnome.desktop.interface gtk-theme 'MacOS-3D-Gtk'
    gsettings set org.gnome.desktop.wm.preferences theme 'MacOS-3D-Gtk'
-   # 窗口装饰主题（标题栏、边框、按钮）通常与 GTK 主题捆绑。若 MacOS-3D-Gtk-Dark 主题包已包含对应的窗口装饰，直接使用同一名称即可保持风格一致。
+   # wm.preferences theme 窗口装饰主题（标题栏、边框、按钮）通常与 GTK 主题捆绑。若 MacOS-3D-Gtk-Dark 主题包已包含对应的窗口装饰，直接使用同一名称即可保持风格一致。
    
-   gsettings set org.gnome.desktop.interface cursor-theme 'MacOS-3D-Cursor-Light'
+   gsettings set org.gnome.desktop.interface color-scheme 'prefer-dark'
+   gsettings set org.gnome.desktop.interface cursor-theme 'MacOS-3D-Cursor-Dark'
    gsettings set org.gnome.desktop.interface icon-theme 'MacOS-3D'
    gsettings set org.gnome.shell.extensions.user-theme name 'MacOS-3D-Shell'
    gsettings set org.gnome.desktop.interface gtk-theme 'MacOS-3D-Gtk-Dark'
    gsettings set org.gnome.desktop.wm.preferences theme 'MacOS-3D-Gtk-Dark'
+   
+   gsettings reset org.gnome.desktop.wm.preferences theme
+   # 默认是 Adwaita
+   gsettings get org.gnome.desktop.wm.preferences theme
    
    
    sudo flatpak override --filesystem=~/.themes
@@ -331,6 +387,7 @@ gsettings reset org.gnome.desktop.interface font-name
 ### **(4) 过时应用程序（Legacy Applications）**
 - **作用**：为 GTK2/GTK3 旧版应用（如 GIMP、Thunderbird）指定备用主题（通常与 GTK4 主题不同）。
 - **`gsettings` 命令**：
+  
   ```bash
   # 查看当前旧版应用主题
   gsettings get org.gnome.desktop.interface gtk-theme

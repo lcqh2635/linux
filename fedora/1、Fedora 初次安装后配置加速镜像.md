@@ -2,20 +2,39 @@
 
 ---
 
-### **1. 备份默认镜像配置**
+### **1. 安装系统基础依赖包**
 ```bash
 sudo dnf update -y && sudo dnf upgrade -y
 
-# 如果想使用 Gnome 软件升级到预发布版本
-gsettings set org.gnome.software show-upgrade-prerelease true
-# 升级完成后，强烈建议禁用该功能，这样您就不会收到不需要的未来预发布版。
-gsettings set org.gnome.software show-upgrade-prerelease false
+sudo dnf install -y git unzip p7zip wl-clipboard \
+gnome-tweaks gnome-extensions-app \
+fastfetch timeshift evolution \
+google-chrome-stable \
+libreoffice-langpack-zh-Hans \
+obs-studio
 
-# 从预发布版（beta）升级到最终公开版（stable）
-如果您使用的是 Fedora Linux 的预发行版，则无需执行任何操作来获取最终的公开发行版，只需在软件包可用时对其进行更新即可。您可以使用 sudo dnf upgrade 或等待桌面通知。当预发布版本作为最终版本发布时，fedora-repos 软件包将被更新，并且您的 updates-testing 仓库将被禁用。一旦发生这种情况（在发布当天），强烈建议运行 sudo dnf distro-sync，以便使软件包版本与当前版本保持一致。
+# evolution配置qq邮箱授权码： embwnsuwkdjrebge
+fastfetch
 
-sudo cp /etc/yum.repos.d/fedora.repo /etc/yum.repos.d/fedora.repo.backup
-sudo cp /etc/yum.repos.d/fedora-updates.repo /etc/yum.repos.d/fedora-updates.repo.backup
+# 配置 Git
+git config --global user.name "龙茶清欢"
+git config --global user.email "2320391937@qq.com"
+ssh-keygen -t rsa -b 4096 -C "2320391937@qq.com"
+# 需要安装 wl-clipboard 工具
+cat ~/.ssh/id_rsa.pub | wl-copy
+# 配置 Gitee 密钥	https://gitee.com/profile/sshkeys
+# 配置 Github 密钥	https://github.com/settings/keys
+
+# 安装基础依赖包 https://v2.tauri.app/zh-cn/start/prerequisites/#linux
+sudo dnf check-update
+sudo dnf install webkit2gtk4.1-devel \
+  openssl-devel \
+  curl \
+  wget \
+  file \
+  libappindicator-gtk3-devel \
+  librsvg2-devel
+sudo dnf group install "c-development"
 ```
 
 ---
@@ -29,17 +48,6 @@ sudo sed -i 's|#baseurl=http://download.example/pub/fedora/linux|baseurl=https:/
 
 sudo sed -i 's|metalink=|#metalink=|g' /etc/yum.repos.d/fedora-updates.repo
 sudo sed -i 's|#baseurl=http://download.example/pub/fedora/linux|baseurl=https://mirrors.tuna.tsinghua.edu.cn/fedora|g' /etc/yum.repos.d/fedora-updates.repo
-
-
-# 国内加速仓库
-清华   https://mirrors.tuna.tsinghua.edu.cn
-中科大 https://mirrors.ustc.edu.cn
-腾讯云 https://mirrors.cloud.tencent.com
-华为云 https://mirrors.huaweicloud.com
-阿里云 https://mirrors.aliyun.com
-
-https://developer.aliyun.com/mirror/fedora
-https://developer.aliyun.com/mirror/rustup
 
 
 # 中科大 Fedora 镜像源 https://mirrors.ustc.edu.cn/help/fedora.html
@@ -98,6 +106,7 @@ echo "
 103.200.30.143    archive.org
 # GitHub End
 " | sudo tee -a /etc/hosts
+
 # 简化版（匹配任意条件内容）
 # 修改（将 20.27.177.113 替换为 192.168.1.100）
 sudo sed -i 's/^[0-9]\+\.[0-9]\+\.[0-9]\+\.[0-9]\+\([[:space:]]\+github\.com\)/20.205.243.166\1/' /etc/hosts

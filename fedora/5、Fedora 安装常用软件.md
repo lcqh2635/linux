@@ -201,8 +201,18 @@ flatpak install flathub com.spotify.Client
 
 ```bash
 # 安装常用 Flathub 软件
-# 自定义 GNOME 的方方面面，类似 gnome-tweaks
-flatpak install flathub page.tesk.Refine -y
+# 管理 Flatpak 权限
+flatpak install flathub com.github.tchx84.Flatseal -y
+# 管理 Flatpak 的所有内容
+flatpak install flathub io.github.flattool.Warehouse -y
+# Flatpak残留清理器
+flatpak install flathub io.github.giantpinkrobots.flatsweep -y
+# 管理 AppImages 应用
+flatpak install flathub it.mijorus.gearlever -y
+# 在设备上安装固件管理
+flatpak install flathub org.gnome.Firmware -y
+# 种子下载器
+flatpak install flathub com.transmissionbt.Transmission -y
 # GDM 设置
 flatpak install flathub io.github.realmazharhussain.GdmSettings -y
 flatpak install flathub org.gnome.Evolution -y
@@ -213,14 +223,6 @@ flatpak install flathub io.github.qier222.YesPlayMusic -y
 flatpak install flathub com.microsoft.Edge -y
 flatpak install flathub com.google.Chrome -y
 flatpak install flathub org.videolan.VLC -y
-# 管理 Flatpak 权限
-flatpak install flathub com.github.tchx84.Flatseal -y
-# 管理 Flatpak 的所有内容
-flatpak install flathub io.github.flattool.Warehouse -y
-# Flatpak残留清理器
-flatpak install flathub io.github.giantpinkrobots.flatsweep -y
-# 管理 AppImages 应用
-flatpak install flathub it.mijorus.gearlever -y
 # 使用 Linux 设备作为第二屏幕
 flatpak install flathub eu.nokun.MirrorHall -y
 # 翻译
@@ -242,11 +244,7 @@ flatpak install flathub ca.desrt.dconf-editor -y
 flatpak install flathub org.gnome.Gtranslator -y
 # 保护您的数据安全、数据备份
 flatpak install flathub org.gnome.World.PikaBackup -y
-# 在设备上安装固件管理
-flatpak install flathub org.gnome.Firmware -y
-# 种子下载器
-flatpak install flathub com.transmissionbt.Transmission -y
-# 保存您的桌面环境配置
+# 保存您的桌面环境配置，例如：主题、字体、扩展等等
 flatpak install flathub io.github.vikdevelop.SaveDesktop -y
 # Podman 虚拟容器化管理器，需要本地安装 Podman 或者提供远程连接地址
 flatpak install flathub com.github.marhkb.Pods -y
@@ -258,6 +256,8 @@ flatpak install flathub com.protonvpn.www -y
 flatpak install flathub io.github.Fndroid.clash_for_windows -y
 # Lutris 可帮您安装和运行大多数平台上几乎所有时代的电子游戏。通过对现有的模拟器、兼容层、第三方游戏引擎等进行整合利用，Lutris 可为您提供一个统一的界面来启动您的所有游戏。
 flatpak install flathub net.lutris.Lutris -y
+flatpak install flathub com.valvesoftware.Steam -y
+flatpak install flathub io.github.Foldex.AdwSteamGtk -y
 # 屏幕录制
 flatpak install -y flathub com.obsproject.Studio
 # 彻底删除应用及数据：
@@ -279,7 +279,5 @@ flatpak install flathub org.fedoraproject.MediaWriter -y
 # 创建图像或编辑照片
 flatpak install flathub org.gimp.GIMP -y
 flatpak install flathub com.wps.Office -y
-flatpak install flathub com.valvesoftware.Steam -y
-flatpak install flathub io.github.Foldex.AdwSteamGtk -y
 ```
 

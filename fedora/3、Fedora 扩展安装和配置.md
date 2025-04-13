@@ -8,50 +8,6 @@
 ### **安装 GNOME 扩展管理器**
 ```bash
 sudo dnf install -y gnome-tweaks gnome-extensions-app
-
-gsettings list-schemas | grep "keybindings"
-# 窗口快捷键
-org.gnome.desktop.wm.keybindings
-# 窗口快捷键
-org.gnome.mutter.keybindings
-org.gnome.mutter.wayland.keybindings
-# 扩展提供的快捷键
-org.gnome.shell.extensions.paperwm.keybindings
-org.gnome.shell.keybindings
-
-gsettings list-recursively org.gnome.settings-daemon.plugins.media-keys
-gsettings list-recursively org.gnome.desktop.wm.keybindings
-
-
-# 自定义媒体快捷键
-org.gnome.settings-daemon.plugins.media-keys media ['<Super>F9']
-org.gnome.settings-daemon.plugins.media-keys mic-mute ['F2']
-org.gnome.settings-daemon.plugins.media-keys volume-down ['F3']
-org.gnome.settings-daemon.plugins.media-keys volume-up ['F4']
-org.gnome.settings-daemon.plugins.media-keys next ['F8']
-org.gnome.settings-daemon.plugins.media-keys play ['F9']
-org.gnome.settings-daemon.plugins.media-keys previous ['F10']
-
-# 自定义系统快捷键
-org.gnome.desktop.wm.keybindings close ['<Super>c']
-org.gnome.desktop.wm.keybindings maximize ['<Super>Up']
-gsettings set org.gnome.desktop.wm.keybindings minimize ['<Super>Down']
-org.gnome.desktop.wm.keybindings show-desktop ['<Super>h']
-org.gnome.desktop.wm.keybindings switch-to-workspace-1 ['<Super>1']
-org.gnome.desktop.wm.keybindings switch-to-workspace-2 ['<Super>2']
-org.gnome.desktop.wm.keybindings switch-to-workspace-3 ['<Super>3']
-org.gnome.desktop.wm.keybindings switch-to-workspace-4 ['<Super>4']
-org.gnome.desktop.wm.keybindings switch-to-workspace-last ['<Super>End']
-org.gnome.desktop.wm.keybindings switch-to-workspace-left ['<Super>Left']
-org.gnome.desktop.wm.keybindings switch-to-workspace-right ['<Super>Right']
-org.gnome.desktop.wm.keybindings switch-to-workspace-down ['<Control><Alt>Down']
-org.gnome.desktop.wm.keybindings switch-to-workspace-up ['<Control><Alt>Up']
-org.gnome.desktop.wm.keybindings toggle-fullscreen ['<Super>f']
-org.gnome.desktop.wm.keybindings toggle-maximized ['<Super>F10']
-org.gnome.desktop.wm.keybindings unmaximize ['<Super>r']
-
-
-
 ```
 或通过浏览器安装扩展：
 1. 安装浏览器插件 [GNOME Shell Integration](https://extensions.gnome.org/)
@@ -303,22 +259,78 @@ gsettings set org.gnome.shell.extensions.gsconnect share-max-size 100
 
 ---
 
-### **⑦ OpenWeather**  
-**作用**：在顶栏显示实时天气信息。  
+### **⑦ Status Area Horizontal Spacing**  
+**作用**：调整顶栏 Panel 的图标间距。  
 **安装**：
+
 ```bash
 sudo dnf install gnome-shell-extension-openweather
 ```
 **`gsettings` 配置示例**：
 ```bash
-# 设置城市（例如 "Beijing"）
-gsettings set org.gnome.shell.extensions.openweather city 'Beijing'
+# 列出所有已安装的 Schema
+gsettings list-schemas
+# 列出某个 Schema 下的所有键
+gsettings list-keys org.gnome.shell.extensions.hidetopbar
+# 递归列出某个 Schema 的键值
+gsettings list-recursively org.gnome.shell.extensions.status-area-horizontal-spacing
+gsettings set org.gnome.shell.extensions.status-area-horizontal-spacing hpadding 5
 
-# 温度单位（'celsius' 或 'fahrenheit'）
-gsettings set org.gnome.shell.extensions.openweather unit 'celsius'
+
+
+org.gnome.shell.extensions.alphabetical-app-grid
+org.gnome.shell.extensions.appindicator
+org.gnome.shell.extensions.auto-move-windows
+org.gnome.shell.extensions.blur-my-shell
+org.gnome.shell.extensions.blur-my-shell.appfolder
+org.gnome.shell.extensions.blur-my-shell.applications
+org.gnome.shell.extensions.blur-my-shell.coverflow-alt-tab
+org.gnome.shell.extensions.blur-my-shell.dash-to-dock
+org.gnome.shell.extensions.blur-my-shell.dash-to-panel
+org.gnome.shell.extensions.blur-my-shell.hidetopbar
+org.gnome.shell.extensions.blur-my-shell.lockscreen
+org.gnome.shell.extensions.blur-my-shell.overview
+org.gnome.shell.extensions.blur-my-shell.panel
+org.gnome.shell.extensions.blur-my-shell.screenshot
+org.gnome.shell.extensions.blur-my-shell.window-list
+org.gnome.shell.extensions.burn-my-windows
+org.gnome.shell.extensions.burn-my-windows-profile
+org.gnome.shell.extensions.clipboard-indicator
+org.gnome.shell.extensions.com.github.hermes83.compiz-alike-magic-lamp-effect
+org.gnome.shell.extensions.com.github.hermes83.compiz-windows-effect
+org.gnome.shell.extensions.coverflowalttab
+org.gnome.shell.extensions.dash-to-dock
+org.gnome.shell.extensions.dash2dock-lite
+org.gnome.shell.extensions.desktop-cube
+org.gnome.shell.extensions.dynamic-panel
+org.gnome.shell.extensions.flypie
+org.gnome.shell.extensions.gtk4-ding
+org.gnome.shell.extensions.hidetopbar
+org.gnome.shell.extensions.just-perfection
+org.gnome.shell.extensions.lennart-k.rounded_corners
+org.gnome.shell.extensions.logo-menu
+org.gnome.shell.extensions.lunar-calendar
+org.gnome.shell.extensions.nightthemeswitcher
+org.gnome.shell.extensions.nightthemeswitcher.color-scheme
+org.gnome.shell.extensions.nightthemeswitcher.commands
+org.gnome.shell.extensions.nightthemeswitcher.time
+org.gnome.shell.extensions.paperwm
+org.gnome.shell.extensions.paperwm.keybindings
+org.gnome.shell.extensions.paperwm.workspacelist
+org.gnome.shell.extensions.quick-settings-avatar
+org.gnome.shell.extensions.quick-settings-tweaks
+org.gnome.shell.extensions.rounded-window-corners-reborn
+org.gnome.shell.extensions.status-area-horizontal-spacing
+org.gnome.shell.extensions.top-bar-organizer
+org.gnome.shell.extensions.trayIconsReloaded
+org.gnome.shell.extensions.user-theme
+org.gnome.shell.extensions.vbox-applet
+org.gnome.shell.extensions.vitals
+org.gnome.shell.extensions.workspace-indicator
 
 # 禁用详细预报弹窗
 gsettings set org.gnome.shell.extensions.openweather show-comment-in-panel false
+
 ```
 
 ### **⑧ Caffeine**  
@@ -499,6 +511,9 @@ org.gnome.shell.extensions.quick-settings-tweaks weather-show-location true
 **安装**:
 ```bash
 sudo dnf install gnome-shell-extension-grand-theft-focus
+
+# 递归列出某个 Schema 的键值
+gsettings list-recursively org.gnome.shell.extensions.rounded-window-corners-reborn
 ```
 **快捷键**: `Super` + `F` 一键锁定。
 
@@ -506,55 +521,90 @@ sudo dnf install gnome-shell-extension-grand-theft-focus
 **评分**: ★★★★★ (50万+ 用户)  
 **作用**: 为所有窗口添加圆角效果（类似 macOS）。  
 **安装**:
+
 ```bash
 sudo dnf install gnome-shell-extension-rounded-window-corners
+Rounded Window Corners Reborn
 ```
 **配置**：
 ```bash
-gsettings set org.gnome.shell.extensions.rounded-window-corners border-radius 12  # 圆角大小
+# 列出所有已安装的 Schema
+gsettings list-schemas
+# 列出某个 Schema 下的所有键
+gsettings list-keys org.gnome.shell.extensions.rounded-window-corners-reborn
+# 递归列出某个 Schema 的键值
+gsettings list-recursively org.gnome.shell.extensions.rounded-window-corners-reborn
+
+org.gnome.shell.extensions.rounded-window-corners-reborn
+# 圆角大小
+gsettings set org.gnome.shell.extensions.rounded-window-corners border-radius 12
+
+org.gnome.shell.extensions.rounded-window-corners-reborn blacklist @as []
+org.gnome.shell.extensions.rounded-window-corners-reborn border-width 0
+org.gnome.shell.extensions.rounded-window-corners-reborn custom-rounded-corner-settings @a{sv} {}
+org.gnome.shell.extensions.rounded-window-corners-reborn debug-mode false
+org.gnome.shell.extensions.rounded-window-corners-reborn enable-preferences-entry false
+org.gnome.shell.extensions.rounded-window-corners-reborn focused-shadow {'horizontalOffset': 0, 'verticalOffset': 4, 'blurOffset': 28, 'spreadRadius': 4, 'opacity': 60}
+org.gnome.shell.extensions.rounded-window-corners-reborn global-rounded-corner-settings {'padding': <{'left': <uint32 1>, 'right': <uint32 1>, 'top': <uint32 1>, 'bottom': <uint32 1>}>, 'keepRoundedCorners': <{'maximized': <false>, 'fullscreen': <false>}>, 'borderRadius': <uint32 12>, 'smoothing': <0>, 'borderColor': <[0.5, 0.5, 0.5, 1.0]>, 'enabled': <true>}
+org.gnome.shell.extensions.rounded-window-corners-reborn settings-version uint32 7
+org.gnome.shell.extensions.rounded-window-corners-reborn skip-libadwaita-app true
+org.gnome.shell.extensions.rounded-window-corners-reborn skip-libhandy-app true
+org.gnome.shell.extensions.rounded-window-corners-reborn tweak-kitty-terminal false
+org.gnome.shell.extensions.rounded-window-corners-reborn unfocused-shadow {'horizontalOffset': 0, 'verticalOffset': 2, 'blurOffset': 12, 'spreadRadius': -1, 'opacity': 65}
 ```
 
 ---
 
-#### 5. **Aylur's Widgets**  
+#### 5. **Desktop Widgets (Desktop Clock)**  
 **评分**: ★★★★☆ (极简风格小组件)  
 **作用**: 在顶栏添加时间、天气、系统监控等精美组件。  
 **安装**:
 ```bash
 sudo dnf install gnome-shell-extension-aylurs-widgets
-```
-**效果预览**：  
-![Aylur's Widgets](https://example.com/aylurs-widgets-preview.png)
 
+org.gnome.shell.extensions.workspace-indicator
+# 递归列出某个 Schema 的键值
+gsettings list-recursively org.gnome.shell.extensions.workspace-indicator
+gsettings set org.gnome.shell.extensions.workspace-indicator embed-previews true
+```
 ---
 
 #### 6. **Burn My Windows**  
 **评分**: ★★★★☆ (炫酷动画)  
 **作用**: 为窗口添加打开/关闭特效（火焰、像素化、矩阵等）。  
 **安装**:
+
 ```bash
 sudo dnf install gnome-shell-extension-burn-my-windows
 ```
 **特效切换**：
 ```bash
 # 恢复默认设置
-gsettings reset-recursively org.gnome.shell.extensions.just-perfection
+gsettings reset-recursively org.gnome.shell.extensions.burn-my-windows
 
 # 列出所有已安装的 Schema
 gsettings list-schemas
 # 列出某个 Schema 下的所有键
-gsettings list-keys org.gnome.shell.extensions.just-perfection
+gsettings list-keys org.gnome.shell.extensions.burn-my-windows
 # 递归列出某个 Schema 的键值
-gsettings list-recursively org.gnome.shell.extensions.just-perfection
+gsettings list-recursively org.gnome.shell.extensions.burn-my-windows
+gsettings list-recursively org.gnome.shell.extensions.burn-my-windows-profile
 
 gsettings set org.gnome.shell.extensions.burn-my-windows animation-type 'fire'
+
+
+org.gnome.shell.extensions.burn-my-windows-profile broken-glass-enable-effect true
+org.gnome.shell.extensions.burn-my-windows-profile broken-glass-use-pointer true
+org.gnome.shell.extensions.burn-my-windows-profile tv-enable-effect true
 ```
 
 #### 7. **Forge**  
-**评分**: ★★★★★ (进阶窗口管理)  
+**评分**: ★★★★★ (进阶窗口管理) 
 **作用**: 比 Tiling Assistant 更强大的分屏工具，支持自定义布局和快捷键。  
 **安装**:
+
 ```bash
+dnf search gnome-shell-extension-forge
 sudo dnf install gnome-shell-extension-forge
 ```
 **分屏快捷键**：  
