@@ -89,6 +89,13 @@ sudo flatpak mask org.gtk.Gtk3theme.adw-gtk3 && sudo flatpak mask org.gtk.Gtk3th
    tar -xzvf theme-name.tar.gz -C ~/.themes
    
    
+   # Flat Remix GTK 主题适配了 LibAdwaita
+   sudo dnf install -y flat-remix-gtk4-theme
+   https://www.gnome-look.org/p/1214931
+   https://github.com/daniruiz/Flat-Remix-GTK
+   flatpak override --user --filesystem=xdg-config/gtk-4.0 --filesystem=~/.themes/
+   gsettings set org.gnome.desktop.interface gtk-theme "Flat-Remix-GTK-Blue"
+   
    # 主题美化，参考 https://www.gnome-look.org/browse?ord=rating
    git clone https://github.com/vinceliuice/WhiteSur-gtk-theme.git --depth=1
    sed -i 's/\$opacity: if([^;]*);/\$opacity: 1;/g' ~/下载/WhiteSur-gtk-theme/src/sass/_colors.scss
@@ -128,7 +135,6 @@ sudo flatpak mask org.gtk.Gtk3theme.adw-gtk3 && sudo flatpak mask org.gtk.Gtk3th
    /usr/local/share/themes/  # 本地安装的第三方主题
    ~/.themes/  # 传统路径（部分旧版GNOME使用）
    ~/.local/share/themes/  # 新版GNOME推荐路径
-   
    
    # Shell 主题更改 GNOME 顶部栏和活动概述的视觉主题（需启用 `User Themes` 扩展）。
    # GTK 主题为 GTK2/GTK3/GTK4 应用（如 GIMP、Thunderbird）指定主题。应用程序内部界面
@@ -184,7 +190,11 @@ sudo flatpak mask org.gtk.Gtk3theme.adw-gtk3 && sudo flatpak mask org.gtk.Gtk3th
    # 作用：将 tcg/themes 这个社区维护的软件仓库添加到您的 Fedora 系统中，之后可以通过 dnf install 安装该仓库中的软件包。
    sudo dnf copr enable tcg/themes
    sudo dnf install la-capitaine-cursor-theme
-   https://github.com/keeferrourke/capitaine-cursors.git
+   # Capitaine Cursors
+   https://www.gnome-look.org/p/1148692
+   git clone https://github.com/keeferrourke/capitaine-cursors.git
+   # McMojave cursors 基于 Capitaine Cursors 构建
+   https://www.gnome-look.org/p/1355701
    # 光标主题建议白天使用黑色，晚上使用白色
    
    
