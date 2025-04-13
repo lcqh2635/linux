@@ -25,9 +25,6 @@ org.gnome.shell.extensions.paperwm.keybindings
 org.gnome.shell.keybindings
 
 gsettings list-recursively org.gnome.settings-daemon.plugins.media-keys
-gsettings list-recursively org.gnome.desktop.wm.keybindings
-
-
 # 自定义媒体快捷键
 org.gnome.settings-daemon.plugins.media-keys media ['<Super>F9']
 org.gnome.settings-daemon.plugins.media-keys mic-mute ['F2']
@@ -37,23 +34,23 @@ org.gnome.settings-daemon.plugins.media-keys next ['F8']
 org.gnome.settings-daemon.plugins.media-keys play ['F9']
 org.gnome.settings-daemon.plugins.media-keys previous ['F10']
 
+gsettings list-recursively org.gnome.desktop.wm.keybindings
 # 自定义系统快捷键
-org.gnome.desktop.wm.keybindings close ['<Super>c']
-org.gnome.desktop.wm.keybindings maximize ['<Super>Up']
-gsettings set org.gnome.desktop.wm.keybindings minimize ['<Super>Down']
-org.gnome.desktop.wm.keybindings show-desktop ['<Super>h']
-org.gnome.desktop.wm.keybindings switch-to-workspace-1 ['<Super>1']
-org.gnome.desktop.wm.keybindings switch-to-workspace-2 ['<Super>2']
-org.gnome.desktop.wm.keybindings switch-to-workspace-3 ['<Super>3']
-org.gnome.desktop.wm.keybindings switch-to-workspace-4 ['<Super>4']
-org.gnome.desktop.wm.keybindings switch-to-workspace-last ['<Super>End']
-org.gnome.desktop.wm.keybindings switch-to-workspace-left ['<Super>Left']
-org.gnome.desktop.wm.keybindings switch-to-workspace-right ['<Super>Right']
-org.gnome.desktop.wm.keybindings switch-to-workspace-down ['<Control><Alt>Down']
-org.gnome.desktop.wm.keybindings switch-to-workspace-up ['<Control><Alt>Up']
-org.gnome.desktop.wm.keybindings toggle-fullscreen ['<Super>f']
-org.gnome.desktop.wm.keybindings toggle-maximized ['<Super>F10']
-org.gnome.desktop.wm.keybindings unmaximize ['<Super>r']
+gsettings set org.gnome.desktop.wm.keybindings close ['<Super>c']
+gsettings set org.gnome.desktop.wm.keybindings maximize ['<Super>Up']
+gsettings set org.gnome.desktop.wm.keybindings unmaximize ['<Super>Down']
+gsettings set org.gnome.desktop.wm.keybindings show-desktop ['<Super>h']
+gsettings set org.gnome.desktop.wm.keybindings switch-to-workspace-1 ['<Super>1']
+gsettings set org.gnome.desktop.wm.keybindings switch-to-workspace-2 ['<Super>2']
+gsettings set org.gnome.desktop.wm.keybindings switch-to-workspace-3 ['<Super>3']
+gsettings set org.gnome.desktop.wm.keybindings switch-to-workspace-4 ['<Super>4']
+gsettings set org.gnome.desktop.wm.keybindings switch-to-workspace-last ['<Super>End']
+gsettings set org.gnome.desktop.wm.keybindings switch-to-workspace-left ['<Super>Left']
+gsettings set org.gnome.desktop.wm.keybindings switch-to-workspace-right ['<Super>Right']
+gsettings set org.gnome.desktop.wm.keybindings switch-to-workspace-down ['<Control><Alt>Down']
+gsettings set org.gnome.desktop.wm.keybindings switch-to-workspace-up ['<Control><Alt>Up']
+gsettings set org.gnome.desktop.wm.keybindings toggle-fullscreen ['<Super>f']
+gsettings set org.gnome.desktop.wm.keybindings toggle-maximized ['<Super>F10']
 ```
 启用 `User Themes` 扩展：
 - 打开 **GNOME Extensions**（`Alt+F2` 输入 `extensions`）  

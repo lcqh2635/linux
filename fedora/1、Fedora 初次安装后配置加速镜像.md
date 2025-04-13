@@ -72,6 +72,49 @@ sudo sed -e 's!^metalink=!#metalink=!g' \
          -e 's!https\?://download1\.rpmfusion\.org/!https://mirrors.aliyun.com/rpmfusion/!g' \
          -i.bak /etc/yum.repos.d/rpmfusion*.repo
 
+
+Fedora 默认使用 Metalink 给出推荐的镜像列表，保证用户使用的镜像仓库足够新，并且能够尽快拿到安全更新，从而提供更好的安全性。所以通常情况下使用默认配置即可，无需更改配置文件。
+由于 Metalink 需要从国外的 Fedora 项目服务器上获取元信息，所以对于校园内网、无国外访问等特殊情况，metalink 并不适用，此时可以如下修改配置文件。
+Fedora 的软件源配置文件可以有多个，其中：
+    系统默认的 fedora 仓库配置文件为 /etc/yum.repos.d/fedora.repo
+    系统默认的 updates 仓库配置文件为 /etc/yum.repos.d/fedora-updates.repo
+将上述两个文件先做个备份，根据 Fedora 系统版本分别替换为下面内容，之后通过 sudo dnf makecache 命令更新本地缓存，即可使用所选择的软件源镜像。
+# 阿里云 Fedora 镜像源 
+sudo sed -e 's|^metalink=|#metalink=|g' \
+    -e 's|^#baseurl=http://download.example/pub/fedora/linux|baseurl=https://mirrors.tuna.tsinghua.edu.cn/fedora|g' \
+    -i.bak \
+    /etc/yum.repos.d/fedora.repo \
+    /etc/yum.repos.d/fedora-updates.repo
+
+
+# 检查系统中当前启用的所有仓库：
+dnf repolist
+sudo dnf config-manager --set-disabled copr:copr.fedorainfracloud.org:peterwu:rendezvous
+
+# -e 's|^metalink=|#metalink=|g'：注释掉所有以 metalink= 开头的行（将 metalink= 替换为 #metalink=）。这是因为 metalink 动态解析镜像列表，而手动配置时我们希望禁用它。
+# -e 's|^#baseurl=http://download.example/pub/fedora/linux|baseurl=https://mirrors.aliyun.com/fedora|g'：将原本被注释掉的 #baseurl= 行取消注释，并将其替换为阿里云镜像站的地址。
+# -i.bak：在修改文件之前创建备份文件（如 fedora.repo.bak）。
+# /etc/yum.repos.d/fedora.repo 和 /etc/yum.repos.d/fedora-updates.repo：需要修改的目标文件。
+sudo sed -e 's|^metalink=|#metalink=|g' \
+    -e 's|^#baseurl=http://download.example/pub/fedora/linux|baseurl=https://mirrors.aliyun.com/fedora|g' \
+    -i.bak \
+    /etc/yum.repos.d/fedora.repo \
+    /etc/yum.repos.d/fedora-updates.repo
+
+# 还原之前的配置
+ls /etc/yum.repos.d/		# 检查备份文件是否存在
+# 如果目标文件（如 /etc/yum.repos.d/fedora.repo）不存在 ，mv 会直接创建目标文件。
+# 如果目标文件已存在 ，mv 会覆盖 目标文件
+sudo mv /etc/yum.repos.d/fedora.repo.bak /etc/yum.repos.d/fedora.repo
+sudo mv /etc/yum.repos.d/fedora-updates.repo.bak /etc/yum.repos.d/fedora-updates.repo
+# 还原完成后，清理旧的缓存并重新生成元数据：
+sudo dnf clean all
+sudo dnf makecache
+
+fedora 仓库 	cat /etc/yum.repos.d/fedora.repo
+updates 仓库 	cat /etc/yum.repos.d/fedora-updates.repo
+
+
 https://mirrors.aliyun.com/mirror/rpmfusion
 # 阿里云 RPMFusion 镜像源 https://developer.aliyun.com/mirror/rpmfusion
 sudo yum install --nogpgcheck https://mirrors.aliyun.com/rpmfusion/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm https://mirrors.tuna.tsinghua.edu.cn/rpmfusion/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm
@@ -93,7 +136,6 @@ sudo flatpak remote-modify flathub --url=https://mirror.sjtu.edu.cn/flathub
 
 # 恢复默认值
 sudo flatpak remote-modify flathub --url=https://dl.flathub.org/repo
-
 sudo dnf update -y && sudo dnf upgrade -y && flatpak update -y
 
 

@@ -41,6 +41,8 @@ for EXT_DIR in ~/.local/share/gnome-shell/extensions/*/; do
         cp "$EXT_DIR/schemas"/*.xml ~/.local/share/glib-2.0/schemas/
     fi
 done
+
+glib-compile-schemas ~/.local/share/glib-2.0/schemas/
 ```
 
 **使用方法**：

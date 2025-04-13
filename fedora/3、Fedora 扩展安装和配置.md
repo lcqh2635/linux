@@ -7,7 +7,36 @@
 ## **1. 必备扩展安装工具**
 ### **安装 GNOME 扩展管理器**
 ```bash
-sudo dnf install -y gnome-tweaks gnome-extensions-app
+sudo dnf install -y \
+gnome-tweaks gnome-extensions-app \
+
+
+dnf search gnome-shell-extension
+# 卸载自带的无用扩展插件
+sudo dnf remove -y \
+gnome-shell-extension-window-list \
+gnome-shell-extension-launch-new-instance \
+gnome-shell-extension-apps-menu \
+gnome-shell-extension-places-menu \
+
+# 系统扩展插件
+sudo dnf install -y \
+gnome-shell-extension-user-theme \
+gnome-shell-extension-dash-to-dock \
+gnome-shell-extension-blur-my-shell \
+gnome-shell-extension-just-perfection \
+gnome-shell-extension-drive-menu \
+gnome-shell-extension-caffeine \
+gnome-shell-extension-workspace-indicator \
+gnome-shell-extension-auto-move-windows \
+gnome-shell-extension-appindicator
+
+gnome-shell-extension-forge.noarch
+gnome-shell-extension-gsconnect.x86_64
+gnome-shell-extension-unite.noarch
+# 这两个可以安装，不建议启用
+gnome-shell-extension-apps-menu
+gnome-shell-extension-places-menu
 ```
 或通过浏览器安装扩展：
 1. 安装浏览器插件 [GNOME Shell Integration](https://extensions.gnome.org/)
