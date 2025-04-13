@@ -136,6 +136,15 @@ cat ~/.ssh/id_rsa.pub | wl-copy
 # 清华镜像
 sudo curl -o /etc/yum.repos.d/fedora.repo https://mirrors.tuna.tsinghua.edu.cn/fedora/releases/41/Everything/x86_64/os/repo/fedora.repo
 sudo curl -o /etc/yum.repos.d/fedora-updates.repo https://mirrors.tuna.tsinghua.edu.cn/fedora/updates/41/Everything/x86_64/os/repo/fedora-updates.repo
+
+# 添加 Fedora COPR（Community Projects）第三方仓库
+# Fedora COPR（Community Projects）第三方仓库。地址 https://copr.fedorainfracloud.org/
+# dnf copr enable：启用一个 COPR（Community Projects）第三方仓库。
+# peterwu/rendezvous：指定仓库作者（peterwu）和仓库名（rendezvous）。
+sudo dnf copr enable <username>/<repository-name>
+# 作用：将 peterwu/rendezvous 这个社区维护的软件仓库添加到您的 Fedora 系统中，之后可以通过 dnf install 安装该仓库中的软件包。
+sudo dnf copr enable peterwu/rendezvous
+sudo dnf install bibata-cursor-themes
 ```
 
 ---

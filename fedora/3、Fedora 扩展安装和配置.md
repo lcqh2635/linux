@@ -811,15 +811,9 @@ gsettings list-keys org.gnome.shell.extensions.nightthemeswitcher
 # 递归列出某个 Schema 的键值
 gsettings list-recursively org.gnome.shell.extensions.nightthemeswitcher.commands
 
-
-# 设置白天/黑夜主题
-gsettings set org.gnome.shell.extensions.night-theme-switcher day-theme 'Adwaita'
-gsettings set org.gnome.shell.extensions.night-theme-switcher night-theme 'Adwaita-dark'
-
-
 gsettings set org.gnome.shell.extensions.nightthemeswitcher.commands enabled true
-gsettings set org.gnome.shell.extensions.nightthemeswitcher.commands sunrise "gsettings set org.gnome.desktop.interface cursor-theme 'MacOS-3D-Cursor-Light'\ngsettings set org.gnome.desktop.interface icon-theme 'MacOS-3D'\ngsettings set org.gnome.shell.extensions.user-theme name 'MacOS-3D-Shell'\ngsettings set org.gnome.desktop.interface gtk-theme 'MacOS-3D-Gtk'\ngsettings set org.gnome.desktop.wm.preferences theme 'MacOS-3D-Gtk'"
-gsettings set org.gnome.shell.extensions.nightthemeswitcher.commands sunset "gsettings set org.gnome.desktop.interface cursor-theme 'MacOS-3D-Cursor-Dark'\ngsettings set org.gnome.desktop.interface icon-theme 'MacOS-3D'\ngsettings set org.gnome.shell.extensions.user-theme name 'MacOS-3D-Shell'\ngsettings set org.gnome.desktop.interface gtk-theme 'MacOS-3D-Gtk-Dark'\ngsettings set org.gnome.desktop.wm.preferences theme 'MacOS-3D-Gtk-Dark'"
+gsettings set org.gnome.shell.extensions.nightthemeswitcher.commands sunrise "gsettings set org.gnome.desktop.interface color-scheme 'default'\ngsettings set org.gnome.desktop.interface cursor-theme 'capitaine-cursors'\ngsettings set org.gnome.desktop.interface icon-theme 'WhiteSur-light'\ngsettings set org.gnome.shell.extensions.user-theme name 'WhiteSur-Light'\ngsettings set org.gnome.desktop.interface gtk-theme 'adw-gtk3'\ngsettings set org.gnome.desktop.wm.preferences theme 'WhiteSur-Light'"
+gsettings set org.gnome.shell.extensions.nightthemeswitcher.commands sunset "gsettings set org.gnome.desktop.interface color-scheme 'prefer-dark'\ngsettings set org.gnome.desktop.interface cursor-theme 'capitaine-cursors-light'\ngsettings set org.gnome.desktop.interface icon-theme 'WhiteSur-dark'\ngsettings set org.gnome.shell.extensions.user-theme name 'WhiteSur-Dark'\ngsettings set org.gnome.desktop.interface gtk-theme 'adw-gtk3-dark'\ngsettings set org.gnome.desktop.wm.preferences theme 'WhiteSur-Dark'"
 ```
 
 #### 6. **Proxy Switcher**  

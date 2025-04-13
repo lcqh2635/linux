@@ -153,6 +153,42 @@ sudo flatpak mask org.gtk.Gtk3theme.adw-gtk3 && sudo flatpak mask org.gtk.Gtk3th
    gsettings set org.gnome.desktop.interface gtk-theme 'MacOS-3D-Gtk-Dark'
    gsettings set org.gnome.desktop.wm.preferences theme 'MacOS-3D-Gtk-Dark'
    
+   
+   dnf install adw-gtk3-theme
+   # 由于 MacOS-3D 的 Shell 主题没有提供暗色主题，所以在切换主题时 Shell 主题无法切换
+   # 可以使用 WhiteSur 的 Shell 和 wm 主题来弥补这一点。可以解决 WhiteSur 的痛点。
+   # 可以比较实现完美的实现全局所有应用的主题切换，包括 libadwaita 系列应用。
+   # 但还是有些应用无法解决主题自动切换的问题，例如：IDEA、ApiPost、QQ、WeChat等等
+   # 总结：只需替换 WhiteSur 系列中的 GTK 主题为基于 Gnome 官方 adw-gtk3 主题开发的 GTK 主题
+   gsettings set org.gnome.desktop.interface color-scheme 'default'
+   gsettings set org.gnome.desktop.interface cursor-theme 'capitaine-cursors'
+   gsettings set org.gnome.desktop.interface icon-theme 'WhiteSur-light'
+   gsettings set org.gnome.shell.extensions.user-theme name 'WhiteSur-Light'
+   gsettings set org.gnome.desktop.interface gtk-theme 'adw-gtk3'
+   gsettings set org.gnome.desktop.wm.preferences theme 'WhiteSur-Light'
+   
+   gsettings set org.gnome.desktop.interface color-scheme 'prefer-dark'
+   gsettings set org.gnome.desktop.interface cursor-theme 'capitaine-cursors-light'
+   gsettings set org.gnome.desktop.interface icon-theme 'WhiteSur-dark'
+   gsettings set org.gnome.shell.extensions.user-theme name 'WhiteSur-Dark'
+   gsettings set org.gnome.desktop.interface gtk-theme 'adw-gtk3-dark'
+   gsettings set org.gnome.desktop.wm.preferences theme 'WhiteSur-Dark'
+   
+   # WhiteSur-cursors 在 libadwaita 系列应用中存在 BUG 不推荐使用，可以在如下网站选择一个评分高的
+   # https://www.gnome-look.org/browse?cat=107&ord=rating
+   
+   # Fedora COPR（Community Projects）第三方仓库地质 https://copr.fedorainfracloud.org/
+   # dnf copr enable：启用一个 COPR（Community Projects）第三方仓库。
+   # tcg/themes：指定仓库作者（tcg）和仓库名（themes）。
+   sudo dnf copr enable <username>/<repository-name>
+   # 作用：将 tcg/themes 这个社区维护的软件仓库添加到您的 Fedora 系统中，之后可以通过 dnf install 安装该仓库中的软件包。
+   sudo dnf copr enable tcg/themes
+   sudo dnf install la-capitaine-cursor-theme
+   https://github.com/keeferrourke/capitaine-cursors.git
+   # 光标主题建议白天使用黑色，晚上使用白色
+   
+   
+   
    gsettings reset org.gnome.desktop.wm.preferences theme
    # 默认是 Adwaita
    gsettings get org.gnome.desktop.wm.preferences theme
@@ -505,8 +541,7 @@ gsettings reset-recursively org.gnome.desktop.background
   org.kde.KStyle.Adwaita \
   org.gtk.Gtk3theme.Adwaita-dark
   
-  theme-switcher
-  libadwaita-demo.noarch
+  sudo dnf install -y libadwaita-demo
   
   gsettings set org.gnome.desktop.interface cursor-theme 'Adwaita'
   gsettings set org.gnome.desktop.interface icon-theme 'Adwaita'
