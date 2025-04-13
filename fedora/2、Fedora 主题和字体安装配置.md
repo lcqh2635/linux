@@ -7,10 +7,8 @@
 ```bash
 # 安装 GNOME Tweaks（图形化设置工具）
 sudo dnf install gnome-tweaks
-
 # 安装扩展管理器（用于管理 GNOME 扩展）
 sudo dnf install gnome-extensions-app
-
 # 安装插件支持（可选，用于手动安装主题）
 sudo dnf install gnome-shell-extension-user-theme
 
@@ -26,13 +24,13 @@ org.gnome.shell.keybindings
 
 gsettings list-recursively org.gnome.settings-daemon.plugins.media-keys
 # 自定义媒体快捷键
-org.gnome.settings-daemon.plugins.media-keys media ['<Super>F9']
-org.gnome.settings-daemon.plugins.media-keys mic-mute ['F2']
-org.gnome.settings-daemon.plugins.media-keys volume-down ['F3']
-org.gnome.settings-daemon.plugins.media-keys volume-up ['F4']
-org.gnome.settings-daemon.plugins.media-keys next ['F8']
-org.gnome.settings-daemon.plugins.media-keys play ['F9']
-org.gnome.settings-daemon.plugins.media-keys previous ['F10']
+gsettings set org.gnome.settings-daemon.plugins.media-keys media ['<Super>F9']
+gsettings set org.gnome.settings-daemon.plugins.media-keys mic-mute ['F2']
+gsettings set org.gnome.settings-daemon.plugins.media-keys volume-down ['F3']
+gsettings set org.gnome.settings-daemon.plugins.media-keys volume-up ['F4']
+gsettings set org.gnome.settings-daemon.plugins.media-keys next ['F8']
+gsettings set org.gnome.settings-daemon.plugins.media-keys play ['F9']
+gsettings set org.gnome.settings-daemon.plugins.media-keys previous ['F10']
 
 gsettings list-recursively org.gnome.desktop.wm.keybindings
 # 自定义系统快捷键
@@ -47,10 +45,7 @@ gsettings set org.gnome.desktop.wm.keybindings switch-to-workspace-4 ['<Super>4'
 gsettings set org.gnome.desktop.wm.keybindings switch-to-workspace-last ['<Super>End']
 gsettings set org.gnome.desktop.wm.keybindings switch-to-workspace-left ['<Super>Left']
 gsettings set org.gnome.desktop.wm.keybindings switch-to-workspace-right ['<Super>Right']
-gsettings set org.gnome.desktop.wm.keybindings switch-to-workspace-down ['<Control><Alt>Down']
-gsettings set org.gnome.desktop.wm.keybindings switch-to-workspace-up ['<Control><Alt>Up']
 gsettings set org.gnome.desktop.wm.keybindings toggle-fullscreen ['<Super>f']
-gsettings set org.gnome.desktop.wm.keybindings toggle-maximized ['<Super>F10']
 ```
 启用 `User Themes` 扩展：
 - 打开 **GNOME Extensions**（`Alt+F2` 输入 `extensions`）  
@@ -82,10 +77,6 @@ sudo flatpak mask org.gtk.Gtk3theme.adw-gtk3 && sudo flatpak mask org.gtk.Gtk3th
 1. 下载主题（如从 [GNOME Look](https://www.gnome-look.org/)）  
 2. 解压到 `~/.themes`（GTK 主题）或 `~/.local/share/themes`（系统级主题）  
    ```bash
-   mkdir -p ~/.themes
-   tar -xzvf theme-name.tar.gz -C ~/.themes
-   
-   
    # Flat Remix GTK 主题适配了 LibAdwaita
    sudo dnf install -y flat-remix-gtk4-theme
    https://www.gnome-look.org/p/1214931
@@ -316,17 +307,12 @@ Fedora 默认字体为 **Cantarell**，可替换为更清晰的字体（如 **No
 
 ### **（1）安装常用字体**
 ```bash
-# 微软字体（Arial、Times New Roman 等）
-sudo dnf install mscore-fonts-all
-
-# Google Noto 字体（支持多语言）
-sudo dnf install google-noto-fonts
-
 # 思源黑体/宋体（中文字体）
 sudo dnf install adobe-source-han-sans-cn-fonts adobe-source-han-serif-cn-fonts
-
 # 等宽字体（编程推荐）
 sudo dnf install fira-code-fonts jetbrains-mono-fonts
+
+
 ```
 
 ### **（2）调整字体渲染**
@@ -437,6 +423,10 @@ gsettings reset org.gnome.desktop.interface font-name
   
   # 设置旧版应用主题（例如改为 "Adwaita-dark"）
   gsettings set org.gnome.desktop.interface gtk-theme 'Adwaita-dark'
+  
+  sudo flatpak override --filesystem=xdg-config/gtk-3.0
+  sudo flatpak override --filesystem=xdg-config/gtk-4.0
+  
   ```
 
 ---
@@ -592,6 +582,7 @@ gsettings reset-recursively org.gnome.desktop.background
 
 #### 3. **壁纸动态切换**
 - **自动更换壁纸**：
+  
   ```bash
   sudo dnf install variety  # 动态壁纸工具
   ```
@@ -602,29 +593,21 @@ gsettings reset-recursively org.gnome.desktop.background
 ### **二、显示效果增强**
 #### 1. **字体优化**
 - **安装高级字体**：
+  
   ```bash
   sudo dnf install inter-fonts firacode-fonts noto-fonts-cjk  # 中文用思源黑体
   ```
 - **抗锯齿与微调**：
   ```bash
-  gsettings set org.gnome.desktop.interface font-antialiasing 'rgba'  # 子像素渲染
-  gsettings set org.gnome.desktop.interface font-hinting 'slight'    # 轻微字型优化
-  ```
-
-#### 2. **高分屏缩放**
-- **整数缩放（200%）**：
-  ```bash
-  gsettings set org.gnome.mutter experimental-features "['scale-monitor-framebuffer']"
-  gsettings set org.gnome.desktop.interface scaling-factor 2
-  ```
-- **分数缩放（125%/150%）**：
-  ```bash
-  gsettings set org.gnome.mutter experimental-features "['scale-monitor-framebuffer']"
-  gsettings set org.gnome.mutter fractional-scaling true
+  # 子像素渲染
+  gsettings set org.gnome.desktop.interface font-antialiasing 'rgba'
+  # 轻微字型优化
+  gsettings set org.gnome.desktop.interface font-hinting 'slight'
   ```
 
 #### 3. **夜间模式与蓝光过滤**
 - **定时切换**：
+  
   ```bash
   gsettings set org.gnome.settings-daemon.plugins.color night-light-enabled true
   gsettings set org.gnome.settings-daemon.plugins.color night-light-schedule-automatic true  # 日出日落自动切换
@@ -709,10 +692,18 @@ gsettings reset-recursively org.gnome.desktop.background
 
 ### **六、一键备份配置**
 ```bash
-# 导出所有视觉相关设置
-dconf dump /org/gnome/desktop/ > ~/gnome-visual-settings.dconf
-dconf dump /org/gnome/shell/ >> ~/gnome-visual-settings.dconf
-# 恢复时：dconf load /org/gnome/ < ~/gnome-visual-settings.dconf
+https://itsfoss.com/flatpak-app-apply-theme/
+参考 https://docs.flatpak.org/zh-cn/latest/desktop-integration.html
+
+# 官网 https://github.com/FengZhongShaoNian/QWhiteSurGtkDecorations
+# 需要自行安装 QWhiteSurGtkDecorations
+# export QT_WAYLAND_DECORATION=whitesur-gtk
+
+export QT_QPA_PLATFORM=wayland
+# sudo dnf install -y qadwaitadecorations-qt5 qadwaitadecorations-qt6
+export QT_WAYLAND_DECORATION=adwaita
+export QT_STYLE_OVERRIDE=kvantum
+source ~/.bashrc
 ```
 
 ---
@@ -829,32 +820,11 @@ gsettings set org.gnome.desktop.wm.preferences button-layout 'close,minimize,max
 
 
 
-sudo flatpak override --filesystem=xdg-config/gtk-3.0
-
-sudo flatpak override --filesystem=xdg-config/gtk-4.0
 
 
 
-https://itsfoss.com/flatpak-app-apply-theme/
-参考 https://docs.flatpak.org/zh-cn/latest/desktop-integration.html
 
 
-
-官网 https://github.com/FengZhongShaoNian/QWhiteSurGtkDecorations
-
-export QT_QPA_PLATFORM=wayland
-
-sudo dnf install -y qadwaitadecorations-qt5 qadwaitadecorations-qt6
-
-export QT_WAYLAND_DECORATION=adwaita
-
-需要自行安装 QWhiteSurGtkDecorations
-
-export QT_WAYLAND_DECORATION=whitesur-gtk
-
-export QT_STYLE_OVERRIDE=kvantum
-
-source ~/.bashrc
 
 ```bash
 sudo dnf install -y git cmake gtk3-devel gtk4-devel
