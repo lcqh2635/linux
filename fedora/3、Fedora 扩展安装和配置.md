@@ -211,12 +211,19 @@ gsettings set org.gnome.shell.extensions.hidetopbar show-delay 300
 sudo dnf install gnome-shell-extension-clipboard-indicator
 ```
 **`gsettings` 配置示例**：
-```bash
-# 设置历史记录数量（默认20）
-gsettings set org.gnome.shell.extensions.clipboard-indicator history-size 50
 
-# 禁用预览弹出窗口
-gsettings set org.gnome.shell.extensions.clipboard-indicator show-preview false
+```bash
+# 列出所有已安装的 Schema
+gsettings list-schemas
+# 列出某个 Schema 下的所有键
+gsettings list-keys org.gnome.shell.extensions.clipboard-indicator
+# 递归列出某个 Schema 的键值
+gsettings list-recursively org.gnome.shell.extensions.clipboard-indicator
+
+gsettings set org.gnome.shell.extensions.clipboard-indicator history-size 10
+
+# 恢复默认设置
+gsettings reset-recursively org.gnome.shell.extensions.clipboard-indicator
 ```
 
 ### **② ArcMenu**  
@@ -271,66 +278,14 @@ sudo dnf install gnome-shell-extension-openweather
 # 列出所有已安装的 Schema
 gsettings list-schemas
 # 列出某个 Schema 下的所有键
-gsettings list-keys org.gnome.shell.extensions.hidetopbar
+gsettings list-keys org.gnome.shell.extensions.status-area-horizontal-spacing
 # 递归列出某个 Schema 的键值
 gsettings list-recursively org.gnome.shell.extensions.status-area-horizontal-spacing
+
 gsettings set org.gnome.shell.extensions.status-area-horizontal-spacing hpadding 5
 
-
-
-org.gnome.shell.extensions.alphabetical-app-grid
-org.gnome.shell.extensions.appindicator
-org.gnome.shell.extensions.auto-move-windows
-org.gnome.shell.extensions.blur-my-shell
-org.gnome.shell.extensions.blur-my-shell.appfolder
-org.gnome.shell.extensions.blur-my-shell.applications
-org.gnome.shell.extensions.blur-my-shell.coverflow-alt-tab
-org.gnome.shell.extensions.blur-my-shell.dash-to-dock
-org.gnome.shell.extensions.blur-my-shell.dash-to-panel
-org.gnome.shell.extensions.blur-my-shell.hidetopbar
-org.gnome.shell.extensions.blur-my-shell.lockscreen
-org.gnome.shell.extensions.blur-my-shell.overview
-org.gnome.shell.extensions.blur-my-shell.panel
-org.gnome.shell.extensions.blur-my-shell.screenshot
-org.gnome.shell.extensions.blur-my-shell.window-list
-org.gnome.shell.extensions.burn-my-windows
-org.gnome.shell.extensions.burn-my-windows-profile
-org.gnome.shell.extensions.clipboard-indicator
-org.gnome.shell.extensions.com.github.hermes83.compiz-alike-magic-lamp-effect
-org.gnome.shell.extensions.com.github.hermes83.compiz-windows-effect
-org.gnome.shell.extensions.coverflowalttab
-org.gnome.shell.extensions.dash-to-dock
-org.gnome.shell.extensions.dash2dock-lite
-org.gnome.shell.extensions.desktop-cube
-org.gnome.shell.extensions.dynamic-panel
-org.gnome.shell.extensions.flypie
-org.gnome.shell.extensions.gtk4-ding
-org.gnome.shell.extensions.hidetopbar
-org.gnome.shell.extensions.just-perfection
-org.gnome.shell.extensions.lennart-k.rounded_corners
-org.gnome.shell.extensions.logo-menu
-org.gnome.shell.extensions.lunar-calendar
-org.gnome.shell.extensions.nightthemeswitcher
-org.gnome.shell.extensions.nightthemeswitcher.color-scheme
-org.gnome.shell.extensions.nightthemeswitcher.commands
-org.gnome.shell.extensions.nightthemeswitcher.time
-org.gnome.shell.extensions.paperwm
-org.gnome.shell.extensions.paperwm.keybindings
-org.gnome.shell.extensions.paperwm.workspacelist
-org.gnome.shell.extensions.quick-settings-avatar
-org.gnome.shell.extensions.quick-settings-tweaks
-org.gnome.shell.extensions.rounded-window-corners-reborn
-org.gnome.shell.extensions.status-area-horizontal-spacing
-org.gnome.shell.extensions.top-bar-organizer
-org.gnome.shell.extensions.trayIconsReloaded
-org.gnome.shell.extensions.user-theme
-org.gnome.shell.extensions.vbox-applet
-org.gnome.shell.extensions.vitals
-org.gnome.shell.extensions.workspace-indicator
-
-# 禁用详细预报弹窗
-gsettings set org.gnome.shell.extensions.openweather show-comment-in-panel false
-
+# 恢复默认设置
+gsettings reset-recursively org.gnome.shell.extensions.status-area-horizontal-spacing
 ```
 
 ### **⑧ Caffeine**  
@@ -386,9 +341,6 @@ sudo dnf install gnome-shell-extension-quick-settings-tweaker
 ```
 **实用配置**：
 ```bash
-# 恢复默认设置
-gsettings reset-recursively org.gnome.shell.extensions.quick-settings-tweaks
-
 # 列出所有已安装的 Schema
 gsettings list-schemas
 # 列出某个 Schema 下的所有键
@@ -405,102 +357,8 @@ gsettings set org.gnome.shell.extensions.quick-settings-tweaks menu-animation-en
 gsettings set org.gnome.shell.extensions.quick-settings-tweaks menu-animation-close-duration 500
 gsettings set org.gnome.shell.extensions.quick-settings-tweaks menu-animation-open-duration 500
 
-
-
-
-org.gnome.shell.extensions.quick-settings-tweaks datemenu-disable-menu false
-org.gnome.shell.extensions.quick-settings-tweaks datemenu-hide-left-box true
-org.gnome.shell.extensions.quick-settings-tweaks datemenu-hide-media-control true
-org.gnome.shell.extensions.quick-settings-tweaks datemenu-hide-notifications true
-org.gnome.shell.extensions.quick-settings-tweaks datemenu-hide-right-box false
-org.gnome.shell.extensions.quick-settings-tweaks dnd-quick-toggle-enabled true
-org.gnome.shell.extensions.quick-settings-tweaks dnd-quick-toggle-indicator-position 'system-tray'
-org.gnome.shell.extensions.quick-settings-tweaks input-always-show false
-org.gnome.shell.extensions.quick-settings-tweaks input-menu-icon 'open-menu-symbolic'
-org.gnome.shell.extensions.quick-settings-tweaks input-show-selected false
-org.gnome.shell.extensions.quick-settings-tweaks layout {'weather-widget': [0, 0], 'notifications-widget': [0, 0], 'media-widget': [0, 0], 'mixer-widget': [0, 0]}
-org.gnome.shell.extensions.quick-settings-tweaks media-compact true
-org.gnome.shell.extensions.quick-settings-tweaks media-contorl-opacity 230
-org.gnome.shell.extensions.quick-settings-tweaks media-contorl-show-next-button true
-org.gnome.shell.extensions.quick-settings-tweaks media-contorl-show-pause-button true
-org.gnome.shell.extensions.quick-settings-tweaks media-contorl-show-prev-button true
-org.gnome.shell.extensions.quick-settings-tweaks media-enabled true
-org.gnome.shell.extensions.quick-settings-tweaks media-gradient-background-color [127, 127, 127]
-org.gnome.shell.extensions.quick-settings-tweaks media-gradient-enabled true
-org.gnome.shell.extensions.quick-settings-tweaks media-gradient-end-mix 180
-org.gnome.shell.extensions.quick-settings-tweaks media-gradient-end-opaque 160
-org.gnome.shell.extensions.quick-settings-tweaks media-gradient-start-mix 820
-org.gnome.shell.extensions.quick-settings-tweaks media-gradient-start-opaque 340
-org.gnome.shell.extensions.quick-settings-tweaks media-progress-active-background-color @ai []
-org.gnome.shell.extensions.quick-settings-tweaks media-progress-background-color @ai []
-org.gnome.shell.extensions.quick-settings-tweaks media-progress-enabled true
-org.gnome.shell.extensions.quick-settings-tweaks media-progress-handle-color @ai []
-org.gnome.shell.extensions.quick-settings-tweaks media-progress-handle-radius 0
-org.gnome.shell.extensions.quick-settings-tweaks media-progress-height 0
-org.gnome.shell.extensions.quick-settings-tweaks media-progress-style 'slim'
-org.gnome.shell.extensions.quick-settings-tweaks media-remove-shadow true
-org.gnome.shell.extensions.quick-settings-tweaks media-round-clip-enabled true
-org.gnome.shell.extensions.quick-settings-tweaks media-round-clip-padding-adjustment-enabled false
-org.gnome.shell.extensions.quick-settings-tweaks media-round-clip-padding-adjustment-value [0, 0, 0, 0]
-org.gnome.shell.extensions.quick-settings-tweaks media-show-header true
-org.gnome.shell.extensions.quick-settings-tweaks media-smooth-scroll-speed 16
-org.gnome.shell.extensions.quick-settings-tweaks notifications-autohide true
-org.gnome.shell.extensions.quick-settings-tweaks notifications-compact true
-org.gnome.shell.extensions.quick-settings-tweaks notifications-enabled true
-org.gnome.shell.extensions.quick-settings-tweaks notifications-fade-offset 46
-org.gnome.shell.extensions.quick-settings-tweaks notifications-max-height 292
-org.gnome.shell.extensions.quick-settings-tweaks notifications-remove-shadow true
-org.gnome.shell.extensions.quick-settings-tweaks notifications-show-header true
-org.gnome.shell.extensions.quick-settings-tweaks notifications-show-scrollbar true
-org.gnome.shell.extensions.quick-settings-tweaks notifications-use-native-controls false
-org.gnome.shell.extensions.quick-settings-tweaks output-menu-icon 'open-menu-symbolic'
-org.gnome.shell.extensions.quick-settings-tweaks output-show-selected false
-org.gnome.shell.extensions.quick-settings-tweaks overlay-menu-animate-duration 360
-org.gnome.shell.extensions.quick-settings-tweaks overlay-menu-animate-style 'dialog'
-org.gnome.shell.extensions.quick-settings-tweaks overlay-menu-enabled false
-org.gnome.shell.extensions.quick-settings-tweaks overlay-menu-width 380
-org.gnome.shell.extensions.quick-settings-tweaks system-indicator-layout-enabled false
-org.gnome.shell.extensions.quick-settings-tweaks system-indicator-layout-order [{'nonOrdered': <true>, 'hide': <false>}, {'hide': <false>, 'isSystem': <true>, 'gtypeName': <'Gjs_toggle_dndQuickToggle_DndIndicator'>}, {'hide': <false>, 'isSystem': <true>, 'gtypeName': <'Gjs_status_remoteAccess_RemoteAccessApplet'>}, {'hide': <false>, 'isSystem': <true>, 'gtypeName': <'Gjs_status_camera_Indicator'>}, {'hide': <false>, 'isSystem': <true>, 'gtypeName': <'Gjs_status_volume_InputIndicator'>}, {'hide': <false>, 'isSystem': <true>, 'gtypeName': <'Gjs_status_location_Indicator'>}, {'hide': <false>, 'isSystem': <true>, 'gtypeName': <'Gjs_status_thunderbolt_Indicator'>}, {'hide': <false>, 'isSystem': <true>, 'gtypeName': <'Gjs_status_nightLight_Indicator'>}, {'hide': <false>, 'isSystem': <true>, 'gtypeName': <'Gjs_status_network_Indicator'>}, {'hide': <false>, 'isSystem': <true>, 'gtypeName': <'Gjs_status_bluetooth_Indicator'>}, {'hide': <false>, 'isSystem': <true>, 'gtypeName': <'Gjs_status_rfkill_Indicator'>}, {'hide': <false>, 'isSystem': <true>, 'gtypeName': <'Gjs_status_volume_OutputIndicator'>}, {'hide': <false>, 'isSystem': <true>, 'gtypeName': <'Gjs_ui_panel_UnsafeModeIndicator'>}, {'hide': <false>, 'isSystem': <true>, 'gtypeName': <'Gjs_status_system_Indicator'>}]
-org.gnome.shell.extensions.quick-settings-tweaks system-indicator-privacy-indicator-style 'default'
-org.gnome.shell.extensions.quick-settings-tweaks system-indicator-screen-recording-indicator-use-accent false
-org.gnome.shell.extensions.quick-settings-tweaks system-indicator-screen-sharing-indicator-use-accent false
-org.gnome.shell.extensions.quick-settings-tweaks system-items-layout-enabled false
-org.gnome.shell.extensions.quick-settings-tweaks system-items-layout-hide false
-org.gnome.shell.extensions.quick-settings-tweaks system-items-layout-hide-battery false
-org.gnome.shell.extensions.quick-settings-tweaks system-items-layout-hide-lock false
-org.gnome.shell.extensions.quick-settings-tweaks system-items-layout-hide-screenshot false
-org.gnome.shell.extensions.quick-settings-tweaks system-items-layout-hide-settings false
-org.gnome.shell.extensions.quick-settings-tweaks system-items-layout-hide-shutdown false
-org.gnome.shell.extensions.quick-settings-tweaks system-items-layout-order ['battery', 'laptopSpacer', 'screenshot', 'settings', 'desktopSpacer', 'lock', 'shutdown']
-org.gnome.shell.extensions.quick-settings-tweaks toggles-layout-enabled false
-
-org.gnome.shell.extensions.quick-settings-tweaks toggles-layout-order [{'hide': <false>, 'isSystem': <true>, 'constructorName': <'NMWiredToggle'>}, {'hide': <false>, 'isSystem': <true>, 'constructorName': <'NMWirelessToggle'>}, {'hide': <false>, 'isSystem': <true>, 'constructorName': <'NMModemToggle'>}, {'hide': <false>, 'isSystem': <true>, 'constructorName': <'NMBluetoothToggle'>}, {'hide': <false>, 'isSystem': <true>, 'constructorName': <'NMVpnToggle'>}, {'hide': <false>, 'isSystem': <true>, 'constructorName': <'BluetoothToggle'>}, {'hide': <false>, 'isSystem': <true>, 'constructorName': <'PowerProfilesToggle'>}, {'hide': <false>, 'isSystem': <true>, 'constructorName': <'NightLightToggle'>}, {'hide': <false>, 'isSystem': <true>, 'constructorName': <'DarkModeToggle'>}, {'hide': <false>, 'isSystem': <true>, 'constructorName': <'KeyboardBrightnessToggle'>}, {'hide': <false>, 'isSystem': <true>, 'constructorName': <'RfkillToggle'>}, {'hide': <false>, 'isSystem': <true>, 'constructorName': <'RotationToggle'>}, {'hide': <false>, 'isSystem': <true>, 'constructorName': <'DndQuickToggle'>}, {'hide': <false>, 'isSystem': <true>, 'constructorName': <'UnsafeQuickToggle'>}, {'nonOrdered': <true>, 'hide': <false>}]
-org.gnome.shell.extensions.quick-settings-tweaks unsafe-quick-toggle-enabled false
-org.gnome.shell.extensions.quick-settings-tweaks unsafe-quick-toggle-last-state false
-org.gnome.shell.extensions.quick-settings-tweaks unsafe-quick-toggle-save-last-state true
-org.gnome.shell.extensions.quick-settings-tweaks volume-mixer-enabled true
-org.gnome.shell.extensions.quick-settings-tweaks volume-mixer-fade-offset 46
-org.gnome.shell.extensions.quick-settings-tweaks volume-mixer-group-by @aa{sv} []
-org.gnome.shell.extensions.quick-settings-tweaks volume-mixer-ignore @aa{sv} []
-org.gnome.shell.extensions.quick-settings-tweaks volume-mixer-ignore-mode 'block'
-org.gnome.shell.extensions.quick-settings-tweaks volume-mixer-label-opacity 220
-org.gnome.shell.extensions.quick-settings-tweaks volume-mixer-label-text 'both'
-org.gnome.shell.extensions.quick-settings-tweaks volume-mixer-max-height 0
-org.gnome.shell.extensions.quick-settings-tweaks volume-mixer-menu-enabled true
-org.gnome.shell.extensions.quick-settings-tweaks volume-mixer-menu-icon 'open-menu-symbolic'
-org.gnome.shell.extensions.quick-settings-tweaks volume-mixer-only-playing true
-org.gnome.shell.extensions.quick-settings-tweaks volume-mixer-order @aa{sv} []
-org.gnome.shell.extensions.quick-settings-tweaks volume-mixer-show-header true
-org.gnome.shell.extensions.quick-settings-tweaks volume-mixer-show-icon true
-org.gnome.shell.extensions.quick-settings-tweaks volume-mixer-show-scrollbar true
-org.gnome.shell.extensions.quick-settings-tweaks weather-click-command ''
-org.gnome.shell.extensions.quick-settings-tweaks weather-compact true
-org.gnome.shell.extensions.quick-settings-tweaks weather-enabled false
-org.gnome.shell.extensions.quick-settings-tweaks weather-interval-hour 1
-org.gnome.shell.extensions.quick-settings-tweaks weather-max-forecasts 5
-org.gnome.shell.extensions.quick-settings-tweaks weather-remove-shadow true
-org.gnome.shell.extensions.quick-settings-tweaks weather-show-header true
-org.gnome.shell.extensions.quick-settings-tweaks weather-show-location true
+# 恢复默认设置
+gsettings reset-recursively org.gnome.shell.extensions.quick-settings-tweaks
 ```
 
 ---
@@ -517,7 +375,7 @@ gsettings list-recursively org.gnome.shell.extensions.rounded-window-corners-reb
 ```
 **快捷键**: `Super` + `F` 一键锁定。
 
-#### 4. **Rounded Window Corners**  
+#### 4. **Rounded Window Corners Reborn**  
 **评分**: ★★★★★ (50万+ 用户)  
 **作用**: 为所有窗口添加圆角效果（类似 macOS）。  
 **安装**:
@@ -551,6 +409,9 @@ org.gnome.shell.extensions.rounded-window-corners-reborn skip-libadwaita-app tru
 org.gnome.shell.extensions.rounded-window-corners-reborn skip-libhandy-app true
 org.gnome.shell.extensions.rounded-window-corners-reborn tweak-kitty-terminal false
 org.gnome.shell.extensions.rounded-window-corners-reborn unfocused-shadow {'horizontalOffset': 0, 'verticalOffset': 2, 'blurOffset': 12, 'spreadRadius': -1, 'opacity': 65}
+
+# 恢复默认设置
+gsettings reset-recursively org.gnome.shell.extensions.rounded-window-corners-reborn
 ```
 
 ---
@@ -579,23 +440,19 @@ sudo dnf install gnome-shell-extension-burn-my-windows
 ```
 **特效切换**：
 ```bash
-# 恢复默认设置
-gsettings reset-recursively org.gnome.shell.extensions.burn-my-windows
-
 # 列出所有已安装的 Schema
 gsettings list-schemas
 # 列出某个 Schema 下的所有键
 gsettings list-keys org.gnome.shell.extensions.burn-my-windows
 # 递归列出某个 Schema 的键值
-gsettings list-recursively org.gnome.shell.extensions.burn-my-windows
 gsettings list-recursively org.gnome.shell.extensions.burn-my-windows-profile
 
-gsettings set org.gnome.shell.extensions.burn-my-windows animation-type 'fire'
+gsettings set org.gnome.shell.extensions.burn-my-windows-profile broken-glass-enable-effect true
+gsettings set org.gnome.shell.extensions.burn-my-windows-profile broken-glass-use-pointer true
+gsettings set org.gnome.shell.extensions.burn-my-windows-profile tv-enable-effect true
 
-
-org.gnome.shell.extensions.burn-my-windows-profile broken-glass-enable-effect true
-org.gnome.shell.extensions.burn-my-windows-profile broken-glass-use-pointer true
-org.gnome.shell.extensions.burn-my-windows-profile tv-enable-effect true
+# 恢复默认设置
+gsettings reset-recursively org.gnome.shell.extensions.burn-my-windows
 ```
 
 #### 7. **Forge**  
@@ -684,8 +541,6 @@ sudo dnf install \
 
 
 
-22
-
 ### **① 全局菜单（Top Bar 显示应用菜单）**
 
 ```bash
@@ -704,19 +559,11 @@ gsettings set org.gnome.desktop.peripherals.touchpad click-method 'fingers'
 gsettings set org.gnome.desktop.peripherals.touchpad tap-to-click true
 ```
 
----
-
-## 22
-
-
-
-
+## 
 
 
 
 Translate clipboard
-
-Extension List
 
 Open Bar
 
@@ -752,7 +599,7 @@ sudo dnf install gnome-shell-extension-gnome-4x-ui-improvements
 ```
 **无需配置**，自动优化界面细节。
 
-#### 5. **TopHat**  
+#### 5. **User Avatar In Quick Settings**  
 **作用**：在顶栏实时显示 CPU/GPU 温度、风扇转速、功耗等硬件数据（需 `lm_sensors`）。  
 **安装**：
 ```bash
@@ -760,16 +607,23 @@ sudo dnf install gnome-shell-extension-tophat lm_sensors
 ```
 **配置命令**：
 ```bash
-# 显示 GPU 温度（NVIDIA 需安装 nvidia-smi）
-gsettings set org.gnome.shell.extensions.tophat show-gpu true
+# 列出所有已安装的 Schema
+gsettings list-schemas
+# 列出某个 Schema 下的所有键
+gsettings list-keys org.gnome.shell.extensions.quick-settings-avatar
+# 递归列出某个 Schema 的键值（例如 org.gnome.desktop.interface）
+gsettings list-recursively org.gnome.shell.extensions.quick-settings-avatar
 
-# 警告温度阈值（摄氏度）
-gsettings set org.gnome.shell.extensions.tophat warning-temperature 80
+gsettings set org.gnome.shell.extensions.quick-settings-avatar avatar-position 1
+
+# 恢复默认设置
+gsettings reset-recursively org.gnome.shell.extensions.quick-settings-avatar
 ```
 
 #### 2. **Coverflow Alt-Tab**  
 **作用**：将传统的 Alt-Tab 窗口切换变成 **macOS 式的 3D 卡片翻转效果**。  
 **安装**：
+
 ```bash
 sudo dnf install gnome-shell-extension-coverflow-alttab
 ```
@@ -925,14 +779,6 @@ gsettings reset-recursively org.gnome.shell.extensions.extension-name
 
 
 
-
-
-
-
-
-
-
-
 #### 1. **Tiling Assistant**  
 **作用**：实现类似 macOS 的窗口分屏（拖拽窗口到边缘自动分屏），支持自定义布局和快捷键。  
 **安装**：
@@ -991,16 +837,29 @@ sudo dnf install gnome-shell-extension-appindicator
 gsettings set org.gnome.shell.extensions.appindicator show-menus true
 ```
 
-#### 5. **CPU Power Manager**  
+#### 5. **Compiz alike magic lamp effect**  
 **作用**：在顶栏显示 CPU 频率和功耗模式（平衡/性能/省电），适合笔记本用户。  
 **安装**：
 ```bash
 sudo dnf install gnome-shell-extension-cpupower
 ```
 **配置命令**：
+
 ```bash
-# 设置默认模式（'powersave'/'performance'）
-gsettings set org.gnome.shell.extensions.cpupower default-mode 'powersave'
+# 列出所有已安装的 Schema
+gsettings list-schemas
+# 列出某个 Schema 下的所有键
+gsettings list-keys org.gnome.shell.extensions.com.github.hermes83.compiz-alike-magic-lamp-effect
+# 查看键的取值类型和描述
+gsettings describe org.gnome.desktop.interface font-name
+# 递归列出某个 Schema 的键值（例如 org.gnome.desktop.interface）
+gsettings list-recursively org.gnome.shell.extensions.com.github.hermes83.compiz-alike-magic-lamp-effect
+
+gsettings set org.gnome.shell.extensions.com.github.hermes83.compiz-alike-magic-lamp-effect duration 500.0
+gsettings set org.gnome.shell.extensions.com.github.hermes83.compiz-alike-magic-lamp-effect x-tiles 20.0
+
+# 恢复默认设置
+gsettings reset-recursively org.gnome.shell.extensions.com.github.hermes83.compiz-alike-magic-lamp-effect
 ```
 
 #### 6. **Unite**  
@@ -1174,12 +1033,17 @@ gsettings set org.gnome.shell.extensions.desktop-cube transparency true
 sudo dnf install gnome-shell-extension-compiz-windows-effect
 ```
 **配置命令**：
-```bash
-# 启用最小化动画（'genie' 效果）
-gsettings set org.gnome.shell.extensions.compiz-windows-effect minimize-effect 'genie'
 
-# 设置点击水面涟漪效果
-gsettings set org.gnome.shell.extensions.compiz-windows-effect ripple-effect true
+```bash
+# 列出所有已安装的 Schema
+gsettings list-schemas
+# 列出某个 Schema 下的所有键
+gsettings list-keys org.gnome.shell.extensions.com.github.hermes83.compiz-windows-effect
+# 递归列出某个 Schema 的键值（例如 org.gnome.desktop.interface）
+gsettings list-recursively org.gnome.shell.extensions.com.github.hermes83.compiz-windows-effect
+
+# 恢复默认设置
+gsettings reset-recursively org.gnome.shell.extensions.com.github.hermes83.compiz-windows-effect
 ```
 
 #### 6. **Space Bar**  
@@ -1198,9 +1062,6 @@ gsettings set org.gnome.shell.extensions.space-bar show-workspace-name true
 gsettings set org.gnome.shell.extensions.space-bar active-workspace-color 'rgb(255,100,100)'
 ```
 
----
-
-### **三、系统底层增强**
 #### 7. **Systemd Manager**  
 **作用**：在 GNOME 中直接图形化管理 systemd 服务（无需命令行）。  
 **安装**：
