@@ -16,10 +16,11 @@ gsettings set org.gnome.desktop.wm.preferences button-layout 'appmenu:minimize,m
 gsettings set org.gnome.mutter center-new-windows true
 gsettings set org.gnome.desktop.interface show-battery-percentage true
 # 安装配置系统字体
-sudo dnf install adobe-source-han-sans-cn-fonts
-sudo dnf install adobe-source-han-serif-cn-fonts
-sudo dnf install jetbrains-mono-fonts
-logout
+sudo dnf install -y \
+adobe-source-han-sans-cn-fonts \
+adobe-source-han-serif-cn-fonts \
+jetbrains-mono-fonts
+
 gsettings set org.gnome.desktop.interface font-name '思源黑体 CN Medium 12'
 gsettings set org.gnome.desktop.interface document-font-name '思源宋体 CN Medium 12'
 gsettings set org.gnome.desktop.interface monospace-font-name 'JetBrains Mono Medium 12'
