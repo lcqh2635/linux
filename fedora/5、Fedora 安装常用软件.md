@@ -40,8 +40,9 @@ io.github.alainm23.planify
 flatpak install -y flathub \
 com.jetbrains.IntelliJ-IDEA-Ultimate \
 me.iepure.devtoolbox \
-cn.apipost.apipost \
+cn.apipost.apipost
 
+sudo dnf install -y tabby-terminal
 
 # 游戏
 flatpak install flathub com.valvesoftware.Steam -y

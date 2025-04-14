@@ -29,23 +29,6 @@ gsettings set org.gnome.desktop.interface font-hinting 'slight'
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 gsettings list-schemas | grep "keybindings"
 # 窗口快捷键
 org.gnome.desktop.wm.keybindings
