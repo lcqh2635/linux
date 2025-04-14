@@ -212,7 +212,7 @@ flatpak install flathub it.mijorus.gearlever -y
 # 在设备上安装固件管理
 flatpak install flathub org.gnome.Firmware -y
 # 种子下载器
-flatpak install flathub com.transmissionbt.Transmission -y
+flatpak install flathub de.haeckerfelix.Fragments -y
 # GDM 设置
 flatpak install flathub io.github.realmazharhussain.GdmSettings -y
 flatpak install flathub org.gnome.Evolution -y
@@ -222,6 +222,7 @@ flatpak install flathub com.baidu.NetDisk -y
 flatpak install flathub io.github.qier222.YesPlayMusic -y
 flatpak install flathub com.microsoft.Edge -y
 flatpak install flathub com.google.Chrome -y
+flatpak install flathub app.zen_browser.zen -y
 flatpak install flathub org.videolan.VLC -y
 # 使用 Linux 设备作为第二屏幕
 flatpak install flathub eu.nokun.MirrorHall -y
@@ -258,7 +259,32 @@ flatpak install flathub io.github.Fndroid.clash_for_windows -y
 flatpak install flathub net.lutris.Lutris -y
 flatpak install flathub com.valvesoftware.Steam -y
 flatpak install flathub io.github.Foldex.AdwSteamGtk -y
-# 屏幕录制
+# 与AI模型聊天
+flatpak install flathub com.jeffser.Alpaca -y
+# 查看有关系统的信息
+flatpak install flathub io.github.nokse22.inspector -y
+# Bottles 允许您在 Linux 上运行 Windows 软件，例如应用程序和游戏。
+flatpak install flathub com.usebottles.bottles -y
+# 让 Firefox 保持时尚，可轻松安装 Firefox GNOME Theme* 并在后台自动更新。
+flatpak install flathub dev.qwery.AddWater -y
+# 为 GNOME 创建应用程序
+flatpak install flathub org.gnome.Builder -y
+# Workbench 用于使用 GNOME 技术进行学习和原型设计，无论是第一次修补还是构建和测试 GTK 用户界面。
+flatpak install flathub re.sonny.Workbench -y
+# https://flathub.org/zh-Hans/apps/com.jetbrains.IntelliJ-IDEA-Ultimate
+flatpak install flathub com.jetbrains.IntelliJ-IDEA-Ultimate -y
+# 及时跟进您的订阅
+flatpak install flathub io.gitlab.news_flash.NewsFlash -y
+# 忘记忘记事情
+flatpak install flathub io.github.alainm23.planify -y
+# 这款阅读器的界面简洁、美观、适应性强，可让您轻松搜索、排序和阅读系列文章。
+flatpak install flathub info.febvre.Komikku -y
+# 创建和编辑应用程序快捷方式
+flatpak install flathub io.github.fabrialberio.pinapp -y
+# 自定义应用程序图标
+flatpak install flathub page.codeberg.libre_menu_editor.LibreMenuEditor -y
+# 屏幕录制，替代 OBS
+flatpak install flathub io.github.seadve.Kooha -y
 flatpak install -y flathub com.obsproject.Studio
 # 彻底删除应用及数据：
 flatpak uninstall --delete-data flathub com.obsproject.Studio -y

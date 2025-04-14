@@ -1,45 +1,10 @@
-在 Fedora 41 初次安装后，配置国内镜像源可以显著提升软件包下载速度（尤其是 `dnf` 更新和安装软件时）。以下是详细步骤：
+在 Fedora 41 初次安装后，配置国内镜像源可以显著提升软件包下载速度（尤其是 `dnf` 更新和安装软件时）。
+
+**推荐先配置加速镜像源，然后再更新系统**。以下是详细步骤：
 
 ---
 
-### **1. 安装系统基础依赖包**
-```bash
-sudo dnf update -y && sudo dnf upgrade -y
-
-sudo dnf install -y git unzip p7zip wl-clipboard \
-gnome-tweaks gnome-extensions-app \
-fastfetch timeshift evolution \
-google-chrome-stable \
-libreoffice-langpack-zh-Hans \
-obs-studio
-
-# evolution配置qq邮箱授权码： embwnsuwkdjrebge
-fastfetch
-
-# 配置 Git
-git config --global user.name "龙茶清欢"
-git config --global user.email "2320391937@qq.com"
-ssh-keygen -t rsa -b 4096 -C "2320391937@qq.com"
-# 需要安装 wl-clipboard 工具
-cat ~/.ssh/id_rsa.pub | wl-copy
-# 配置 Gitee 密钥	https://gitee.com/profile/sshkeys
-# 配置 Github 密钥	https://github.com/settings/keys
-
-# 安装基础依赖包 https://v2.tauri.app/zh-cn/start/prerequisites/#linux
-sudo dnf check-update
-sudo dnf install webkit2gtk4.1-devel \
-  openssl-devel \
-  curl \
-  wget \
-  file \
-  libappindicator-gtk3-devel \
-  librsvg2-devel
-sudo dnf group install "c-development"
-```
-
----
-
-### **2. 替换为国内镜像源**
+### **1. 替换为国内镜像源**
 #### **方法一：手动修改 repo 文件**
 编辑 Fedora 官方仓库文件，将 `metalink` 替换为国内镜像 URL（以 **清华镜像** 为例）：
 ```bash
@@ -111,8 +76,8 @@ sudo mv /etc/yum.repos.d/fedora-updates.repo.bak /etc/yum.repos.d/fedora-updates
 sudo dnf clean all
 sudo dnf makecache
 
-fedora 仓库 	cat /etc/yum.repos.d/fedora.repo
-updates 仓库 	cat /etc/yum.repos.d/fedora-updates.repo
+cat /etc/yum.repos.d/fedora.repo
+cat /etc/yum.repos.d/fedora-updates.repo
 
 
 https://mirrors.aliyun.com/mirror/rpmfusion
@@ -129,14 +94,8 @@ cat /etc/yum.repos.d/rpmfusion-free.repo
 
 # 最后运行 sudo dnf makecache 生成缓存
 sudo dnf makecache
-# 中科大 Flatpak 镜像源 https://mirrors.ustc.edu.cn/help/flathub.html
-sudo flatpak remote-modify flathub --url=https://mirrors.ustc.edu.cn/flathub
-# 上海交大 Flatpak 镜像源 https://mirrors.sjtug.sjtu.edu.cn/docs/flathub
-sudo flatpak remote-modify flathub --url=https://mirror.sjtu.edu.cn/flathub
 
-# 恢复默认值
-sudo flatpak remote-modify flathub --url=https://dl.flathub.org/repo
-sudo dnf update -y && sudo dnf upgrade -y && flatpak update -y
+
 
 
 # 网站国内可用 DNS 测试 ping https://ping.chinaz.com/www.youtube.com
@@ -173,12 +132,23 @@ cat ~/.ssh/id_rsa.pub | wl-copy
 # https://github.com/settings/keys
 ```
 
-#### **方法二：直接下载预配置 repo 文件（推荐）**
-```bash
-# 清华镜像
-sudo curl -o /etc/yum.repos.d/fedora.repo https://mirrors.tuna.tsinghua.edu.cn/fedora/releases/41/Everything/x86_64/os/repo/fedora.repo
-sudo curl -o /etc/yum.repos.d/fedora-updates.repo https://mirrors.tuna.tsinghua.edu.cn/fedora/updates/41/Everything/x86_64/os/repo/fedora-updates.repo
+---
 
+### **2. 添加 RPM Fusion 国内镜像**
+如果已启用 RPM Fusion，可以替换其镜像源：
+```bash
+# 替换 free 仓库
+sudo sed -i 's|baseurl=http://download1.rpmfusion.org|baseurl=https://mirrors.tuna.tsinghua.edu.cn/rpmfusion|g' /etc/yum.repos.d/rpmfusion-free.repo
+
+# 替换 nonfree 仓库
+sudo sed -i 's|baseurl=http://download1.rpmfusion.org|baseurl=https://mirrors.tuna.tsinghua.edu.cn/rpmfusion|g' /etc/yum.repos.d/rpmfusion-nonfree.repo
+```
+
+---
+
+#### **3. 启用 Fedora COPR 第三方仓库**
+
+```bash
 # 添加 Fedora COPR（Community Projects）第三方仓库
 # Fedora COPR（Community Projects）第三方仓库。地址 https://copr.fedorainfracloud.org/
 # dnf copr enable：启用一个 COPR（Community Projects）第三方仓库。
@@ -191,19 +161,8 @@ sudo dnf install bibata-cursor-themes
 
 ---
 
-### **3. 添加 RPM Fusion 国内镜像（可选）**
-如果已启用 RPM Fusion，可以替换其镜像源：
-```bash
-# 替换 free 仓库
-sudo sed -i 's|baseurl=http://download1.rpmfusion.org|baseurl=https://mirrors.tuna.tsinghua.edu.cn/rpmfusion|g' /etc/yum.repos.d/rpmfusion-free.repo
-
-# 替换 nonfree 仓库
-sudo sed -i 's|baseurl=http://download1.rpmfusion.org|baseurl=https://mirrors.tuna.tsinghua.edu.cn/rpmfusion|g' /etc/yum.repos.d/rpmfusion-nonfree.repo
-```
-
----
-
 ### **4. 刷新缓存并测试速度**
+
 ```bash
 sudo dnf clean all
 sudo dnf makecache
@@ -212,8 +171,6 @@ sudo dnf update -y
 - 检查速度是否提升，可通过 `dnf` 输出中的下载链接确认是否来自国内镜像。
 
 ---
-
-**5. 其他国内镜像源列表**
 
 ### **5. 其他国内镜像源列表**
 
@@ -226,7 +183,71 @@ sudo dnf update -y
 
 替换时只需修改上述命令中的 `baseurl` 地址即可。
 
+### **2. 添加 Flatpak 国内镜像**
 
+如果已启用 Flatpak，可以替换其镜像源：
+
+```bash
+# 添加 Flathub 官方仓库
+flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
+
+# 修改 Flathub 仓库地址为国内镜像
+# 上海交大 Flatpak 镜像源 https://mirrors.sjtug.sjtu.edu.cn/docs/flathub
+sudo flatpak remote-modify flathub --url=https://mirror.sjtu.edu.cn/flathub
+# 中科大 Flatpak 镜像源（处于测试阶段） https://mirrors.ustc.edu.cn/help/flathub.html
+sudo flatpak remote-modify flathub --url=https://mirrors.ustc.edu.cn/flathub
+
+# 恢复默认值
+sudo flatpak remote-modify flathub --url=https://dl.flathub.org/repo/flathub.flatpakrepo
+flatpak update -y
+flatpak list
+flatpak list --app
+# 删除未使用的运行时和应用程序
+flatpak uninstall --unused
+```
+
+---
+
+### **1. 安装系统基础依赖包**
+
+```bash
+# 在系统初次安装后，推荐先配置加速镜像源，然后再更新系统。
+sudo dnf update -y && sudo dnf upgrade -y
+
+sudo dnf install -y git unzip p7zip wl-clipboard \
+gnome-tweaks gnome-extensions-app \
+fastfetch timeshift evolution \
+google-chrome-stable \
+libreoffice-langpack-zh-Hans \
+obs-studio
+
+# evolution配置qq邮箱授权码： embwnsuwkdjrebge
+fastfetch
+
+# 配置 Git
+git config --global user.name "龙茶清欢"
+git config --global user.email "2320391937@qq.com"
+ssh-keygen -t rsa -b 4096 -C "2320391937@qq.com"
+# 需要安装 wl-clipboard 工具
+cat ~/.ssh/id_rsa.pub | wl-copy
+# 配置 Gitee 密钥	https://gitee.com/profile/sshkeys
+# 配置 Github 密钥	https://github.com/settings/keys
+
+# 安装基础依赖包 https://v2.tauri.app/zh-cn/start/prerequisites/#linux
+sudo dnf check-update
+sudo dnf install webkit2gtk4.1-devel \
+  openssl-devel \
+  curl \
+  wget \
+  file \
+  libappindicator-gtk3-devel \
+  librsvg2-devel
+sudo dnf group install "c-development"
+```
+
+---
+
+### 
 
 
 
