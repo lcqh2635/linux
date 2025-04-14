@@ -84,12 +84,6 @@ git clone https://github.com/daniruiz/GNOME-4X-themes.git
 ./install.sh
 ./uninstall.sh
 
-# 安装 Arc 主题
-sudo dnf install arc-theme
-
-# 安装 Materia 主题
-sudo dnf install materia-theme
-
 # 安装 Adwaita 暗色变体
 sudo dnf install adwaita-dark
 
@@ -173,8 +167,8 @@ sudo flatpak mask org.gtk.Gtk3theme.adw-gtk3 && sudo flatpak mask org.gtk.Gtk3th
    gsettings set org.gnome.desktop.interface gtk-theme 'MacOS-3D-Gtk-Dark'
    gsettings set org.gnome.desktop.wm.preferences theme 'MacOS-3D-Gtk-Dark'
    
-   
-   dnf install adw-gtk3-theme
+    # la-capitaine 这两个注意已经在 fedora 仓库中可以搜索到，无需启用三方仓库
+   sudo dnf install -y la-capitaine-cursor-theme adw-gtk3-theme
    # 由于 MacOS-3D 的 Shell 主题没有提供暗色主题，所以在切换主题时 Shell 主题无法切换
    # 可以使用 WhiteSur 的 Shell 和 wm 主题来弥补这一点。可以解决 WhiteSur 的痛点。
    # 可以比较实现完美的实现全局所有应用的主题切换，包括 libadwaita 系列应用。
@@ -193,12 +187,18 @@ sudo flatpak mask org.gtk.Gtk3theme.adw-gtk3 && sudo flatpak mask org.gtk.Gtk3th
    gsettings set org.gnome.shell.extensions.user-theme name 'WhiteSur-Dark'
    gsettings set org.gnome.desktop.interface gtk-theme 'adw-gtk3-dark'
    gsettings set org.gnome.desktop.wm.preferences theme 'WhiteSur-Dark'
-   
+
+
+	# 恢复默认主题设置
+   gsettings set org.gnome.desktop.interface cursor-theme 'Adwaita'
+   gsettings set org.gnome.desktop.interface icon-theme 'Adwaita'
+   gsettings set org.gnome.shell.extensions.user-theme name 'Adwaita'
+   gsettings set org.gnome.desktop.interface gtk-theme 'Adwaita'
+   gsettings set org.gnome.desktop.wm.preferences theme 'Adwaita'
    # WhiteSur-cursors 在 libadwaita 系列应用中存在 BUG 不推荐使用，可以在如下网站选择一个评分高的
    # https://www.gnome-look.org/browse?cat=107&ord=rating
    
-   # la-capitaine 这两个注意已经在 fedora 仓库中可以搜索到，无需启用三方仓库
-   sudo dnf install la-capitaine-cursor-theme la-capitaine-icon-theme
+
    # Capitaine Cursors
    https://www.gnome-look.org/p/1148692
    git clone https://github.com/keeferrourke/capitaine-cursors.git
