@@ -5,66 +5,35 @@
 ---
 
 ### **1. 替换为国内镜像源**
-#### **方法一：手动修改 repo 文件**
 编辑 Fedora 官方仓库文件，将 `metalink` 替换为国内镜像 URL（以 **清华镜像** 为例）：
 ```bash
-sudo sed -i 's|metalink=|#metalink=|g' /etc/yum.repos.d/fedora.repo
-sudo sed -i 's|#baseurl=http://download.example/pub/fedora/linux|baseurl=https://mirrors.tuna.tsinghua.edu.cn/fedora|g' /etc/yum.repos.d/fedora.repo
-
-sudo sed -i 's|metalink=|#metalink=|g' /etc/yum.repos.d/fedora-updates.repo
-sudo sed -i 's|#baseurl=http://download.example/pub/fedora/linux|baseurl=https://mirrors.tuna.tsinghua.edu.cn/fedora|g' /etc/yum.repos.d/fedora-updates.repo
-
-
-# 中科大 Fedora 镜像源 https://mirrors.ustc.edu.cn/help/fedora.html
-sudo sed -e 's|^metalink=|#metalink=|g' \
-         -e 's|^#baseurl=http://download.example/pub/fedora/linux|baseurl=https://mirrors.ustc.edu.cn/fedora|g' \
-         -i.bak \
-         /etc/yum.repos.d/fedora.repo \
-         /etc/yum.repos.d/fedora-updates.repo
-# 清华 Fedora 镜像源 https://mirrors.tuna.tsinghua.edu.cn/help/fedora/
-sed -e 's|^metalink=|#metalink=|g' \
-    -e 's|^#baseurl=http://download.example/pub/fedora/linux|baseurl=https://mirrors.tuna.tsinghua.edu.cn/fedora|g' \
-    -i.bak \
-    /etc/yum.repos.d/fedora.repo \
-    /etc/yum.repos.d/fedora-updates.repo
-# 清华 RPMFusion 镜像源 https://mirrors.tuna.tsinghua.edu.cn/help/rpmfusion/
-# 1、安装基础包。首先安装提供基础配置文件和 GPG 密钥的 rpmfusion-*.rpm。
-sudo yum install --nogpgcheck https://mirrors.tuna.tsinghua.edu.cn/rpmfusion/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm https://mirrors.tuna.tsinghua.edu.cn/rpmfusion/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm
-# 2、修改链接指向镜像站
-sudo sed -e 's!^metalink=!#metalink=!g' \
-         -e 's!^mirrorlist=!#mirrorlist=!g' \
-         -e 's!^#baseurl=!baseurl=!g' \
-         -e 's!https\?://download1\.rpmfusion\.org/!https://mirrors.aliyun.com/rpmfusion/!g' \
-         -i.bak /etc/yum.repos.d/rpmfusion*.repo
-
-
-Fedora 默认使用 Metalink 给出推荐的镜像列表，保证用户使用的镜像仓库足够新，并且能够尽快拿到安全更新，从而提供更好的安全性。所以通常情况下使用默认配置即可，无需更改配置文件。
-由于 Metalink 需要从国外的 Fedora 项目服务器上获取元信息，所以对于校园内网、无国外访问等特殊情况，metalink 并不适用，此时可以如下修改配置文件。
-Fedora 的软件源配置文件可以有多个，其中：
-    系统默认的 fedora 仓库配置文件为 /etc/yum.repos.d/fedora.repo
-    系统默认的 updates 仓库配置文件为 /etc/yum.repos.d/fedora-updates.repo
-将上述两个文件先做个备份，根据 Fedora 系统版本分别替换为下面内容，之后通过 sudo dnf makecache 命令更新本地缓存，即可使用所选择的软件源镜像。
-# 阿里云 Fedora 镜像源 
-sudo sed -e 's|^metalink=|#metalink=|g' \
-    -e 's|^#baseurl=http://download.example/pub/fedora/linux|baseurl=https://mirrors.tuna.tsinghua.edu.cn/fedora|g' \
-    -i.bak \
-    /etc/yum.repos.d/fedora.repo \
-    /etc/yum.repos.d/fedora-updates.repo
-
-
-# 检查系统中当前启用的所有仓库：
-dnf repolist
-sudo dnf config-manager --set-disabled copr:copr.fedorainfracloud.org:peterwu:rendezvous
+# 一切加速镜像配置教程统一参考 清华大学开源软件镜像站 该站点拥有最详细的配置教程
+# 清华大学开源软件镜像站 https://mirrors.tuna.tsinghua.edu.cn/help/
 
 # -e 's|^metalink=|#metalink=|g'：注释掉所有以 metalink= 开头的行（将 metalink= 替换为 #metalink=）。这是因为 metalink 动态解析镜像列表，而手动配置时我们希望禁用它。
 # -e 's|^#baseurl=http://download.example/pub/fedora/linux|baseurl=https://mirrors.aliyun.com/fedora|g'：将原本被注释掉的 #baseurl= 行取消注释，并将其替换为阿里云镜像站的地址。
 # -i.bak：在修改文件之前创建备份文件（如 fedora.repo.bak）。
 # /etc/yum.repos.d/fedora.repo 和 /etc/yum.repos.d/fedora-updates.repo：需要修改的目标文件。
+
+cat /etc/yum.repos.d/fedora.repo
+cat /etc/yum.repos.d/fedora-updates.repo
+# 1、清华 Fedora 镜像源 https://mirrors.tuna.tsinghua.edu.cn/help/fedora/
+sudo sed -e 's|^metalink=|#metalink=|g' \
+    -e 's|^#baseurl=http://download.example/pub/fedora/linux|baseurl=https://mirrors.tuna.tsinghua.edu.cn/fedora|g' \
+    -i.bak \
+    /etc/yum.repos.d/fedora.repo \
+    /etc/yum.repos.d/fedora-updates.repo
+
+
+# 2、阿里云 Fedora 镜像源 https://developer.aliyun.com/mirror/fedora
 sudo sed -e 's|^metalink=|#metalink=|g' \
     -e 's|^#baseurl=http://download.example/pub/fedora/linux|baseurl=https://mirrors.aliyun.com/fedora|g' \
     -i.bak \
     /etc/yum.repos.d/fedora.repo \
     /etc/yum.repos.d/fedora-updates.repo
+
+# 最后运行 sudo dnf makecache 生成缓存
+sudo dnf makecache
 
 # 还原之前的配置
 ls /etc/yum.repos.d/		# 检查备份文件是否存在
@@ -76,25 +45,12 @@ sudo mv /etc/yum.repos.d/fedora-updates.repo.bak /etc/yum.repos.d/fedora-updates
 sudo dnf clean all
 sudo dnf makecache
 
-cat /etc/yum.repos.d/fedora.repo
-cat /etc/yum.repos.d/fedora-updates.repo
-
-
-https://mirrors.aliyun.com/mirror/rpmfusion
-# 阿里云 RPMFusion 镜像源 https://developer.aliyun.com/mirror/rpmfusion
-sudo yum install --nogpgcheck https://mirrors.aliyun.com/rpmfusion/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm https://mirrors.tuna.tsinghua.edu.cn/rpmfusion/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm
-         
-sudo sed -e 's!^metalink=!#metalink=!g' \
-         -e 's!^mirrorlist=!#mirrorlist=!g' \
-         -e 's!^#baseurl=!baseurl=!g' \
-         -e 's!https\?://download1\.rpmfusion\.org/!https://mirrors.tuna.tsinghua.edu.cn/rpmfusion/!g' \
-         -i.bak /etc/yum.repos.d/rpmfusion*.repo         
-# 查看配置结果
-cat /etc/yum.repos.d/rpmfusion-free.repo
-
-# 最后运行 sudo dnf makecache 生成缓存
-sudo dnf makecache
-
+Fedora 默认使用 Metalink 给出推荐的镜像列表，保证用户使用的镜像仓库足够新，并且能够尽快拿到安全更新，从而提供更好的安全性。所以通常情况下使用默认配置即可，无需更改配置文件。
+由于 Metalink 需要从国外的 Fedora 项目服务器上获取元信息，所以对于校园内网、无国外访问等特殊情况，metalink 并不适用，此时可以如下修改配置文件。
+Fedora 的软件源配置文件可以有多个，其中：
+    系统默认的 fedora 仓库配置文件为 /etc/yum.repos.d/fedora.repo
+    系统默认的 updates 仓库配置文件为 /etc/yum.repos.d/fedora-updates.repo
+将上述两个文件先做个备份，根据 Fedora 系统版本分别替换为下面内容，之后通过 sudo dnf makecache 命令更新本地缓存，即可使用所选择的软件源镜像。
 
 
 
@@ -137,11 +93,32 @@ cat ~/.ssh/id_rsa.pub | wl-copy
 ### **2. 添加 RPM Fusion 国内镜像**
 如果已启用 RPM Fusion，可以替换其镜像源：
 ```bash
-# 替换 free 仓库
-sudo sed -i 's|baseurl=http://download1.rpmfusion.org|baseurl=https://mirrors.tuna.tsinghua.edu.cn/rpmfusion|g' /etc/yum.repos.d/rpmfusion-free.repo
+# 一切加速镜像配置教程统一参考 清华大学开源软件镜像站 该站点拥有最详细的配置教程
+# 清华大学开源软件镜像站 https://mirrors.tuna.tsinghua.edu.cn/help/
 
-# 替换 nonfree 仓库
-sudo sed -i 's|baseurl=http://download1.rpmfusion.org|baseurl=https://mirrors.tuna.tsinghua.edu.cn/rpmfusion|g' /etc/yum.repos.d/rpmfusion-nonfree.repo
+# 清华 RPMFusion 镜像源 https://mirrors.tuna.tsinghua.edu.cn/help/rpmfusion/
+# 1、首先安装提供基础配置文件和 GPG 密钥的 rpmfusion-*.rpm。
+sudo yum install --nogpgcheck https://mirrors.tuna.tsinghua.edu.cn/rpmfusion/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm https://mirrors.tuna.tsinghua.edu.cn/rpmfusion/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm
+# 2、安装成功后，修改链接指向镜像站   
+sudo sed -e 's!^metalink=!#metalink=!g' \
+         -e 's!^mirrorlist=!#mirrorlist=!g' \
+         -e 's!^#baseurl=!baseurl=!g' \
+         -e 's!https\?://download1\.rpmfusion\.org/!https://mirrors.tuna.tsinghua.edu.cn/rpmfusion/!g' \
+         -i.bak /etc/yum.repos.d/rpmfusion*.repo
+
+
+# 阿里云 RPMFusion 镜像源 https://developer.aliyun.com/mirror/rpmfusion
+# 1、首先安装提供基础配置文件和 GPG 密钥的 rpmfusion-*.rpm。
+sudo yum install --nogpgcheck https://mirrors.aliyun.com/rpmfusion/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm https://mirrors.tuna.tsinghua.edu.cn/rpmfusion/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm
+# 2、安装成功后，修改链接指向镜像站         
+sudo sed -e 's!^metalink=!#metalink=!g' \
+         -e 's!^mirrorlist=!#mirrorlist=!g' \
+         -e 's!^#baseurl=!baseurl=!g' \
+         -e 's!https\?://download1\.rpmfusion\.org/!https://mirrors.aliyun.com/rpmfusion/!g' \
+         -i.bak /etc/yum.repos.d/rpmfusion*.repo         
+
+# 查看配置结果
+cat /etc/yum.repos.d/rpmfusion-free.repo
 ```
 
 ---
@@ -157,6 +134,10 @@ sudo dnf copr enable <username>/<repository-name>
 # 作用：将 peterwu/rendezvous 这个社区维护的软件仓库添加到您的 Fedora 系统中，之后可以通过 dnf install 安装该仓库中的软件包。
 sudo dnf copr enable peterwu/rendezvous
 sudo dnf install bibata-cursor-themes
+
+# 检查系统中当前启用的所有仓库：
+dnf repolist
+sudo dnf config-manager --set-disabled copr:copr.fedorainfracloud.org:peterwu:rendezvous
 ```
 
 ---
@@ -188,6 +169,9 @@ sudo dnf update -y
 如果已启用 Flatpak，可以替换其镜像源：
 
 ```bash
+# 查看 Flatpak 远程仓库
+flatpak remotes --show-details
+
 # 添加 Flathub 官方仓库
 flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
 
@@ -199,6 +183,7 @@ sudo flatpak remote-modify flathub --url=https://mirrors.ustc.edu.cn/flathub
 
 # 恢复默认值
 sudo flatpak remote-modify flathub --url=https://dl.flathub.org/repo/flathub.flatpakrepo
+
 flatpak update -y
 flatpak list
 flatpak list --app

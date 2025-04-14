@@ -58,6 +58,16 @@ Fedora 默认使用 **Adwaita** 主题，可以更换为更流行的主题（如
 
 ### **方法 1：通过 `dnf` 安装官方主题**
 ```bash
+
+
+# 推荐安装支持 GTK4 + Libadwaita 的 GTK 主题 https://drasite.com/
+# Flat Remix GTK	https://www.gnome-look.org/p/1214931
+sudo dnf install flat-remix-gtk4-theme
+# GNOME-4X themes	https://www.gnome-look.org/p/2173282
+git clone https://github.com/daniruiz/GNOME-4X-themes.git
+./install.sh
+./uninstall.sh
+
 # 安装 Arc 主题
 sudo dnf install arc-theme
 
@@ -171,13 +181,8 @@ sudo flatpak mask org.gtk.Gtk3theme.adw-gtk3 && sudo flatpak mask org.gtk.Gtk3th
    # WhiteSur-cursors 在 libadwaita 系列应用中存在 BUG 不推荐使用，可以在如下网站选择一个评分高的
    # https://www.gnome-look.org/browse?cat=107&ord=rating
    
-   # Fedora COPR（Community Projects）第三方仓库地质 https://copr.fedorainfracloud.org/
-   # dnf copr enable：启用一个 COPR（Community Projects）第三方仓库。
-   # tcg/themes：指定仓库作者（tcg）和仓库名（themes）。
-   sudo dnf copr enable <username>/<repository-name>
-   # 作用：将 tcg/themes 这个社区维护的软件仓库添加到您的 Fedora 系统中，之后可以通过 dnf install 安装该仓库中的软件包。
-   sudo dnf copr enable tcg/themes
-   sudo dnf install la-capitaine-cursor-theme
+   # la-capitaine 这两个注意已经在 fedora 仓库中可以搜索到，无需启用三方仓库
+   sudo dnf install la-capitaine-cursor-theme la-capitaine-icon-theme
    # Capitaine Cursors
    https://www.gnome-look.org/p/1148692
    git clone https://github.com/keeferrourke/capitaine-cursors.git
