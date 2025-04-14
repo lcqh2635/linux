@@ -27,7 +27,7 @@ curl -s "https://get.sdkman.io" | bash
 source "$HOME/.sdkman/bin/sdkman-init.sh"
 
 # 安装 JDK（示例：安装 Temurin JDK 17）
-sdk install java 17.0.10-tem
+sdk install java 21.0.6-tem
 
 # 安装 Maven/Gradle
 sdk install maven
@@ -68,20 +68,23 @@ go version
 
 #### **🔹 Node.js & Bun**
 ```bash
-# 选项1：通过 NodeSource 安装 Node.js
-curl -fsSL https://rpm.nodesource.com/setup_20.x | sudo bash -
 sudo dnf install -y nodejs
 
-# 选项2：使用 nvm（多版本管理）
-curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
-source ~/.bashrc
-nvm install --lts
 
-# 安装 Bun（替代 npm/yarn）
-curl -fsSL https://bun.sh/install | bash
-echo 'export BUN_INSTALL="$HOME/.bun"' >> ~/.bashrc
-echo 'export PATH="$BUN_INSTALL/bin:$PATH"' >> ~/.bashrc
-source ~/.bashrc
+
+# 最新地址 淘宝 NPM 镜像站喊你切换新域名啦!
+npm config set registry https://registry.npmmirror.com
+npm config get registry
+   
+sudo npm install -g bun
+echo 你刚安装的 bun 版本号为： $(bun --version)
+# 将 bunfig.toml 作为隐藏文件添加到用户主目录
+echo '[install]
+# 使用阿里云加速仓库，仓库地址可从阿里云官方获取，地址为 https://developer.aliyun.com/mirror/
+registry = "https://registry.npmmirror.com/"
+' >> ~/.bunfig.toml
+
+cat ~/.bunfig.toml
 
 # 验证安装
 node --version
