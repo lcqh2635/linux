@@ -3,307 +3,127 @@
 ---
 
 ### **一、系统更新与基础配置**
-1. **更新系统**  
-   ```bash
-   sudo dnf update -y && sudo dnf upgrade -y
-   
-   # 如果想使用 Gnome 软件升级到预发布版本
-   gsettings set org.gnome.software show-upgrade-prerelease true
-   # 升级完成后，强烈建议禁用该功能，这样您就不会收到不需要的未来预发布版。
-   gsettings set org.gnome.software show-upgrade-prerelease false
-   
-   # 从预发布版（beta）升级到最终公开版（stable）
-   如果您使用的是 Fedora Linux 的预发行版，则无需执行任何操作来获取最终的公开发行版，只需在软件包可用时对其进行更新即可。您可以使用 sudo dnf upgrade 或等待桌面通知。当预发布版本作为最终版本发布时，fedora-repos 软件包将被更新，并且您的 updates-testing 仓库将被禁用。一旦发生这种情况（在发布当天），强烈建议运行 sudo dnf distro-sync，以便使软件包版本与当前版本保持一致。
-   ```
-   
-2. **启用 RPM Fusion 仓库**（提供非自由软件支持）  
-   ```bash
-   # 国内加速仓库
-   清华   https://mirrors.tuna.tsinghua.edu.cn
-   中科大 https://mirrors.ustc.edu.cn
-   腾讯云 https://mirrors.cloud.tencent.com
-   华为云 https://mirrors.huaweicloud.com
-   阿里云 https://mirrors.aliyun.com
-   
-   https://developer.aliyun.com/mirror/fedora
-   https://developer.aliyun.com/mirror/rustup
-   
-   
-   # 中科大 Fedora 镜像源 https://mirrors.ustc.edu.cn/help/fedora.html
-   sudo sed -e 's|^metalink=|#metalink=|g' \
-            -e 's|^#baseurl=http://download.example/pub/fedora/linux|baseurl=https://mirrors.ustc.edu.cn/fedora|g' \
-            -i.bak \
-            /etc/yum.repos.d/fedora.repo \
-            /etc/yum.repos.d/fedora-updates.repo
-   # 清华 Fedora 镜像源 https://mirrors.tuna.tsinghua.edu.cn/help/fedora/
-   sed -e 's|^metalink=|#metalink=|g' \
-       -e 's|^#baseurl=http://download.example/pub/fedora/linux|baseurl=https://mirrors.tuna.tsinghua.edu.cn/fedora|g' \
-       -i.bak \
-       /etc/yum.repos.d/fedora.repo \
-       /etc/yum.repos.d/fedora-updates.repo
-   # 清华 RPMFusion 镜像源 https://mirrors.tuna.tsinghua.edu.cn/help/rpmfusion/
-   # 1、安装基础包。首先安装提供基础配置文件和 GPG 密钥的 rpmfusion-*.rpm。
-   sudo yum install --nogpgcheck https://mirrors.tuna.tsinghua.edu.cn/rpmfusion/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm https://mirrors.tuna.tsinghua.edu.cn/rpmfusion/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm
-   # 2、修改链接指向镜像站
-   sudo sed -e 's!^metalink=!#metalink=!g' \
-            -e 's!^mirrorlist=!#mirrorlist=!g' \
-            -e 's!^#baseurl=!baseurl=!g' \
-            -e 's!https\?://download1\.rpmfusion\.org/!https://mirrors.aliyun.com/rpmfusion/!g' \
-            -i.bak /etc/yum.repos.d/rpmfusion*.repo
-   
-   https://mirrors.aliyun.com/mirror/rpmfusion
-   # 阿里云 RPMFusion 镜像源 https://developer.aliyun.com/mirror/rpmfusion
-   sudo yum install --nogpgcheck https://mirrors.aliyun.com/rpmfusion/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm https://mirrors.tuna.tsinghua.edu.cn/rpmfusion/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm
-            
-   sudo sed -e 's!^metalink=!#metalink=!g' \
-            -e 's!^mirrorlist=!#mirrorlist=!g' \
-            -e 's!^#baseurl=!baseurl=!g' \
-            -e 's!https\?://download1\.rpmfusion\.org/!https://mirrors.tuna.tsinghua.edu.cn/rpmfusion/!g' \
-            -i.bak /etc/yum.repos.d/rpmfusion*.repo         
-   # 查看配置结果
-   cat /etc/yum.repos.d/rpmfusion-free.repo
-   
-   # 最后运行 sudo dnf makecache 生成缓存
-   sudo dnf makecache
-   # 中科大 Flatpak 镜像源 https://mirrors.ustc.edu.cn/help/flathub.html
-   sudo flatpak remote-modify flathub --url=https://mirrors.ustc.edu.cn/flathub
-   # 上海交大 Flatpak 镜像源 https://mirrors.sjtug.sjtu.edu.cn/docs/flathub
-   sudo flatpak remote-modify flathub --url=https://mirror.sjtu.edu.cn/flathub
-   
-   # 恢复默认值
-   sudo flatpak remote-modify flathub --url=https://dl.flathub.org/repo
-   
-   sudo dnf update -y && sudo dnf upgrade -y && flatpak update -y
-   
-   
-   # 网站国内可用 DNS 测试 ping https://ping.chinaz.com/www.youtube.com
-   # 配置Github访问加速
-   echo "
-   # GitHub Start
-   20.27.177.113    github.com
-   185.199.108.133    raw.githubusercontent.com
-   103.200.30.143    archive.org
-   # GitHub End
-   " | sudo tee -a /etc/hosts
-   # 简化版（匹配任意条件内容）
-   # 修改（将 20.27.177.113 替换为 192.168.1.100）
-   sudo sed -i 's/^[0-9]\+\.[0-9]\+\.[0-9]\+\.[0-9]\+\([[:space:]]\+github\.com\)/20.205.243.166\1/' /etc/hosts
-   sudo sed -i 's/^[0-9]\+\.[0-9]\+\.[0-9]\+\.[0-9]\+\([[:space:]]\+raw\.githubusercontent\.com\)/185.199.111.133\1/' /etc/hosts
-   # 验证是否添加成功
-   grep 'github.com' /etc/hosts
-   grep 'raw.githubusercontent.com' /etc/hosts
-   # 检查是否解析为新IP
-   ping github.com
-   ping raw.githubusercontent.com
-   cat /etc/hosts
-   nautilus admin:/etc/hosts
-   
-   # 安装基础依赖包 https://v2.tauri.app/zh-cn/start/prerequisites/#linux
-   sudo dnf install -y git wl-clipboard
-   git config --global user.name "龙茶清欢"
-   git config --global user.email "2320391937@qq.com"
-   ssh-keygen -t rsa -b 4096 -C "2320391937@qq.com"
-   # 需要安装 wl-clipboard 工具
-   cat ~/.ssh/id_rsa.pub | wl-copy
-   # https://gitee.com/profile/sshkeys
-   # https://github.com/settings/keys
-   ```
-   
-3. 配置
+```bash
 
-4. **安装多媒体编解码器**  
+# 安装常用 Flathub 软件
+# 自定义 GNOME 的方方面面，类似 gnome-tweaks
+flatpak install flathub page.tesk.Refine -y
+# GDM 设置
+flatpak install flathub io.github.realmazharhussain.GdmSettings -y
+flatpak install flathub org.gnome.Evolution -y
+flatpak install flathub io.typora.Typora -y
+flatpak install flathub md.obsidian.Obsidian -y
+flatpak install flathub com.baidu.NetDisk -y
+flatpak install flathub io.github.qier222.YesPlayMusic -y
+flatpak install flathub com.microsoft.Edge -y
+flatpak install flathub com.google.Chrome -y
+flatpak install flathub org.videolan.VLC -y
+# 管理 Flatpak 权限
+flatpak install flathub com.github.tchx84.Flatseal -y
+# 管理 Flatpak 的所有内容
+flatpak install flathub io.github.flattool.Warehouse -y
+# Flatpak残留清理器
+flatpak install flathub io.github.giantpinkrobots.flatsweep -y
+# 管理 AppImages 应用
+flatpak install flathub it.mijorus.gearlever -y
+# 使用 Linux 设备作为第二屏幕
+flatpak install flathub eu.nokun.MirrorHall -y
+# 翻译
+flatpak install flathub app.drey.Dialect -y
+# 办公软件
+flatpak install flathub org.libreoffice.LibreOffice -y
+# 制作 ISO 系统启动盘
+flatpak install flathub io.gitlab.adhami3310.Impression -y
+# 快捷、安全的文件传输工具
+flatpak install flathub app.drey.Warp -y
+# 下载、使用且能自适应的 GTK 应用程序字体
+flatpak install flathub org.gustavoperedo.FontDownloader -y
+# 管理您的密码和密钥，优先使用 bitwarden
+flatpak install flathub org.gnome.seahorse.Application -y
+flatpak install flathub com.bitwarden.desktop -y
+# 用于编辑 dconf 数据库的图形化工具
+flatpak install flathub ca.desrt.dconf-editor -y
+# 对应用程序和库进行翻译和本地化，它能处理所有形式的 gettext po 文件
+flatpak install flathub org.gnome.Gtranslator -y
+# 保护您的数据安全、数据备份
+flatpak install flathub org.gnome.World.PikaBackup -y
+# 在设备上安装固件管理
+flatpak install flathub org.gnome.Firmware -y
+# 种子下载器
+flatpak install flathub com.transmissionbt.Transmission -y
+# 保存您的桌面环境配置
+flatpak install flathub io.github.vikdevelop.SaveDesktop -y
+# Podman 虚拟容器化管理器，需要本地安装 Podman 或者提供远程连接地址
+flatpak install flathub com.github.marhkb.Pods -y
+flatpak install flathub io.podman_desktop.PodmanDesktop -y
+# 一个系统 systemd 服务管理器
+flatpak install flathub io.github.plrigaux.sysd-manager -y
+# VPN 软件
+flatpak install flathub com.protonvpn.www -y
+flatpak install flathub io.github.Fndroid.clash_for_windows -y
+# Lutris 可帮您安装和运行大多数平台上几乎所有时代的电子游戏。通过对现有的模拟器、兼容层、第三方游戏引擎等进行整合利用，Lutris 可为您提供一个统一的界面来启动您的所有游戏。
+flatpak install flathub net.lutris.Lutris -y
+# 屏幕录制
+flatpak install -y flathub com.obsproject.Studio
+# 彻底删除应用及数据：
+flatpak uninstall --delete-data flathub com.obsproject.Studio -y
+# 定期运行 flatpak uninstall --unused 删除旧版本运行时。
+flatpak uninstall --unused -y
+# 列出已配置的远程仓库
+flatpak remote-list -d
+sudo flatpak override --reset
 
-   ```bash
-   # 作为 Fedora 用户和系统管理员，您可以使用这些步骤来安装额外的多媒体插件，使您能够播放各种视频和音频类型。参考 https://docs.fedoraproject.org/zh_Hans/quick-docs/installing-plugins-for-playing-movies-and-music/
-   sudo dnf group install multimedia
-   
-   dnf list installed
-   sudo dnf install gnome-terminal
-   sudo dnf install dnf-plugins-core
-   # 参考 https://docs.fedoraproject.org/zh_CN/quick-docs/openh264/#_firefox_config_changes
-   sudo dnf install gstreamer1-plugin-openh264 mozilla-openh264 mozilla-ublock-origin
-   # 配置 Firefox
-   在 Firefox 地址栏中键入 about:config 并接受警告。
-   在搜索字段中，输入 264，将出现一些选项。通过双击 false，为以下 Preference Names 指定 true 值：
-   media.gmp-gmpopenh264.autoupdate
-   media.gmp-gmpopenh264.enabled
-   media.gmp-gmpopenh264.provider.enabled
-   media.peerconnection.video.h264_enabled
-   
-   
-   sudo dnf install \
-   ffmpeg \                    # 通用音视频处理框架（支持多种格式）
-   gstreamer1-plugins-bad-* \  # "Bad"插件集（非自由/实验性编解码器，如MPEG-2、DTS）
-   gstreamer1-plugins-good-* \ # "Good"插件集（高质量自由编解码器，如MP3、H.264）
-   gstreamer1-plugins-base \   # GStreamer 基础插件（必须依赖项）
-   gstreamer1-plugin-openh264 \ # 开源H.264编解码器（用于WebRTC视频通话）
-   gstreamer1-libav \          # 基于FFmpeg的编解码器扩展（补充格式支持）
-   --exclude=gstreamer1-plugins-bad-free-devel  # 排除开发头文件（避免冲突）
-   ```
+# 以下软件为适配主题，依旧使用自带默认主题
+flatpak install flathub com.qq.QQ -y
+flatpak install flathub com.tencent.WeChat -y
+flatpak install flathub com.tencent.wemeet -y
+flatpak install flathub cn.apipost.apipost -y
+flatpak install flathub com.rustdesk.RustDesk -y
+# Fedora 自带启动盘 ISO 写入工具
+flatpak install flathub org.fedoraproject.MediaWriter -y
+# 创建图像或编辑照片
+flatpak install flathub org.gimp.GIMP -y
+flatpak install flathub com.wps.Office -y
+flatpak install flathub com.valvesoftware.Steam -y
+flatpak install flathub io.github.Foldex.AdwSteamGtk -y
 
----
 
-### **二、硬件驱动优化**
-1. **显卡驱动**  
-   - **NVIDIA 显卡**（需先启用 RPM Fusion）：  
-     ```bash
-     sudo dnf install akmod-nvidia xorg-x11-drv-nvidia-cuda
-     sudo reboot
-     ```
-   - **AMD/Intel 集成显卡**：默认已启用开源驱动，无需额外操作。
+# 开发常用软件
+flatpak install flathub com.jetbrains.IntelliJ-IDEA-Ultimate -y
+flatpak install flathub com.google.AndroidStudio -y
+flatpak install flathub dev.zed.Zed -y
+flatpak install flathub io.github.shiftey.Desktop -y
+flatpak install flathub com.visualstudio.code -y
+# 触手可及的开发工具箱
+flatpak install flathub me.iepure.devtoolbox -y
+# 下载 jetbrains-toolbox
+https://www.jetbrains.com/zh-cn/toolbox-app/download/download-thanks.html?platform=linux
 
-2. **触控板/鼠标优化**  
-   ```bash
-   sudo dnf install libinput-gestures  # 支持多指触控手势
-   ```
 
----
+# 一键安装 Watt Toolkit 软件脚本，参考 https://steampp.net/
+# 安装后还需要额外处理一些问题 https://steampp.net/liunxSetupCer
+curl -sSL https://steampp.net/Install/Linux.sh | bash
+# 处理 Watt Toolkit 程序没有 Host 文件权限
+sudo chmod a+w /etc/hosts
+# 在网络加速中点击 加速设置 然后点击 安装证书
+# 在设置中将 背景不透明度 调到最高，禁用背景透明效果
 
-### **三、软件管理**
-1. **启用 Flathub 软件仓库**  
-   
-   ```bash
-   flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
-   ```
-   
-2. **安装常用工具**  
-   ```bash
-   sudo dnf install -y \                 
-   git unzip p7zip \   
-   gnome-tweaks \          
-   gnome-extensions-app \ 
-   timeshift \ 
-   
-   
-   
-   sudo dnf install google-chrome-stable
-   sudo dnf install libreoffice-langpack-zh-Hans
-   sudo dnf install evolution obs-studio
-   # evolution配置qq邮箱授权码： embwnsuwkdjrebge
-   sudo dnf install fastfetch
-   fastfetch
-   sudo dnf install vagrant VirtualBox virtualbox-guest-additions
-   
-   
-   # 安装常用 Flathub 软件
-   # 自定义 GNOME 的方方面面，类似 gnome-tweaks
-   flatpak install flathub page.tesk.Refine -y
-   # GDM 设置
-   flatpak install flathub io.github.realmazharhussain.GdmSettings -y
-   flatpak install flathub org.gnome.Evolution -y
-   flatpak install flathub io.typora.Typora -y
-   flatpak install flathub md.obsidian.Obsidian -y
-   flatpak install flathub com.baidu.NetDisk -y
-   flatpak install flathub io.github.qier222.YesPlayMusic -y
-   flatpak install flathub com.microsoft.Edge -y
-   flatpak install flathub com.google.Chrome -y
-   flatpak install flathub org.videolan.VLC -y
-   # 管理 Flatpak 权限
-   flatpak install flathub com.github.tchx84.Flatseal -y
-   # 管理 Flatpak 的所有内容
-   flatpak install flathub io.github.flattool.Warehouse -y
-   # Flatpak残留清理器
-   flatpak install flathub io.github.giantpinkrobots.flatsweep -y
-   # 管理 AppImages 应用
-   flatpak install flathub it.mijorus.gearlever -y
-   # 使用 Linux 设备作为第二屏幕
-   flatpak install flathub eu.nokun.MirrorHall -y
-   # 翻译
-   flatpak install flathub app.drey.Dialect -y
-   # 办公软件
-   flatpak install flathub org.libreoffice.LibreOffice -y
-   # 制作 ISO 系统启动盘
-   flatpak install flathub io.gitlab.adhami3310.Impression -y
-   # 快捷、安全的文件传输工具
-   flatpak install flathub app.drey.Warp -y
-   # 下载、使用且能自适应的 GTK 应用程序字体
-   flatpak install flathub org.gustavoperedo.FontDownloader -y
-   # 管理您的密码和密钥，优先使用 bitwarden
-   flatpak install flathub org.gnome.seahorse.Application -y
-   flatpak install flathub com.bitwarden.desktop -y
-   # 用于编辑 dconf 数据库的图形化工具
-   flatpak install flathub ca.desrt.dconf-editor -y
-   # 对应用程序和库进行翻译和本地化，它能处理所有形式的 gettext po 文件
-   flatpak install flathub org.gnome.Gtranslator -y
-   # 保护您的数据安全、数据备份
-   flatpak install flathub org.gnome.World.PikaBackup -y
-   # 在设备上安装固件管理
-   flatpak install flathub org.gnome.Firmware -y
-   # 种子下载器
-   flatpak install flathub com.transmissionbt.Transmission -y
-   # 保存您的桌面环境配置
-   flatpak install flathub io.github.vikdevelop.SaveDesktop -y
-   # Podman 虚拟容器化管理器，需要本地安装 Podman 或者提供远程连接地址
-   flatpak install flathub com.github.marhkb.Pods -y
-   flatpak install flathub io.podman_desktop.PodmanDesktop -y
-   # 一个系统 systemd 服务管理器
-   flatpak install flathub io.github.plrigaux.sysd-manager -y
-   # VPN 软件
-   flatpak install flathub com.protonvpn.www -y
-   flatpak install flathub io.github.Fndroid.clash_for_windows -y
-   # Lutris 可帮您安装和运行大多数平台上几乎所有时代的电子游戏。通过对现有的模拟器、兼容层、第三方游戏引擎等进行整合利用，Lutris 可为您提供一个统一的界面来启动您的所有游戏。
-   flatpak install flathub net.lutris.Lutris -y
-   # 屏幕录制
-   flatpak install -y flathub com.obsproject.Studio
-   # 彻底删除应用及数据：
-   flatpak uninstall --delete-data flathub com.obsproject.Studio -y
-   # 定期运行 flatpak uninstall --unused 删除旧版本运行时。
-   flatpak uninstall --unused -y
-   # 列出已配置的远程仓库
-   flatpak remote-list -d
-   sudo flatpak override --reset
-   
-   # 以下软件为适配主题，依旧使用自带默认主题
-   flatpak install flathub com.qq.QQ -y
-   flatpak install flathub com.tencent.WeChat -y
-   flatpak install flathub com.tencent.wemeet -y
-   flatpak install flathub cn.apipost.apipost -y
-   flatpak install flathub com.rustdesk.RustDesk -y
-   # Fedora 自带启动盘 ISO 写入工具
-   flatpak install flathub org.fedoraproject.MediaWriter -y
-   # 创建图像或编辑照片
-   flatpak install flathub org.gimp.GIMP -y
-   flatpak install flathub com.wps.Office -y
-   flatpak install flathub com.valvesoftware.Steam -y
-   flatpak install flathub io.github.Foldex.AdwSteamGtk -y
-   
-   
-   # 开发常用软件
-   flatpak install flathub com.jetbrains.IntelliJ-IDEA-Ultimate -y
-   flatpak install flathub com.google.AndroidStudio -y
-   flatpak install flathub dev.zed.Zed -y
-   flatpak install flathub io.github.shiftey.Desktop -y
-   flatpak install flathub com.visualstudio.code -y
-   # 触手可及的开发工具箱
-   flatpak install flathub me.iepure.devtoolbox -y
-   # 下载 jetbrains-toolbox
-   https://www.jetbrains.com/zh-cn/toolbox-app/download/download-thanks.html?platform=linux
-   
-   
-   # 一键安装 Watt Toolkit 软件脚本，参考 https://steampp.net/
-   # 安装后还需要额外处理一些问题 https://steampp.net/liunxSetupCer
-   curl -sSL https://steampp.net/Install/Linux.sh | bash
-   # 处理 Watt Toolkit 程序没有 Host 文件权限
-   sudo chmod a+w /etc/hosts
-   # 在网络加速中点击 加速设置 然后点击 安装证书
-   # 在设置中将 背景不透明度 调到最高，禁用背景透明效果
-   
-   # 火狐浏览器导入 Watt Toolkit 证书
-   # 打开 设置 - 隐私与安全 - 安全 - 证书 - 查看证书。
-   # 选择 证书颁发机构 然后点击导入
-   # 证书地址为 /home/lcqh/.local/share/Steam++/Plugins/Accelerator/SteamTools.Certificate.cer
-   # 勾选 信任由此证书颁发机构来标识网站
-   
-   # Google浏览器导入 Watt Toolkit 证书
-   # 打开 设置 - 隐私与安全 - 安全 - 管理证书
-   # chrome 搜索栏输入chrome://settings/certificates，选择导入证书
-   # 本地证书 - 自定义 - 可信证书 - 导入
-   # 证书地址为 /home/lcqh/.local/share/Steam++/Plugins/Accelerator/SteamTools.Certificate.cer
-   # 点击 Steam 左上角 stream 菜单 - Settings - interface 在其中设置界面为中文
-   ```
-   
-3. **推荐通过 Flatpak 安装的软件**  
-   
+# 火狐浏览器导入 Watt Toolkit 证书
+# 打开 设置 - 隐私与安全 - 安全 - 证书 - 查看证书。
+# 选择 证书颁发机构 然后点击导入
+# 证书地址为 /home/lcqh/.local/share/Steam++/Plugins/Accelerator/SteamTools.Certificate.cer
+# 勾选 信任由此证书颁发机构来标识网站
+
+# Google浏览器导入 Watt Toolkit 证书
+# 打开 设置 - 隐私与安全 - 安全 - 管理证书
+# chrome 搜索栏输入chrome://settings/certificates，选择导入证书
+# 本地证书 - 自定义 - 可信证书 - 导入
+# 证书地址为 /home/lcqh/.local/share/Steam++/Plugins/Accelerator/SteamTools.Certificate.cer
+# 点击 Steam 左上角 stream 菜单 - Settings - interface 在其中设置界面为中文
+```
+
+1. **推荐通过 Flatpak 安装的软件**  
+
    ```bash
    flatpak install -y flathub \
    com.spotify.Client \    # 音乐

@@ -196,7 +196,6 @@ gsettings list-keys org.gnome.mutter
 gsettings list-recursively org.gnome.mutter
 gsettings list-recursively org.gnome.desktop.interface
 gsettings list-recursively org.gnome.desktop.wm.preferences
-gsettings set org.gnome.desktop.wm.preferences workspace-names ['休闲区','工作区']
 
 
 # 查看当前BIOS信息，

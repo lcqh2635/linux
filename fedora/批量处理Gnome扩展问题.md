@@ -28,21 +28,6 @@ gsettings list-schemas | grep "org.gnome.shell.extensions"
 
 # 重启 GNOME Shell
 killall -3 gnome-shell
-
-
-for EXT_DIR in ~/.local/share/gnome-shell/extensions/*/; do
-    EXT_ID=$(basename "$EXT_DIR")
-    echo "处理扩展: $EXT_ID"
-
-    if [ -d "$EXT_DIR/schemas" ]; then
-        glib-compile-schemas "$EXT_DIR/schemas"
-
-        mkdir -p ~/.local/share/glib-2.0/schemas/
-        cp "$EXT_DIR/schemas"/*.xml ~/.local/share/glib-2.0/schemas/
-    fi
-done
-
-glib-compile-schemas ~/.local/share/glib-2.0/schemas/
 ```
 
 **使用方法**：

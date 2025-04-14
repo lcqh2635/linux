@@ -12,6 +12,40 @@ sudo dnf install gnome-extensions-app
 # 安装插件支持（可选，用于手动安装主题）
 sudo dnf install gnome-shell-extension-user-theme
 
+gsettings set org.gnome.desktop.wm.preferences button-layout 'appmenu:minimize,maximize,close'
+gsettings set org.gnome.mutter center-new-windows true
+gsettings set org.gnome.desktop.interface show-battery-percentage true
+# 安装配置系统字体
+sudo dnf install adobe-source-han-sans-cn-fonts
+sudo dnf install adobe-source-han-serif-cn-fonts
+sudo dnf install jetbrains-mono-fonts
+logout
+gsettings set org.gnome.desktop.interface font-name '思源黑体 CN Medium 12'
+gsettings set org.gnome.desktop.interface document-font-name '思源宋体 CN Medium 12'
+gsettings set org.gnome.desktop.interface monospace-font-name 'JetBrains Mono Medium 12'
+gsettings set org.gnome.desktop.wm.preferences titlebar-font '思源黑体 CN Bold 12'
+gsettings set org.gnome.desktop.interface font-antialiasing 'rgba'
+gsettings set org.gnome.desktop.interface font-hinting 'slight'
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 gsettings list-schemas | grep "keybindings"
 # 窗口快捷键
 org.gnome.desktop.wm.keybindings

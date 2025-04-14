@@ -5,7 +5,53 @@
 ### **📌 安装方法**
 #### **1. 启用 Flathub（推荐）**
 ```bash
-sudo flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
+# 基础系统工具
+flatpak install -y flathub \
+com.github.tchx84.Flatseal \
+io.github.flattool.Warehouse \
+io.github.giantpinkrobots.flatsweep \
+io.github.realmazharhussain.GdmSettings \
+io.github.vikdevelop.SaveDesktop \
+io.github.seadve.Kooha \
+io.gitlab.adhami3310.Impression \
+it.mijorus.gearlever \
+org.gnome.Firmware \
+org.gnome.Builder \
+app.drey.Dialect \
+ca.desrt.dconf-editor \
+org.gnome.Gtranslator \
+com.bitwarden.desktop \
+de.haeckerfelix.Fragments \
+org.gnome.gitlab.somas.Apostrophe
+
+# 工作娱乐
+flatpak install -y flathub \
+com.qq.QQ \
+com.tencent.WeChat \
+com.tencent.wemeet \
+io.github.qier222.YesPlayMusic \
+com.baidu.NetDisk \
+md.obsidian.Obsidian \
+io.typora.Typora \
+io.github.alainm23.planify
+
+
+# 开发工具
+flatpak install -y flathub \
+com.jetbrains.IntelliJ-IDEA-Ultimate \
+me.iepure.devtoolbox \
+cn.apipost.apipost \
+
+
+# 游戏
+flatpak install flathub com.valvesoftware.Steam -y
+flatpak install flathub io.github.Foldex.AdwSteamGtk -y
+
+# 定期运行 flatpak uninstall --unused 删除旧版本运行时。
+flatpak uninstall --unused -y
+
+# 下载 jetbrains-toolbox
+https://www.jetbrains.com/zh-cn/toolbox-app/download/download-thanks.html?platform=linux
 ```
 
 #### **2. 安装方式选择**
@@ -24,14 +70,6 @@ sudo flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub
 | **DBeaver**       | 数据库管理工具 | `sudo dnf install dbeaver`                                   | 支持 MySQL/PostgreSQL |
 
 ```bash
-sudo dnf install -y \                 
-git unzip p7zip \   
-gnome-tweaks \          
-gnome-extensions-app \ 
-timeshift \ 
-
-
-
 sudo dnf install google-chrome-stable
 sudo dnf install evolution obs-studio
 # evolution配置qq邮箱授权码： embwnsuwkdjrebge
@@ -47,8 +85,6 @@ flatpak install flathub io.github.shiftey.Desktop -y
 flatpak install flathub com.visualstudio.code -y
 # 触手可及的开发工具箱
 flatpak install flathub me.iepure.devtoolbox -y
-# 下载 jetbrains-toolbox
-https://www.jetbrains.com/zh-cn/toolbox-app/download/download-thanks.html?platform=linux
 
 
 # 一键安装 Watt Toolkit 软件脚本，参考 https://steampp.net/
@@ -100,10 +136,6 @@ flatpak install -y flathub org.gnome.gitlab.somas.Apostrophe
 | **Krita**    | 数字绘画工具                | `sudo dnf install krita`    | 压感笔支持优秀    |
 | **Blender**  | 3D 建模与动画               | `sudo dnf install blender`  | 需启用 RPM Fusion |
 
-```
-
-```
-
 ---
 
 ### **🎵 多媒体**
@@ -128,10 +160,6 @@ flatpak install -y flathub org.gnome.gitlab.somas.Apostrophe
 | **Stacer**       | 系统清理与监控 | `sudo dnf install stacer`       | 图形化任务管理器        |
 | **GParted**      | 分区管理工具   | `sudo dnf install gparted`      | 需 root 权限            |
 
-```
-
-```
-
 ---
 
 ### **🌐 网络与通信**
@@ -142,10 +170,6 @@ flatpak install -y flathub org.gnome.gitlab.somas.Apostrophe
 | **Thunderbird** | 邮件客户端 | `sudo dnf install thunderbird`                 | 支持日历插件     |
 | **Telegram**    | 即时通讯   | `flatpak install flathub org.telegram.desktop` | 官方客户端       |
 
-```
-
-```
-
 ---
 
 ### **🔧 其他实用工具**
@@ -155,19 +179,6 @@ flatpak install -y flathub org.gnome.gitlab.somas.Apostrophe
 | **Transmission** | BT 下载工具    | `sudo dnf install transmission`                 | 轻量级           |
 | **Remmina**      | 远程桌面客户端 | `sudo dnf install remmina`                      | 支持 RDP/VNC     |
 | **Warpinator**   | 局域网文件传输 | `sudo dnf install warpinator`                   | 类似苹果 AirDrop |
-
-```
-
-```
-
----
-
-### **📦 启用 RPM Fusion 仓库（第三方软件）**
-```bash
-# 启用 RPM Fusion（非自由软件）
-sudo dnf install https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm
-sudo dnf install https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm
-```
 
 ---
 
@@ -193,8 +204,6 @@ flatpak install flathub com.jetbrains.IntelliJ-IDEA-Community
 # 多媒体
 sudo dnf install vlc obs-studio --enablerepo=rpmfusion-nonfree
 flatpak install flathub com.spotify.Client
-
-
 ```
 
 按此清单配置后，Fedora 41 将覆盖绝大多数日常使用场景，兼顾生产力和娱乐需求！ 🚀

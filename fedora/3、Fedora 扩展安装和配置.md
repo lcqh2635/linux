@@ -7,36 +7,98 @@
 ## **1. 必备扩展安装工具**
 ### **安装 GNOME 扩展管理器**
 ```bash
-sudo dnf install -y \
-gnome-tweaks gnome-extensions-app \
-
-
-dnf search gnome-shell-extension
 # 卸载自带的无用扩展插件
 sudo dnf remove -y \
 gnome-shell-extension-window-list \
-gnome-shell-extension-launch-new-instance \
-gnome-shell-extension-apps-menu \
-gnome-shell-extension-places-menu \
+gnome-shell-extension-launch-new-instance
 
-# 系统扩展插件
+# 系统必装 Gnome 扩展
 sudo dnf install -y \
 gnome-shell-extension-user-theme \
 gnome-shell-extension-dash-to-dock \
 gnome-shell-extension-blur-my-shell \
 gnome-shell-extension-just-perfection \
-gnome-shell-extension-drive-menu \
-gnome-shell-extension-caffeine \
-gnome-shell-extension-workspace-indicator \
-gnome-shell-extension-auto-move-windows \
+gnome-shell-extension-drive-menu
+
+gsettings set org.gnome.shell.extensions.dash-to-dock animation-time 0.5
+gsettings set org.gnome.shell.extensions.dash-to-dock hot-keys false
+gsettings set org.gnome.shell.extensions.dash-to-dock click-action 'minimize'
+gsettings set org.gnome.shell.extensions.dash-to-dock scroll-action 'cycle-windows'
+gsettings set org.gnome.shell.extensions.dash-to-dock custom-theme-shrink true
+gsettings set org.gnome.shell.extensions.dash-to-dock running-indicator-style 'DASHES'
+gsettings set org.gnome.shell.extensions.dash-to-dock running-indicator-dominant-color true
+gsettings set org.gnome.shell.extensions.blur-my-shell.panel force-light-text true
+gsettings set org.gnome.shell.extensions.blur-my-shell.panel style-panel 1
+gsettings set org.gnome.shell.extensions.blur-my-shell.hidetopbar compatibility true
+gsettings set org.gnome.shell.extensions.blur-my-shell.appfolder style-dialogs 2
+gsettings set org.gnome.shell.extensions.blur-my-shell.dash-to-dock style-dash-to-dock 1
+
+# 待选 Gnome 扩展
+gnome-shell-extension-caffeine
+gnome-shell-extension-workspace-indicator
+gnome-shell-extension-auto-move-windows
 gnome-shell-extension-appindicator
 
-gnome-shell-extension-forge.noarch
-gnome-shell-extension-gsconnect.x86_64
-gnome-shell-extension-unite.noarch
-# 这两个可以安装，不建议启用
-gnome-shell-extension-apps-menu
-gnome-shell-extension-places-menu
+# 用户比装 Gnome 扩展
+Hide Top Bar
+# 修复 Hide Top Bar 闪跳 BUG
+Disable unredirect fullscreen windows
+Rounded Window Corners Reborn
+Rounded Corners
+# 数值设置为 5
+Status Area Horizontal Spacing
+
+
+# 优质推荐 Gnome 扩展
+Add to Desktop
+Alphabetical App Grid
+Bluetooth Quick Connect
+Clipboard Indicator
+Coverflow Alt-Tab
+Compiz windows effect
+Compiz alike magic lamp effect
+Desktop Cube
+Dynamic Panel
+Dash2Dock Animated
+Extension List
+Gtk4 Desktop Icons NG (DING)
+# 安装 Lunar Calendar 农历 扩展插件需要如下内容
+#https://gitlab.gnome.org/Nei/ChineseCalendar/-/archive/20250205/ChineseCalendar-20250205.tar.gz
+# tar -xzvf ChineseCalendar-20250205.tar.gz
+# cd ChineseCalendar-20250205
+# ./install.sh
+Lunar Calendar 农历
+Logo Menu
+IBus Tweaker
+Night Theme Switcher
+Notification Banner Reloaded
+Quick Settings Tweaks
+Search Light
+SettingsCenter
+Top Bar Organizer
+Tray Icons: Reloaded
+User Avatar In Quick Settings
+Window Gestures
+VirtualBox applet
+# https://github.com/Sominemo/Fildem-Gnome-45
+
+
+# 解决用户 Gnome 扩展无法使用 gsettings 的问题
+for EXT_DIR in ~/.local/share/gnome-shell/extensions/*/; do
+    EXT_ID=$(basename "$EXT_DIR")
+    echo "处理扩展: $EXT_ID"
+
+    if [ -d "$EXT_DIR/schemas" ]; then
+        glib-compile-schemas "$EXT_DIR/schemas"
+
+        mkdir -p ~/.local/share/glib-2.0/schemas/
+        cp "$EXT_DIR/schemas"/*.xml ~/.local/share/glib-2.0/schemas/
+    fi
+done
+
+glib-compile-schemas ~/.local/share/glib-2.0/schemas/
+
+gsettings set org.gnome.shell.extensions.hidetopbar mouse-sensitive true
 ```
 或通过浏览器安装扩展：
 1. 安装浏览器插件 [GNOME Shell Integration](https://extensions.gnome.org/)
