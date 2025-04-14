@@ -1,0 +1,36 @@
+# 使用 config.disksize.size 配置虚拟硬盘大小需要先安装插件 vagrant plugin install vagrant-disksize
+
+# 指定 Vagrantfile 使用的配置版本，并创建了一个名为 "config" 的对象，通过该对象来配置虚拟机的各种参数和行为。
+Vagrant.configure("2") do |config|
+  # 公共配置直接定义在外层，脱离于每个独立的 vm.define
+  # 使用 debian/bookworm64 的 box 也就是 debian12
+  config.vm.box = "debian/bookworm64"
+  # 设置虚拟机启动超时时间为 30 秒
+  config.vm.boot_timeout = 30
+  # 设置虚拟磁盘大小为40GB，最低40GB，格式为 VDI  
+  # config.disksize.size = '40GB'   
+    
+  # 定义一个名为 "debian-master" 的虚拟机
+  config.vm.define "debian-master" do |master|
+    # 设置虚拟机主机名为 "debian-master"
+    master.vm.hostname = "debian-master"
+    # 配置私有网络，分配给虚拟机 IP 地址为 192.168.56.10
+    master.vm.network "private_network", ip: "192.168.56.10"
+    # 配置使用 VirtualBox 提供者的虚拟机属性
+    master.vm.provider "virtualbox" do |vb|
+      # 在开机的时候，启用虚拟机的图形用户界面
+      vb.gui = false
+      # 分配给虚拟机的内存大小为 8196MB
+      vb.memory = "8196"
+      # 虚拟机的CPU核心数量为 4
+      vb.cpus = 4
+      # 指定虚拟机在 virtualbox 中显示的名称
+      vb.name = "debian-master"
+      # 是否检查客户端插件的版本和更新
+      vb.check_guest_additions = true
+    end
+  end
+    
+end
+
+# 通信测试	ping 192.168.124.10

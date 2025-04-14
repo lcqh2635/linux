@@ -176,6 +176,9 @@
   },
   "active": "746e66e10ef8f587",
   "lastOpenFiles": [
+    "Vagrantfile",
+    "性能优化.txt",
+    "docker-compose.yaml",
     "fedora/Fedora 初次安装后的配置.md",
     "fedora/5、Fedora 安装常用软件.md",
     "fedora/6、Fedora 开发环境搭建.md",
@@ -202,7 +205,6 @@
     "Empty File",
     "manjaro/Gnome 字体设置注意事项.md",
     "manjaro/Empty File",
-    "apple/Mac min m4安装常用软件.md",
-    "apple/Homebrew的安装和使用.md"
+    "apple/Mac min m4安装常用软件.md"
   ]
 }

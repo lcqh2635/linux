@@ -58,8 +58,6 @@ Fedora 默认使用 **Adwaita** 主题，可以更换为更流行的主题（如
 
 ### **方法 1：通过 `dnf` 安装官方主题**
 ```bash
-
-
 # 推荐安装支持 GTK4 + Libadwaita 的 GTK 主题 https://drasite.com/
 # Flat Remix GTK	https://www.gnome-look.org/p/1214931
 sudo dnf install flat-remix-gtk4-theme
