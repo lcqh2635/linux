@@ -5,6 +5,11 @@
 ### **一、基础优化**
 #### **1. 更新系统与启用 RPM Fusion**
 ```bash
+# 快捷键优化
+CTRL 键控制文本
+Win 键控制窗口
+ALT 键h控制工作区
+
 # 更新所有软件包
 sudo dnf upgrade --refresh
 ```

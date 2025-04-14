@@ -22,6 +22,11 @@ sudo dnf install https://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfre
 ### **2. 安装开发工具链**
 #### **🔹 SDKMAN!（Java/Kotlin/Scala 等）**
 ```bash
+# 参考 https://docs.fedoraproject.org/zh_Hans/quick-docs/installing-java/
+dnf search openjdk
+sudo dnf install java-latest-openjdk.x86_64
+sudo dnf install openjdk maven
+
 # 安装 SDKMAN!
 curl -s "https://get.sdkman.io" | bash
 source "$HOME/.sdkman/bin/sdkman-init.sh"
