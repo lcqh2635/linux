@@ -5,16 +5,17 @@
 ## **1. 安装主题管理工具**
 首先安装必要的工具和插件：
 ```bash
-# 安装 GNOME Tweaks（图形化设置工具）
-sudo dnf install gnome-tweaks
-# 安装扩展管理器（用于管理 GNOME 扩展）
-sudo dnf install gnome-extensions-app
-# 安装插件支持（可选，用于手动安装主题）
-sudo dnf install gnome-shell-extension-user-theme
-
+# 基础窗口优化
 gsettings set org.gnome.desktop.wm.preferences button-layout 'appmenu:minimize,maximize,close'
 gsettings set org.gnome.mutter center-new-windows true
 gsettings set org.gnome.desktop.interface show-battery-percentage true
+
+# 安装 GNOME Tweaks（图形化设置工具）
+sudo dnf install -y \
+gnome-tweaks \
+gnome-extensions-app \
+gnome-shell-extension-user-theme
+
 # 安装配置系统字体
 sudo dnf install -y \
 adobe-source-han-sans-cn-fonts \
@@ -27,43 +28,6 @@ gsettings set org.gnome.desktop.interface monospace-font-name 'JetBrains Mono Me
 gsettings set org.gnome.desktop.wm.preferences titlebar-font '思源黑体 CN Bold 12'
 gsettings set org.gnome.desktop.interface font-antialiasing 'rgba'
 gsettings set org.gnome.desktop.interface font-hinting 'slight'
-
-
-
-gsettings list-schemas | grep "keybindings"
-# 窗口快捷键
-org.gnome.desktop.wm.keybindings
-# 窗口快捷键
-org.gnome.mutter.keybindings
-org.gnome.mutter.wayland.keybindings
-# 扩展提供的快捷键
-org.gnome.shell.extensions.paperwm.keybindings
-org.gnome.shell.keybindings
-
-gsettings list-recursively org.gnome.settings-daemon.plugins.media-keys
-# 自定义媒体快捷键
-gsettings set org.gnome.settings-daemon.plugins.media-keys media ['<Super>F9']
-gsettings set org.gnome.settings-daemon.plugins.media-keys mic-mute ['F2']
-gsettings set org.gnome.settings-daemon.plugins.media-keys volume-down ['F3']
-gsettings set org.gnome.settings-daemon.plugins.media-keys volume-up ['F4']
-gsettings set org.gnome.settings-daemon.plugins.media-keys next ['F8']
-gsettings set org.gnome.settings-daemon.plugins.media-keys play ['F9']
-gsettings set org.gnome.settings-daemon.plugins.media-keys previous ['F10']
-
-gsettings list-recursively org.gnome.desktop.wm.keybindings
-# 自定义系统快捷键
-gsettings set org.gnome.desktop.wm.keybindings close ['<Super>c']
-gsettings set org.gnome.desktop.wm.keybindings maximize ['<Super>Up']
-gsettings set org.gnome.desktop.wm.keybindings unmaximize ['<Super>Down']
-gsettings set org.gnome.desktop.wm.keybindings show-desktop ['<Super>h']
-gsettings set org.gnome.desktop.wm.keybindings switch-to-workspace-1 ['<Super>1']
-gsettings set org.gnome.desktop.wm.keybindings switch-to-workspace-2 ['<Super>2']
-gsettings set org.gnome.desktop.wm.keybindings switch-to-workspace-3 ['<Super>3']
-gsettings set org.gnome.desktop.wm.keybindings switch-to-workspace-4 ['<Super>4']
-gsettings set org.gnome.desktop.wm.keybindings switch-to-workspace-last ['<Super>End']
-gsettings set org.gnome.desktop.wm.keybindings switch-to-workspace-left ['<Super>Left']
-gsettings set org.gnome.desktop.wm.keybindings switch-to-workspace-right ['<Super>Right']
-gsettings set org.gnome.desktop.wm.keybindings toggle-fullscreen ['<Super>f']
 ```
 启用 `User Themes` 扩展：
 - 打开 **GNOME Extensions**（`Alt+F2` 输入 `extensions`）  
@@ -76,8 +40,42 @@ Fedora 默认使用 **Adwaita** 主题，可以更换为更流行的主题（如
 
 ### **方法 1：通过 `dnf` 安装官方主题**
 ```bash
+在 Github 范县一个好项目 adw-gtk3
+https://github.com/lassekongo83/adw-gtk3
+
+# 在 Fedora 中安装 adw-gtk3-theme 安装后的主题存放目录 ~/.local/share/themes/
+sudo dnf install -y adw-gtk3-theme
+
+# 2、如果您使用 flatpak 应用程序，则有 2 个选项来使用主题（仅选择一个）：
+# 2-1、从 Flathub 安装主题： 
+flatpak install org.gtk.Gtk3theme.adw-gtk3 org.gtk.Gtk3theme.adw-gtk3-dark
+
+# 2-2、或者，可以使用 FlatPak override。使用此选项的好处是，将对 Flathub 中的非 libadwaita GTK4 应用程序设置样式。为此，主题必须安装在 ~/.local/share/themes 中。从终端运行：
+sudo flatpak override --filesystem=xdg-data/themes && sudo flatpak mask org.gtk.Gtk3theme.adw-gtk3 && sudo flatpak mask org.gtk.Gtk3theme.adw-gtk3-dark
+
+# 3、然后，您可以在应用程序 gnome-tweaks 中启用 adw-gtk3。（某些应用程序可能需要重新登录）
+
+# 如果你使用 dark 主题，你还需要在 设置 中启用 dark 外观。或者，您可以使用终端设置主题：
+# 1、将主题更改为 adw-gtk3 light：
+gsettings set org.gnome.desktop.interface gtk-theme 'adw-gtk3' && gsettings set org.gnome.desktop.interface color-scheme 'default'
+# 2、将主题更改为 adw-gtk3-dark：
+gsettings set org.gnome.desktop.interface gtk-theme 'adw-gtk3-dark' && gsettings set org.gnome.desktop.interface color-scheme 'prefer-dark'
+# 3、恢复到 GNOME 的默认主题：
+gsettings set org.gnome.desktop.interface gtk-theme 'Adwaita' && gsettings set org.gnome.desktop.interface color-scheme 'default'
+
+# 自定义
+# 如果您想在 GNOME 47 或更高版本中更改大多数应用程序的强调色（修改窗口控制按钮颜色），那么您可以使用小的 cli 程序 accent-color-change。
+https://github.com/lassekongo83/adw-colors/tree/main/accent-color-change
+# Adw-gtk3 和 libadwaita 可以使用 GTK 命名颜色进行自定义。有关更多信息，请参阅 adw-colors。
+# 注意： GTK3 不支持 GNOME 47 中引入的强调色功能。只有 libadwaita 可以。
+
+
+# https://github.com/birneee/obsidian-adwaita-theme
+
+
 # 推荐安装支持 GTK4 + Libadwaita 的 GTK 主题 https://drasite.com/
 # Flat Remix GTK	https://www.gnome-look.org/p/1214931
+# 或者是基于 Gnome 官方主题 adwaita 和 adw-gtk3-theme 而开发的主题
 sudo dnf install flat-remix-gtk4-theme
 # GNOME-4X themes	https://www.gnome-look.org/p/2173282
 git clone https://github.com/daniruiz/GNOME-4X-themes.git
@@ -86,6 +84,16 @@ git clone https://github.com/daniruiz/GNOME-4X-themes.git
 
 # 安装 Adwaita 暗色变体
 sudo dnf install adwaita-dark
+
+
+# Gnome 官方主题
+sudo dnf install -y \
+adwaita-fonts-all \
+adwaita-cursor-theme \
+adwaita-icon-theme \
+
+qadwaitadecorations-qt5.x86_64
+
 
 # https://github.com/lassekongo83/adw-gtk3
 dnf install adw-gtk3-theme
@@ -942,3 +950,41 @@ org.kde.Platform runtime
 org.kde.WaylandDecoration.QAdwaitaDecorations
 org.kde.WaylandDecoration.QGnomePlatform-decoration
 org.kde.PlatformTheme.QGnomePlatform
+
+
+`
+gsettings list-schemas | grep "keybindings"
+# 窗口快捷键
+org.gnome.desktop.wm.keybindings
+# 窗口快捷键
+org.gnome.mutter.keybindings
+org.gnome.mutter.wayland.keybindings
+# 扩展提供的快捷键
+org.gnome.shell.extensions.paperwm.keybindings
+org.gnome.shell.keybindings
+
+gsettings list-recursively org.gnome.settings-daemon.plugins.media-keys
+# 自定义媒体快捷键
+gsettings set org.gnome.settings-daemon.plugins.media-keys media ['<Super>F9']
+gsettings set org.gnome.settings-daemon.plugins.media-keys mic-mute ['F2']
+gsettings set org.gnome.settings-daemon.plugins.media-keys volume-down ['F3']
+gsettings set org.gnome.settings-daemon.plugins.media-keys volume-up ['F4']
+gsettings set org.gnome.settings-daemon.plugins.media-keys next ['F8']
+gsettings set org.gnome.settings-daemon.plugins.media-keys play ['F9']
+gsettings set org.gnome.settings-daemon.plugins.media-keys previous ['F10']
+
+gsettings list-recursively org.gnome.desktop.wm.keybindings
+# 自定义系统快捷键
+gsettings set org.gnome.desktop.wm.keybindings close ['<Super>c']
+gsettings set org.gnome.desktop.wm.keybindings maximize ['<Super>Up']
+gsettings set org.gnome.desktop.wm.keybindings unmaximize ['<Super>Down']
+gsettings set org.gnome.desktop.wm.keybindings show-desktop ['<Super>h']
+gsettings set org.gnome.desktop.wm.keybindings switch-to-workspace-1 ['<Super>1']
+gsettings set org.gnome.desktop.wm.keybindings switch-to-workspace-2 ['<Super>2']
+gsettings set org.gnome.desktop.wm.keybindings switch-to-workspace-3 ['<Super>3']
+gsettings set org.gnome.desktop.wm.keybindings switch-to-workspace-4 ['<Super>4']
+gsettings set org.gnome.desktop.wm.keybindings switch-to-workspace-last ['<Super>End']
+gsettings set org.gnome.desktop.wm.keybindings switch-to-workspace-left ['<Super>Left']
+gsettings set org.gnome.desktop.wm.keybindings switch-to-workspace-right ['<Super>Right']
+gsettings set org.gnome.desktop.wm.keybindings toggle-fullscreen ['<Super>f']
+`
