@@ -28,6 +28,20 @@ gsettings set org.gnome.desktop.interface monospace-font-name 'JetBrains Mono Me
 gsettings set org.gnome.desktop.wm.preferences titlebar-font '思源黑体 CN Bold 12'
 gsettings set org.gnome.desktop.interface font-antialiasing 'rgba'
 gsettings set org.gnome.desktop.interface font-hinting 'slight'
+
+# Fedora 系统默认自带的主题存放目录
+# 光标主题：
+ls /usr/share/icons/
+# 图标主题：
+ls /usr/share/icons/
+# GTK 主题和 GNOME Shell 主题：
+ls /usr/share/themes/
+
+# Fedora 用户安装的主题存放目录
+ls ~/.icons/
+# 用户自定义的图标主题可以存放在 `~/.local/share/icons/` 目录下，这是符合 XDG Base Directory Specification（XDG 基础目录规范）的设计。这个规范旨在标准化用户配置文件和数据的存放位置，以提高系统的组织性和灵活性。
+ls ~/.local/share/icons/
+ls ~/.themes/
 ```
 启用 `User Themes` 扩展：
 - 打开 **GNOME Extensions**（`Alt+F2` 输入 `extensions`）  

@@ -11,10 +11,14 @@
             "id": "d505fa1d93e2e9bb",
             "type": "leaf",
             "state": {
-              "type": "graph",
-              "state": {},
-              "icon": "lucide-git-fork",
-              "title": "关系图谱"
+              "type": "markdown",
+              "state": {
+                "file": "fedora/2、Fedora 主题和字体安装配置.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "2、Fedora 主题和字体安装配置"
             }
           }
         ]
@@ -176,13 +180,13 @@
   },
   "active": "d505fa1d93e2e9bb",
   "lastOpenFiles": [
+    "fedora/5、Fedora 安装常用软件.md",
+    "fedora/1、Fedora 初次安装后配置加速镜像.md",
     "fedora/fedora自动化配置脚本/setup.sh",
     "fedora/fedora自动化配置脚本",
     "fedora/4、Fedora 系统优化.md",
-    "fedora/5、Fedora 安装常用软件.md",
     "fedora/3、Fedora 扩展安装和配置.md",
     "fedora/2、Fedora 主题和字体安装配置.md",
-    "fedora/1、Fedora 初次安装后配置加速镜像.md",
     "fedora/自动化配置脚本/setup.sh",
     "fedora/自动化配置脚本/新建脚本.sh",
     "fedora/自动化配置脚本",
@@ -192,7 +196,6 @@
     "模板/新建桌面文件.desktop",
     "模板/新建Word.docx",
     "模板/新建HTML.html",
-    "模板/新建文本.txt",
     "fedora/6、Fedora 开发环境搭建.md",
     "manjaro/Gnome 常用软件安装和配置.md",
     "manjaro/Gnome常用软件安装和配置.md",
