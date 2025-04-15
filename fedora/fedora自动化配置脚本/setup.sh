@@ -6,6 +6,11 @@ gsettings set org.gnome.mutter center-new-windows true
 gsettings set org.gnome.desktop.interface show-battery-percentage true
 # 为了确保系统能够以最快的速度完成更新和软件安装，通常建议先配置加速镜像，再进行系统更新。
 
+# 配置dnf以加快软件下载速度（启用最快的镜像）
+echo "为DNF配置最快的镜子..."
+echo 'fastestmirror=1' | sudo tee -a /etc/dnf/dnf.conf
+echo 'max_parallel_downloads=10' | sudo tee -a /etc/dnf/dnf.conf
+
 # 清华 Fedora 镜像源 https://mirrors.tuna.tsinghua.edu.cn/help/fedora/
 # 配置dnf以加快软件下载速度（启用最快的镜像）
 echo "使用清华源配置Fedora的加速镜像..."
@@ -60,8 +65,9 @@ git config --global user.email "2320391937@qq.com"
 
 # 安装 Firefox 相关组件
 sudo dnf install -y \
-mozilla-openh264 \
+multimedia \
 mozilla-ublock-origin \
+mozilla-openh264 \
 gstreamer1-plugin-openh264
 
 # 图形界面工具: gnome-tweaks, gnome-extensions-app
