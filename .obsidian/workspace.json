@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "fedora/5、Fedora 安装常用软件.md",
+                "file": "fedora/2、Fedora 主题和字体安装配置.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "5、Fedora 安装常用软件"
+              "title": "2、Fedora 主题和字体安装配置"
             }
           }
         ]
@@ -180,10 +180,10 @@
   },
   "active": "d505fa1d93e2e9bb",
   "lastOpenFiles": [
+    "fedora/5、Fedora 安装常用软件.md",
     "fedora/1、Fedora 初次安装后配置加速镜像.md",
     "fedora/3、Fedora 扩展安装和配置.md",
     "fedora/2、Fedora 主题和字体安装配置.md",
-    "fedora/5、Fedora 安装常用软件.md",
     "fedora/fedora自动化配置脚本/setup.sh",
     "fedora/fedora自动化配置脚本",
     "fedora/4、Fedora 系统优化.md",
