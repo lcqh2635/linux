@@ -28,12 +28,13 @@ org.gnome.gitlab.somas.Apostrophe
 flatpak install -y flathub \
 com.qq.QQ \
 com.tencent.WeChat \
-com.tencent.wemeet \
 io.github.qier222.YesPlayMusic \
 com.baidu.NetDisk \
 md.obsidian.Obsidian \
-io.typora.Typora \
 io.github.alainm23.planify
+
+com.tencent.wemeet \
+io.typora.Typora \
 
 
 # 开发工具
