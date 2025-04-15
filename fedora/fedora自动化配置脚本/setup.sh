@@ -1,0 +1,145 @@
+#!/bin/bash
+
+# 基础窗口优化
+gsettings set org.gnome.desktop.wm.preferences button-layout 'appmenu:minimize,maximize,close'
+gsettings set org.gnome.mutter center-new-windows true
+gsettings set org.gnome.desktop.interface show-battery-percentage true
+# 为了确保系统能够以最快的速度完成更新和软件安装，通常建议先配置加速镜像，再进行系统更新。
+
+# 配置dnf以加快软件下载速度（启用最快的镜像）
+echo "开始为DNF配置最快的加速镜像..."
+echo 'fastestmirror=1' | sudo tee -a /etc/dnf/dnf.conf
+echo 'max_parallel_downloads=10' | sudo tee -a /etc/dnf/dnf.conf
+# Fedora默认安装了Flatpak，只要配置Flatpak加速镜像即可
+echo "开始配置Flatpak加速镜像..."
+# 添加 Flathub 官方仓库
+flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
+# 修改 Flathub 仓库地址为国内镜像
+# 1、上海交大 Flatpak 镜像源 https://mirrors.sjtug.sjtu.edu.cn/docs/flathub
+# sudo flatpak remote-modify flathub --url=https://mirror.sjtu.edu.cn/flathub
+# 2、中科大 Flatpak 镜像源（处于测试阶段） https://mirrors.ustc.edu.cn/help/flathub.html
+sudo flatpak remote-modify flathub --url=https://mirrors.ustc.edu.cn/flathub
+# 更新系统并升级所有已安装的包
+echo "开始系统..."
+sudo dnf update -y && sudo dnf upgrade -y
+
+
+# 安装常用软件
+echo "安装系统基础软件..."
+# 常用工具: git, vim, wget, curl, htop, net-tools
+sudo dnf install -y \
+git vim wget curl htop net-tools \
+fastfetch
+
+sudo dnf install -y \
+git unzip p7zip wl-clipboard \
+fastfetch timeshift evolution \
+google-chrome-stable \
+libreoffice-langpack-zh-Hans
+# 配置Git（需要根据你的实际情况修改用户名和邮箱）
+echo "配置 Git..."
+git config --global user.name "龙茶清欢"
+git config --global user.email "2320391937@qq.com"
+
+# 安装 Firefox 相关组件
+sudo dnf install -y \
+mozilla-openh264 \
+mozilla-ublock-origin \
+gstreamer1-plugin-openh264
+
+# 图形界面工具: gnome-tweaks, gnome-extensions-app
+sudo dnf install -y gnome-tweaks gnome-extensions-app
+# 安装 Gnome 扩展管理
+flatpak install -y flathub com.mattjakeman.ExtensionManager
+
+# 安装配置系统字体
+sudo dnf install -y \
+adobe-source-han-sans-cn-fonts \
+adobe-source-han-serif-cn-fonts \
+jetbrains-mono-fonts
+# 设置系统字体
+gsettings set org.gnome.desktop.interface font-name '思源黑体 CN Medium 12'
+gsettings set org.gnome.desktop.interface document-font-name '思源宋体 CN Medium 12'
+gsettings set org.gnome.desktop.interface monospace-font-name 'JetBrains Mono Medium 12'
+gsettings set org.gnome.desktop.wm.preferences titlebar-font '思源黑体 CN Bold 12'
+gsettings set org.gnome.desktop.interface font-antialiasing 'rgba'
+gsettings set org.gnome.desktop.interface font-hinting 'slight'
+
+# 系统必装 Gnome 扩展
+sudo dnf install -y \
+gnome-shell-extension-user-theme \
+gnome-shell-extension-dash-to-dock \
+gnome-shell-extension-blur-my-shell \
+gnome-shell-extension-just-perfection \
+gnome-shell-extension-drive-menu
+
+# 系统外观主题和Gnome扩展插件优化
+# 在 Github 发现一个好项目 adw-gtk3	https://github.com/lassekongo83/adw-gtk3
+sudo dnf install -y adw-gtk3-theme la-capitaine-cursor-theme
+# 系统外观优化
+gsettings set org.gnome.desktop.interface color-scheme 'default'
+gsettings set org.gnome.desktop.interface cursor-theme 'capitaine-cursors'
+gsettings set org.gnome.desktop.interface icon-theme 'Adwaita'
+gsettings set org.gnome.shell.extensions.user-theme name 'Adwaita'
+gsettings set org.gnome.desktop.interface gtk-theme 'adw-gtk3'
+# dash-to-dock 扩展优化
+gsettings set org.gnome.shell.extensions.dash-to-dock hot-keys false
+gsettings set org.gnome.shell.extensions.dash-to-dock click-action 'minimize'
+gsettings set org.gnome.shell.extensions.dash-to-dock scroll-action 'cycle-windows'
+gsettings set org.gnome.shell.extensions.dash-to-dock custom-theme-shrink true
+gsettings set org.gnome.shell.extensions.dash-to-dock running-indicator-style 'DASHES'
+gsettings set org.gnome.shell.extensions.dash-to-dock running-indicator-dominant-color true
+# blur-my-shell 扩展优化
+gsettings set org.gnome.shell.extensions.blur-my-shell.panel force-light-text true
+gsettings set org.gnome.shell.extensions.blur-my-shell.panel style-panel 1
+gsettings set org.gnome.shell.extensions.blur-my-shell.hidetopbar compatibility true
+gsettings set org.gnome.shell.extensions.blur-my-shell.appfolder style-dialogs 2
+gsettings set org.gnome.shell.extensions.blur-my-shell.dash-to-dock style-dash-to-dock 1
+gsettings set org.gnome.shell.extensions.blur-my-shell.applications blur true
+gsettings set org.gnome.shell.extensions.blur-my-shell.applications sigma 40
+gsettings set org.gnome.shell.extensions.blur-my-shell.applications dynamic-opacity false
+org.gnome.shell.extensions.blur-my-shell.applications whitelist ['org.gnome.Settings', 'org.gnome.Software', 'org.gnome.TextEditor', 'org.gnome.SystemMonitor', 'org.gnome.tweaks', 'org.gnome.Extensions', 'org.gnome.Shell.Extensions', 'com.mattjakeman.ExtensionManager', 'org.gnome.Builder', 'org.gnome.Loupe', 'org.gnome.gitlab.somas.Apostrophe', 'io.github.alainm23.planify', 'com.github.tchx84.Flatseal', 'io.github.flattool.Warehouse']
+# just-perfection 扩展优化
+gsettings set org.gnome.shell.extensions.just-perfection accessibility-menu false
+gsettings set org.gnome.shell.extensions.just-perfection world-clock false
+gsettings set org.gnome.shell.extensions.just-perfection weather false
+gsettings set org.gnome.shell.extensions.just-perfection events-button false
+gsettings set org.gnome.shell.extensions.just-perfection window-demands-attention-focus true
+gsettings set org.gnome.shell.extensions.just-perfection startup-status 0
+
+# 安装一些常用的Flatpak应用（如VSCode, LibreOffice）
+echo "安装基础Flatpak应用程序..."
+flatpak install -y flathub \
+com.github.tchx84.Flatseal \
+io.github.flattool.Warehouse \
+io.github.realmazharhussain.GdmSettings \
+io.github.vikdevelop.SaveDesktop \
+io.github.seadve.Kooha \
+org.gnome.seahorse.Application \
+org.gnome.Firmware \
+org.gnome.Gtranslator \
+de.haeckerfelix.Fragments \
+org.gnome.gitlab.somas.Apostrophe
+
+# 启用并启动防火墙服务
+echo "启用和启动防火墙..."
+# 在 Fedora 中，默认的防火墙 firewalld 已安装，但还需要自行安装图形化的防火墙管理工具
+sudo dnf install firewall-config -y
+sudo systemctl enable --now firewalld
+# 配置防火墙规则（例如允许HTTP和HTTPS）
+echo "配置防火墙规则..."
+sudo firewall-cmd --permanent --add-service=http
+sudo firewall-cmd --permanent --add-service=https
+sudo firewall-cmd --reload
+
+# 安装电源管理 TLP 优化续航（笔记本用户）
+sudo dnf install -y tlp tlp-rdw
+sudo systemctl enable --now tlp
+systemctl status tlp
+
+# 清理无用的包和缓存
+echo "清理未使用的软件包和缓存..."
+sudo dnf autoremove -y
+sudo dnf clean all
+
+echo "系统配置成功完成!"

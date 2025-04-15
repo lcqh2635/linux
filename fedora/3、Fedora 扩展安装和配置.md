@@ -212,17 +212,76 @@ gsettings list-keys org.gnome.shell.extensions.just-perfection
 # 递归列出某个 Schema 的键值
 gsettings list-recursively org.gnome.shell.extensions.just-perfection
 
-gsettings set org.gnome.shell.extensions.just-perfection hide-activities-button true  # 隐藏活动按钮
-gsettings set org.gnome.shell.extensions.just-perfection animation-speed 0.7  # 加快动画
-
-# 隐藏活动按钮（左上角）
-gsettings set org.gnome.shell.extensions.just-perfection hide-activities-button true
-
-# 禁用工作区切换动画
-gsettings set org.gnome.shell.extensions.just-perfection workspace-switcher-should-show false
-
-# 加快窗口动画（类似 macOS）
-gsettings set org.gnome.shell.extensions.just-perfection animation-speed 0.7
+org.gnome.shell.extensions.just-perfection accent-color-icon false
+org.gnome.shell.extensions.just-perfection accessibility-menu false
+org.gnome.shell.extensions.just-perfection activities-button true
+org.gnome.shell.extensions.just-perfection alt-tab-icon-size 0
+org.gnome.shell.extensions.just-perfection alt-tab-small-icon-size 0
+org.gnome.shell.extensions.just-perfection alt-tab-window-preview-size 0
+org.gnome.shell.extensions.just-perfection animation 1
+org.gnome.shell.extensions.just-perfection background-menu true
+org.gnome.shell.extensions.just-perfection calendar true
+org.gnome.shell.extensions.just-perfection clock-menu true
+org.gnome.shell.extensions.just-perfection clock-menu-position 0
+org.gnome.shell.extensions.just-perfection clock-menu-position-offset 0
+org.gnome.shell.extensions.just-perfection controls-manager-spacing-size 0
+org.gnome.shell.extensions.just-perfection dash true
+org.gnome.shell.extensions.just-perfection dash-app-running true
+org.gnome.shell.extensions.just-perfection dash-icon-size 0
+org.gnome.shell.extensions.just-perfection dash-separator true
+org.gnome.shell.extensions.just-perfection double-super-to-appgrid true
+org.gnome.shell.extensions.just-perfection events-button false
+org.gnome.shell.extensions.just-perfection invert-calendar-column-items false
+org.gnome.shell.extensions.just-perfection keyboard-layout true
+org.gnome.shell.extensions.just-perfection looking-glass-height 0
+org.gnome.shell.extensions.just-perfection looking-glass-width 0
+org.gnome.shell.extensions.just-perfection max-displayed-search-results 1
+org.gnome.shell.extensions.just-perfection notification-banner-position 1
+org.gnome.shell.extensions.just-perfection osd true
+org.gnome.shell.extensions.just-perfection osd-position 0
+org.gnome.shell.extensions.just-perfection overlay-key true
+org.gnome.shell.extensions.just-perfection panel true
+org.gnome.shell.extensions.just-perfection panel-button-padding-size 0
+org.gnome.shell.extensions.just-perfection panel-corner-size 0
+org.gnome.shell.extensions.just-perfection panel-icon-size 0
+org.gnome.shell.extensions.just-perfection panel-in-overview false
+org.gnome.shell.extensions.just-perfection panel-indicator-padding-size 0
+org.gnome.shell.extensions.just-perfection panel-notification-icon true
+org.gnome.shell.extensions.just-perfection panel-size 0
+org.gnome.shell.extensions.just-perfection power-icon true
+org.gnome.shell.extensions.just-perfection quick-settings true
+org.gnome.shell.extensions.just-perfection quick-settings-airplane-mode true
+org.gnome.shell.extensions.just-perfection quick-settings-dark-mode true
+org.gnome.shell.extensions.just-perfection quick-settings-night-light true
+org.gnome.shell.extensions.just-perfection ripple-box true
+org.gnome.shell.extensions.just-perfection screen-recording-indicator true
+org.gnome.shell.extensions.just-perfection screen-sharing-indicator true
+org.gnome.shell.extensions.just-perfection search true
+org.gnome.shell.extensions.just-perfection show-apps-button true
+org.gnome.shell.extensions.just-perfection startup-status 0
+org.gnome.shell.extensions.just-perfection support-notifier-showed-version 34
+org.gnome.shell.extensions.just-perfection support-notifier-type 1
+org.gnome.shell.extensions.just-perfection switcher-popup-delay true
+org.gnome.shell.extensions.just-perfection theme false
+org.gnome.shell.extensions.just-perfection top-panel-position 0
+org.gnome.shell.extensions.just-perfection type-to-search true
+org.gnome.shell.extensions.just-perfection weather false
+org.gnome.shell.extensions.just-perfection window-demands-attention-focus true
+org.gnome.shell.extensions.just-perfection window-maximized-on-create false
+org.gnome.shell.extensions.just-perfection window-menu-take-screenshot-button true
+org.gnome.shell.extensions.just-perfection window-picker-icon true
+org.gnome.shell.extensions.just-perfection window-preview-caption true
+org.gnome.shell.extensions.just-perfection window-preview-close-button true
+org.gnome.shell.extensions.just-perfection workspace true
+org.gnome.shell.extensions.just-perfection workspace-background-corner-size 0
+org.gnome.shell.extensions.just-perfection workspace-peek true
+org.gnome.shell.extensions.just-perfection workspace-popup true
+org.gnome.shell.extensions.just-perfection workspace-switcher-should-show false
+org.gnome.shell.extensions.just-perfection workspace-switcher-size 0
+org.gnome.shell.extensions.just-perfection workspace-thumbnail-to-main-view false
+org.gnome.shell.extensions.just-perfection workspace-wrap-around false
+org.gnome.shell.extensions.just-perfection workspaces-in-app-grid true
+org.gnome.shell.extensions.just-perfection world-clock false
 ```
 
 #### **6. AppIndicator and KStatusNotifierItem Support**  

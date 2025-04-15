@@ -40,7 +40,7 @@ Fedora 默认使用 **Adwaita** 主题，可以更换为更流行的主题（如
 
 ### **方法 1：通过 `dnf` 安装官方主题**
 ```bash
-在 Github 范县一个好项目 adw-gtk3
+# 在 Github 范县一个好项目 adw-gtk3
 https://github.com/lassekongo83/adw-gtk3
 
 # 在 Fedora 中安装 adw-gtk3-theme 安装后的主题存放目录 ~/.local/share/themes/
@@ -53,6 +53,7 @@ flatpak install org.gtk.Gtk3theme.adw-gtk3 org.gtk.Gtk3theme.adw-gtk3-dark
 # 2-2、或者，可以使用 FlatPak override。使用此选项的好处是，将对 Flathub 中的非 libadwaita GTK4 应用程序设置样式。为此，主题必须安装在 ~/.local/share/themes 中。从终端运行：
 sudo flatpak override --filesystem=xdg-data/themes && sudo flatpak mask org.gtk.Gtk3theme.adw-gtk3 && sudo flatpak mask org.gtk.Gtk3theme.adw-gtk3-dark
 
+sudo flatpak override --reset
 # 3、然后，您可以在应用程序 gnome-tweaks 中启用 adw-gtk3。（某些应用程序可能需要重新登录）
 
 # 如果你使用 dark 主题，你还需要在 设置 中启用 dark 外观。或者，您可以使用终端设置主题：
@@ -63,15 +64,24 @@ gsettings set org.gnome.desktop.interface gtk-theme 'adw-gtk3-dark' && gsettings
 # 3、恢复到 GNOME 的默认主题：
 gsettings set org.gnome.desktop.interface gtk-theme 'Adwaita' && gsettings set org.gnome.desktop.interface color-scheme 'default'
 
-# 自定义
-# 如果您想在 GNOME 47 或更高版本中更改大多数应用程序的强调色（修改窗口控制按钮颜色），那么您可以使用小的 cli 程序 accent-color-change。
+# 自定义 adw-gtk3 主题 （修改窗口控制按钮颜色）
+https://github.com/lassekongo83/adw-colors
+
+sudo flatpak override --filesystem=xdg-config/gtk-3.0 && sudo flatpak override --filesystem=xdg-config/gtk-4.0
+
+
+# 如果您想在 GNOME 47 或更高版本中更改大多数应用程序的强调色，那么您可以使用小的 cli 程序 accent-color-change。
 https://github.com/lassekongo83/adw-colors/tree/main/accent-color-change
+wget https://github.com/lassekongo83/adw-colors/raw/refs/heads/main/accent-color-change/accent-color-change.sh
+
+sh accent-color-change.sh
 # Adw-gtk3 和 libadwaita 可以使用 GTK 命名颜色进行自定义。有关更多信息，请参阅 adw-colors。
 # 注意： GTK3 不支持 GNOME 47 中引入的强调色功能。只有 libadwaita 可以。
 
 
 # https://github.com/birneee/obsidian-adwaita-theme
-
+# 在 Obsidian 中，转到“设置”>“选项”>“外观”>“主题”>“管理”，搜索 Adwaita 并安装
+# （可选）安装 Obsidian Style Settings Plugin 进行自定义。在 设置 > 社区插件 下进行调整 > 样式设置 > Adwaita
 
 # 推荐安装支持 GTK4 + Libadwaita 的 GTK 主题 https://drasite.com/
 # Flat Remix GTK	https://www.gnome-look.org/p/1214931
@@ -82,9 +92,6 @@ git clone https://github.com/daniruiz/GNOME-4X-themes.git
 ./install.sh
 ./uninstall.sh
 
-# 安装 Adwaita 暗色变体
-sudo dnf install adwaita-dark
-
 
 # Gnome 官方主题
 sudo dnf install -y \
@@ -92,7 +99,7 @@ adwaita-fonts-all \
 adwaita-cursor-theme \
 adwaita-icon-theme \
 
-qadwaitadecorations-qt5.x86_64
+qadwaitadecorations-qt5
 
 
 # https://github.com/lassekongo83/adw-gtk3

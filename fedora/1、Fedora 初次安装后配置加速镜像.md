@@ -242,10 +242,14 @@ cat ~/.ssh/id_rsa.pub | wl-copy
 sudo dnf group install multimedia
 
 dnf list installed
-sudo dnf install gnome-terminal
 sudo dnf install dnf-plugins-core
+
 # 参考 https://docs.fedoraproject.org/zh_CN/quick-docs/openh264/#_firefox_config_changes
-sudo dnf install gstreamer1-plugin-openh264 mozilla-openh264 mozilla-ublock-origin
+sudo dnf install -y \
+mozilla-openh264 \
+mozilla-ublock-origin \
+gstreamer1-plugin-openh264 \
+
 # 配置 Firefox
 在 Firefox 地址栏中键入 about:config 并接受警告。
 在搜索字段中，输入 264，将出现一些选项。通过双击 false，为以下 Preference Names 指定 true 值：
