@@ -32,10 +32,13 @@ gsettings set org.gnome.desktop.interface font-hinting 'slight'
 # Fedora 系统默认自带的主题存放目录
 # 光标主题：
 ls /usr/share/icons/
+ls /usr/share/icons/Adwaita/cursors/
 # 图标主题：
 ls /usr/share/icons/
+ls /usr/share/icons/Adwaita/
 # GTK 主题和 GNOME Shell 主题：
 ls /usr/share/themes/
+ls /usr/share/themes/Adwaita/
 
 # Fedora 用户安装的主题存放目录
 ls ~/.icons/

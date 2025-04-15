@@ -6,10 +6,27 @@ gsettings set org.gnome.mutter center-new-windows true
 gsettings set org.gnome.desktop.interface show-battery-percentage true
 # 为了确保系统能够以最快的速度完成更新和软件安装，通常建议先配置加速镜像，再进行系统更新。
 
+# 清华 Fedora 镜像源 https://mirrors.tuna.tsinghua.edu.cn/help/fedora/
 # 配置dnf以加快软件下载速度（启用最快的镜像）
-echo "开始为DNF配置最快的加速镜像..."
-echo 'fastestmirror=1' | sudo tee -a /etc/dnf/dnf.conf
-echo 'max_parallel_downloads=10' | sudo tee -a /etc/dnf/dnf.conf
+echo "使用清华源配置Fedora的加速镜像..."
+sudo sed -e 's|^metalink=|#metalink=|g' \
+    -e 's|^#baseurl=http://download.example/pub/fedora/linux|baseurl=https://mirrors.tuna.tsinghua.edu.cn/fedora|g' \
+    -i.bak \
+    /etc/yum.repos.d/fedora.repo \
+    /etc/yum.repos.d/fedora-updates.repo
+# 最后运行 sudo dnf makecache 生成缓存
+sudo dnf makecache
+    
+# 清华 RPMFusion 镜像源 https://mirrors.tuna.tsinghua.edu.cn/help/rpmfusion/
+# 1、首先安装提供基础配置文件和 GPG 密钥的 rpmfusion-*.rpm。
+sudo yum install --nogpgcheck https://mirrors.tuna.tsinghua.edu.cn/rpmfusion/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm https://mirrors.tuna.tsinghua.edu.cn/rpmfusion/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm
+# 2、安装成功后，修改链接指向镜像站   
+sudo sed -e 's!^metalink=!#metalink=!g' \
+         -e 's!^mirrorlist=!#mirrorlist=!g' \
+         -e 's!^#baseurl=!baseurl=!g' \
+         -e 's!https\?://download1\.rpmfusion\.org/!https://mirrors.tuna.tsinghua.edu.cn/rpmfusion/!g' \
+         -i.bak /etc/yum.repos.d/rpmfusion*.repo
+    
 # Fedora默认安装了Flatpak，只要配置Flatpak加速镜像即可
 echo "开始配置Flatpak加速镜像..."
 # 添加 Flathub 官方仓库
@@ -19,10 +36,10 @@ flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.f
 # sudo flatpak remote-modify flathub --url=https://mirror.sjtu.edu.cn/flathub
 # 2、中科大 Flatpak 镜像源（处于测试阶段） https://mirrors.ustc.edu.cn/help/flathub.html
 sudo flatpak remote-modify flathub --url=https://mirrors.ustc.edu.cn/flathub
+
 # 更新系统并升级所有已安装的包
 echo "开始系统..."
 sudo dnf update -y && sudo dnf upgrade -y
-
 
 # 安装常用软件
 echo "安装系统基础软件..."

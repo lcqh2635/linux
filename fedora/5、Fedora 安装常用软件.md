@@ -90,6 +90,7 @@ flatpak install flathub me.iepure.devtoolbox -y
 
 # 一键安装 Watt Toolkit 软件脚本，参考 https://steampp.net/
 # 安装后还需要额外处理一些问题 https://steampp.net/liunxSetupCer
+# 安装目录     /home/lcqh/.local/share/WattToolkit
 curl -sSL https://steampp.net/Install/Linux.sh | bash
 # 处理 Watt Toolkit 程序没有 Host 文件权限
 sudo chmod a+w /etc/hosts
