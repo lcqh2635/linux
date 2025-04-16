@@ -29,7 +29,7 @@ sudo dnf install openjdk maven
 
 # 安装 SDKMAN!
 curl -s "https://get.sdkman.io" | bash
-source "$HOME/.sdkman/bin/sdkman-init.sh"
+source "/home/lcqh/.sdkman/bin/sdkman-init.sh"
 
 # 安装 JDK（示例：安装 Temurin JDK 17）
 sdk install java 21.0.6-tem
@@ -94,6 +94,8 @@ cat ~/.bunfig.toml
 # 验证安装
 node --version
 bun --version
+
+dnf search chat2db
 ```
 
 ---
