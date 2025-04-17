@@ -59,6 +59,12 @@ Fedora 默认使用 **Adwaita** 主题，可以更换为更流行的主题（如
 ```bash
 # 在 Github 范县一个好项目 adw-gtk3
 https://github.com/lassekongo83/adw-gtk3
+https://github.com/GabePoel/KvLibadwaita
+https://github.com/rafaelmardojai/firefox-gnome-theme
+https://github.com/tkashkin/Adwaita-for-Steam
+https://github.com/piousdeer/vscode-adwaita
+https://github.com/birneee/obsidian-adwaita-theme
+
 
 # 在 Fedora 中安装 adw-gtk3-theme 安装后的主题存放目录 ~/.local/share/themes/
 sudo dnf install -y adw-gtk3-theme
@@ -68,6 +74,7 @@ sudo dnf install -y adw-gtk3-theme
 flatpak install org.gtk.Gtk3theme.adw-gtk3 org.gtk.Gtk3theme.adw-gtk3-dark
 
 # 2-2、或者，可以使用 FlatPak override。使用此选项的好处是，将对 Flathub 中的非 libadwaita GTK4 应用程序设置样式。为此，主题必须安装在 ~/.local/share/themes 中。从终端运行：
+ls ~/.local/share/themes
 sudo flatpak override --filesystem=xdg-data/themes && sudo flatpak mask org.gtk.Gtk3theme.adw-gtk3 && sudo flatpak mask org.gtk.Gtk3theme.adw-gtk3-dark
 
 sudo flatpak override --reset
@@ -99,6 +106,13 @@ sh accent-color-change.sh
 # https://github.com/birneee/obsidian-adwaita-theme
 # 在 Obsidian 中，转到“设置”>“选项”>“外观”>“主题”>“管理”，搜索 Adwaita 并安装
 # （可选）安装 Obsidian Style Settings Plugin 进行自定义。在 设置 > 社区插件 下进行调整 > 样式设置 > Adwaita
+
+
+wget https://github.com/dpejoh/Adwaita-colors/releases/download/v2.4.1/adwaita-colors-theme-2.4.1.rpm
+sudo dnf install adwaita-colors-theme-2.4.1.rpm
+# 安装如下 Gnome 扩展
+Auto Adwaita Colors
+
 
 # 推荐安装支持 GTK4 + Libadwaita 的 GTK 主题 https://drasite.com/
 # Flat Remix GTK	https://www.gnome-look.org/p/1214931

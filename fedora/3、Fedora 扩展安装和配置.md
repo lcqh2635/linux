@@ -18,7 +18,21 @@ gnome-shell-extension-user-theme \
 gnome-shell-extension-dash-to-dock \
 gnome-shell-extension-blur-my-shell \
 gnome-shell-extension-just-perfection \
-gnome-shell-extension-drive-menu
+gnome-shell-extension-drive-menu \
+gnome-shell-extension-appindicator
+
+# gnome-shell-extension-appindicator 和 Tray Icons: Reloaded 二选一，推荐使用前者
+
+# 待选 Gnome 扩展
+sudo dnf install -y \
+gnome-shell-extension-gsconnect
+gnome-shell-extension-forge
+gnome-shell-extension-workspace-indicator
+gnome-shell-extension-auto-move-windows
+gnome-shell-extension-caffeine
+gnome-shell-extension-places-menu
+gnome-shell-extension-apps-menu
+
 
 gsettings set org.gnome.shell.extensions.dash-to-dock animation-time 0.5
 gsettings set org.gnome.shell.extensions.dash-to-dock hot-keys false
@@ -33,25 +47,20 @@ gsettings set org.gnome.shell.extensions.blur-my-shell.hidetopbar compatibility 
 gsettings set org.gnome.shell.extensions.blur-my-shell.appfolder style-dialogs 2
 gsettings set org.gnome.shell.extensions.blur-my-shell.dash-to-dock style-dash-to-dock 1
 
-# 待选 Gnome 扩展
-gnome-shell-extension-caffeine
-gnome-shell-extension-workspace-indicator
-gnome-shell-extension-auto-move-windows
-gnome-shell-extension-appindicator
+
 
 # 用户比装 Gnome 扩展
 Hide Top Bar
 # 修复 Hide Top Bar 闪跳 BUG
-Disable unredirect fullscreen windows
-Rounded Window Corners Reborn
+Disable unredirect
 Rounded Corners
+Rounded Window Corners Reborn
 # 数值设置为 5
 Status Area Horizontal Spacing
-
+Alphabetical App Grid
 
 # 优质推荐 Gnome 扩展
 Add to Desktop
-Alphabetical App Grid
 Bluetooth Quick Connect
 Clipboard Indicator
 Coverflow Alt-Tab
@@ -59,6 +68,7 @@ Compiz windows effect
 Compiz alike magic lamp effect
 Desktop Cube
 Dynamic Panel
+Open Bar
 Dash2Dock Animated
 Extension List
 Gtk4 Desktop Icons NG (DING)
@@ -76,8 +86,10 @@ Quick Settings Tweaks
 Search Light
 SettingsCenter
 Top Bar Organizer
-Tray Icons: Reloaded
+# Tray Icons: Reloaded
 User Avatar In Quick Settings
+Quick Settings Audio Panel
+Fedora Linux Update Indicator
 Window Gestures
 VirtualBox applet
 # https://github.com/Sominemo/Fildem-Gnome-45
@@ -86,7 +98,15 @@ Custom Window Controls
 # https://extensions.gnome.org/extension/6300/custom-window-controls/
 # https://github.com/icedman/custom-window-controls
 Custom Command Toggle
+Color Picker
+Show Desktop Button
+Bluetooth Battery Meter
 
+# 桌面小组件
+https://github.com/brndnmtthws/conky
+https://copr.fedorainfracloud.org/coprs/geraldosimiao/conky-manager2/
+sudo dnf install -y conky
+sudo dnf copr enable geraldosimiao/conky-manager2
 
 
 # 解决用户 Gnome 扩展无法使用 gsettings 的问题
@@ -105,6 +125,11 @@ done
 glib-compile-schemas ~/.local/share/glib-2.0/schemas/
 
 gsettings set org.gnome.shell.extensions.hidetopbar mouse-sensitive true
+
+
+# 窗口统一圆角
+https://github.com/yilozt/mutter-rounded
+https://github.com/yilozt/mutter-rounded-setting
 ```
 或通过浏览器安装扩展：
 1. 安装浏览器插件 [GNOME Shell Integration](https://extensions.gnome.org/)

@@ -5,6 +5,13 @@
 ### **📌 安装方法**
 #### **1. 启用 Flathub（推荐）**
 ```bash
+# 安装 ohmyzsh
+https://github.com/ohmyzsh/ohmyzsh
+zsh --version
+sudo dnf install zsh -y
+chsh -s $(which zsh)
+sh -c "$(curl -fsSL https://install.ohmyz.sh/)"
+
 # 基础系统工具
 flatpak install -y flathub \
 com.github.tchx84.Flatseal \
@@ -40,6 +47,7 @@ io.typora.Typora \
 # 开发工具
 flatpak install -y flathub \
 com.jetbrains.IntelliJ-IDEA-Ultimate \
+com.visualstudio.code \
 me.iepure.devtoolbox \
 cn.apipost.apipost
 
