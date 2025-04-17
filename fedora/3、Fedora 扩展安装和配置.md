@@ -81,6 +81,12 @@ User Avatar In Quick Settings
 Window Gestures
 VirtualBox applet
 # https://github.com/Sominemo/Fildem-Gnome-45
+App menu is back
+Custom Window Controls
+# https://extensions.gnome.org/extension/6300/custom-window-controls/
+# https://github.com/icedman/custom-window-controls
+Custom Command Toggle
+
 
 
 # 解决用户 Gnome 扩展无法使用 gsettings 的问题

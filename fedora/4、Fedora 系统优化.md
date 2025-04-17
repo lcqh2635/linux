@@ -40,10 +40,34 @@ keepcache=False
 ---
 
 ### **二、性能优化**
-#### **1. 启用 EarlyOOM（防止内存不足卡死）**
+#### **1. Firefox 视频播放优化**
 ```bash
-sudo dnf install earlyoom
-sudo systemctl enable --now earlyoom
+
+# 安装 Firefox 相关组件
+sudo dnf install -y \
+multimedia \
+mozilla-ublock-origin \
+mozilla-openh264 \
+gstreamer1-plugin-openh264
+# 安装必要的多媒体编解码器以支持高效的视频解码	about:support
+sudo dnf install ffmpeg gstreamer1-plugins-{bad-\*,good-\*,base} gstreamer1-libav -y
+# 确认VA-API驱动已安装
+sudo dnf install mesa-va-drivers mesa-vdpau-drivers libva-utils
+vainfo
+
+# about:support
+
+
+media.ffmpeg.vaapi.enabled = true
+media.vaapi.enabled = true
+media.rdd-ffmpeg.enabled = true  # 允许远程进程使用FFmpeg
+media.navigator.mediadatadecode_vpx_enabled = true  # 针对VP9
+
+# 强制开启WebRender合成
+# 在 about:config 中设置：
+gfx.webrender.all = true
+gfx.webrender.compositor = true  # Wayland下更有效
+layers.acceleration.force-enabled = true
 ```
 
 #### **2. 调整 Swappiness（减少交换分区使用）**

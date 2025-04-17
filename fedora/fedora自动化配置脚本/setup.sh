@@ -69,6 +69,13 @@ multimedia \
 mozilla-ublock-origin \
 mozilla-openh264 \
 gstreamer1-plugin-openh264
+# 安装必要的多媒体编解码器以支持高效的视频解码	about:support
+sudo dnf install ffmpeg gstreamer1-plugins-{bad-\*,good-\*,base} gstreamer1-libav -y
+# 确认VA-API驱动已安装
+sudo dnf install mesa-va-drivers mesa-vdpau-drivers libva-utils
+sudo dnf install mesa-vdpau-drivers vulkan-loader vulkan-tools
+vainfo
+
 
 # 图形界面工具: gnome-tweaks, gnome-extensions-app
 sudo dnf install -y gnome-tweaks gnome-extensions-app
