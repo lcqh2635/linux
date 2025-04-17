@@ -19,7 +19,14 @@ gnome-shell-extension-dash-to-dock \
 gnome-shell-extension-blur-my-shell \
 gnome-shell-extension-just-perfection \
 gnome-shell-extension-drive-menu \
-gnome-shell-extension-appindicator
+gnome-shell-extension-appindicator \
+gnome-shell-extension-forge \
+gnome-shell-extension-caffeine \
+gnome-shell-extension-workspace-indicator \
+gnome-shell-extension-auto-move-windows \
+gnome-shell-extension-places-menu \
+gnome-shell-extension-apps-menu
+
 
 # gnome-shell-extension-appindicator 和 Tray Icons: Reloaded 二选一，推荐使用前者
 
@@ -48,22 +55,24 @@ gsettings set org.gnome.shell.extensions.blur-my-shell.appfolder style-dialogs 2
 gsettings set org.gnome.shell.extensions.blur-my-shell.dash-to-dock style-dash-to-dock 1
 
 
-
+Logo Menu
+Alphabetical App Grid
 # 用户比装 Gnome 扩展
 Hide Top Bar
 # 修复 Hide Top Bar 闪跳 BUG
 Disable unredirect
 Rounded Corners
 Rounded Window Corners Reborn
+Coverflow Alt-Tab
+User Avatar In Quick Settings
 # 数值设置为 5
 Status Area Horizontal Spacing
-Alphabetical App Grid
+
 
 # 优质推荐 Gnome 扩展
 Add to Desktop
 Bluetooth Quick Connect
 Clipboard Indicator
-Coverflow Alt-Tab
 Compiz windows effect
 Compiz alike magic lamp effect
 Desktop Cube
@@ -78,7 +87,6 @@ Gtk4 Desktop Icons NG (DING)
 # cd ChineseCalendar-20250205
 # ./install.sh
 Lunar Calendar 农历
-Logo Menu
 IBus Tweaker
 Night Theme Switcher
 Notification Banner Reloaded
@@ -87,7 +95,6 @@ Search Light
 SettingsCenter
 Top Bar Organizer
 # Tray Icons: Reloaded
-User Avatar In Quick Settings
 Quick Settings Audio Panel
 Fedora Linux Update Indicator
 Window Gestures
@@ -372,15 +379,6 @@ sudo dnf install gnome-shell-extension-vitals
 gsettings set org.gnome.shell.extensions.vitals monitors "['cpu', 'memory', 'temperature']"
 ```
 
-#### 1. **Tray Icons: Reloaded**  
-**评分**: ★★★★★ (解决 GNOME 40+ 托盘图标兼容性问题)  
-**作用**: 完美支持传统应用托盘图标（如 QQ、Steam、WPS）。  
-**安装**:
-```bash
-sudo dnf install gnome-shell-extension-tray-icons-reloaded
-```
-**配置**：安装后自动生效，无需额外设置。
-
 ---
 
 #### 2. **Quick Settings Tweaks**  
@@ -655,14 +653,13 @@ gsettings reset-recursively org.gnome.shell.extensions.just-perfection
 # 列出所有已安装的 Schema
 gsettings list-schemas
 # 列出某个 Schema 下的所有键
-gsettings list-keys org.gnome.shell.extensions.just-perfection
+gsettings list-keys org.gnome.shell.extensions.coverflowalttab
 # 递归列出某个 Schema 的键值
-gsettings list-recursively org.gnome.shell.extensions.just-perfection
+gsettings list-recursively org.gnome.shell.extensions.coverflowalttab
 
-# 设置动画速度（1-10）
-gsettings set org.gnome.shell.extensions.coverflow-alttab animation-duration 3
-# 启用模糊背景
-gsettings set org.gnome.shell.extensions.coverflow-alttab blur-background true
+gsettings set org.gnome.shell.extensions.coverflowalttab animation-time 0.5
+gsettings set org.gnome.shell.extensions.coverflowalttab easing-function 'ease-in-out-sine'
+gsettings set org.gnome.shell.extensions.coverflowalttab preview-to-monitor-ratio 0.75
 ```
 
 #### 5. **Night Theme Switcher**  

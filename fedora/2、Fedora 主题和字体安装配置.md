@@ -1026,3 +1026,4 @@ gsettings set org.gnome.desktop.wm.keybindings switch-to-workspace-left ['<Super
 gsettings set org.gnome.desktop.wm.keybindings switch-to-workspace-right ['<Super>Right']
 gsettings set org.gnome.desktop.wm.keybindings toggle-fullscreen ['<Super>f']
 `
+

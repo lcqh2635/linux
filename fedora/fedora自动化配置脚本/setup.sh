@@ -95,13 +95,25 @@ gsettings set org.gnome.desktop.wm.preferences titlebar-font '思源黑体 CN Bo
 gsettings set org.gnome.desktop.interface font-antialiasing 'rgba'
 gsettings set org.gnome.desktop.interface font-hinting 'slight'
 
+
+# 卸载自带的无用扩展插件
+sudo dnf remove -y \
+gnome-shell-extension-window-list \
+gnome-shell-extension-launch-new-instance
 # 系统必装 Gnome 扩展
 sudo dnf install -y \
 gnome-shell-extension-user-theme \
 gnome-shell-extension-dash-to-dock \
 gnome-shell-extension-blur-my-shell \
 gnome-shell-extension-just-perfection \
-gnome-shell-extension-drive-menu
+gnome-shell-extension-drive-menu \
+gnome-shell-extension-appindicator \
+gnome-shell-extension-forge \
+gnome-shell-extension-caffeine \
+gnome-shell-extension-workspace-indicator \
+gnome-shell-extension-auto-move-windows \
+gnome-shell-extension-places-menu \
+gnome-shell-extension-apps-menu
 
 # 系统外观主题和Gnome扩展插件优化
 # 在 Github 发现一个好项目 adw-gtk3	https://github.com/lassekongo83/adw-gtk3
@@ -136,6 +148,38 @@ gsettings set org.gnome.shell.extensions.just-perfection weather false
 gsettings set org.gnome.shell.extensions.just-perfection events-button false
 gsettings set org.gnome.shell.extensions.just-perfection window-demands-attention-focus true
 gsettings set org.gnome.shell.extensions.just-perfection startup-status 0
+
+
+# 自定义快捷键优化，Super-管理窗口、Alt-管理工作区
+gsettings set org.gnome.desktop.wm.keybindings switch-to-workspace-last "['<Alt>End']"
+gsettings set org.gnome.desktop.wm.keybindings switch-to-workspace-left "['<Alt>Left']"
+gsettings set org.gnome.desktop.wm.keybindings switch-to-workspace-right "['<Alt>Right']"
+gsettings set org.gnome.desktop.wm.keybindings switch-to-workspace-1 "['<Alt>1']"
+gsettings set org.gnome.desktop.wm.keybindings switch-to-workspace-2 "['<Alt>2']"
+gsettings set org.gnome.desktop.wm.keybindings switch-to-workspace-3 "['<Alt>3']"
+# 当前工作区内的窗口切换
+gsettings set org.gnome.desktop.wm.keybindings switch-windows "['<Super>T']"
+# 窗口在工作区移动
+gsettings set org.gnome.desktop.wm.keybindings move-to-workspace-last "['<Alt><Super>End']"
+gsettings set org.gnome.desktop.wm.keybindings move-to-workspace-left "['<Alt><Super>Left']"
+gsettings set org.gnome.desktop.wm.keybindings move-to-workspace-right "['<Alt><Super>Right']"
+gsettings set org.gnome.desktop.wm.keybindings move-to-workspace-1 "['<Alt><Super>1']"
+gsettings set org.gnome.desktop.wm.keybindings move-to-workspace-2 "['<Alt><Super>2']"
+gsettings set org.gnome.desktop.wm.keybindings move-to-workspace-3 "['<Alt><Super>3']"
+# 隐藏/显示当前工作区的所有窗口
+gsettings set org.gnome.desktop.wm.keybindings show-desktop "['<Alt><Super>h']"
+# 键盘 F 功能键
+# gsettings list-recursively org.gnome.settings-daemon.plugins.media-keys
+# 媒体声音控制
+gsettings set org.gnome.settings-daemon.plugins.media-keys mic-mute "['F2']"
+gsettings set org.gnome.settings-daemon.plugins.media-keys volume-down "['F3']"
+gsettings set org.gnome.settings-daemon.plugins.media-keys volume-up "['F4']"
+# 弹出 U 盘
+gsettings set org.gnome.settings-daemon.plugins.media-keys eject "['F5']"
+# 播放器控制
+gsettings set org.gnome.settings-daemon.plugins.media-keys next "['F8']"
+gsettings set org.gnome.settings-daemon.plugins.media-keys play "['F9']"
+gsettings set org.gnome.settings-daemon.plugins.media-keys previous "['F10']"
 
 # 安装一些常用的Flatpak应用（如VSCode, LibreOffice）
 echo "安装基础Flatpak应用程序..."
