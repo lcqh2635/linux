@@ -291,16 +291,11 @@ gsettings list-keys org.gnome.shell.extensions.hidetopbar
 # 递归列出某个 Schema 的键值
 gsettings list-recursively org.gnome.shell.extensions.hidetopbar
 
-# 启用自动隐藏（必需）
-gsettings set org.gnome.shell.extensions.hidetopbar enable-autohide true
 # 设置鼠标触发灵敏度（true/false）
 gsettings set org.gnome.shell.extensions.hidetopbar mouse-sensitive true
-# 禁用鼠标悬停时显示概览（仅显示顶栏）
-gsettings set org.gnome.shell.extensions.hidetopbar mouse-triggers-overview false
-# 设置隐藏延迟（毫秒，默认200ms）
-gsettings set org.gnome.shell.extensions.hidetopbar hide-delay 200
-# 设置显示延迟（毫秒，默认300ms）
-gsettings set org.gnome.shell.extensions.hidetopbar show-delay 300
+gsettings set org.gnome.shell.extensions.hidetopbar animation-time-autohide 0.5
+gsettings set org.gnome.shell.extensions.hidetopbar animation-time-overview 0.5
+gsettings set org.gnome.shell.extensions.hidetopbar enable-intellihide true
 
 # 恢复默认设置
 gsettings reset-recursively org.gnome.shell.extensions.hidetopbar
