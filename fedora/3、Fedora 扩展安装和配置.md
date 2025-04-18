@@ -209,9 +209,6 @@ sudo dnf install gnome-shell-extension-blur-my-shell
 ```
 **`gsettings` 配置示例**：
 ```bash
-# 恢复默认设置
-gsettings reset-recursively org.gnome.shell.extensions.blur-my-shell
-
 # 列出所有已安装的 Schema
 gsettings list-schemas
 # 列出某个 Schema 下的所有键
@@ -219,17 +216,18 @@ gsettings list-keys org.gnome.shell.extensions.blur-my-shell
 # 递归列出某个 Schema 的键值
 gsettings list-recursively org.gnome.shell.extensions.blur-my-shell
 
-gsettings set org.gnome.shell.extensions.blur-my-shell sigma 10  # 模糊强度
-gsettings set org.gnome.shell.extensions.blur-my-shell blur-panel true  # 模糊顶栏
+gsettings set org.gnome.shell.extensions.blur-my-shell.panel force-light-text true
+gsettings set org.gnome.shell.extensions.blur-my-shell.panel style-panel 1
+gsettings set org.gnome.shell.extensions.blur-my-shell.hidetopbar compatibility true
+gsettings set org.gnome.shell.extensions.blur-my-shell.appfolder style-dialogs 2
+gsettings set org.gnome.shell.extensions.blur-my-shell.dash-to-dock style-dash-to-dock 1
+gsettings set org.gnome.shell.extensions.blur-my-shell.applications blur true
+gsettings set org.gnome.shell.extensions.blur-my-shell.applications dynamic-opacity false
+gsettings set org.gnome.shell.extensions.blur-my-shell.applications whitelist ['org.gnome.Settings', 'org.gnome.Software', 'org.gnome.TextEditor', 'org.gnome.SystemMonitor', 'org.gnome.tweaks', 'org.gnome.Extensions', 'org.gnome.Shell.Extensions', 'com.mattjakeman.ExtensionManager', 'org.gnome.Builder', 'org.gnome.Loupe', 'org.gnome.gitlab.somas.Apostrophe', 'io.github.alainm23.planify', 'com.github.tchx84.Flatseal', 'io.github.flattool.Warehouse']
+gsettings set org.gnome.shell.extensions.blur-my-shell.coverflow-alt-tab blur false
 
-# 启用顶栏模糊
-gsettings set org.gnome.shell.extensions.blur-my-shell blur-panel true
-
-# 设置模糊强度（1-10）
-gsettings set org.gnome.shell.extensions.blur-my-shell sigma 10
-
-# 禁用 Dash 背景模糊（避免性能问题）
-gsettings set org.gnome.shell.extensions.blur-my-shell blur-dash false
+# 恢复默认设置
+gsettings reset-recursively org.gnome.shell.extensions.blur-my-shell
 ```
 
 ### **④ Just Perfection**  
@@ -240,15 +238,22 @@ sudo dnf install gnome-shell-extension-just-perfection
 ```
 **`gsettings` 配置示例**：
 ```bash
-# 恢复默认设置
-gsettings reset-recursively org.gnome.shell.extensions.just-perfection
-
 # 列出所有已安装的 Schema
 gsettings list-schemas
 # 列出某个 Schema 下的所有键
 gsettings list-keys org.gnome.shell.extensions.just-perfection
 # 递归列出某个 Schema 的键值
 gsettings list-recursively org.gnome.shell.extensions.just-perfection
+
+gsettings set org.gnome.shell.extensions.just-perfection accessibility-menu false
+gsettings set org.gnome.shell.extensions.just-perfection world-clock false
+gsettings set org.gnome.shell.extensions.just-perfection weather false
+gsettings set org.gnome.shell.extensions.just-perfection events-button false
+gsettings set org.gnome.shell.extensions.just-perfection window-demands-attention-focus true
+gsettings set org.gnome.shell.extensions.just-perfection startup-status 0
+
+# 恢复默认设置
+gsettings reset-recursively org.gnome.shell.extensions.just-perfection
 ```
 
 #### **6. AppIndicator and KStatusNotifierItem Support**  
@@ -279,9 +284,6 @@ sudo dnf install gnome-shell-extension-hidetopbar
 **配置命令**:
 
 ```bash
-# 恢复默认设置
-gsettings reset-recursively org.gnome.shell.extensions.hidetopbar
-
 # 列出所有已安装的 Schema
 gsettings list-schemas
 # 列出某个 Schema 下的所有键
@@ -299,6 +301,9 @@ gsettings set org.gnome.shell.extensions.hidetopbar mouse-triggers-overview fals
 gsettings set org.gnome.shell.extensions.hidetopbar hide-delay 200
 # 设置显示延迟（毫秒，默认300ms）
 gsettings set org.gnome.shell.extensions.hidetopbar show-delay 300
+
+# 恢复默认设置
+gsettings reset-recursively org.gnome.shell.extensions.hidetopbar
 ```
 
 ### **⑤ Clipboard Indicator**  
@@ -647,9 +652,6 @@ sudo dnf install gnome-shell-extension-coverflow-alttab
 ```
 **配置命令**：
 ```bash
-# 恢复默认设置
-gsettings reset-recursively org.gnome.shell.extensions.just-perfection
-
 # 列出所有已安装的 Schema
 gsettings list-schemas
 # 列出某个 Schema 下的所有键
@@ -660,6 +662,9 @@ gsettings list-recursively org.gnome.shell.extensions.coverflowalttab
 gsettings set org.gnome.shell.extensions.coverflowalttab animation-time 0.5
 gsettings set org.gnome.shell.extensions.coverflowalttab easing-function 'ease-in-out-sine'
 gsettings set org.gnome.shell.extensions.coverflowalttab preview-to-monitor-ratio 0.75
+
+# 恢复默认设置
+gsettings reset-recursively org.gnome.shell.extensions.coverflowalttab
 ```
 
 #### 5. **Night Theme Switcher**  

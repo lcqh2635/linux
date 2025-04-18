@@ -6,11 +6,6 @@ gsettings set org.gnome.mutter center-new-windows true
 gsettings set org.gnome.desktop.interface show-battery-percentage true
 # 为了确保系统能够以最快的速度完成更新和软件安装，通常建议先配置加速镜像，再进行系统更新。
 
-# 配置dnf以加快软件下载速度（启用最快的镜像）
-echo "为DNF配置最快的镜子..."
-echo 'fastestmirror=1' | sudo tee -a /etc/dnf/dnf.conf
-echo 'max_parallel_downloads=10' | sudo tee -a /etc/dnf/dnf.conf
-
 # 清华 Fedora 镜像源 https://mirrors.tuna.tsinghua.edu.cn/help/fedora/
 # 配置dnf以加快软件下载速度（启用最快的镜像）
 echo "使用清华源配置Fedora的加速镜像..."
@@ -48,34 +43,30 @@ sudo dnf update -y && sudo dnf upgrade -y
 
 # 安装常用软件
 echo "安装系统基础软件..."
-# 常用工具: git, vim, wget, curl, htop, net-tools
 sudo dnf install -y \
-git vim wget curl htop net-tools \
-fastfetch
-
-sudo dnf install -y \
-git unzip p7zip wl-clipboard \
-fastfetch timeshift evolution \
+git wl-clipboard \
+fastfetch timeshift \
 google-chrome-stable \
 libreoffice-langpack-zh-Hans
 # 配置Git（需要根据你的实际情况修改用户名和邮箱）
 echo "配置 Git..."
+# 安装基础依赖包 https://v2.tauri.app/zh-cn/start/prerequisites/#linux
+sudo dnf install -y git wl-clipboard
 git config --global user.name "龙茶清欢"
 git config --global user.email "2320391937@qq.com"
+ssh-keygen -t rsa -b 4096 -C "2320391937@qq.com"
+# 需要安装 wl-clipboard 工具
+cat ~/.ssh/id_rsa.pub | wl-copy
+# https://gitee.com/profile/sshkeys
+# https://github.com/settings/keys
 
 # 安装 Firefox 相关组件
 sudo dnf install -y \
-multimedia \
 mozilla-ublock-origin \
 mozilla-openh264 \
 gstreamer1-plugin-openh264
 # 安装必要的多媒体编解码器以支持高效的视频解码	about:support
 sudo dnf install ffmpeg gstreamer1-plugins-{bad-\*,good-\*,base} gstreamer1-libav -y
-# 确认VA-API驱动已安装
-sudo dnf install mesa-va-drivers mesa-vdpau-drivers libva-utils
-sudo dnf install mesa-vdpau-drivers vulkan-loader vulkan-tools
-vainfo
-
 
 # 图形界面工具: gnome-tweaks, gnome-extensions-app
 sudo dnf install -y gnome-tweaks gnome-extensions-app
@@ -138,9 +129,9 @@ gsettings set org.gnome.shell.extensions.blur-my-shell.hidetopbar compatibility 
 gsettings set org.gnome.shell.extensions.blur-my-shell.appfolder style-dialogs 2
 gsettings set org.gnome.shell.extensions.blur-my-shell.dash-to-dock style-dash-to-dock 1
 gsettings set org.gnome.shell.extensions.blur-my-shell.applications blur true
-gsettings set org.gnome.shell.extensions.blur-my-shell.applications sigma 40
 gsettings set org.gnome.shell.extensions.blur-my-shell.applications dynamic-opacity false
-org.gnome.shell.extensions.blur-my-shell.applications whitelist ['org.gnome.Settings', 'org.gnome.Software', 'org.gnome.TextEditor', 'org.gnome.SystemMonitor', 'org.gnome.tweaks', 'org.gnome.Extensions', 'org.gnome.Shell.Extensions', 'com.mattjakeman.ExtensionManager', 'org.gnome.Builder', 'org.gnome.Loupe', 'org.gnome.gitlab.somas.Apostrophe', 'io.github.alainm23.planify', 'com.github.tchx84.Flatseal', 'io.github.flattool.Warehouse']
+gsettings set org.gnome.shell.extensions.blur-my-shell.applications whitelist ['org.gnome.Settings', 'org.gnome.Software', 'org.gnome.TextEditor', 'org.gnome.SystemMonitor', 'org.gnome.tweaks', 'org.gnome.Extensions', 'org.gnome.Shell.Extensions', 'com.mattjakeman.ExtensionManager', 'org.gnome.Builder', 'org.gnome.Loupe', 'org.gnome.gitlab.somas.Apostrophe', 'io.github.alainm23.planify', 'com.github.tchx84.Flatseal', 'io.github.flattool.Warehouse']
+gsettings set org.gnome.shell.extensions.blur-my-shell.coverflow-alt-tab blur false
 # just-perfection 扩展优化
 gsettings set org.gnome.shell.extensions.just-perfection accessibility-menu false
 gsettings set org.gnome.shell.extensions.just-perfection world-clock false
@@ -184,6 +175,7 @@ gsettings set org.gnome.settings-daemon.plugins.media-keys previous "['F10']"
 # 安装一些常用的Flatpak应用（如VSCode, LibreOffice）
 echo "安装基础Flatpak应用程序..."
 flatpak install -y flathub \
+org.gnome.Evolution \
 com.github.tchx84.Flatseal \
 io.github.flattool.Warehouse \
 io.github.realmazharhussain.GdmSettings \
@@ -192,8 +184,12 @@ io.github.seadve.Kooha \
 org.gnome.seahorse.Application \
 org.gnome.Firmware \
 org.gnome.Gtranslator \
+com.github.neithern.g4music \
 de.haeckerfelix.Fragments \
-org.gnome.gitlab.somas.Apostrophe
+org.gnome.gitlab.somas.Apostrophe \
+com.github.gmg137.netease-cloud-music-gtk \
+md.obsidian.Obsidian \
+io.github.alainm23.planify
 
 # 启用并启动防火墙服务
 echo "启用和启动防火墙..."
