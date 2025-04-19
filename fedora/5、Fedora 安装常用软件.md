@@ -173,26 +173,6 @@ flatpak install -y flathub org.gnome.gitlab.somas.Apostrophe
 
 ---
 
-### **🌐 网络与通信**
-| 软件名称        | 功能描述   | 安装命令                                       | 备注             |
-| --------------- | ---------- | ---------------------------------------------- | ---------------- |
-| **Firefox**     | 默认浏览器 | 已预装                                         | Wayland 原生支持 |
-| **Brave**       | 隐私浏览器 | `sudo dnf install brave-browser`               | 基于 Chromium    |
-| **Thunderbird** | 邮件客户端 | `sudo dnf install thunderbird`                 | 支持日历插件     |
-| **Telegram**    | 即时通讯   | `flatpak install flathub org.telegram.desktop` | 官方客户端       |
-
----
-
-### **🔧 其他实用工具**
-| 软件名称         | 功能描述       | 安装命令                                        | 备注             |
-| ---------------- | -------------- | ----------------------------------------------- | ---------------- |
-| **Bitwarden**    | 密码管理       | `flatpak install flathub com.bitwarden.desktop` | 开源免费         |
-| **Transmission** | BT 下载工具    | `sudo dnf install transmission`                 | 轻量级           |
-| **Remmina**      | 远程桌面客户端 | `sudo dnf install remmina`                      | 支持 RDP/VNC     |
-| **Warpinator**   | 局域网文件传输 | `sudo dnf install warpinator`                   | 类似苹果 AirDrop |
-
----
-
 ### **💡 使用建议**
 1. **优先选择 Flatpak**：避免依赖冲突，尤其适合闭源软件（如 Spotify）。  
 2. **硬件加速**：视频编辑/游戏类软件需安装 NVIDIA 驱动或 VA-API：  
@@ -207,15 +187,6 @@ flatpak install -y flathub org.gnome.gitlab.somas.Apostrophe
 ---
 
 ### **一键安装所有推荐软件（示例）**
-```bash
-# 开发工具
-sudo dnf install code dbeaver
-flatpak install flathub com.jetbrains.IntelliJ-IDEA-Community
-
-# 多媒体
-sudo dnf install vlc obs-studio --enablerepo=rpmfusion-nonfree
-flatpak install flathub com.spotify.Client
-```
 
 按此清单配置后，Fedora 41 将覆盖绝大多数日常使用场景，兼顾生产力和娱乐需求！ 🚀
 

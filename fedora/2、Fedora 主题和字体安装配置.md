@@ -148,6 +148,8 @@ sudo flatpak mask org.gtk.Gtk3theme.adw-gtk3 && sudo flatpak mask org.gtk.Gtk3th
    https://www.gnome-look.org/p/1214931
    https://github.com/daniruiz/Flat-Remix-GTK
    flatpak override --user --filesystem=xdg-config/gtk-4.0 --filesystem=~/.themes/
+
+   gsettings set org.gnome.shell.extensions.user-theme name "Flat-Remix"
    gsettings set org.gnome.desktop.interface gtk-theme "Flat-Remix-GTK-Blue"
    
    # 主题美化，参考 https://www.gnome-look.org/browse?ord=rating
