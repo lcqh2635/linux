@@ -62,6 +62,9 @@ flatpak uninstall --unused -y
 
 # 下载 jetbrains-toolbox
 https://www.jetbrains.com/zh-cn/toolbox-app/download/download-thanks.html?platform=linux
+
+
+https://www.jetbrains.com/zh-cn/toolbox-app/
 ```
 
 #### **2. 安装方式选择**
@@ -296,5 +299,8 @@ flatpak install flathub org.fedoraproject.MediaWriter -y
 # 创建图像或编辑照片
 flatpak install flathub org.gimp.GIMP -y
 flatpak install flathub com.wps.Office -y
+
+
+
 ```
 
