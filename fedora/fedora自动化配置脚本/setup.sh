@@ -238,6 +238,40 @@ sudo dnf install @development-tools -y
 sudo dnf group info "Development Tools"
 sudo dnf group info "C Development Tools and Libraries"
 
+# 安装 nodejs 前端运行时环境
+sudo dnf install -y nodejs
+node --version
+# 最新地址 淘宝 NPM 镜像站喊你切换新域名啦!
+npm config set registry https://registry.npmmirror.com
+npm config get registry
+# 安装 bun 前端运行时环境
+sudo npm install -g bun
+bun --version
+echo 你刚安装的 bun 版本号为： $(bun --version)
+# 将 bunfig.toml 作为隐藏文件添加到用户主目录
+echo '[install]
+# 使用阿里云加速仓库，仓库地址可从阿里云官方获取，地址为 https://developer.aliyun.com/mirror/
+registry = "https://registry.npmmirror.com/"
+' >> ~/.bunfig.toml
+cat ~/.bunfig.toml
+
+# 安装 SDKMAN!
+curl -s "https://get.sdkman.io" | bash
+source "/home/lcqh/.sdkman/bin/sdkman-init.sh"
+# 安装 JDK（示例：默认安装 Temurin JDK 21）
+sdk install java
+# 安装 Maven/Gradle
+sdk install maven
+sdk install gradle
+
+# 安装 Rust
+sudo dnf install -y rust cargo
+# 验证安装
+rustc --version
+cargo --version
+# 安装虚拟机
+sudo dnf install -y vagrant VirtualBox virtualbox-guest-additions
+
 # 清理无用的包和缓存
 echo "清理未使用的软件包和缓存..."
 sudo dnf autoremove -y
