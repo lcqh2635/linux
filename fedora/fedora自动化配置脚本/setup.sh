@@ -65,8 +65,29 @@ sudo dnf install -y \
 mozilla-ublock-origin \
 mozilla-openh264 \
 gstreamer1-plugin-openh264
+
+
+# 安装fedora的多媒体组，以下内容参考 https://rpmfusion.org/Howto/Multimedia
+sudo dnf group install multimedia
 # 安装必要的多媒体编解码器以支持高效的视频解码	about:support
 sudo dnf install ffmpeg gstreamer1-plugins-{bad-\*,good-\*,base} gstreamer1-libav -y
+# FFmpeg-Free 是 Fedora 默认提供的一个受限版本，仅包含开源且无专利限制的编解码器。
+# FFmpeg 是一个功能强大的多媒体处理工具集，支持视频、音频的编码、解码、转码、流媒体传输等功能。
+# 它支持广泛的编解码器（如 H.264、HEVC、AAC 等），包括一些专利保护的编解码器。 
+sudo dnf swap ffmpeg-free ffmpeg --allowerasing
+sudo dnf update @multimedia --setopt="install_weak_deps=False" --exclude=PackageKit-gstreamer-plugin
+# 安装 VA-API 和 VDPAU 驱动，一般默认已安装
+sudo dnf install mesa-va-drivers mesa-vdpau-drivers libva-utils -y
+# swap 命令为替换操作
+# Mesa 是一个开源的图形驱动框架，提供了对 OpenGL、Vulkan、VA-API 和 VDPAU 等图形 API 的支持。
+# Fedora 默认的 Mesa 驱动遵循严格的开源许可证，因此不包含对某些专利保护的编解码器（如 H.264 和 HEVC）的支持。
+# Fedora 默认安装的是开源的 mesa-va-drivers 和 mesa-vdpau-drivers，这些驱动完全符合开源社区的标准，但可能缺少对某些专有编解码器（如 H.264 或 HEVC）的支持。
+# RPM Fusion 提供了名为 mesa-*-drivers-freeworld 的替代版本，它们是基于 Mesa 的增强版本，支持更多的专有编解码器（如 H.264 和 HEVC）和性能优化
+sudo dnf swap mesa-va-drivers mesa-va-drivers-freeworld
+sudo dnf swap mesa-vdpau-drivers mesa-vdpau-drivers-freeworld
+sudo dnf install libva-utils -y
+vainfo
+
 
 # 图形界面工具: gnome-tweaks, gnome-extensions-app
 sudo dnf install -y gnome-tweaks gnome-extensions-app

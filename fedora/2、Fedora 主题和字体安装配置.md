@@ -29,6 +29,11 @@ gsettings set org.gnome.desktop.wm.preferences titlebar-font '思源黑体 CN Bo
 gsettings set org.gnome.desktop.interface font-antialiasing 'rgba'
 gsettings set org.gnome.desktop.interface font-hinting 'slight'
 
+gsettings set org.gnome.desktop.interface font-name
+gsettings set org.gnome.desktop.interface document-font-name
+gsettings set org.gnome.desktop.interface monospace-font-name
+gsettings set org.gnome.desktop.wm.preferences titlebar-font
+
 # Fedora 系统默认自带的主题存放目录
 # 光标主题：
 ls /usr/share/icons/
