@@ -77,6 +77,7 @@ sudo dnf install ffmpeg gstreamer1-plugins-{bad-\*,good-\*,base} gstreamer1-liba
 sudo dnf swap ffmpeg-free ffmpeg --allowerasing
 sudo dnf update @multimedia --setopt="install_weak_deps=False" --exclude=PackageKit-gstreamer-plugin
 # 安装 VA-API 和 VDPAU 驱动，一般默认已安装
+dnf list mesa*		# 查看 Mesa 驱动程序 freeworld 和原始驱动程序
 sudo dnf install mesa-va-drivers mesa-vdpau-drivers libva-utils -y
 # swap 命令为替换操作
 # Mesa 是一个开源的图形驱动框架，提供了对 OpenGL、Vulkan、VA-API 和 VDPAU 等图形 API 的支持。
@@ -227,6 +228,15 @@ sudo firewall-cmd --reload
 sudo dnf install -y tlp tlp-rdw
 sudo systemctl enable --now tlp
 systemctl status tlp
+
+
+# Development Tools  是一个预定义的软件包组，包含一组常用的开发工具和库，用于支持软件开发工作。
+# 它旨在为开发者提供一个基础的开发环境，而无需手动安装每个工具。
+sudo dnf group list		# 查看可用的软件包组
+sudo dnf install @development-tools -y
+# sudo dnf install @c-development -y
+sudo dnf group info "Development Tools"
+sudo dnf group info "C Development Tools and Libraries"
 
 # 清理无用的包和缓存
 echo "清理未使用的软件包和缓存..."
