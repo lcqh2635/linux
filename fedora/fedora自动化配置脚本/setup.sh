@@ -265,6 +265,8 @@ sdk install maven
 sdk install gradle
 
 # 安装 Rust
+echo 'export RUSTUP_UPDATE_ROOT=https://mirrors.tuna.tsinghua.edu.cn/rustup/rustup' >> ~/.bash_profile
+echo 'export RUSTUP_DIST_SERVER=https://mirrors.tuna.tsinghua.edu.cn/rustup' >> ~/.bash_profile
 sudo dnf install -y rust cargo
 # 验证安装
 rustc --version
