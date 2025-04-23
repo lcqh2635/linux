@@ -66,7 +66,6 @@ mozilla-ublock-origin \
 mozilla-openh264 \
 gstreamer1-plugin-openh264
 
-
 # 安装fedora的多媒体组，以下内容参考 https://rpmfusion.org/Howto/Multimedia
 sudo dnf group install multimedia
 # 安装必要的多媒体编解码器以支持高效的视频解码	about:support
@@ -86,9 +85,8 @@ sudo dnf install mesa-va-drivers mesa-vdpau-drivers libva-utils -y
 # RPM Fusion 提供了名为 mesa-*-drivers-freeworld 的替代版本，它们是基于 Mesa 的增强版本，支持更多的专有编解码器（如 H.264 和 HEVC）和性能优化
 sudo dnf swap mesa-va-drivers mesa-va-drivers-freeworld
 sudo dnf swap mesa-vdpau-drivers mesa-vdpau-drivers-freeworld
-sudo dnf install libva-utils -y
+sudo dnf install libva-utils -y		# 提供 vainfo 命令的包
 vainfo
-
 
 # 图形界面工具: gnome-tweaks, gnome-extensions-app
 sudo dnf install -y gnome-tweaks gnome-extensions-app
@@ -107,7 +105,6 @@ gsettings set org.gnome.desktop.interface monospace-font-name 'JetBrains Mono Me
 gsettings set org.gnome.desktop.wm.preferences titlebar-font '思源黑体 CN Bold 12'
 gsettings set org.gnome.desktop.interface font-antialiasing 'rgba'
 gsettings set org.gnome.desktop.interface font-hinting 'slight'
-
 
 # 卸载自带的无用扩展插件
 sudo dnf remove -y \
@@ -228,7 +225,8 @@ sudo firewall-cmd --reload
 sudo dnf install -y tlp tlp-rdw
 sudo systemctl enable --now tlp
 systemctl status tlp
-
+# 查看电池信息
+man tlp
 
 # Development Tools  是一个预定义的软件包组，包含一组常用的开发工具和库，用于支持软件开发工作。
 # 它旨在为开发者提供一个基础的开发环境，而无需手动安装每个工具。

@@ -29,7 +29,8 @@ ca.desrt.dconf-editor \
 org.gnome.Gtranslator \
 com.bitwarden.desktop \
 de.haeckerfelix.Fragments \
-org.gnome.gitlab.somas.Apostrophe
+org.gnome.gitlab.somas.Apostrophe \
+org.gnome.World.PikaBackup
 
 # 工作娱乐
 flatpak install -y flathub \
@@ -207,6 +208,8 @@ flatpak install flathub it.mijorus.gearlever -y
 flatpak install flathub org.gnome.Firmware -y
 # 种子下载器
 flatpak install flathub de.haeckerfelix.Fragments -y
+# 系统备份
+flatpak install flathub org.gnome.World.PikaBackup -y
 # GDM 设置
 flatpak install flathub io.github.realmazharhussain.GdmSettings -y
 flatpak install flathub org.gnome.Evolution -y
