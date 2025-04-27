@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>柔和背景渐变的毛玻璃效果</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: linear-gradient(135deg, hsl(180, 60%, 85%), hsl(340, 70%, 85%)); /* 淡青色到淡粉色 */
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+      position: relative;
+    }
+
+    /* 添加背景颗粒感 */
+    body::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(circle, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+      background-size: 20px 20px;
+      z-index: -1;
+      opacity: 0.5; /* 动态调整 */
+    }
+
+    /* 配置菜单 */
+    .config-menu {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      border-radius: 10px;
+      padding: 20px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+      color: white;
+      font-size: 14px;
+      line-height: 1.6;
+      max-width: 300px;
+    }
+
+    .config-menu label {
+      display: block;
+      margin-bottom: 20px;
+    }
+
+    .config-menu .label-text {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 5px;
+    }
+
+    .config-menu input[type="range"] {
+      width: 100%;
+    }
+
+    /* 数字显示样式 */
+    .config-menu .value-display {
+      font-size: 16px; /* 增大字体 */
+      font-weight: bold; /* 加粗字体 */
+      color: #ffeb3b; /* 使用高对比度颜色（亮黄色） */
+      text-shadow: 0 0 5px rgba(0, 0, 0, 0.8); /* 添加描边效果 */
+      background: rgba(0, 0, 0, 0.5); /* 半透明背景框 */
+      padding: 2px 6px; /* 内边距 */
+      border-radius: 4px; /* 圆角 */
+    }
+
+    /* 模拟窗口容器 */
+    .window {
+      position: relative;
+      width: 400px;
+      height: 300px;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+      background: hsla(200, 60%, 85%, 0.1); /* 初始背景颜色 */
+      backdrop-filter: blur(15px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      transition: all 0.3s ease;
+    }
+
+    /* 渐变边框 */
+    .window::before {
+      content: '';
+      position: absolute;
+      top: -2px;
+      left: -2px;
+      right: -2px;
+      bottom: -2px;
+      background: linear-gradient(135deg, hsl(180, 60%, 85%), hsl(340, 70%, 85%)); /* 淡青色到淡粉色 */
+      border-radius: 12px;
+      z-index: -1;
+      filter: blur(10px);
+      opacity: 0.5; /* 动态调整 */
+    }
+
+    /* 动态光影效果 */
+    .window::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(circle at 50% 50%, hsla(0, 0%, 100%, 0.1), transparent);
+      pointer-events: none;
+      z-index: 1;
+      opacity: 0.5; /* 动态调整 */
+    }
+
+    .title-bar {
+      height: 40px;
+      background: rgba(255, 255, 255, 0.15);
+      display: flex;
+      align-items: center;
+      padding: 0 15px;
+      font-size: 14px;
+      color: white;
+      font-weight: bold;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .content {
+      padding: 20px;
+      color: white;
+      font-size: 16px;
+      line-height: 1.6;
+    }
+  </style>
+</head>
+<body>
+  <!-- 动态配置菜单 -->
+  <div class="config-menu">
+    <h3>动态样式配置</h3>
+
+    <!-- 色相 -->
+    <label>
+      <div class="label-text">
+        背景色相 (0-360)
+        <span class="value-display" id="hue-value">200</span>
+      </div>
+      <input type="range" id="hue" min="0" max="360" value="200">
+    </label>
+
+    <!-- 饱和度 -->
+    <label>
+      <div class="label-text">
+        背景饱和度 (%)
+        <span class="value-display" id="saturation-value">60</span>
+      </div>
+      <input type="range" id="saturation" min="0" max="100" value="60">
+    </label>
+
+    <!-- 亮度 -->
+    <label>
+      <div class="label-text">
+        背景亮度 (%)
+        <span class="value-display" id="lightness-value">85</span>
+      </div>
+      <input type="range" id="lightness" min="0" max="100" value="85">
+    </label>
+
+    <!-- 背景透明度 -->
+    <label>
+      <div class="label-text">
+        背景透明度 (%)
+        <span class="value-display" id="alpha-value">10</span>
+      </div>
+      <input type="range" id="alpha" min="0" max="100" value="10">
+    </label>
+
+    <!-- 模糊强度 -->
+    <label>
+      <div class="label-text">
+        模糊强度 (px)
+        <span class="value-display" id="blur-value">15</span>
+      </div>
+      <input type="range" id="blur" min="0" max="30" value="15">
+    </label>
+  </div>
+
+  <!-- 主窗口 -->
+  <div class="window" id="window">
+    <div class="title-bar">
+      柔和背景渐变的毛玻璃效果
+    </div>
+    <div class="content">
+      在右侧的配置菜单中调整样式参数，实时查看效果。
+    </div>
+  </div>
+
+  <script>
+    // 获取 DOM 元素
+    const windowElement = document.getElementById('window');
+    const hueInput = document.getElementById('hue');
+    const saturationInput = document.getElementById('saturation');
+    const lightnessInput = document.getElementById('lightness');
+    const alphaInput = document.getElementById('alpha');
+    const blurInput = document.getElementById('blur');
+
+    // 显示当前值的元素
+    const hueValueDisplay = document.getElementById('hue-value');
+    const saturationValueDisplay = document.getElementById('saturation-value');
+    const lightnessValueDisplay = document.getElementById('lightness-value');
+    const alphaValueDisplay = document.getElementById('alpha-value');
+    const blurValueDisplay = document.getElementById('blur-value');
+
+    // 更新背景颜色
+    function updateBackgroundColor() {
+      const hue = hueInput.value;
+      const saturation = saturationInput.value;
+      const lightness = lightnessInput.value;
+      const alpha = alphaInput.value / 100;
+      const hslaColor = `hsla(${hue}, ${saturation}%, ${lightness}%, ${alpha})`;
+      windowElement.style.background = hslaColor;
+    }
+
+    // 监听背景颜色相关参数的变化
+    hueInput.addEventListener('input', () => {
+      const value = hueInput.value;
+      hueValueDisplay.textContent = value;
+      updateBackgroundColor();
+    });
+
+    saturationInput.addEventListener('input', () => {
+      const value = saturationInput.value;
+      saturationValueDisplay.textContent = value;
+      updateBackgroundColor();
+    });
+
+    lightnessInput.addEventListener('input', () => {
+      const value = lightnessInput.value;
+      lightnessValueDisplay.textContent = value;
+      updateBackgroundColor();
+    });
+
+    alphaInput.addEventListener('input', () => {
+      const value = alphaInput.value;
+      alphaValueDisplay.textContent = value;
+      updateBackgroundColor();
+    });
+
+    // 监听模糊强度的变化
+    blurInput.addEventListener('input', () => {
+      const value = blurInput.value;
+      blurValueDisplay.textContent = value;
+      windowElement.style.backdropFilter = `blur(${value}px)`;
+    });
+
+    // 初始化样式和显示值
+    hueValueDisplay.textContent = hueInput.value;
+    saturationValueDisplay.textContent = saturationInput.value;
+    lightnessValueDisplay.textContent = lightnessInput.value;
+    alphaValueDisplay.textContent = alphaInput.value;
+    blurValueDisplay.textContent = blurInput.value;
+
+    updateBackgroundColor();
+  </script>
+</body>
+</html>
