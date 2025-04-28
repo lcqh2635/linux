@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GSAP Drawer</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    .drawer {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 300px;
+      background-color: #333;
+      color: white;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      transform: translateY(-100%);
+    }
+
+    .drawer p {
+      font-size: 18px;
+      margin-bottom: 20px;
+    }
+
+    .drawer button {
+      padding: 10px 20px;
+      background-color: #ff5722;
+      color: white;
+      border: none;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    .drawer button:hover {
+      background-color: #e64a19;
+    }
+
+    .open-button {
+      position: fixed;
+      top: 50%;
+      right: 50%;
+      padding: 10px 20px;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    .open-button:hover {
+      background-color: #0056b3;
+    }
+  </style>
+</head>
+<body>
+  <button class="open-button">上抽屉</button>
+  <div class="drawer">
+    <p>This is a drawer</p>
+    <button id="closeDrawer">Close</button>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  <script>
+    const openButton = document.querySelector('.open-button');
+    const closeDrawerButton = document.getElementById('closeDrawer');
+    const drawer = document.querySelector('.drawer');
+
+    // Define the GSAP timeline for the drawer animation
+    const drawerTimeline = gsap.timeline({ paused: true });
+    drawerTimeline.to(drawer, { y: '0%', duration: 0.5, ease: 'power2.out' });
+
+    // Open the drawer
+    openButton.addEventListener('click', () => {
+      drawerTimeline.play();
+    });
+
+    // Close the drawer
+    closeDrawerButton.addEventListener('click', () => {
+      drawerTimeline.reverse();
+    });
+
+    // Close the drawer when clicking outside of it
+    document.addEventListener('click', (event) => {
+      if (!drawer.contains(event.target) && !openButton.contains(event.target)) {
+        drawerTimeline.reverse();
+      }
+    });
+  </script>
+</body>
+</html>
