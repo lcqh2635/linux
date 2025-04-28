@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>动态切换布局</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      background: linear-gradient(135deg, hsl(200, 60%, 85%), hsl(340, 70%, 85%));
+      height: 100vh;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* 公共 Header 样式 */
+    .header {
+      height: 60px;
+      background: rgba(255, 255, 255, 0.9);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+      display: flex;
+      align-items: center;
+      padding: 0 20px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      position: relative;
+      z-index: 20;
+      transition: all 0.5s ease;
+    }
+
+    .header .logo {
+      font-size: 20px;
+      font-weight: bold;
+      color: #333;
+    }
+
+    .header .switch-button {
+      background: #007bff;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+      margin-left: auto; /* 将按钮推到右侧 */
+      z-index: 30;
+    }
+
+    .header .switch-button:hover {
+      background: #0056b3;
+    }
+
+    /* 单页布局：Header 菜单 */
+    .spa-header .menu {
+      display: flex;
+      gap: 20px;
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      top: 50%;
+      translate: -50% -50%;
+    }
+
+    .spa-header .menu a {
+      text-decoration: none;
+      color: #333;
+      font-weight: bold;
+      padding: 10px;
+      border-radius: 5px;
+      transition: background 0.3s ease;
+    }
+
+    .spa-header .menu a:hover {
+      background: rgba(0, 0, 0, 0.1);
+    }
+
+    /* 主容器 */
+    .main-container {
+      flex: 1;
+      display: flex;
+      overflow: hidden;
+      transition: all 0.5s ease;
+    }
+
+    /* 经典布局：Sidebar */
+    .sidebar {
+      width: 250px;
+      background: rgba(255, 255, 255, 0.9);
+      backdrop-filter: blur(10px);
+      border-right: 1px solid rgba(0, 0, 0, 0.1);
+      padding: 20px;
+      box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+      transition: all 0.5s ease;
+    }
+
+    .sidebar ul {
+      list-style: none;
+    }
+
+    .sidebar ul li {
+      margin-bottom: 15px;
+      cursor: pointer;
+      padding: 10px;
+      border-radius: 5px;
+      transition: background 0.3s ease;
+    }
+
+    .sidebar ul li:hover {
+      background: rgba(0, 0, 0, 0.1);
+    }
+
+    /* 内容区域 */
+    .content {
+      flex: 1;
+      padding: 20px;
+      overflow-y: auto;
+      background: rgba(255, 255, 255, 0.8);
+      backdrop-filter: blur(10px);
+      transition: all 0.5s ease;
+    }
+
+    /* 动画控制 */
+    .is-classic .sidebar {
+      transform: translateX(0);
+    }
+
+    .is-classic .content {
+      transform: translateX(0);
+      width: calc(100% - 250px);
+    }
+
+    .is-spa .sidebar {
+      transform: translateX(-100%);
+      width: 0;
+    }
+
+    .is-spa .content {
+      transform: translateX(-250px);
+      width: 100%;
+    }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <div class="header" id="header">
+    <div class="logo">LOGO</div>
+    <button class="switch-button" id="switchButton">切换到单页布局</button>
+  </div>
+
+  <!-- Main Container -->
+  <div class="main-container is-classic" id="mainContainer">
+    <!-- Sidebar -->
+    <div class="sidebar" id="sidebar">
+      <ul>
+        <li><a href="#">仪表盘</a></li>
+        <li><a href="#">用户管理</a></li>
+        <li><a href="#">设置</a></li>
+        <li><a href="#">退出登录</a></li>
+      </ul>
+    </div>
+
+    <!-- 内容区域 -->
+    <div class="content">
+      <h1>内容区域</h1>
+      <p>这是内容区域。</p>
+    </div>
+  </div>
+
+  <script>
+    // 获取 DOM 元素
+    const switchButton = document.getElementById('switchButton');
+    const mainContainer = document.getElementById('mainContainer');
+    const sidebar = document.getElementById('sidebar');
+    const header = document.getElementById('header');
+
+    let isClassic = true; // 初始为经典布局
+
+    // 切换布局
+    switchButton.addEventListener('click', () => {
+      if (isClassic) {
+        // 切换到单页布局
+        mainContainer.classList.add('is-spa');
+        mainContainer.classList.remove('is-classic');
+
+        // 等待动画完成后再移动菜单到 Header
+        setTimeout(() => {
+          // 将 Sidebar 的菜单移动到 Header
+          const menu = sidebar.querySelector('ul');
+          menu.style.display = 'flex';
+          menu.style.position = 'absolute';
+          menu.style.left = '50%';
+          menu.style.transform = 'translateX(-50%)';
+          menu.style.top = '50%';
+          menu.style.translate = '-50% -50%';
+          header.appendChild(menu);
+          header.classList.add('spa-header');
+        }, 500); // 等待动画完成
+
+        switchButton.textContent = '切换到经典布局';
+      } else {
+        // 切换到经典布局
+        mainContainer.classList.add('is-classic');
+        mainContainer.classList.remove('is-spa');
+
+        // 等待动画完成后再将菜单移回 Sidebar
+        setTimeout(() => {
+          const menu = header.querySelector('ul');
+          menu.style.display = '';
+          menu.style.position = '';
+          menu.style.left = '';
+          menu.style.transform = '';
+          menu.style.top = '';
+          menu.style.translate = '';
+          sidebar.appendChild(menu);
+          header.classList.remove('spa-header');
+        }, 500); // 等待动画完成
+
+        switchButton.textContent = '切换到单页布局';
+      }
+      isClassic = !isClassic; // 切换状态
+    });
+  </script>
+</body>
+</html>

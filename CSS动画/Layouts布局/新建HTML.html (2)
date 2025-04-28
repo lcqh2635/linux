@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sidebar Layout with Header</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+        }
+        .header {
+            height: 60px;
+            display: flex;
+            align-items: center;
+            background-color: #4CAF50;
+            color: white;
+            padding: 0 20px;
+        }
+        .header .logo {
+            width: 230px;
+            font-size: 20px;
+            font-weight: bold;
+        }
+        .header .spacer {
+            flex-grow: 1;
+            height: 60px;
+        }
+        .header .actions {
+            display: flex;
+            gap: 15px;
+        }
+        .header .actions button {
+            background-color: #fff;
+            color: #333;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .header .actions button:hover {
+            background-color: #f0f0f0;
+        }
+        .main {
+            display: flex;
+            flex: 1;
+        }
+        .sidebar {
+            width: 250px;
+            background-color: #333;
+            color: #fff;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        .sidebar h2 {
+            margin-top: 0;
+        }
+        .sidebar ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        .sidebar ul li {
+            margin: 15px 0;
+        }
+        .sidebar ul li a {
+            color: #fff;
+            text-decoration: none;
+        }
+        .content {
+            flex-grow: 1;
+            padding: 20px;
+            background-color: #f4f4f9;
+        }
+        .content h1 {
+            margin-top: 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="logo">网站标题或Logo</div>
+        <div class="spacer"></div>
+        <div class="actions">
+            <button>功能按钮1</button>
+            <button>功能按钮2</button>
+            <button>功能按钮3</button>
+        </div>
+    </div>
+    <div class="main">
+        <div class="sidebar">
+            <h2>侧边栏</h2>
+            <ul>
+                <li><a href="#">首页</a></li>
+                <li><a href="#">关于我们</a></li>
+                <li><a href="#">服务</a></li>
+                <li><a href="#">联系我们</a></li>
+            </ul>
+        </div>
+        <div class="content">
+            <h1>主要内容区域</h1>
+            <p>这是一个典型的带头部的侧边栏布局示例。顶部Header分为三部分：左侧为网站标题或Logo，中间空白填充，右侧为功能按钮区。</p>
+            <p>这种布局常用于管理后台、博客或文档网站等场景。</p>
+        </div>
+    </div>
+</body>
+</html>

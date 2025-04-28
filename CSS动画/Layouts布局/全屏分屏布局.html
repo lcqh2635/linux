@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>全屏分屏布局</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      height: 100vh;
+      display: flex;
+    }
+
+    /* Left Section */
+    .left-section {
+      flex: 1;
+      background: linear-gradient(135deg, hsl(200, 60%, 85%), hsl(340, 70%, 85%));
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      color: #333;
+    }
+
+    .left-section h1 {
+      font-size: 36px;
+      font-weight: bold;
+    }
+
+    /* Right Section */
+    .right-section {
+      flex: 1;
+      background: rgba(255, 255, 255, 0.9);
+      backdrop-filter: blur(10px);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      color: #333;
+    }
+
+    .right-section form input {
+      width: 80%;
+      padding: 10px;
+      margin-bottom: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+
+    .right-section form button {
+      width: 80%;
+      padding: 10px;
+      background: #007bff;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    .right-section form button:hover {
+      background: #0056b3;
+    }
+  </style>
+</head>
+<body>
+  <!-- Left Section -->
+  <div class="left-section">
+    <div>
+      <h1>欢迎加入我们</h1>
+      <p>创建一个账户，享受更多服务。</p>
+    </div>
+  </div>
+
+  <!-- Right Section -->
+  <div class="right-section">
+    <form>
+      <input type="text" placeholder="用户名">
+      <input type="password" placeholder="密码">
+      <button>注册</button>
+    </form>
+  </div>
+</body>
+</html>

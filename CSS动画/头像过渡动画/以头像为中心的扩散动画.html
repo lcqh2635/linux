@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>以头像为中心的扩散动画</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+  
+    /* 全局样式 */
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: linear-gradient(135deg, hsl(180, 60%, 85%), hsl(340, 70%, 85%));
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      
+    }
+
+    /* Header 布局 */
+    .header {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 60px;
+      background: rgba(255, 255, 255, 0.9);
+      backdrop-filter: blur(10px); /* 毛玻璃效果 */
+      border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    /* 用户头像容器 */
+    .avatar-container {
+      position: relative;
+      display: inline-block;
+      cursor: pointer;
+    }
+
+    /* 用户头像 */
+    .avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: #3498db;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      overflow: hidden;
+      transition: transform 0.2s;
+      will-change: transform;
+    }
+    
+    .avatar:hover {
+      transform: scale(1.05);
+    }
+    
+    .avatar img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    /* 下拉菜单 */
+    .dropdown-menu {
+      position: absolute;
+      /* top: calc(100% + 5px);  距离头像下方 5px */
+      top: 45px;
+      width: 200px;
+      height: 150px;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px); /* 毛玻璃效果 */
+      border-radius: 10px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+      overflow: hidden;
+      transform: scale(0); /* 初始缩放为 0 */
+      opacity: 0; /* 初始透明度为 0 */
+      visibility: hidden; /* 隐藏菜单 */
+      transition: all 0.3s ease; /* 平滑过渡 */
+    }
+
+    .avatar-container.left {
+      margin-left: 20px;
+    }
+    /* 左上角头像的下拉菜单 */
+    .avatar-container.left .dropdown-menu {
+      left: 0;
+      transform-origin: top left; /* 动画原点为头像左上角 */
+    }
+    
+    /* 中间头像的下拉菜单 */
+    .avatar-container.center .dropdown-menu {
+      left: 50%; /* 将菜单的左边移动到头像中心 */
+      margin-left: -100px; /* 手动偏移菜单宽度的一半（假设宽度为 200px） */
+      transform-origin: top center; /* 动画原点为头像中心 */
+    }
+    
+    .avatar-container.right {
+      margin-right: 20px;
+    }
+    /* 右上角头像的下拉菜单 */
+    .avatar-container.right .dropdown-menu {
+      right: 0;
+      transform-origin: top right; /* 动画原点为头像右上角 */
+    }
+
+    /* 下拉菜单显示状态 */
+    .dropdown-menu.active {
+      transform: scale(1); /* 缩放为正常大小 */
+      opacity: 1; /* 完全可见 */
+      visibility: visible; /* 显示菜单 */
+    }
+
+    /* 菜单项 */
+    .dropdown-menu li {
+      list-style: none;
+      padding: 12px 20px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+      display: flex;
+      align-items: center;
+    }
+
+    .dropdown-menu li:hover {
+      background: rgba(0, 0, 0, 0.1);
+    }
+    
+  </style>
+</head>
+<body>
+  <!-- Header 布局 -->
+  <div class="header">
+    <div class="avatar-container left" id="avatarContainerLeft">
+      <div class="avatar">
+        <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="用户头像">
+      </div>
+      <ul class="dropdown-menu" id="dropdownMenuLeft">
+        <li>
+            <i>👤</i>
+            <span>个人中心</span>
+        </li>
+        <li>设置</li>
+        <li>退出登录</li>
+      </ul>
+    </div>
+    
+    <div class="avatar-container center" id="avatarContainerCenter">
+      <div class="avatar">
+        <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="用户头像">
+      </div>
+      <ul class="dropdown-menu" id="dropdownMenuCenter">
+        <li>个人资料</li>
+        <li>设置</li>
+        <li>退出登录</li>
+      </ul>
+    </div>
+
+    <div class="avatar-container right" id="avatarContainerRight">
+      <div class="avatar">
+        <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="用户头像">
+      </div>
+      <ul class="dropdown-menu" id="dropdownMenuRight">
+        <li>个人资料</li>
+        <li>设置</li>
+        <li>退出登录</li>
+      </ul>
+    </div>
+  </div>
+
+  <script>
+    // 获取 DOM 元素
+    const avatarContainers = document.querySelectorAll('.avatar-container');
+    const dropdownMenus = document.querySelectorAll('.dropdown-menu');
+
+    // 点击头像切换菜单显示状态
+    avatarContainers.forEach((container) => {
+      container.addEventListener('click', () => {
+        const menu = container.querySelector('.dropdown-menu');
+        dropdownMenus.forEach((dropdown) => {
+          if (dropdown !== menu) {
+            dropdown.classList.remove('active'); // 关闭其他菜单
+          }
+        });
+        menu.classList.toggle('active'); // 切换当前菜单
+      });
+    });
+
+    // 点击页面其他区域关闭菜单
+    document.addEventListener('click', (event) => {
+      avatarContainers.forEach((container) => {
+        if (!container.contains(event.target)) {
+          const menu = container.querySelector('.dropdown-menu');
+          menu.classList.remove('active');
+        }
+      });
+    });
+  </script>
+</body>
+</html>

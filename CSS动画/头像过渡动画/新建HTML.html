@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GSAP Dropdown Menu in Layout</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f9f9f9;
+    }
+    .layout {
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+    }
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 20px;
+      background-color: #ffffff;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      height: 60px;
+    }
+    .content {
+      flex: 1;
+      padding: 20px;
+    }
+    .avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background-color: #3498db;
+      cursor: pointer;
+      position: relative;
+    }
+    .menu {
+      position: absolute;
+      top: 50px;
+      width: 200px;
+      background-color: white;
+      border: 1px solid #ccc;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      overflow: hidden;
+      display: none;
+    }
+    .menu-item {
+      padding: 10px;
+      text-align: left;
+      border-bottom: 1px solid #eee;
+      cursor: pointer;
+    }
+    .menu-item:last-child {
+      border-bottom: none;
+    }
+    .menu-item:hover {
+      background-color: #f9f9f9;
+    }
+    .left-menu {
+      left: 0;
+      transform-origin: top left;
+    }
+    .center-menu {
+      left: 50%;
+      transform: translateX(-50%);
+      transform-origin: top center;
+    }
+    .right-menu {
+      right: 0;
+      transform-origin: top right;
+    }
+  </style>
+</head>
+<body>
+  <div class="layout">
+    <header class="header">
+      <div class="avatar-container" id="leftAvatarContainer">
+        <div class="avatar" id="leftAvatar"></div>
+        <div class="menu left-menu" id="leftMenu">
+          <div class="menu-item">Left Profile</div>
+          <div class="menu-item">Left Settings</div>
+          <div class="menu-item">Left Logout</div>
+        </div>
+      </div>
+      <div class="avatar-container" id="centerAvatarContainer">
+        <div class="avatar" id="centerAvatar"></div>
+        <div class="menu center-menu" id="centerMenu">
+          <div class="menu-item">Center Profile</div>
+          <div class="menu-item">Center Settings</div>
+          <div class="menu-item">Center Logout</div>
+        </div>
+      </div>
+      <div class="avatar-container" id="rightAvatarContainer">
+        <div class="avatar" id="rightAvatar"></div>
+        <div class="menu right-menu" id="rightMenu">
+          <div class="menu-item">Right Profile</div>
+          <div class="menu-item">Right Settings</div>
+          <div class="menu-item">Right Logout</div>
+        </div>
+      </div>
+    </header>
+    <main class="content">
+      <h1>Welcome to the App</h1>
+      <p>This is the main content area.</p>
+    </main>
+  </div>
+
+  <script>
+    function setupAvatarMenu(avatarId, menuId, alignment) {
+      const avatar = document.getElementById(avatarId);
+      const menu = document.getElementById(menuId);
+      let isMenuOpen = false;
+
+      avatar.addEventListener('click', () => {
+        if (isMenuOpen) {
+          gsap.to(menu, {
+            duration: 0.3,
+            scaleX: 0,
+            scaleY: 0,
+            transformOrigin: alignment === 'left' ? 'top left' : alignment === 'center' ? 'top center' : 'top right',
+            ease: 'power2.inOut',
+            onComplete: () => {
+              menu.style.display = 'none';
+            }
+          });
+        } else {
+          menu.style.display = 'block';
+          gsap.fromTo(
+            menu,
+            { scaleX: 0, scaleY: 0, transformOrigin: alignment === 'left' ? 'top left' : alignment === 'center' ? 'top center' : 'top right' },
+            { 
+              duration: 0.3,
+              scaleX: 1,
+              scaleY: 1,
+              transformOrigin: alignment === 'left' ? 'top left' : alignment === 'center' ? 'top center' : 'top right',
+              ease: 'power2.out'
+            }
+          );
+        }
+        isMenuOpen = !isMenuOpen;
+      });
+
+      // Close menu when clicking outside
+      document.addEventListener('click', (e) => {
+        const avatarContainer = document.getElementById(`${avatarId}Container`);
+        if (!avatarContainer.contains(e.target)) {
+          if (isMenuOpen) {
+            gsap.to(menu, {
+              duration: 0.3,
+              scaleX: 0,
+              scaleY: 0,
+              transformOrigin: alignment === 'left' ? 'top left' : alignment === 'center' ? 'top center' : 'top right',
+              ease: 'power2.inOut',
+              onComplete: () => {
+                menu.style.display = 'none';
+              }
+            });
+            isMenuOpen = false;
+          }
+        }
+      });
+    }
+
+    setupAvatarMenu('leftAvatar', 'leftMenu', 'left');
+    setupAvatarMenu('centerAvatar', 'centerMenu', 'center');
+    setupAvatarMenu('rightAvatar', 'rightMenu', 'right');
+  </script>
+</body>
+</html>
