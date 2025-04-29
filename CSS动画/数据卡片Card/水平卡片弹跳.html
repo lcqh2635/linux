@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GSAP Layout Animation</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background-color: #f9fafb;
+    }
+    .card-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 20px;
+      width: 90%;
+      max-width: 1200px;
+    }
+    .card {
+      background-color: #ffffff;
+      border-radius: 12px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.06);
+      padding: 20px;
+      text-align: center;
+      opacity: 0;
+      transform: scale(0.9) translateY(20px);
+      transition: box-shadow 0.3s ease;
+    }
+    .card h3 {
+      margin: 0 0 10px;
+      font-size: 18px;
+      color: #333;
+    }
+    .card p {
+      margin: 0;
+      font-size: 14px;
+      color: #666;
+    }
+    .card:hover {
+      box-shadow: 0 8px 12px rgba(0, 0, 0, 0.15), 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+  </style>
+</head>
+<body>
+  <div class="card-container">
+    <div class="card">
+      <h3>Card 1</h3>
+      <p>This is the first card with some data.</p>
+    </div>
+    <div class="card">
+      <h3>Card 2</h3>
+      <p>This is the second card with some data.</p>
+    </div>
+    <div class="card">
+      <h3>Card 3</h3>
+      <p>This is the third card with some data.</p>
+    </div>
+    <div class="card">
+      <h3>Card 4</h3>
+      <p>This is the fourth card with some data.</p>
+    </div>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      // const cards = document.querySelectorAll(".card");
+      // 获取所有卡片元素
+      const cards = gsap.utils.toArray('.card');
+      
+      // 为每个卡片设置动画
+      // 注意：这里使用的是 gsap.to
+      gsap.to(cards, {
+        y: -50, // 从上方50px开始
+        opacity: 1, // 从完全透明开始
+        // scale: 1,
+        duration: 1.2, // 动画持续时间
+        stagger: 0.15, // 每个元素间隔0.15秒
+        // elastic.out(amplitude, period):
+        // amplitude: 弹性幅度(默认1)，值越大弹性越强
+        // period: 弹性周期(默认0.3)，值越小弹性振动越快
+        // ease: "elastic.out(0.8, 0.8)",  // 较柔和的弹性
+         ease: "elastic.out(1, 0.5)",    // 中等弹性
+        // ease: "elastic.out(1.5, 0.3)"   // 更强弹性
+      });
+    });
+  </script>
+</body>
+</html>

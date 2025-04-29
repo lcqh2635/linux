@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GSAP主题切换动画</title>
+  <style>
+    :root {
+      --bg-color: #ffffff;
+      --text-color: #333333;
+      --primary-color: #4285f4;
+      --card-bg: #f5f5f5;
+      --border-color: #e0e0e0;
+      --transition-time: 0.5s;
+    }
+
+    [data-theme="dark"] {
+      --bg-color: #1a1a1a;
+      --text-color: #f0f0f0;
+      --primary-color: #8ab4f8;
+      --card-bg: #2a2a2a;
+      --border-color: #444444;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Arial', sans-serif;
+      background-color: var(--bg-color);
+      color: var(--text-color);
+      line-height: 1.6;
+      padding: 20px;
+      /* 禁用CSS过渡，由GSAP控制 */
+      transition: none;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 30px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    h1 {
+      color: var(--primary-color);
+    }
+
+    .theme-toggle {
+      background: var(--primary-color);
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    .card {
+      background: var(--card-bg);
+      border-radius: 8px;
+      padding: 20px;
+      margin-bottom: 20px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      border: 1px solid var(--border-color);
+    }
+
+    .card h2 {
+      margin-bottom: 10px;
+      color: var(--primary-color);
+    }
+
+    .features {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 20px;
+      margin-top: 30px;
+    }
+
+    .feature-item {
+      background: var(--card-bg);
+      padding: 15px;
+      border-radius: 8px;
+      border: 1px solid var(--border-color);
+    }
+
+    /* 为减少运动用户提供选项 */
+    @media (prefers-reduced-motion: reduce) {
+      :root {
+        --transition-time: 0.01s;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>主题切换演示</h1>
+      <button class="theme-toggle" id="themeToggle">切换暗色主题</button>
+    </header>
+
+    <div class="card">
+      <h2>关于这个演示</h2>
+      <p>这是一个使用GSAP实现流畅主题切换过渡的完整示例。点击右上角按钮可以在亮色和暗色主题之间切换。</p>
+      <p>注意观察所有元素的颜色是如何同步过渡的，没有卡顿或不同步的情况。</p>
+    </div>
+
+    <div class="features">
+      <div class="feature-item">
+        <h3>统一过渡</h3>
+        <p>所有元素使用CSS变量，通过GSAP统一控制过渡</p>
+      </div>
+      <div class="feature-item">
+        <h3>平滑动画</h3>
+        <p>使用GSAP的时间轴和缓动函数实现自然过渡</p>
+      </div>
+      <div class="feature-item">
+        <h3>性能优化</h3>
+        <p>最小化重绘和回流，确保动画流畅</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 引入GSAP库 -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/gsap.min.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const themeToggle = document.getElementById('themeToggle');
+      const root = document.documentElement;
+      
+      // 检查本地存储中的主题偏好
+      const savedTheme = localStorage.getItem('theme');
+      const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      
+      // 设置初始主题
+      const initialTheme = savedTheme || (systemPrefersDark ? 'dark' : 'light');
+      setTheme(initialTheme, false); // 初始加载不应用动画
+      
+      // 监听系统主题变化
+      window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => {
+        const newTheme = e.matches ? 'dark' : 'light';
+        setTheme(newTheme);
+      });
+      
+      // 按钮点击事件
+      themeToggle.addEventListener('click', () => {
+        const currentTheme = root.getAttribute('data-theme');
+        const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+        setTheme(newTheme);
+      });
+      
+      function setTheme(newTheme, animate = true) {
+        // 更新按钮文本
+        themeToggle.textContent = newTheme === 'dark' ? '切换亮色主题' : '切换暗色主题';
+        
+        if (!animate) {
+          // 不应用动画，直接设置主题
+          root.setAttribute('data-theme', newTheme);
+          localStorage.setItem('theme', newTheme);
+          return;
+        }
+        
+        // 使用GSAP动画主题切换
+        const timeline = gsap.timeline({
+          onComplete: () => {
+            root.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+          }
+        });
+        
+        // 定义主题颜色
+        const themeColors = {
+          light: {
+            '--bg-color': '#ffffff',
+            '--text-color': '#333333',
+            '--primary-color': '#4285f4',
+            '--card-bg': '#f5f5f5',
+            '--border-color': '#e0e0e0'
+          },
+          dark: {
+            '--bg-color': '#1a1a1a',
+            '--text-color': '#f0f0f0',
+            '--primary-color': '#8ab4f8',
+            '--card-bg': '#2a2a2a',
+            '--border-color': '#444444'
+          }
+        };
+        
+        // 动画所有CSS变量
+        timeline.to(root, {
+          duration: 1,
+          ease: "power2.inOut",
+          ...themeColors[newTheme]
+        }, 0);
+        
+      }
+    });
+  </script>
+</body>
+</html>

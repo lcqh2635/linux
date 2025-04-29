@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>卡片加载动画 - 工作示例</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f5f7fa;
+      padding: 20px;
+    }
+    .card-container {
+      max-width: 800px;
+      margin: 0 auto;
+    }
+    .card {
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+      padding: 25px;
+      margin-bottom: 25px;
+      /* 移除初始的opacity和transform，让GSAP控制 */
+    }
+    h2 {
+      color: #333;
+      margin-top: 0;
+    }
+    p {
+      color: #666;
+      line-height: 1.6;
+    }
+  </style>
+</head>
+<body>
+  <div class="card-container">
+    <div class="card">
+      <h2>卡片标题1</h2>
+      <p>这里是卡片1的内容描述，展示一些有趣的信息。</p>
+    </div>
+    <div class="card">
+      <h2>卡片标题2</h2>
+      <p>这里是卡片2的内容描述，展示一些有趣的信息。</p>
+    </div>
+    <div class="card">
+      <h2>卡片标题3</h2>
+      <p>这里是卡片3的内容描述，展示一些有趣的信息。</p>
+    </div>
+    <div class="card">
+      <h2>卡片标题4</h2>
+      <p>这里是卡片4的内容描述，展示一些有趣的信息。</p>
+    </div>
+  </div>
+
+  <!-- 将GSAP脚本放在body末尾确保DOM已存在 -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/gsap.min.js"></script>
+  <script>
+    // 更可靠的初始化方式
+    document.addEventListener('DOMContentLoaded', function() {
+      // 添加调试输出确认代码执行
+      console.log('DOM已加载，开始动画');
+      
+      // 使用gsap.fromTo更明确地控制初始和结束状态
+      gsap.fromTo('.card', 
+        {
+          y: 50,
+          opacity: 0,
+          scale: 0.95
+        },
+        {
+          y: 0,
+          opacity: 1,
+          scale: 1,
+          duration: 1.2,
+          stagger: 0.15,
+          ease: "elastic.out(1.2, 0.5)",
+          onComplete: function() {
+            console.log('所有卡片动画完成');
+          }
+        }
+      );
+    });
+  </script>
+</body>
+</html>

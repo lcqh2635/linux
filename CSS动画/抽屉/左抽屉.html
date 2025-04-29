@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>GSAP Drawer</title>
+  <title>GSAP Drawer 左抽屉</title>
   <style>
     body {
       margin: 0;
@@ -29,6 +29,8 @@
       justify-content: center;
       align-items: center;
       transform: translateX(-100%);
+      box-shadow: 5px 0 15px rgba(0,0,0,0.1); /* Shadow on the right side */
+      transition: box-shadow 0.2s ease;
     }
 
     .drawer p {
