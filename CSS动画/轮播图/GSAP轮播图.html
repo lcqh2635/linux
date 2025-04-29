@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>改进版GSAP轮播图</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #f5f5f5;
+        }
+        
+        .carousel-container {
+            position: relative;
+            width: 800px;
+            height: 450px;
+            overflow: hidden;
+            border-radius: 8px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+        
+        .carousel {
+            display: flex;
+            width: 100%;
+            height: 100%;
+            position: relative;
+        }
+        
+        .slide {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 4rem;
+            color: white;
+            font-weight: bold;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+        
+        .slide:nth-child(1) { background-color: #FF6B6B; }
+        .slide:nth-child(2) { background-color: #4ECDC4; }
+        .slide:nth-child(3) { background-color: #45B7D1; }
+        .slide:nth-child(4) { background-color: #FFA07A; }
+        
+        .controls {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 10px;
+            z-index: 10;
+        }
+        
+        .control-btn {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background-color: rgba(255, 255, 255, 0.5);
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        .control-btn.active {
+            background-color: white;
+        }
+        
+        .nav-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 50px;
+            height: 50px;
+            background-color: rgba(0, 0, 0, 0.3);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            font-size: 1.5rem;
+            cursor: pointer;
+            z-index: 10;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: all 0.3s;
+            opacity: 0;
+            visibility: hidden;
+            padding: 0; /* 添加这一行确保没有内边距影响 */
+        }
+        
+        /* 专门为箭头字符添加调整 */
+        .nav-btn::before {
+            content: '';
+            display: inline-block;
+            height: 100%;
+            vertical-align: middle;
+        }
+        
+        .nav-btn span {
+            display: inline-block;
+            vertical-align: middle;
+            line-height: 1;
+            margin-top: -2px; /* 微调垂直位置 */
+        }
+        
+        .carousel-container:hover .nav-btn {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        .nav-btn:hover {
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+        
+        .prev {
+            left: 20px;
+        }
+        
+        .next {
+            right: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="carousel-container">
+        <div class="carousel">
+            <div class="slide">1</div>
+            <div class="slide">2</div>
+            <div class="slide">3</div>
+            <div class="slide">4</div>
+        </div>
+        
+        <!-- 将箭头包裹在span中以便更好控制 -->
+        <button class="nav-btn prev"><span>❮</span></button>
+        <button class="nav-btn next"><span>❯</span></button>
+        
+        <div class="controls">
+            <button class="control-btn active" data-index="0"></button>
+            <button class="control-btn" data-index="1"></button>
+            <button class="control-btn" data-index="2"></button>
+            <button class="control-btn" data-index="3"></button>
+        </div>
+    </div>
+
+    <!-- 引入GSAP库 -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/gsap.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const slides = document.querySelectorAll('.slide');
+            const controlButtons = document.querySelectorAll('.control-btn');
+            const prevBtn = document.querySelector('.prev');
+            const nextBtn = document.querySelector('.next');
+            
+            let currentIndex = 0;
+            const totalSlides = slides.length;
+            let isAnimating = false; // 防止快速点击导致的问题
+            
+            // 初始化轮播图 - 将所有幻灯片放在右侧
+            gsap.set(slides, { xPercent: 100 });
+            gsap.set(slides[0], { xPercent: 0 });
+            
+            // 自动轮播
+            let autoPlayInterval = setInterval(nextSlide, 5000);
+            
+            // 鼠标悬停时暂停自动轮播并显示导航按钮
+            const carouselContainer = document.querySelector('.carousel-container');
+            carouselContainer.addEventListener('mouseenter', () => {
+                clearInterval(autoPlayInterval);
+            });
+            
+            carouselContainer.addEventListener('mouseleave', () => {
+                autoPlayInterval = setInterval(nextSlide, 5000);
+            });
+            
+            // 下一张幻灯片
+            function nextSlide() {
+                if (isAnimating) return;
+                goToSlide((currentIndex + 1) % totalSlides);
+            }
+            
+            // 上一张幻灯片
+            function prevSlide() {
+                if (isAnimating) return;
+                goToSlide((currentIndex - 1 + totalSlides) % totalSlides);
+            }
+            
+            // 跳转到指定幻灯片
+            function goToSlide(index) {
+                // 如果点击的是当前幻灯片或正在动画中，不做任何操作
+                if (index === currentIndex || isAnimating) return;
+                
+                isAnimating = true; // 开始动画
+                
+                // 获取当前和下一个幻灯片
+                const currentSlide = slides[currentIndex];
+                const nextSlide = slides[index];
+                
+                // 根据方向决定动画方向
+                const direction = index > currentIndex ? 1 : -1;
+                
+                // 设置下一个幻灯片的初始位置
+                gsap.set(nextSlide, { xPercent: direction * 100, zIndex: 1 });
+                gsap.set(currentSlide, { zIndex: 2 });
+                
+                // 创建时间线，使动画更流畅
+                const tl = gsap.timeline({
+                    defaults: { duration: 0.8, ease: "power2.inOut" },
+                    onComplete: () => {
+                        isAnimating = false; // 动画结束
+                    }
+                });
+                
+                // 动画效果：当前幻灯片移出，新幻灯片移入
+                tl.to(currentSlide, { xPercent: -direction * 100 }, 0)
+                  .to(nextSlide, { xPercent: 0 }, 0); // 与上一动画同时开始
+                
+                // 更新控制按钮状态
+                updateControls(index);
+                
+                // 更新当前索引
+                currentIndex = index;
+            }
+            
+            // 更新控制按钮状态
+            function updateControls(index) {
+                controlButtons.forEach((btn, i) => {
+                    if (i === index) {
+                        btn.classList.add('active');
+                    } else {
+                        btn.classList.remove('active');
+                    }
+                });
+            }
+            
+            // 事件监听
+            nextBtn.addEventListener('click', nextSlide);
+            prevBtn.addEventListener('click', prevSlide);
+            
+            controlButtons.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const index = parseInt(btn.getAttribute('data-index'));
+                    goToSlide(index);
+                });
+            });
+            
+            // 添加键盘导航
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'ArrowRight') {
+                    nextSlide();
+                } else if (e.key === 'ArrowLeft') {
+                    prevSlide();
+                }
+            });
+        });
+    </script>
+</body>
+</html>

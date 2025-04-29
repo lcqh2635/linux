@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>完美解决下拉菜单空白问题</title>
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      height: 100vh;
+      margin: 0;
+      padding: 20px;
+      background: #f5f5f5;
+      box-sizing: border-box;
+    }
+
+    .user-menu {
+      position: relative;
+      display: inline-block;
+      margin: 10px;
+    }
+
+    .avatar {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      overflow: hidden;
+      cursor: pointer;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .avatar:hover {
+      transform: scale(1.05);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    .avatar img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block; /* 修复图片显示问题 */
+    }
+
+    .dropdown-menu {
+      position: absolute;
+      background: white;
+      border-radius: 8px;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+      overflow: hidden;
+      opacity: 0;
+      visibility: hidden;
+      min-width: 180px;
+      z-index: 1000; /* 确保足够高的层级 */
+      pointer-events: none;
+    }
+
+    .dropdown-menu.active {
+      pointer-events: auto;
+    }
+
+    /* 初始状态 - 会在JS中根据位置覆盖 */
+    .dropdown-menu {
+      top: 60px;
+      left: 50%;
+      transform: translateX(-50%) translateY(-15px) scaleY(0.9);
+      transform-origin: top center;
+    }
+
+    .dropdown-menu.left-align {
+      left: 0;
+      transform: translateY(-15px) scaleY(0.9);
+      transform-origin: top left;
+    }
+
+    .dropdown-menu.right-align {
+      right: 0;
+      left: auto;
+      transform: translateY(-15px) scaleY(0.9);
+      transform-origin: top right;
+    }
+
+    .dropdown-menu ul {
+      list-style: none;
+      padding: 8px 0;
+      margin: 0;
+      /* 确保列表内容可见 */
+      opacity: 1 !important; 
+      visibility: visible !important;
+    }
+
+    .dropdown-menu li {
+      /* 确保列表项可见 */
+      opacity: 1 !important;
+      transform: none !important;
+    }
+
+    .dropdown-menu li a {
+      display: block;
+      padding: 10px 20px;
+      color: #333;
+      text-decoration: none;
+      transition: background 0.2s;
+      /* 确保链接可见 */
+      opacity: 1 !important;
+    }
+
+    .dropdown-menu li a:hover {
+      background: #f0f0f0;
+    }
+
+    .dropdown-menu li:not(:last-child) {
+      border-bottom: 1px solid #eee;
+    }
+
+    .container {
+      display: flex;
+      justify-content: space-between;
+      width: 100%;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="user-menu">
+      <div class="avatar">
+        <img src="https://randomuser.me/api/portraits/women/44.jpg" alt="User Avatar">
+      </div>
+      <div class="dropdown-menu">
+        <ul>
+          <li><a href="#">个人资料</a></li>
+          <li><a href="#">账户设置</a></li>
+          <li><a href="#">退出登录</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="user-menu">
+      <div class="avatar">
+        <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="User Avatar">
+      </div>
+      <div class="dropdown-menu">
+        <ul>
+          <li><a href="#">个人资料</a></li>
+          <li><a href="#">账户设置</a></li>
+          <li><a href="#">退出登录</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="user-menu">
+      <div class="avatar">
+        <img src="https://randomuser.me/api/portraits/women/68.jpg" alt="User Avatar">
+      </div>
+      <div class="dropdown-menu">
+        <ul>
+          <li><a href="#">个人资料</a></li>
+          <li><a href="#">账户设置</a></li>
+          <li><a href="#">退出登录</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/gsap.min.js"></script>
+  
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // 为所有菜单设置点击事件
+      document.querySelectorAll('.user-menu').forEach(menu => {
+        const avatar = menu.querySelector('.avatar');
+        const dropdown = menu.querySelector('.dropdown-menu');
+        let isMenuOpen = false;
+        let animation;
+
+        // 初始化动画
+        function initAnimation() {
+          // 确保菜单内容完全可见（重置可能被GSAP修改的样式）
+          gsap.set(dropdown.querySelectorAll('li'), {
+            opacity: 1,
+            y: 0
+          });
+
+          // 设置菜单初始状态
+          gsap.set(dropdown, {
+            opacity: 0,
+            visibility: 'hidden',
+            display: 'block' // 确保元素显示
+          });
+
+          // 根据菜单位置确定动画方向
+          const menuRect = menu.getBoundingClientRect();
+          const viewportWidth = window.innerWidth;
+          let positionType = 'center';
+          const menuCenter = menuRect.left + menuRect.width / 2;
+          
+          if (menuCenter < viewportWidth * 0.25) {
+            positionType = 'left';
+            dropdown.classList.add('left-align');
+          } else if (menuCenter > viewportWidth * 0.75) {
+            positionType = 'right';
+            dropdown.classList.add('right-align');
+          }
+
+          // 清除旧动画
+          if (animation) animation.kill();
+
+          // 创建新动画
+          animation = gsap.timeline({ 
+            paused: true,
+            defaults: { 
+              duration: 0.3,
+              ease: "back.out(1.2)" 
+            }
+          });
+
+          // 基础动画（菜单容器）
+          animation
+            .set(dropdown, { 
+              visibility: 'visible',
+              onStart: () => dropdown.classList.add('active')
+            })
+            .fromTo(dropdown, 
+              { 
+                opacity: 0,
+                y: -15,
+                scale: positionType === 'center' ? 1 : 0.95,
+                x: positionType === 'left' ? -10 : positionType === 'right' ? 10 : 0
+              },
+              { 
+                opacity: 1,
+                y: 0,
+                scale: 1,
+                x: 0
+              }
+            );
+
+          // 菜单项动画
+          animation.from(dropdown.querySelectorAll('li'), {
+            opacity: 0,
+            y: -10,
+            stagger: 0.08,
+            duration: 0.2
+          }, "<0.1");
+
+          // 关闭动画完成回调
+          animation.eventCallback('onReverseComplete', () => {
+            dropdown.classList.remove('active');
+            gsap.set(dropdown, { visibility: 'hidden' });
+          });
+        }
+
+        // 初始化动画
+        initAnimation();
+
+        // 窗口大小改变时重新初始化
+        window.addEventListener('resize', initAnimation);
+
+        // 点击头像切换菜单
+        avatar.addEventListener('click', (e) => {
+          e.stopPropagation();
+          
+          if (isMenuOpen) {
+            animation.timeScale(1.3).reverse();
+          } else {
+            initAnimation(); // 确保位置正确
+            animation.timeScale(1).play();
+          }
+          
+          isMenuOpen = !isMenuOpen;
+        });
+
+        // 点击页面其他位置关闭菜单
+        document.addEventListener('click', () => {
+          if (isMenuOpen) {
+            animation.timeScale(1.5).reverse();
+            isMenuOpen = false;
+          }
+        });
+
+        // 阻止菜单内部点击冒泡
+        dropdown.addEventListener('click', (e) => {
+          e.stopPropagation();
+        });
+      });
+    });
+  </script>
+</body>
+</html>

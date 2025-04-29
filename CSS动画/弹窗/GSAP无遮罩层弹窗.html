@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>无遮罩层弹窗示例</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+      transition: filter 0.3s ease;
+    }
+    
+    .modal-content {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) scale(0.8);
+      background: white;
+      padding: 30px;
+      border-radius: 12px;
+      max-width: 500px;
+      width: 90%;
+      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+      z-index: 1000;
+      opacity: 0;
+      display: none;
+      will-change: transform, opacity;
+      border: 1px solid rgba(0, 0, 0, 0.1);
+    }
+    
+    .open-btn, .close-btn {
+      padding: 12px 24px;
+      background: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 16px;
+      transition: all 0.2s;
+    }
+    
+    .close-btn {
+      background: #f44336;
+      margin-top: 20px;
+    }
+    
+    .open-btn:hover, .close-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+  </style>
+</head>
+<body>
+  <h1>页面标题</h1>
+  <p>这里是页面的一些其他内容...</p>
+  <button class="open-btn">打开弹窗</button>
+  
+  <div class="modal-content">
+    <h2>重要通知</h2>
+    <p>这是一个没有遮罩层的弹窗示例。点击外部区域或关闭按钮可以关闭弹窗。</p>
+    <button class="close-btn">关闭弹窗</button>
+  </div>
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/gsap.min.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const modal = document.querySelector('.modal-content');
+      const openBtn = document.querySelector('.open-btn');
+      const closeBtn = document.querySelector('.close-btn');
+      
+      // 打开弹窗
+      function openModal() {
+        // 背景元素轻微模糊
+        gsap.to("body > *:not(.modal-content)", {
+          filter: "blur(2px)",
+          duration: 0.3,
+          ease: "power2.out"
+        });
+        
+        // 弹窗动画
+        gsap.fromTo(modal, 
+          { 
+            scale: 0.8,
+            opacity: 0,
+            y: 30
+          },
+          { 
+            scale: 1,
+            opacity: 1,
+            y: 0,
+            duration: 0.6,
+            ease: 'elastic.out(1, 0.5)',
+            onStart: () => modal.style.display = "block"
+          }
+        );
+      }
+      
+      // 关闭弹窗
+      function closeModal() {
+        // 恢复背景
+        gsap.to("body > *:not(.modal-content)", {
+          filter: "blur(0px)",
+          duration: 0.3,
+          ease: "power2.in"
+        });
+        
+        // 弹窗动画
+        gsap.to(modal, {
+          scale: 0.8,
+          opacity: 0,
+          y: 30,
+          duration: 0.3,
+          ease: "back.in(1.2)",
+          onComplete: () => modal.style.display = "none"
+        });
+      }
+      
+      // 事件监听
+      openBtn.addEventListener('click', openModal);
+      closeBtn.addEventListener('click', closeModal);
+      
+      // 点击外部关闭
+      document.addEventListener('click', (e) => {
+        if (!modal.contains(e.target) && e.target !== openBtn && window.getComputedStyle(modal).display === "block") {
+          closeModal();
+        }
+      });
+    });
+  </script>
+</body>
+</html>
