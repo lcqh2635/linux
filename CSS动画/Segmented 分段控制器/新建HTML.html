@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GSAP Segmented Control</title>
+  <style>
+    .segmented-control {
+      position: relative;
+      display: inline-flex;
+      background: #f0f0f0;
+      border-radius: 8px;
+      padding: 4px;
+      margin: 20px;
+    }
+    
+    .segmented-options {
+      display: flex;
+      position: relative;
+      z-index: 1;
+    }
+    
+    .option {
+      padding: 8px 16px;
+      border: none;
+      background: transparent;
+      cursor: pointer;
+      position: relative;
+      z-index: 2;
+      transition: color 0.3s ease;
+    }
+    
+    .option.active {
+      color: white;
+    }
+    
+    .indicator {
+      position: absolute;
+      top: 4px;
+      left: 4px;
+      height: calc(100% - 8px);
+      border-radius: 6px;
+      background: #4a90e2;
+      z-index: 1;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    
+    .indicator.option1 { background: #4a90e2; }
+    .indicator.option2 { background: #e24a4a; }
+    .indicator.option3 { background: #4ae24a; }
+  </style>
+</head>
+<body>
+  <div class="segmented-control">
+    <div class="segmented-options">
+      <button class="option active" data-value="option1">选项1</button>
+      <button class="option" data-value="option2">选项2</button>
+      <button class="option" data-value="option3">选项3</button>
+    </div>
+    <div class="indicator option1"></div>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/gsap.min.js"></script>
+  <script>
+    class SegmentedControl {
+      constructor(container) {
+        this.container = container;
+        this.options = Array.from(container.querySelectorAll('.option'));
+        this.indicator = container.querySelector('.indicator');
+        this.activeOption = container.querySelector('.option.active');
+        this.resizeTimeout = null;
+        
+        this.positionIndicator();
+        
+        this.options.forEach(option => {
+          option.addEventListener('click', () => this.handleOptionClick(option));
+        });
+        
+        window.addEventListener('resize', () => {
+          this.positionIndicator();
+        });
+      }
+      
+      positionIndicator() {
+        if (this.resizeTimeout) clearTimeout(this.resizeTimeout);
+        this.resizeTimeout = setTimeout(() => {
+          const { left, width } = this.activeOption.getBoundingClientRect();
+          const containerLeft = this.container.getBoundingClientRect().left;
+          
+          gsap.set(this.indicator, {
+            x: left - containerLeft - 4,
+            width: width
+          });
+        }, 100);
+      }
+      
+      handleOptionClick(clickedOption) {
+        if (clickedOption === this.activeOption) return;
+        
+        this.options.forEach(option => option.classList.remove('active'));
+        clickedOption.classList.add('active');
+        
+        const { left, width } = clickedOption.getBoundingClientRect();
+        const containerLeft = this.container.getBoundingClientRect().left;
+        const newX = left - containerLeft - 4;
+        
+        // 高级动画效果
+        gsap.to(this.indicator, {
+          x: newX,
+          width: width,
+          scaleX: 1.1,
+          duration: 0.3,
+          ease: "back.out(1.7)",
+          className: `indicator ${clickedOption.dataset.value}`,
+          onComplete: () => {
+            gsap.to(this.indicator, {
+              scaleX: 1,
+              duration: 0.1
+            });
+          }
+        });
+        
+        this.activeOption = clickedOption;
+      }
+    }
+    
+    document.querySelectorAll('.segmented-control').forEach(control => {
+      new SegmentedControl(control);
+    });
+  </script>
+</body>
+</html>

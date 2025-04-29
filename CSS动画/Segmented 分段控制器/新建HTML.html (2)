@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GSAP FLIP Segmented Controller</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      background-color: #f4f4f9;
+    }
+
+    .segmented-controller {
+      display: flex;
+      position: relative;
+      border: 2px solid #007bff;
+      border-radius: 25px;
+      overflow: hidden;
+      width: 300px;
+      height: 50px;
+    }
+
+    .segment {
+      flex: 1;
+      text-align: center;
+      line-height: 46px;
+      cursor: pointer;
+      color: #007bff;
+      transition: color 0.3s;
+    }
+
+    .segment.active {
+      color: white;
+    }
+
+    .highlight {
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 100%;
+      background-color: #007bff;
+      border-radius: 23px;
+      z-index: -1;
+      will-change: transform, width; /* 提升性能 */
+    }
+  </style>
+</head>
+<body>
+  <div class="segmented-controller">
+    <div class="highlight"></div>
+    <div class="segment active" data-index="0">选项 1</div>
+    <div class="segment" data-index="1">选项 2</div>
+  </div>
+
+  <!-- 引入 GSAP 和 FLIP 插件 -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/Flip.min.js"></script>
+  <script>
+    // 获取 DOM 元素
+    const segments = document.querySelectorAll('.segment');
+    const highlight = document.querySelector('.highlight');
+
+    // 初始化当前活动索引
+    let currentActiveIndex = 0;
+
+    // 设置初始高亮位置
+    gsap.set(highlight, {
+      x: segments[currentActiveIndex].offsetLeft,
+      width: segments[currentActiveIndex].offsetWidth
+    });
+
+    // 添加点击事件监听
+    segments.forEach((segment, index) => {
+      segment.addEventListener('click', () => {
+        if (index === currentActiveIndex) return; // 防止重复点击
+
+        // 更新当前活动索引
+        const previousActiveIndex = currentActiveIndex;
+        currentActiveIndex = index;
+
+        // 使用 FLIP 插件创建动画
+        Flip.from(
+          Flip.getState([highlight]), // 捕获当前状态
+          {
+            targets: highlight, // 动画目标
+            duration: 0.4, // 动画时长
+            ease: 'power2.inOut', // 缓动函数
+            absolute: true, // 使用绝对定位
+            onEnter: () => {
+              // 更新高亮的位置和宽度
+              gsap.to(highlight, {
+                x: segments[currentActiveIndex].offsetLeft,
+                width: segments[currentActiveIndex].offsetWidth
+              });
+            },
+            onStart: () => {
+              // 移除之前的 active 类
+              segments[previousActiveIndex].classList.remove('active');
+            },
+            onComplete: () => {
+              // 添加新的 active 类
+              segments[currentActiveIndex].classList.add('active');
+            }
+          }
+        );
+      });
+    });
+  </script>
+</body>
+</html>
