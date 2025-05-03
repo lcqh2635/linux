@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>GSAP 图标旋转动画</title>
+  <style>
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background-color: #f0f0f0;
+      margin: 0;
+    }
+
+    .icon {
+      font-size: 4rem;
+      color: #333;
+      cursor: pointer;
+      /* 移除原生 transition，避免干扰 GSAP */
+      /* transition: transform 0.3s ease; */
+      transform-origin: center center;
+    }
+
+    .icon:hover {
+      color: #0077ff;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- 图标元素 -->
+  <div class="icon" id="rotateIcon">🔄</div>
+
+  <!-- 引入 GSAP -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      const icon = document.getElementById("rotateIcon");
+
+      icon.addEventListener("click", function () {
+        gsap.to(icon, {
+          rotate: "+=360",   // ✅ 使用 rotate 而非 rotation（GSAP 3+ 推荐）
+          duration: 0.6,     // 动画持续时间
+          ease: "power2.out",// 缓动函数
+          transformOrigin: "center center", // ✅ 明确设置旋转中心
+          onComplete: () => {
+            console.log("图标旋转完成");
+          }
+        });
+      });
+    });
+  </script>
+
+</body>
+</html>

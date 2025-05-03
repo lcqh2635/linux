@@ -1,0 +1,715 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GSAP 侧边栏菜单</title>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <style>
+        :root {
+            --sidebar-bg: #304156;
+            --sidebar-text: #bfcbd9;
+            --sidebar-active: #409EFF;
+            --sidebar-hover: #263445;
+            --sidebar-submenu: #1f2d3d;
+            --header-bg: #ffffff;
+            --header-text: #5a5e66;
+            --header-hover: #409EFF;
+            --header-search-bg: #f5f7fa;
+            --content-bg: #f0f2f5;
+            --content-text: #333333;
+            --drawer-bg: #ffffff;
+            --drawer-text: #333333;
+            --border-color: #e6e6e6;
+            --tooltip-bg: #304156;
+            --theme-toggle-bg: #dcdfe6;
+        }
+
+        body.dark {
+            --sidebar-bg: #1a1a1a;
+            --sidebar-text: #a0a0a0;
+            --sidebar-active: #409EFF;
+            --sidebar-hover: #2a2a2a;
+            --sidebar-submenu: #252525;
+            --header-bg: #2a2a2a;
+            --header-text: #cccccc;
+            --header-hover: #409EFF;
+            --header-search-bg: #3a3a3a;
+            --content-bg: #1a1a1a;
+            --content-text: #e6e6e6;
+            --drawer-bg: #2a2a2a;
+            --drawer-text: #e6e6e6;
+            --border-color: #3a3a3a;
+            --tooltip-bg: #2a2a2a;
+            --theme-toggle-bg: #409EFF;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', sans-serif;
+            display: flex;
+            height: 100vh;
+            background-color: var(--content-bg);
+            color: var(--content-text);
+            flex-direction: column;
+            transition: background-color 0.3s, color 0.3s;
+        }
+        
+        .app-container {
+            display: flex;
+            flex: 1;
+            overflow: hidden;
+        }
+        
+        .sidebar {
+            width: 220px;
+            height: 100%;
+            background-color: var(--sidebar-bg);
+            color: var(--sidebar-text);
+            transition: width 0.3s ease, background-color 0.3s, color 0.3s;
+            overflow: visible;
+            position: relative;
+            z-index: 100;
+            border-right: 1px solid var(--border-color);
+        }
+        
+        .sidebar.collapsed {
+            width: 64px;
+        }
+        
+        .header {
+            height: 60px;
+            background-color: var(--header-bg);
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 20px;
+            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+            z-index: 90;
+            transition: background-color 0.3s, border-color 0.3s;
+        }
+        
+        .header-left, .header-right {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .header-icon {
+            color: var(--header-text);
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .header-icon:hover {
+            color: var(--header-hover);
+        }
+        
+        .settings-icon {
+            transition: transform 0.3s;
+        }
+        
+        .settings-icon.rotated {
+            transform: rotate(90deg);
+        }
+        
+        .search-bar {
+            display: flex;
+            align-items: center;
+            background-color: var(--header-search-bg);
+            border-radius: 18px;
+            padding: 5px 10px;
+            width: 200px;
+            transition: background-color 0.3s;
+        }
+        
+        .search-bar input {
+            border: none;
+            background: transparent;
+            outline: none;
+            padding: 5px;
+            width: 100%;
+            color: var(--header-text);
+        }
+        
+        .search-bar .material-icons {
+            color: var(--header-text);
+        }
+        
+        .theme-toggle {
+            position: relative;
+            width: 40px;
+            height: 20px;
+            background-color: var(--theme-toggle-bg);
+            border-radius: 10px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        .theme-toggle::after {
+            content: '';
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            width: 16px;
+            height: 16px;
+            background-color: #fff;
+            border-radius: 50%;
+            transition: transform 0.3s;
+        }
+        
+        .user-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background-color: var(--header-hover);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        
+        .drawer {
+            position: fixed;
+            top: 60px;
+            right: 0;
+            width: 300px;
+            height: calc(100vh - 60px);
+            background-color: var(--drawer-bg);
+            color: var(--drawer-text);
+            box-shadow: -2px 0 10px rgba(0, 0, 0, 0.1);
+            transform: translateX(100%);
+            transition: transform 0.3s ease, background-color 0.3s, color 0.3s;
+            z-index: 80;
+            padding: 20px;
+            overflow-y: auto;
+        }
+        
+        .drawer.open {
+            transform: translateX(0);
+        }
+        
+        .logo {
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-bottom: 1px solid var(--border-color);
+            padding: 0 20px;
+            overflow: hidden;
+        }
+        
+        .logo-content {
+            display: flex;
+            align-items: center;
+            width: 100%;
+        }
+        
+        .logo .title {
+            white-space: nowrap;
+            font-size: 18px;
+            font-weight: bold;
+            color: #fff;
+            transition: opacity 0.3s ease, margin-left 0.3s ease;
+            margin-left: 10px;
+            opacity: 1;
+        }
+        
+        .sidebar.collapsed .logo .title {
+            opacity: 0;
+            margin-left: -10px;
+            width: 0;
+        }
+        
+        .logo .material-icons {
+            font-size: 24px;
+            flex-shrink: 0;
+            color: #fff;
+        }
+        
+        .menu {
+            list-style: none;
+            padding: 0;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .menu-item {
+            position: relative;
+        }
+        
+        .menu-item > a {
+            display: flex;
+            align-items: center;
+            padding: 12px 20px;
+            color: var(--sidebar-text);
+            text-decoration: none;
+            transition: background-color 0.3s, color 0.3s;
+            white-space: nowrap;
+            position: relative;
+        }
+        
+        .menu-item > a:hover {
+            background-color: var(--sidebar-hover);
+        }
+        
+        .menu-item.active > a {
+            background-color: var(--sidebar-hover);
+            color: var(--sidebar-active);
+        }
+        
+        .menu-item .material-icons {
+            margin-right: 10px;
+            font-size: 18px;
+            flex-shrink: 0;
+        }
+        
+        .menu-item .title {
+            transition: opacity 0.3s ease, margin-left 0.3s ease;
+        }
+        
+        .sidebar.collapsed .menu-item .title {
+            opacity: 0;
+            width: 0;
+            margin-left: -10px;
+        }
+        
+        .menu-item .arrow {
+            margin-left: auto;
+            transition: transform 0.3s ease;
+            flex-shrink: 0;
+            font-size: 18px;
+        }
+        
+        .menu-item.expanded .arrow {
+            transform: rotate(90deg);
+        }
+        
+        .submenu {
+            list-style: none;
+            padding-left: 20px;
+            overflow: hidden;
+            background-color: var(--sidebar-submenu);
+            transition: background-color 0.3s;
+        }
+        
+        .submenu-item a {
+            display: flex;
+            align-items: center;
+            padding: 10px 20px 10px 40px;
+            color: var(--sidebar-text);
+            text-decoration: none;
+            transition: background-color 0.3s, color 0.3s;
+            white-space: nowrap;
+        }
+        
+        .submenu-item a:hover {
+            background-color: var(--sidebar-hover);
+        }
+        
+        .submenu-item.active a {
+            color: var(--sidebar-active);
+        }
+        
+        .toggle-btn {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            background: none;
+            border: none;
+            color: var(--sidebar-text);
+            cursor: pointer;
+            font-size: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 24px;
+            height: 24px;
+            transition: color 0.3s;
+        }
+        
+        .content-container {
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+            overflow: hidden;
+        }
+        
+        .main-content {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            background-color: var(--content-bg);
+            color: var(--content-text);
+            transition: background-color 0.3s, color 0.3s;
+        }
+        
+        /* Tooltip 样式 */
+        .menu-item .tooltip {
+            position: absolute;
+            left: calc(100% + 15px);
+            top: 50%;
+            transform: translateY(-50%);
+            background-color: var(--tooltip-bg);
+            color: #fff;
+            padding: 8px 12px;
+            border-radius: 4px;
+            font-size: 14px;
+            white-space: nowrap;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.2s ease 0.1s;
+            z-index: 1000;
+            box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
+            pointer-events: none;
+        }
+        
+        .sidebar.collapsed .menu-item:hover .tooltip {
+            opacity: 1;
+            visibility: visible;
+            left: calc(100% + 12px);
+        }
+        
+        .menu-item .tooltip::before {
+            content: '';
+            position: absolute;
+            right: 100%;
+            top: 50%;
+            transform: translateY(-50%);
+            border-width: 6px;
+            border-style: solid;
+            border-color: transparent var(--tooltip-bg) transparent transparent;
+        }
+
+        /* 活动指示器 */
+        .menu-item.active-indicator::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 4px;
+            background-color: var(--sidebar-active);
+            border-radius: 0 4px 4px 0;
+            transition: opacity 0.3s ease, background-color 0.3s;
+        }
+        
+        .sidebar.collapsed .menu-item.active-indicator::before {
+            opacity: 0;
+        }
+
+        /* 抽屉内容样式 */
+        .setting-item {
+            margin-bottom: 20px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .setting-item h3 {
+            margin-bottom: 8px;
+            color: var(--drawer-text);
+        }
+
+        .setting-item p {
+            color: var(--sidebar-text);
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <div class="sidebar">
+            <div class="logo">
+                <div class="logo-content">
+                    <span class="material-icons">menu</span>
+                    <span class="title">Admin System</span>
+                </div>
+            </div>
+            <ul class="menu">
+                <li class="menu-item active active-indicator">
+                    <a href="#">
+                        <span class="material-icons">dashboard</span>
+                        <span class="title">Dashboard</span>
+                        <span class="tooltip">Dashboard</span>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="#" class="menu-title">
+                        <span class="material-icons">folder</span>
+                        <span class="title">Files</span>
+                        <span class="arrow material-icons">chevron_right</span>
+                        <span class="tooltip">Files</span>
+                    </a>
+                    <ul class="submenu">
+                        <li class="submenu-item active">
+                            <a href="#">
+                                <span class="title">Documents</span>
+                            </a>
+                        </li>
+                        <li class="submenu-item">
+                            <a href="#">
+                                <span class="title">Images</span>
+                            </a>
+                        </li>
+                        <li class="submenu-item">
+                            <a href="#">
+                                <span class="title">Videos</span>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="menu-item">
+                    <a href="#" class="menu-title">
+                        <span class="material-icons">settings</span>
+                        <span class="title">Settings</span>
+                        <span class="arrow material-icons">chevron_right</span>
+                        <span class="tooltip">Settings</span>
+                    </a>
+                    <ul class="submenu">
+                        <li class="submenu-item">
+                            <a href="#">
+                                <span class="title">System</span>
+                            </a>
+                        </li>
+                        <li class="submenu-item">
+                            <a href="#">
+                                <span class="title">User</span>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="menu-item">
+                    <a href="#">
+                        <span class="material-icons">message</span>
+                        <span class="title">Messages</span>
+                        <span class="tooltip">Messages</span>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="#">
+                        <span class="material-icons">help</span>
+                        <span class="title">Help</span>
+                        <span class="tooltip">Help</span>
+                    </a>
+                </li>
+            </ul>
+            <button class="toggle-btn">
+                <span class="material-icons">menu</span>
+            </button>
+        </div>
+        
+        <div class="content-container">
+            <div class="header">
+                <div class="header-left">
+                    <span class="material-icons header-icon">menu</span>
+                </div>
+                <div class="header-right">
+                    <div class="search-bar">
+                        <span class="material-icons">search</span>
+                        <input type="text" placeholder="Search...">
+                    </div>
+                    <span class="material-icons header-icon">notifications</span>
+                    <span class="material-icons header-icon">email</span>
+                    <span class="material-icons header-icon settings-icon">settings</span>
+                    <div class="user-avatar">U</div>
+                    <div class="theme-toggle"></div>
+                </div>
+            </div>
+            <div class="main-content">
+                <h1>Main Content</h1>
+                <p>Click the menu button at the bottom left to toggle the sidebar.</p>
+                <p>Click on menu items with arrows to expand/collapse submenus.</p>
+                <p>Hover over icons when sidebar is collapsed to see tooltips.</p>
+                <p>Click the settings icon to open the drawer.</p>
+                <p>Click the theme toggle to switch between light and dark mode.</p>
+            </div>
+        </div>
+        
+        <!-- 设置抽屉 -->
+        <div class="drawer">
+            <h2>Settings Panel</h2>
+            <div class="setting-item">
+                <h3>Theme Settings</h3>
+                <p>Toggle between light and dark mode</p>
+            </div>
+            <div class="setting-item">
+                <h3>Notification Preferences</h3>
+                <p>Configure how you receive notifications</p>
+            </div>
+            <div class="setting-item">
+                <h3>Account Settings</h3>
+                <p>Update your profile and security settings</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const sidebar = document.querySelector('.sidebar');
+            const toggleBtn = document.querySelector('.toggle-btn');
+            const menuItems = document.querySelectorAll('.menu-item');
+            const headerMenuBtn = document.querySelector('.header-left .header-icon');
+            const themeToggle = document.querySelector('.theme-toggle');
+            const settingsIcon = document.querySelector('.settings-icon');
+            const drawer = document.querySelector('.drawer');
+            
+            // 初始化子菜单高度
+            document.querySelectorAll('.submenu').forEach(submenu => {
+                gsap.set(submenu, { height: 0 });
+            });
+            
+            // 设置初始活动菜单
+            const initialActiveItem = document.querySelector('.menu-item.active');
+            if (initialActiveItem) {
+                const submenu = initialActiveItem.querySelector('.submenu');
+                if (submenu) {
+                    gsap.set(submenu, { height: 'auto' });
+                    initialActiveItem.classList.add('expanded');
+                }
+            }
+            
+            // 切换侧边栏折叠状态
+            function toggleSidebar() {
+                sidebar.classList.toggle('collapsed');
+                
+                // 如果展开侧边栏，保持当前子菜单状态
+                if (!sidebar.classList.contains('collapsed')) {
+                    document.querySelectorAll('.menu-item').forEach(item => {
+                        const submenu = item.querySelector('.submenu');
+                        if (submenu && item.classList.contains('expanded')) {
+                            gsap.to(submenu, { height: 'auto', duration: 0.3 });
+                        }
+                    });
+                } else {
+                    // 折叠时关闭所有子菜单
+                    document.querySelectorAll('.submenu').forEach(submenu => {
+                        gsap.to(submenu, { height: 0, duration: 0.3 });
+                    });
+                    document.querySelectorAll('.menu-item').forEach(item => {
+                        item.classList.remove('expanded');
+                    });
+                }
+            }
+            
+            toggleBtn.addEventListener('click', toggleSidebar);
+            headerMenuBtn.addEventListener('click', toggleSidebar);
+            
+            // 菜单项点击事件
+            menuItems.forEach(item => {
+                const menuTitle = item.querySelector('.menu-title');
+                if (menuTitle) {
+                    menuTitle.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        
+                        // 如果侧边栏是折叠状态，先展开侧边栏
+                        if (sidebar.classList.contains('collapsed')) {
+                            sidebar.classList.remove('collapsed');
+                            // 等待侧边栏展开动画完成
+                            setTimeout(() => {
+                                toggleSubmenu(item);
+                            }, 300);
+                        } else {
+                            toggleSubmenu(item);
+                        }
+                    });
+                } else {
+                    // 没有子菜单的项
+                    item.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        updateActiveState(item);
+                    });
+                }
+            });
+            
+            // 子菜单项点击事件
+            document.querySelectorAll('.submenu-item').forEach(item => {
+                item.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const parentMenuItem = item.closest('.menu-item');
+                    updateActiveState(parentMenuItem);
+                    item.classList.add('active');
+                    
+                    // 确保父菜单是展开状态
+                    if (!parentMenuItem.classList.contains('expanded')) {
+                        parentMenuItem.classList.add('expanded');
+                        const submenu = parentMenuItem.querySelector('.submenu');
+                        gsap.set(submenu, { height: 'auto' });
+                    }
+                });
+            });
+            
+            // 主题切换
+            themeToggle.addEventListener('click', function() {
+                document.body.classList.toggle('dark');
+                
+                // 保存主题偏好到本地存储
+                const isDark = document.body.classList.contains('dark');
+                localStorage.setItem('darkMode', isDark);
+            });
+            
+            // 检查本地存储中的主题偏好
+            if (localStorage.getItem('darkMode') === 'true') {
+                document.body.classList.add('dark');
+            }
+            
+            // 设置图标点击事件
+            settingsIcon.addEventListener('click', function(e) {
+                e.stopPropagation();
+                // 旋转图标
+                settingsIcon.classList.toggle('rotated');
+                
+                // 切换抽屉状态
+                drawer.classList.toggle('open');
+            });
+            
+            // 点击抽屉外部关闭抽屉
+            document.addEventListener('click', function(e) {
+                if (!drawer.contains(e.target) && e.target !== settingsIcon) {
+                    drawer.classList.remove('open');
+                    settingsIcon.classList.remove('rotated');
+                }
+            });
+            
+            // 切换子菜单函数
+            function toggleSubmenu(menuItem) {
+                const submenu = menuItem.querySelector('.submenu');
+                
+                if (menuItem.classList.contains('expanded')) {
+                    // 收缩子菜单
+                    gsap.to(submenu, { height: 0, duration: 0.3 });
+                    menuItem.classList.remove('expanded');
+                } else {
+                    // 展开子菜单
+                    gsap.to(submenu, { height: 'auto', duration: 0.3 });
+                    menuItem.classList.add('expanded');
+                }
+                
+                updateActiveState(menuItem);
+            }
+            
+            // 更新活动状态函数
+            function updateActiveState(activeItem) {
+                // 移除所有active类
+                document.querySelectorAll('.menu-item').forEach(i => {
+                    i.classList.remove('active', 'active-indicator');
+                });
+                document.querySelectorAll('.submenu-item').forEach(i => {
+                    i.classList.remove('active');
+                });
+                
+                // 添加active类到当前项
+                activeItem.classList.add('active', 'active-indicator');
+            }
+        });
+    </script>
+</body>
+</html>
