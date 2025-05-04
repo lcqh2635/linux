@@ -88,6 +88,7 @@ Gtk4 Desktop Icons NG (DING)
 # ./install.sh
 Lunar Calendar 农历
 IBus Tweaker
+Customize IBus
 Night Theme Switcher
 Notification Banner Reloaded
 Quick Settings Tweaks

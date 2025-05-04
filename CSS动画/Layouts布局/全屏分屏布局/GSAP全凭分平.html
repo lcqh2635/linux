@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>全屏分屏登录布局</title>
+  <!-- Font Awesome CDN for icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      height: 100vh;
+      display: flex;
+      overflow: hidden;
+      background-color: #f4f7fb;
+    }
+
+    .left-section {
+      flex: 1;
+      background: linear-gradient(135deg, hsl(200, 60%, 85%), hsl(340, 70%, 85%));
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      color: #333;
+    }
+
+    .left-section h1 {
+      font-size: 40px;
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+
+    .left-section p {
+      font-size: 18px;
+      opacity: 0.8;
+    }
+
+    .right-section {
+      flex: 1;
+      background: rgba(255, 255, 255, 0.98);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 40px;
+    }
+
+    .login-container {
+      width: 100%;
+      max-width: 400px;
+    }
+
+    .login-container h2 {
+      font-size: 28px;
+      margin-bottom: 20px;
+      color: #333;
+      text-align: center;
+    }
+
+    .login-container form input {
+      width: 100%;
+      padding: 12px 40px 12px 12px;
+      border: none;
+      border-radius: 8px;
+      background-color: #f0f4f8;
+      font-size: 16px;
+      transition: background-color 0.3s ease;
+      margin-bottom: 15px;
+    }
+
+    .login-container form input:focus {
+      outline: none;
+      background-color: #e0ecf8;
+    }
+
+    .input-group {
+      position: relative;
+      margin-bottom: 15px;
+    }
+
+    .toggle-password {
+      position: absolute;
+      right: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+      cursor: pointer;
+      color: #888;
+      font-size: 16px;
+      transition: color 0.3s ease;
+    }
+
+    .toggle-password:hover {
+      color: #555;
+    }
+
+    .form-options {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 10px;
+      margin-bottom: 15px;
+      font-size: 14px;
+    }
+
+    .form-options label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    .form-options input[type="checkbox"] {
+      margin: 0;
+      transform: scale(1.1);
+    }
+
+    .form-options a {
+      color: #007bff;
+      text-decoration: none;
+      transition: color 0.3s ease;
+    }
+
+    .form-options a:hover {
+      color: #0056b3;
+    }
+
+    .login-container form button {
+      width: 100%;
+      padding: 12px;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+      margin-top: 10px;
+      position: relative;
+    }
+
+    .login-container form button:disabled {
+      background-color: #aaa;
+      cursor: not-allowed;
+    }
+
+    .spinner {
+      position: absolute;
+      left: 15px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 16px;
+      height: 16px;
+      border: 2px solid #fff;
+      border-top-color: transparent;
+      border-radius: 50%;
+      animation: spin 0.8s infinite linear;
+      display: none;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    .divider {
+      margin: 30px 0;
+      position: relative;
+      text-align: center;
+    }
+
+    .divider::before,
+    .divider::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      width: 45%;
+      height: 1px;
+      background: #ccc;
+    }
+
+    .divider::before {
+      left: 0;
+    }
+
+    .divider::after {
+      right: 0;
+    }
+
+    .divider span {
+      display: inline-block;
+      padding: 0 10px;
+      background-color: #fff;
+      color: #aaa;
+      font-size: 14px;
+    }
+
+    .social-login {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .social-btn {
+      flex: 1;
+      padding: 12px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      background-color: #fff;
+      color: #333;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+    }
+
+    .social-btn:hover {
+      background-color: #f1f1f1;
+    }
+
+    .social-btn i {
+      font-size: 18px;
+    }
+
+    .register-link {
+      text-align: center;
+      margin-top: 20px;
+      font-size: 14px;
+    }
+
+    .register-link a {
+      color: #007bff;
+      text-decoration: none;
+      font-weight: bold;
+      transition: color 0.3s ease;
+    }
+
+    .register-link a:hover {
+      color: #0056b3;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Left Section -->
+  <div class="left-section">
+    <div>
+      <h1>欢迎回来！</h1>
+      <p>请登录以继续使用我们的服务。</p>
+    </div>
+  </div>
+
+  <!-- Right Section -->
+  <div class="right-section">
+    <div class="login-container">
+      <h2>登录你的账户</h2>
+      <form id="loginForm">
+        <input type="text" placeholder="邮箱或用户名" required />
+        <div class="input-group">
+          <input id="password" type="password" placeholder="密码" required />
+          <i class="fas fa-eye toggle-password" id="togglePassword"></i>
+        </div>
+
+        <div class="form-options">
+          <label>
+            <input type="checkbox" /> 记住我
+          </label>
+          <a href="#">忘记密码？</a>
+        </div>
+
+        <button type="submit" id="loginBtn">登录</button>
+        <div class="spinner" id="spinner"></div>
+      </form>
+
+      <div class="divider"><span>或使用第三方登录</span></div>
+
+      <div class="social-login">
+        <button class="social-btn"><i class="fab fa-google"></i> Google</button>
+        <button class="social-btn"><i class="fab fa-facebook-f"></i> Facebook</button>
+        <button class="social-btn"><i class="fab fa-github"></i> GitHub</button>
+      </div>
+
+      <div class="register-link">
+        没有账号？<a href="#">立即注册</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- GSAP Library -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      // 页面初始隐藏
+      gsap.set(".left-section, .right-section", { opacity: 0, x: "-100%" });
+      gsap.set(".right-section", { x: "100%" });
+
+      // 左右滑入动画
+      gsap.to(".left-section", {
+        opacity: 1,
+        x: 0,
+        duration: 1.2,
+        ease: "power3.out"
+      });
+
+      gsap.to(".right-section", {
+        opacity: 1,
+        x: 0,
+        duration: 1.2,
+        delay: 0.3,
+        ease: "power3.out"
+      });
+
+      // 表单输入项逐个进入
+      gsap.from("#loginForm input, #loginBtn", {
+        opacity: 0,
+        y: 20,
+        stagger: 0.2,
+        delay: 1.5,
+        duration: 0.6,
+        ease: "power2.out"
+      });
+
+      // 查看密码图标动画
+      gsap.from("#togglePassword", {
+        opacity: 0,
+        scale: 0.5,
+        delay: 1.9,
+        duration: 0.4,
+        ease: "back.out"
+      });
+
+      // 表单选项动画
+      gsap.from(".form-options", {
+        opacity: 0,
+        y: 10,
+        delay: 1.8,
+        duration: 0.4,
+        ease: "power2.out"
+      });
+
+      // 第三方登录按钮动画
+      gsap.from(".social-login > *", {
+        opacity: 0,
+        y: 20,
+        stagger: 0.1,
+        delay: 2.2,
+        duration: 0.6,
+        ease: "power2.out"
+      });
+
+      // 注册链接动画
+      gsap.from(".register-link", {
+        opacity: 0,
+        y: 10,
+        delay: 2.4,
+        duration: 0.4,
+        ease: "power2.out"
+      });
+
+      // 切换密码可视状态
+      const togglePassword = document.querySelector('#togglePassword');
+      const password = document.querySelector('#password');
+
+      togglePassword.addEventListener('click', function () {
+        const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
+        password.setAttribute('type', type);
+        this.classList.toggle('fa-eye-slash');
+        this.classList.toggle('fa-eye');
+      });
+
+      // 模拟登录加载动画
+      const loginBtn = document.getElementById('loginBtn');
+      const spinner = document.getElementById('spinner');
+
+      document.getElementById('loginForm').addEventListener('submit', function (e) {
+        e.preventDefault();
+
+        // 禁用按钮并显示加载动画
+        loginBtn.disabled = true;
+        loginBtn.textContent = '登录中...';
+        spinner.style.display = 'block';
+
+        // 模拟异步请求
+        setTimeout(() => {
+          loginBtn.disabled = false;
+          loginBtn.textContent = '登录';
+          spinner.style.display = 'none';
+
+          alert('登录成功！');
+          // window.location.href = 'dashboard.html'; // 跳转逻辑可自行实现
+        }, 2000);
+      });
+    });
+  </script>
+</body>
+</html>
