@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>背景高亮动画标签页</title>
+    <title>完整功能的标签页系统</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
     <style>
         * {
@@ -31,7 +31,6 @@
         .tabs-header {
             position: relative;
             background-color: #f8f9fa;
-            border-bottom: 1px solid #ddd;
             display: flex;
             align-items: center;
         }
@@ -51,18 +50,27 @@
         
         .tab {
             position: relative;
-            padding: 10px 30px 10px 20px;
+            padding: 10px 20px; /* 调整padding使文字更好居中 */
             cursor: pointer;
             background-color: #f8f9fa;
             border: 1px solid #ddd;
-            border-bottom: none;
-            border-radius: 5px 5px 0 0;
+            border-radius: 5px;
             margin-right: 5px;
             transition: all 0.2s ease;
             user-select: none;
             white-space: nowrap;
             flex-shrink: 0;
             z-index: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        /* 文字容器，用于实现居中效果 */
+        .tab-text {
+            transition: all 0.2s ease;
+            transform: translateX(0);
+            position: relative;
         }
         
         /* 背景高亮指示器 */
@@ -109,6 +117,10 @@
         .tab:hover .close-tab {
             opacity: 1;
             pointer-events: auto;
+        }
+        
+        .tab:hover .tab-text {
+            transform: translateX(-8px); /* 悬停时文字向左移动 */
         }
         
         .close-tab:hover {
@@ -194,15 +206,15 @@
                 <div class="tabs-wrapper">
                     <div class="tab-highlight"></div>
                     <div class="tab active" data-tab="tab1">
-                        New Tab 1
+                        <span class="tab-text">New Tab 1</span>
                         <span class="close-tab" data-tab="tab1">×</span>
                     </div>
                     <div class="tab" data-tab="tab2">
-                        New Tab 2
+                        <span class="tab-text">New Tab 2</span>
                         <span class="close-tab" data-tab="tab2">×</span>
                     </div>
                     <div class="tab" data-tab="tab3">
-                        New Tab 3
+                        <span class="tab-text">New Tab 3</span>
                         <span class="close-tab" data-tab="tab3">×</span>
                     </div>
                 </div>
@@ -445,7 +457,7 @@
                 newTab.className = 'tab';
                 newTab.setAttribute('data-tab', tabId);
                 newTab.innerHTML = `
-                    New Tab ${tabCount}
+                    <span class="tab-text">New Tab ${tabCount}</span>
                     <span class="close-tab" data-tab="${tabId}">×</span>
                 `;
                 
