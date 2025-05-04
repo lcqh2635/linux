@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>多标签页系统</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+        
+        body {
+            background-color: #f5f7fa;
+            color: #333;
+        }
+        
+        .app-container {
+            display: flex;
+            height: 100vh;
+        }
+        
+        /* 侧边栏样式 */
+        .sidebar {
+            width: 220px;
+            background-color: #2c3e50;
+            color: white;
+            padding: 20px 0;
+        }
+        
+        .menu-item {
+            padding: 12px 20px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        .menu-item:hover {
+            background-color: #34495e;
+        }
+        
+        .menu-item.active {
+            background-color: #3498db;
+        }
+        
+        /* 主内容区 */
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        /* 标签页容器 */
+        .tabs-container {
+            background-color: white;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .tabs-header {
+            display: flex;
+            background-color: #f8f9fa;
+            border-bottom: 1px solid #e0e0e0;
+            padding: 0 10px;
+            position: relative;
+        }
+        
+        .tab {
+            padding: 12px 20px;
+            cursor: pointer;
+            position: relative;
+            display: flex;
+            align-items: center;
+            background-color: white;
+            border: 1px solid #e0e0e0;
+            border-bottom: none;
+            margin-right: 5px;
+            border-radius: 4px 4px 0 0;
+            transition: all 0.3s;
+        }
+        
+        .tab.active {
+            background-color: #3498db;
+            color: white;
+            border-color: #3498db;
+        }
+        
+        .tab-close {
+            margin-left: 8px;
+            width: 16px;
+            height: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: background-color 0.2s;
+        }
+        
+        .tab.active .tab-close {
+            color: white;
+        }
+        
+        .tab-close:hover {
+            background-color: rgba(0, 0, 0, 0.1);
+        }
+        
+        /* 内容区 */
+        .tab-content {
+            padding: 20px;
+            flex: 1;
+            overflow: auto;
+            position: relative;
+        }
+        
+        .content-page {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            padding: 20px;
+            top: 0;
+            left: 0;
+            display: none;
+        }
+        
+        .content-page.active {
+            display: block;
+        }
+        
+        /* 动画指示器 */
+        .tab-indicator {
+            position: absolute;
+            bottom: 0;
+            height: 3px;
+            background-color: #3498db;
+            transition: all 0.3s ease;
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <!-- 侧边栏 -->
+        <div class="sidebar">
+            <div class="menu-item" data-tab="dashboard">控制面板</div>
+            <div class="menu-item" data-tab="users">用户管理</div>
+            <div class="menu-item" data-tab="orders">订单管理</div>
+            <div class="menu-item" data-tab="settings">系统设置</div>
+            <div class="menu-item" data-tab="reports">报表统计</div>
+        </div>
+        
+        <!-- 主内容区 -->
+        <div class="main-content">
+            <!-- 标签页头部 -->
+            <div class="tabs-container">
+                <div class="tabs-header" id="tabsHeader">
+                    <!-- 标签页将通过JS动态生成 -->
+                    <div class="tab-indicator" id="tabIndicator"></div>
+                </div>
+                
+                <!-- 内容区 -->
+                <div class="tab-content" id="tabContent">
+                    <div class="content-page" data-tab-content="dashboard">
+                        <h2>控制面板</h2>
+                        <p>这里是控制面板的内容</p>
+                    </div>
+                    <div class="content-page" data-tab-content="users">
+                        <h2>用户管理</h2>
+                        <p>这里是用户管理的内容</p>
+                    </div>
+                    <div class="content-page" data-tab-content="orders">
+                        <h2>订单管理</h2>
+                        <p>这里是订单管理的内容</p>
+                    </div>
+                    <div class="content-page" data-tab-content="settings">
+                        <h2>系统设置</h2>
+                        <p>这里是系统设置的内容</p>
+                    </div>
+                    <div class="content-page" data-tab-content="reports">
+                        <h2>报表统计</h2>
+                        <p>这里是报表统计的内容</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 引入GSAP库 -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/gsap.min.js"></script>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // 标签页数据
+            const tabsData = {
+                dashboard: { title: '控制面板', content: 'dashboard' },
+                users: { title: '用户管理', content: 'users' },
+                orders: { title: '订单管理', content: 'orders' },
+                settings: { title: '系统设置', content: 'settings' },
+                reports: { title: '报表统计', content: 'reports' }
+            };
+            
+            // DOM元素
+            const menuItems = document.querySelectorAll('.menu-item');
+            const tabsHeader = document.getElementById('tabsHeader');
+            const tabContent = document.getElementById('tabContent');
+            const tabIndicator = document.getElementById('tabIndicator');
+            
+            // 当前激活的标签页
+            let activeTab = null;
+            let tabs = [];
+            
+            // 初始化第一个标签页
+            openTab('dashboard');
+            
+            // 菜单点击事件
+            menuItems.forEach(item => {
+                item.addEventListener('click', function() {
+                    const tabId = this.getAttribute('data-tab');
+                    openTab(tabId);
+                    
+                    // 更新菜单激活状态
+                    menuItems.forEach(menu => menu.classList.remove('active'));
+                    this.classList.add('active');
+                });
+            });
+            
+            // 打开标签页
+            function openTab(tabId) {
+                // 如果标签页已存在，直接激活
+                const existingTab = tabs.find(tab => tab.id === tabId);
+                if (existingTab) {
+                    activateTab(existingTab);
+                    return;
+                }
+                
+                // 创建新标签页
+                const tabData = tabsData[tabId];
+                if (!tabData) return;
+                
+                const tab = {
+                    id: tabId,
+                    title: tabData.title,
+                    content: tabData.content,
+                    element: null
+                };
+                
+                tabs.push(tab);
+                renderTab(tab);
+                activateTab(tab);
+            }
+            
+            // 渲染标签页
+            function renderTab(tab) {
+                const tabElement = document.createElement('div');
+                tabElement.className = 'tab';
+                tabElement.setAttribute('data-tab', tab.id);
+                
+                tabElement.innerHTML = `
+                    ${tab.title}
+                    <span class="tab-close">&times;</span>
+                `;
+                
+                // 点击标签页
+                tabElement.addEventListener('click', function(e) {
+                    if (e.target.classList.contains('tab-close')) {
+                        e.stopPropagation();
+                        closeTab(tab.id);
+                    } else {
+                        activateTab(tab);
+                    }
+                });
+                
+                tabsHeader.insertBefore(tabElement, tabIndicator);
+                tab.element = tabElement;
+            }
+            
+            // 激活标签页
+            function activateTab(tab) {
+                // 如果已经是当前激活的标签页，不做任何操作
+                if (activeTab && activeTab.id === tab.id) return;
+                
+                const prevActiveTab = activeTab;
+                activeTab = tab;
+                
+                // 更新标签页样式
+                tabs.forEach(t => {
+                    const isActive = t.id === tab.id;
+                    t.element.classList.toggle('active', isActive);
+                    
+                    // 更新内容区
+                    const contentPage = document.querySelector(`.content-page[data-tab-content="${t.id}"]`);
+                    if (contentPage) {
+                        contentPage.classList.toggle('active', isActive);
+                    }
+                });
+                
+                // 更新指示器位置
+                updateTabIndicator();
+                
+                // 执行切换动画
+                if (prevActiveTab) {
+                    animateTabSwitch(prevActiveTab, tab);
+                }
+            }
+            
+            // 关闭标签页
+            function closeTab(tabId) {
+                const tabIndex = tabs.findIndex(tab => tab.id === tabId);
+                if (tabIndex === -1) return;
+                
+                const tab = tabs[tabIndex];
+                const isActive = activeTab && activeTab.id === tabId;
+                
+                // 从DOM中移除
+                if (tab.element) {
+                    tab.element.remove();
+                }
+                
+                // 从数组中移除
+                tabs.splice(tabIndex, 1);
+                
+                // 如果关闭的是当前激活的标签页，激活另一个标签页
+                if (isActive && tabs.length > 0) {
+                    const newActiveIndex = Math.min(tabIndex, tabs.length - 1);
+                    activateTab(tabs[newActiveIndex]);
+                }
+                
+                // 如果没有标签页了，打开默认标签页
+                if (tabs.length === 0) {
+                    openTab('dashboard');
+                }
+            }
+            
+            // 更新指示器位置
+            function updateTabIndicator() {
+                if (!activeTab || !activeTab.element) return;
+                
+                const tabRect = activeTab.element.getBoundingClientRect();
+                const headerRect = tabsHeader.getBoundingClientRect();
+                
+                tabIndicator.style.left = `${tabRect.left - headerRect.left}px`;
+                tabIndicator.style.width = `${tabRect.width}px`;
+            }
+            
+            // 标签页切换动画
+            function animateTabSwitch(fromTab, toTab) {
+                if (!fromTab || !toTab) return;
+                
+                const fromContent = document.querySelector(`.content-page[data-tab-content="${fromTab.id}"]`);
+                const toContent = document.querySelector(`.content-page[data-tab-content="${toTab.id}"]`);
+                
+                if (!fromContent || !toContent) return;
+                
+                // 设置初始状态
+                gsap.set(fromContent, { opacity: 1, x: 0 });
+                gsap.set(toContent, { opacity: 0, x: toTab.id > fromTab.id ? 50 : -50 });
+                
+                // 执行动画
+                gsap.to(fromContent, {
+                    opacity: 0,
+                    x: toTab.id > fromTab.id ? -50 : 50,
+                    duration: 0.3,
+                    ease: "power2.out"
+                });
+                
+                gsap.to(toContent, {
+                    opacity: 1,
+                    x: 0,
+                    duration: 0.3,
+                    ease: "power2.out",
+                    onComplete: () => {
+                        fromContent.classList.remove('active');
+                        toContent.classList.add('active');
+                    }
+                });
+                
+                // 标签指示器动画
+                const tabRect = toTab.element.getBoundingClientRect();
+                const headerRect = tabsHeader.getBoundingClientRect();
+                
+                gsap.to(tabIndicator, {
+                    left: tabRect.left - headerRect.left,
+                    width: tabRect.width,
+                    duration: 0.3,
+                    ease: "power2.out"
+                });
+            }
+            
+            // 窗口大小改变时更新指示器位置
+            window.addEventListener('resize', updateTabIndicator);
+        });
+    </script>
+</body>
+</html>

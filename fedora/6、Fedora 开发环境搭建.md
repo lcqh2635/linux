@@ -95,6 +95,23 @@ cat ~/.bunfig.toml
 node --version
 bun --version
 
+
+# 使用 bun 创建一个基于 vue-ts 模板的项目，bun即是一个包管理器也是JS运行时
+bun create vite bun-vue3-router --template vue-ts
+bun install
+bun run dev
+# 是用 bun 创建一个 tauri 2.0 项目，参考 https://v2.tauri.app/zh-cn/
+bun create tauri-app
+cd tauri-app
+bun install
+# 需要提前安装并配置好 Android Studio  参考 https://tauri.app/zh-cn/start/prerequisites/#android
+bun run tauri android init
+# For Desktop development, run:
+bun run tauri dev
+# For Android development, run: 需要提前安装并配置好 Android Studio  参考 https://tauri.app/zh-cn/start/prerequisites/#android
+bun run tauri android dev
+
+
 dnf search chat2db
 ```
 

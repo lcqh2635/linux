@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>后台管理系统 - GSAP路由动画</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Arial', sans-serif;
+    }
+    
+    body {
+      background-color: #f5f7fa;
+      color: #333;
+    }
+    
+    .layout {
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+    
+    .header {
+      background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+      padding: 0 2rem;
+      box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
+      position: relative;
+      z-index: 100;
+    }
+    
+    .nav {
+      display: flex;
+      gap: 0.5rem;
+      height: 60px;
+      align-items: center;
+    }
+    
+    .nav-link {
+      color: rgba(255, 255, 255, 0.8);
+      text-decoration: none;
+      padding: 0.5rem 1.2rem;
+      border-radius: 20px;
+      font-size: 14px;
+      font-weight: 500;
+      transition: all 0.3s ease;
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+    
+    .nav-link:hover {
+      color: white;
+    }
+    
+    .nav-link.active {
+      color: white;
+      background: rgba(255, 255, 255, 0.15);
+    }
+    
+    .nav-link.active::after {
+      content: '';
+      position: absolute;
+      bottom: -8px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 5px;
+      height: 5px;
+      background: #4facfe;
+      border-radius: 50%;
+    }
+    
+    .main-content {
+      flex: 1;
+      padding: 2rem;
+      background-color: white;
+      margin: 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    }
+    
+    .page-title {
+      margin-bottom: 1.5rem;
+      color: #2a5298;
+    }
+    
+    .content {
+      line-height: 1.6;
+    }
+  </style>
+</head>
+<body>
+  <div class="layout">
+    <header class="header">
+      <nav class="nav" id="mainNav">
+        <a href="#dashboard" class="nav-link active" data-page="dashboard">控制台</a>
+        <a href="#users" class="nav-link" data-page="users">用户管理</a>
+        <a href="#orders" class="nav-link" data-page="orders">订单管理</a>
+        <a href="#settings" class="nav-link" data-page="settings">系统设置</a>
+      </nav>
+    </header>
+    
+    <main class="main-content">
+      <h1 class="page-title" id="pageTitle">控制台</h1>
+      <div class="content" id="pageContent">
+        <p>这里是控制台页面内容。点击上方导航标签可以查看页面切换动画效果。</p>
+      </div>
+    </main>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/gsap.min.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const navLinks = document.querySelectorAll('.nav-link');
+      const pageTitle = document.getElementById('pageTitle');
+      const pageContent = document.getElementById('pageContent');
+      
+      // 页面内容数据
+      const pages = {
+        dashboard: {
+          title: '控制台',
+          content: '<p>这里是控制台页面内容。您可以查看系统概览和关键指标。</p><p>今日活跃用户: 1,245</p><p>新增订单: 86</p>'
+        },
+        users: {
+          title: '用户管理',
+          content: '<p>用户管理页面。您可以在此管理所有用户账户。</p><ul><li>用户列表</li><li>权限设置</li><li>角色管理</li></ul>'
+        },
+        orders: {
+          title: '订单管理',
+          content: '<p>订单管理页面。查看和处理系统订单。</p><div style="display:flex;gap:1rem;margin-top:1rem;"><div style="padding:1rem;background:#f0f4f8;border-radius:6px;"><h3>待处理</h3><p>24 个订单</p></div><div style="padding:1rem;background:#f0f4f8;border-radius:6px;"><h3>已发货</h3><p>156 个订单</p></div></div>'
+        },
+        settings: {
+          title: '系统设置',
+          content: '<p>系统配置页面。请谨慎修改以下设置：</p><form style="margin-top:1rem;"><div style="margin-bottom:1rem;"><label>系统名称</label><input type="text" style="display:block;width:100%;padding:0.5rem;margin-top:0.5rem;border:1px solid #ddd;border-radius:4px;"></div><div style="margin-bottom:1rem;"><label>时区设置</label><select style="display:block;width:100%;padding:0.5rem;margin-top:0.5rem;border:1px solid #ddd;border-radius:4px;"><option>UTC+8 北京时间</option></select></div><button type="button" style="padding:0.5rem 1rem;background:#2a5298;color:white;border:none;border-radius:4px;">保存设置</button></form>'
+        }
+      };
+      
+      // 初始加载动画
+      gsap.from(navLinks, {
+        opacity: 0,
+        y: -20,
+        duration: 0.6,
+        stagger: 0.1,
+        ease: "back.out(1.2)",
+        delay: 0.3
+      });
+      
+      // 为每个导航链接添加事件监听
+      navLinks.forEach(link => {
+        // 鼠标悬停效果
+        link.addEventListener('mouseenter', () => {
+          if (!link.classList.contains('active')) {
+            gsap.to(link, {
+              color: 'white',
+              scale: 1.05,
+              duration: 0.2
+            });
+          }
+        });
+        
+        link.addEventListener('mouseleave', () => {
+          if (!link.classList.contains('active')) {
+            gsap.to(link, {
+              color: 'rgba(255, 255, 255, 0.8)',
+              scale: 1,
+              duration: 0.2
+            });
+          }
+        });
+        
+        // 点击切换页面
+        link.addEventListener('click', (e) => {
+          e.preventDefault();
+          const page = link.getAttribute('data-page');
+          
+          // 如果点击的是当前活动链接，不做任何事
+          if (link.classList.contains('active')) return;
+          
+          // 获取当前活动链接
+          const currentActive = document.querySelector('.nav-link.active');
+          const currentIndex = Array.from(navLinks).indexOf(currentActive);
+          const newIndex = Array.from(navLinks).indexOf(link);
+          
+          // 执行切换动画
+          animatePageChange(currentActive, link, currentIndex, newIndex, page);
+        });
+      });
+      
+      // 页面切换动画函数
+      function animatePageChange(oldLink, newLink, oldIndex, newIndex, page) {
+        // 旧链接动画 - 缩小并褪色
+        gsap.to(oldLink, {
+          scale: 0.95,
+          color: 'rgba(255, 255, 255, 0.6)',
+          duration: 0.3,
+          ease: "power2.in",
+          onComplete: () => {
+            oldLink.classList.remove('active');
+          }
+        });
+        
+        // 新链接动画 - 从下方弹入
+        gsap.fromTo(newLink, 
+          {
+            y: 10,
+            opacity: 0.7,
+            scale: 0.9
+          },
+          {
+            y: 0,
+            opacity: 1,
+            scale: 1,
+            color: 'white',
+            duration: 0.5,
+            ease: "back.out(1.7)",
+            onStart: () => {
+              newLink.classList.add('active');
+            }
+          }
+        );
+        
+        // 页面内容动画
+        gsap.to([pageTitle, pageContent], {
+          opacity: 0,
+          y: 20,
+          duration: 0.3,
+          ease: "power1.in",
+          onComplete: () => {
+            // 更新页面内容
+            pageTitle.textContent = pages[page].title;
+            pageContent.innerHTML = pages[page].content;
+            
+            // 新内容入场动画
+            gsap.fromTo([pageTitle, pageContent], 
+              {
+                opacity: 0,
+                y: -20
+              },
+              {
+                opacity: 1,
+                y: 0,
+                duration: 0.5,
+                ease: "back.out(1.2)"
+              }
+            );
+          }
+        });
+        
+        // 如果是从右向左切换，添加额外的水平动画
+        if (newIndex > oldIndex) {
+          gsap.from(newLink, {
+            x: 20,
+            duration: 0.4,
+            ease: "power2.out"
+          });
+        } else if (newIndex < oldIndex) {
+          gsap.from(newLink, {
+            x: -20,
+            duration: 0.4,
+            ease: "power2.out"
+          });
+        }
+      }
+      
+      // 处理URL哈希变化
+      window.addEventListener('hashchange', () => {
+        const hash = window.location.hash.substring(1);
+        const targetLink = document.querySelector(`.nav-link[data-page="${hash}"]`);
+        
+        if (targetLink && !targetLink.classList.contains('active')) {
+          targetLink.click();
+        }
+      });
+      
+      // 初始加载时检查哈希
+      if (window.location.hash) {
+        const initialHash = window.location.hash.substring(1);
+        const initialLink = document.querySelector(`.nav-link[data-page="${initialHash}"]`);
+        
+        if (initialLink) {
+          // 移除默认的active类
+          document.querySelector('.nav-link.active').classList.remove('active');
+          
+          // 添加新的active类并更新内容
+          initialLink.classList.add('active');
+          pageTitle.textContent = pages[initialHash].title;
+          pageContent.innerHTML = pages[initialHash].content;
+        }
+      }
+    });
+  </script>
+</body>
+</html>
