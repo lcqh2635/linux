@@ -31,7 +31,6 @@
         .tabs-header {
             position: relative;
             background-color: #f8f9fa;
-            
             padding: 0 40px;
         }
         
@@ -45,10 +44,10 @@
             transition: transform 0.3s ease;
             height: 42px;
         }
-        
+
         .tab {
             position: relative;
-            padding: 10px 30px 10px 20px;
+            padding: 10px 20px; /* 调整padding使文字更好居中 */
             cursor: pointer;
             background-color: #f8f9fa;
             border: 1px solid #ddd;
@@ -58,6 +57,15 @@
             user-select: none;
             white-space: nowrap;
             flex-shrink: 0;
+            z-index: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .tab-text {
+            transition: all 0.2s ease;
+            transform: translateX(0);
         }
         
         .tab:hover {
@@ -90,11 +98,16 @@
             background-color: #e9ecef;
             color: #ff4d4f;
         }
-        
+
         .tab:hover .close-tab {
             opacity: 1;
+            pointer-events: auto;
         }
-        
+
+        .tab:hover .tab-text {
+            transform: translateX(-8px);
+        }
+
         .tab-content {
             padding: 20px;
             min-height: 200px;
@@ -154,44 +167,36 @@
             <div class="tabs-wrapper">
                 <div class="tabs">
                     <div class="tab active" data-tab="tab1">
-                        New Tab
+                        <span class="tab-text">New Tab</span>
                         <span class="close-tab" data-tab="tab1">×</span>
                     </div>
                     <div class="tab" data-tab="tab2">
-                        New Tab
+                        <span class="tab-text">New Tab</span>
                         <span class="close-tab" data-tab="tab2">×</span>
                     </div>
                     <div class="tab" data-tab="tab3">
-                        New Tab
+                        <span class="tab-text">New Tab</span>
                         <span class="close-tab" data-tab="tab3">×</span>
                     </div>
                     <div class="tab" data-tab="tab4">
-                        New Tab
+                        <span class="tab-text">New Tab</span>
                         <span class="close-tab" data-tab="tab4">×</span>
                     </div>
                     <div class="tab" data-tab="tab5">
-                        New Tab
+                        <span class="tab-text">New Tab</span>
                         <span class="close-tab" data-tab="tab5">×</span>
                     </div>
-                    <div class="tab" data-tab="tab6">
-                        New Tab
-                        <span class="close-tab" data-tab="tab6">×</span>
+                    <div class="tab" data-tab="tab3">
+                        <span class="tab-text">New Tab</span>
+                        <span class="close-tab" data-tab="tab3">×</span>
                     </div>
-                    <div class="tab" data-tab="tab7">
-                        New Tab
-                        <span class="close-tab" data-tab="tab7">×</span>
+                    <div class="tab" data-tab="tab4">
+                        <span class="tab-text">New Tab</span>
+                        <span class="close-tab" data-tab="tab4">×</span>
                     </div>
-                    <div class="tab" data-tab="tab8">
-                        New Tab
-                        <span class="close-tab" data-tab="tab8">×</span>
-                    </div>
-                    <div class="tab" data-tab="tab9">
-                        New Tab
-                        <span class="close-tab" data-tab="tab9">×</span>
-                    </div>
-                    <div class="tab" data-tab="tab10">
-                        New Tab
-                        <span class="close-tab" data-tab="tab10">×</span>
+                    <div class="tab" data-tab="tab5">
+                        <span class="tab-text">New Tab</span>
+                        <span class="close-tab" data-tab="tab5">×</span>
                     </div>
                 </div>
             </div>

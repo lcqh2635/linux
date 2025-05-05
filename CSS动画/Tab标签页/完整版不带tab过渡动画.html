@@ -12,12 +12,12 @@
             box-sizing: border-box;
             font-family: 'Arial', sans-serif;
         }
-        
+
         body {
             background-color: #f5f5f5;
             padding: 20px;
         }
-        
+
         .tab-container {
             background-color: white;
             border-radius: 8px;
@@ -27,7 +27,7 @@
             margin: 0 auto;
             position: relative;
         }
-        
+
         /* 保留原有的标签页样式 */
         .tabs-header {
             position: relative;
@@ -36,19 +36,19 @@
             display: flex;
             align-items: center;
         }
-        
+
         .tabs-scroll {
             flex: 1;
             overflow: hidden;
             position: relative;
         }
-        
+
         .tabs-wrapper {
             display: flex;
             transition: transform 0.3s ease;
             height: 42px;
         }
-        
+
         .tab {
             position: relative;
             padding: 10px 20px; /* 调整padding使文字更好居中 */
@@ -66,24 +66,29 @@
             align-items: center;
             justify-content: center;
         }
-        
+
         /* 文字容器，用于实现居中效果 */
         .tab-text {
             transition: all 0.2s ease;
             transform: translateX(0);
             position: relative;
         }
-        
+
+        .tab-text {
+            transition: all 0.2s ease;
+            transform: translateX(0);
+        }
+
         .tab:hover {
             background-color: #e9ecef;
         }
-        
+
         .tab.active {
             color: #1890ff;
             font-weight: bold;
             background-color: transparent;
         }
-        
+
         .close-tab {
             position: absolute;
             right: 8px;
@@ -100,32 +105,32 @@
             font-size: 12px;
             pointer-events: none;
         }
-        
+
         .tab:hover .close-tab {
             opacity: 1;
             pointer-events: auto;
         }
-        
+
         .tab:hover .tab-text {
             transform: translateX(-8px); /* 悬停时文字向左移动 */
         }
-        
+
         .close-tab:hover {
             background-color: #e9ecef;
             color: #ff4d4f;
         }
-        
+
         .tab-content {
             padding: 20px;
             min-height: 200px;
         }
-        
+
         .content {
             display: none;
             opacity: 0;
             transform: translateY(10px);
         }
-        
+
         .content.active {
             display: block;
         }
@@ -391,21 +396,21 @@
             // 初始化现有标签和关闭按钮
             tabs.forEach(tab => setupTabClick(tab));
             closeButtons.forEach(button => setupCloseButton(button));
-            
+
             // 添加新标签
             addButton.addEventListener('click', function() {
                 tabCount++;
                 const tabId = `tab${tabCount}`;
-                
+
                 // 创建新标签
                 const newTab = document.createElement('div');
                 newTab.className = 'tab';
                 newTab.setAttribute('data-tab', tabId);
                 newTab.innerHTML = `
-                    New Tab ${tabCount}
+                    <span class="tab-text">New Tab ${tabCount}</span>
                     <span class="close-tab" data-tab="${tabId}">×</span>
                 `;
-                
+
                 // 创建新内容
                 const newContent = document.createElement('div');
                 newContent.className = 'content';
@@ -414,18 +419,18 @@
                     <h3>New Tab Content ${tabCount}</h3>
                     <p>This is the content for the new tab.</p>
                 `;
-                
+
                 // 添加到DOM
                 tabsContainer.appendChild(newTab);
                 document.querySelector('.tab-content').appendChild(newContent);
-                
+
                 // 设置事件监听
                 setupTabClick(newTab);
                 setupCloseButton(newTab.querySelector('.close-tab'));
-                
+
                 // 切换到新标签
                 switchTab(newTab);
-                
+
                 // 检查是否需要显示导航按钮
                 setTimeout(checkNavButtons, 0);
             });
