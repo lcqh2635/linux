@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Element风格通知系统</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            min-height: 100vh;
+            background-color: #f5f5f5;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1200px;
+        }
+
+        h1 {
+            margin-bottom: 20px;
+            color: #333;
+            text-align: center;
+        }
+
+        .demo-controls {
+            background: white;
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+        }
+
+        .control-row {
+            display: flex;
+            flex-wrap: wrap;
+            margin-bottom: 18px;
+        }
+
+        .control-group {
+            margin-right: 30px;
+            margin-bottom: 10px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 14px;
+            color: #606266;
+        }
+
+        select, input {
+            width: 200px;
+            padding: 9px 15px;
+            border: 1px solid #dcdfe6;
+            border-radius: 4px;
+            font-size: 14px;
+            color: #606266;
+            transition: border-color 0.2s;
+        }
+
+        select:focus, input:focus {
+            outline: none;
+            border-color: #409eff;
+        }
+
+        .el-button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 9px 15px;
+            font-size: 14px;
+            font-weight: 500;
+            border-radius: 4px;
+            border: 1px solid #dcdfe6;
+            background-color: #fff;
+            color: #606266;
+            cursor: pointer;
+            transition: all 0.2s;
+            margin-right: 10px;
+            margin-bottom: 10px;
+        }
+
+        .el-button:hover {
+            color: #409eff;
+            border-color: #c6e2ff;
+            background-color: #ecf5ff;
+        }
+
+        .el-button--primary {
+            color: #fff;
+            background-color: #409eff;
+            border-color: #409eff;
+        }
+
+        .el-button--primary:hover {
+            background: #66b1ff;
+            border-color: #66b1ff;
+            color: #fff;
+        }
+
+        /* Element风格通知样式 */
+        .el-notification-container {
+            position: fixed;
+            z-index: 9999;
+            pointer-events: none;
+        }
+
+        .el-notification-container.top-right {
+            top: 20px;
+            right: 20px;
+        }
+
+        .el-notification-container.top-left {
+            top: 20px;
+            left: 20px;
+        }
+
+        .el-notification-container.bottom-right {
+            bottom: 20px;
+            right: 20px;
+        }
+
+        .el-notification-container.bottom-left {
+            bottom: 20px;
+            left: 20px;
+        }
+
+        .el-notification {
+            position: relative;
+            width: 330px;
+            padding: 14px 26px 14px 13px;
+            margin-bottom: 16px;
+            border-radius: 8px;
+            box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
+            background-color: #fff;
+            color: #606266;
+            font-size: 14px;
+            display: flex;
+            opacity: 0;
+            transform: translateX(100%);
+            transition: all 0.3s;
+            pointer-events: auto;
+            will-change: transform, opacity;
+        }
+
+        .el-notification.right {
+            transform: translateX(100%);
+        }
+
+        .el-notification.left {
+            transform: translateX(-100%);
+        }
+
+        .el-notification__group {
+            flex-grow: 1;
+            margin-left: 13px;
+        }
+
+        .el-notification__title {
+            font-weight: 700;
+            font-size: 16px;
+            color: #303133;
+            margin: 0 0 6px 0;
+        }
+
+        .el-notification__content {
+            margin: 0;
+            line-height: 21px;
+            color: #606266;
+        }
+
+        .el-notification__icon {
+            font-size: 24px;
+            width: 24px;
+            height: 24px;
+            flex-shrink: 0;
+        }
+
+        .el-notification__closeBtn {
+            position: absolute;
+            top: 18px;
+            right: 15px;
+            cursor: pointer;
+            color: #909399;
+            font-size: 16px;
+            line-height: 1;
+        }
+
+        .el-notification__closeBtn:hover {
+            color: #606266;
+        }
+
+        /* 不同类型颜色 */
+        .el-notification.success .el-notification__icon {
+            color: #67c23a;
+        }
+
+        .el-notification.warning .el-notification__icon {
+            color: #e6a23c;
+        }
+
+        .el-notification.error .el-notification__icon {
+            color: #f56c6c;
+        }
+
+        .el-notification.info .el-notification__icon {
+            color: #909399;
+        }
+
+        /* 进度条 */
+        .el-notification-progress {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            height: 2px;
+            width: 100%;
+            background-color: transparent;
+        }
+
+        .el-notification-progress__bar {
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.1);
+            transform-origin: left center;
+        }
+
+        .el-notification.success .el-notification-progress__bar {
+            background-color: rgba(103, 194, 58, 0.3);
+        }
+
+        .el-notification.warning .el-notification-progress__bar {
+            background-color: rgba(230, 162, 60, 0.3);
+        }
+
+        .el-notification.error .el-notification-progress__bar {
+            background-color: rgba(245, 108, 108, 0.3);
+        }
+
+        .el-notification.info .el-notification-progress__bar {
+            background-color: rgba(144, 147, 153, 0.3);
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>Element UI 风格通知系统</h1>
+
+    <div class="demo-controls">
+        <div class="control-row">
+            <div class="control-group">
+                <label for="position">通知位置</label>
+                <select id="position">
+                    <option value="top-right">右上角</option>
+                    <option value="top-left">左上角</option>
+                    <option value="bottom-right">右下角</option>
+                    <option value="bottom-left">左下角</option>
+                </select>
+            </div>
+
+            <div class="control-group">
+                <label for="type">通知类型</label>
+                <select id="type">
+                    <option value="success">成功</option>
+                    <option value="warning">警告</option>
+                    <option value="error">错误</option>
+                    <option value="info">信息</option>
+                </select>
+            </div>
+
+            <div class="control-group">
+                <label for="duration">显示时长(毫秒)</label>
+                <input type="number" id="duration" value="4500" min="1000" step="500">
+            </div>
+        </div>
+
+        <div class="control-row">
+            <div class="control-group">
+                <label for="title">标题</label>
+                <input type="text" id="title" placeholder="输入通知标题" value="通知标题">
+            </div>
+
+            <div class="control-group">
+                <label for="message">消息内容</label>
+                <input type="text" id="message" placeholder="输入通知内容"
+                       value="这是一条Element UI风格的通知消息，支持多种类型和位置">
+            </div>
+        </div>
+
+        <div class="control-row">
+            <button class="el-button el-button--primary" id="showNotification">显示通知</button>
+            <button class="el-button" id="showRandom">随机通知</button>
+            <button class="el-button" id="clearAll">清除所有</button>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/gsap.min.js"></script>
+
+<script>
+    // 通知系统类 - 模仿Element UI的ElNotification
+    class ElNotificationSystem {
+        constructor() {
+            this.container = null;
+            this.notifications = [];
+            this.initContainer();
+        }
+
+        // 初始化容器
+        initContainer(position = 'top-right') {
+            if(this.container) {
+                document.body.removeChild(this.container);
+            }
+
+            this.container = document.createElement('div');
+            this.container.className = `el-notification-container ${position}`;
+            document.body.appendChild(this.container);
+        }
+
+        // 显示通知
+        show({
+                 type = 'info',
+                 title = '通知',
+                 message = '',
+                 duration = 4500,
+                 position = 'top-right',
+                 offset = 20,
+                 customClass = ''
+             }) {
+            // 确保容器位置正确
+            if(!this.container.className.includes(position)) {
+                this.initContainer(position);
+            }
+
+            // 创建通知元素
+            const notification = document.createElement('div');
+            const direction = position.includes('right') ? 'right' : 'left';
+
+            notification.className = `el-notification ${type} ${direction} ${customClass}`;
+
+            // 图标映射
+            const icons = {
+                success: '✓',
+                warning: '⚠',
+                error: '✗',
+                info: 'ℹ'
+            };
+
+            // 构建通知内容
+            notification.innerHTML = `
+                    <span class="el-notification__icon">${icons[type]}</span>
+                    <div class="el-notification__group">
+                        <h2 class="el-notification__title">${title}</h2>
+                        <div class="el-notification__content">${message}</div>
+                    </div>
+                    <span class="el-notification__closeBtn">×</span>
+                    <div class="el-notification-progress">
+                        <div class="el-notification-progress__bar"></div>
+                    </div>
+                `;
+
+            // 添加到容器
+            this.container.appendChild(notification);
+            this.notifications.push(notification);
+
+            // 设置初始位置
+            gsap.set(notification, {
+                opacity: 0,
+                x: direction === 'right' ? '100%' : '-100%',
+                y: 0
+            });
+
+            // 动画时间线
+            const tl = gsap.timeline();
+
+            // 入场动画 - 模仿Element的弹性滑动效果
+            tl.to(notification, {
+                duration: 0.1,
+                opacity: 1,
+                x: '0%',
+                ease: "elastic.out(1, 0.6)"
+            }, 0);
+
+            // 进度条动画
+            if(duration > 0) {
+                tl.to(notification.querySelector('.el-notification-progress__bar'), {
+                    duration: duration / 1000,
+                    scaleX: 0,
+                    ease: "linear.none"
+                }, 0);
+            }
+
+            // 关闭按钮事件
+            const closeBtn = notification.querySelector('.el-notification__closeBtn');
+            closeBtn.addEventListener('click', () => {
+                this.close(notification);
+            });
+
+            // 自动关闭
+            if(duration > 0) {
+                setTimeout(() => {
+                    this.close(notification);
+                }, duration);
+            }
+
+            return notification;
+        }
+
+        // 关闭通知
+        close(notification) {
+            if(!notification || !this.notifications.includes(notification)) return;
+
+            const direction = notification.classList.contains('right') ? 'right' : 'left';
+
+            gsap.to(notification, {
+                duration: 0.3,
+                opacity: 0,
+                x: direction === 'right' ? '100%' : '-100%',
+                ease: "back.in(0.7)",
+                onComplete: () => {
+                    notification.remove();
+                    this.notifications = this.notifications.filter(n => n !== notification);
+                }
+            });
+        }
+
+        // 清除所有通知
+        clearAll() {
+            this.notifications.forEach(notification => {
+                this.close(notification);
+            });
+        }
+    }
+
+    // 创建通知系统实例
+    const notification = new ElNotificationSystem();
+
+    // 随机消息数据
+    const randomData = {
+        titles: {
+            success: ['成功提示', '操作成功', '完成通知'],
+            warning: ['警告提示', '注意通知', '安全警告'],
+            error: ['错误提示', '操作失败', '系统错误'],
+            info: ['信息通知', '系统消息', '提示信息']
+        },
+        messages: [
+            '您的申请已提交成功，请耐心等待审核',
+            '系统检测到您的账号有异常登录行为',
+            '文件上传失败，请检查网络连接后重试',
+            '新版本已发布，点击此处立即更新',
+            '您有3条未读消息，请及时查看',
+            '密码修改成功，请妥善保管您的新密码',
+            '服务器连接超时，请稍后再试',
+            '数据保存成功，可在历史记录中查看'
+        ]
+    };
+
+    // 获取随机通知数据
+    function getRandomNotification() {
+        const type = ['success', 'warning', 'error', 'info'][Math.floor(Math.random() * 4)];
+        const title = randomData.titles[type][Math.floor(Math.random() * randomData.titles[type].length)];
+        const message = randomData.messages[Math.floor(Math.random() * randomData.messages.length)];
+
+        return {
+            type,
+            title,
+            message,
+            duration: 3000 + Math.random() * 4000
+        };
+    }
+
+    // DOM事件绑定
+    document.getElementById('showNotification').addEventListener('click', () => {
+        const position = document.getElementById('position').value;
+        const type = document.getElementById('type').value;
+        const duration = parseInt(document.getElementById('duration').value);
+        const title = document.getElementById('title').value;
+        const message = document.getElementById('message').value;
+
+        notification.show({
+            position,
+            type,
+            duration,
+            title,
+            message
+        });
+    });
+
+    document.getElementById('showRandom').addEventListener('click', () => {
+        const position = document.getElementById('position').value;
+        const randomNotif = getRandomNotification();
+
+        notification.show({
+            position,
+            ...randomNotif
+        });
+    });
+
+    document.getElementById('clearAll').addEventListener('click', () => {
+        notification.clearAll();
+    });
+</script>
+</body>
+</html>

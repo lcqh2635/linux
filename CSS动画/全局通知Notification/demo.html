@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>全局通知系统</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Helvetica Neue', Arial, sans-serif;
+      min-height: 100vh;
+      background-color: #f5f5f5;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    h1 {
+      margin-bottom: 20px;
+      color: #333;
+    }
+
+    .controls {
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      margin-bottom: 30px;
+    }
+
+    .control-group {
+      margin-bottom: 15px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: bold;
+      color: #555;
+    }
+
+    select, input, button {
+      padding: 8px 12px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      font-size: 14px;
+    }
+
+    button {
+      background-color: #4a6bdf;
+      color: white;
+      border: none;
+      cursor: pointer;
+      transition: background-color 0.3s;
+      margin-right: 10px;
+      margin-bottom: 10px;
+    }
+
+    button:hover {
+      background-color: #3a56c0;
+    }
+
+    /* 通知样式 */
+    .notification-container {
+      position: fixed;
+      z-index: 9999;
+      pointer-events: none;
+    }
+
+    .notification-container.top-right {
+      top: 20px;
+      right: 20px;
+    }
+
+    .notification-container.top-left {
+      top: 20px;
+      left: 20px;
+    }
+
+    .notification-container.bottom-right {
+      bottom: 20px;
+      right: 20px;
+    }
+
+    .notification-container.bottom-left {
+      bottom: 20px;
+      left: 20px;
+    }
+
+    .notification {
+      position: relative;
+      width: 300px;
+      padding: 15px;
+      margin-bottom: 15px;
+      border-radius: 6px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      font-size: 14px;
+      display: flex;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: box-shadow 0.3s;
+      pointer-events: auto;
+      will-change: transform, opacity;
+    }
+
+    .notification:hover {
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+    }
+
+    .notification.success {
+      background-color: #f6ffed;
+      color: #52c41a;
+      border: 1px solid #b7eb8f;
+    }
+
+    .notification.error {
+      background-color: #fff2f0;
+      color: #ff4d4f;
+      border: 1px solid #ffccc7;
+    }
+
+    .notification.warning {
+      background-color: #fffbe6;
+      color: #faad14;
+      border: 1px solid #ffe58f;
+    }
+
+    .notification.info {
+      background-color: #e6f7ff;
+      color: #1890ff;
+      border: 1px solid #91d5ff;
+    }
+
+    .notification-icon {
+      margin-right: 12px;
+      font-size: 20px;
+      flex-shrink: 0;
+    }
+
+    .notification-content {
+      flex-grow: 1;
+    }
+
+    .notification-title {
+      font-weight: bold;
+      margin-bottom: 5px;
+      font-size: 15px;
+    }
+
+    .notification-message {
+      line-height: 1.5;
+      color: rgba(0, 0, 0, 0.65);
+    }
+
+    .notification-close {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: none;
+      border: none;
+      font-size: 16px;
+      color: inherit;
+      opacity: 0.7;
+      cursor: pointer;
+      padding: 2px;
+      transition: opacity 0.2s;
+    }
+
+    .notification-close:hover {
+      opacity: 1;
+    }
+
+    .notification-progress {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      height: 3px;
+      background-color: rgba(255, 255, 255, 0.4);
+      width: 100%;
+      border-radius: 0 0 6px 6px;
+      overflow: hidden;
+    }
+
+    .notification-progress-bar {
+      height: 100%;
+      background-color: currentColor;
+      opacity: 0.3;
+      width: 100%;
+      transform-origin: left center;
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <h1>全局通知系统</h1>
+
+  <div class="controls">
+    <div class="control-group">
+      <label for="position">通知位置</label>
+      <select id="position">
+        <option value="top-right">右上角</option>
+        <option value="top-left">左上角</option>
+        <option value="bottom-right">右下角</option>
+        <option value="bottom-left">左下角</option>
+      </select>
+    </div>
+
+    <div class="control-group">
+      <label for="type">通知类型</label>
+      <select id="type">
+        <option value="success">成功</option>
+        <option value="error">错误</option>
+        <option value="warning">警告</option>
+        <option value="info">信息</option>
+      </select>
+    </div>
+
+    <div class="control-group">
+      <label for="duration">显示时长(毫秒)</label>
+      <input type="number" id="duration" value="5000" min="1000" step="1000">
+    </div>
+
+    <div class="control-group">
+      <label for="title">标题</label>
+      <input type="text" id="title" placeholder="输入通知标题" value="操作通知">
+    </div>
+
+    <div class="control-group">
+      <label for="message">消息内容</label>
+      <input type="text" id="message" placeholder="输入通知内容" value="这是一条重要的系统通知消息">
+    </div>
+
+    <button id="showNotification">显示通知</button>
+    <button id="showRandom">随机通知</button>
+    <button id="clearAll">清除所有</button>
+  </div>
+</div>
+
+<!-- 通知容器将在JS中动态创建 -->
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/gsap.min.js"></script>
+
+<script>
+  // 通知系统类
+  class NotificationSystem {
+    constructor() {
+      this.container = null;
+      this.notifications = [];
+      this.initContainer();
+    }
+
+    // 初始化通知容器
+    initContainer(position = 'top-right') {
+      // 如果已有容器，先移除
+      if(this.container) {
+        document.body.removeChild(this.container);
+      }
+
+      // 创建新容器
+      this.container = document.createElement('div');
+      this.container.className = `notification-container ${position}`;
+      document.body.appendChild(this.container);
+    }
+
+    // 显示通知
+    show({
+           type = 'info',
+           title = '通知',
+           message = '',
+           duration = 5000,
+           position = 'top-right'
+         }) {
+      // 确保容器位置正确
+      if(!this.container.className.includes(position)) {
+        this.initContainer(position);
+      }
+
+      // 创建通知元素
+      const notification = document.createElement('div');
+      notification.className = `notification ${type}`;
+
+      // 图标映射
+      const icons = {
+        success: '✓',
+        error: '✗',
+        warning: '⚠',
+        info: 'ℹ'
+      };
+
+      // 通知内容
+      notification.innerHTML = `
+                    <span class="notification-icon">${icons[type]}</span>
+                    <div class="notification-content">
+                        <div class="notification-title">${title}</div>
+                        <div class="notification-message">${message}</div>
+                    </div>
+                    <button class="notification-close">&times;</button>
+                    <div class="notification-progress">
+                        <div class="notification-progress-bar"></div>
+                    </div>
+                `;
+
+      // 添加到容器
+      this.container.appendChild(notification);
+      this.notifications.push(notification);
+
+      // 动画时间线
+      const tl = gsap.timeline();
+
+      // 入场动画
+      tl.to(notification, {
+        duration: 0.4,
+        opacity: 1,
+        y: 0,
+        ease: "back.out(1.2)"
+      });
+
+      // 进度条动画
+      tl.to(notification.querySelector('.notification-progress-bar'), {
+        duration: duration / 1000,
+        scaleX: 0,
+        ease: "linear"
+      }, 0);
+
+      // 关闭按钮事件
+      const closeBtn = notification.querySelector('.notification-close');
+      closeBtn.addEventListener('click', () => {
+        this.removeNotification(notification);
+      });
+
+      // 自动关闭
+      if(duration > 0) {
+        setTimeout(() => {
+          this.removeNotification(notification);
+        }, duration);
+      }
+
+      return notification;
+    }
+
+    // 移除通知
+    removeNotification(notification) {
+      if(!notification || !this.notifications.includes(notification)) return;
+
+      gsap.to(notification, {
+        duration: 0.3,
+        opacity: 0,
+        y: -20,
+        ease: "power1.in",
+        onComplete: () => {
+          notification.remove();
+          this.notifications = this.notifications.filter(n => n !== notification);
+        }
+      });
+    }
+
+    // 清除所有通知
+    clearAll() {
+      this.notifications.forEach(notification => {
+        this.removeNotification(notification);
+      });
+    }
+  }
+
+  // 创建通知系统实例
+  const notificationSystem = new NotificationSystem();
+
+  // 获取随机消息
+  function getRandomMessage() {
+    const messages = [
+      "系统更新将于今晚进行",
+      "您的账户有新消息",
+      "任务已完成",
+      "警告: 磁盘空间不足",
+      "登录成功",
+      "错误: 无法连接到服务器",
+      "新版本可用，请更新",
+      "备份已完成"
+    ];
+    return messages[Math.floor(Math.random() * messages.length)];
+  }
+
+  // 获取随机类型
+  function getRandomType() {
+    const types = ['success', 'error', 'warning', 'info'];
+    return types[Math.floor(Math.random() * types.length)];
+  }
+
+  // DOM事件绑定
+  document.getElementById('showNotification').addEventListener('click', () => {
+    const position = document.getElementById('position').value;
+    const type = document.getElementById('type').value;
+    const duration = parseInt(document.getElementById('duration').value);
+    const title = document.getElementById('title').value;
+    const message = document.getElementById('message').value;
+
+    notificationSystem.show({
+      position,
+      type,
+      duration,
+      title,
+      message
+    });
+  });
+
+  document.getElementById('showRandom').addEventListener('click', () => {
+    const position = document.getElementById('position').value;
+
+    notificationSystem.show({
+      position,
+      type: getRandomType(),
+      duration: 3000 + Math.random() * 4000,
+      title: ['系统通知', '提醒', '警告', '提示'][Math.floor(Math.random() * 4)],
+      message: getRandomMessage()
+    });
+  });
+
+  document.getElementById('clearAll').addEventListener('click', () => {
+    notificationSystem.clearAll();
+  });
+</script>
+</body>
+</html>

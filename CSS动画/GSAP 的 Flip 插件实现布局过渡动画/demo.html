@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GSAP Flip 动画示例</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Arial', sans-serif;
+            background: #f5f5f5;
+            padding: 20px;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        h1 {
+            text-align: center;
+            margin: 20px 0;
+            color: #333;
+        }
+        .controls {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        button {
+            padding: 8px 16px;
+            background: #4a90e2;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        button:hover {
+            background: #357ab8;
+        }
+        /* 网格布局 */
+        .grid-layout {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 15px;
+        }
+        /* 列表布局 */
+        .list-layout {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 10px;
+        }
+        .card {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            cursor: pointer;
+            transition: box-shadow 0.3s;
+        }
+        .card:hover {
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+        .card img {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+        }
+        .card-content {
+            padding: 15px;
+        }
+        .card h3 {
+            margin-bottom: 8px;
+            color: #333;
+        }
+        .card p {
+            color: #666;
+            font-size: 14px;
+        }
+        /* 模态框样式 */
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            pointer-events: none;
+            z-index: 100;
+        }
+        .modal.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+        .modal-content {
+            background: white;
+            max-width: 600px;
+            width: 90%;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        .modal-content img {
+            width: 100%;
+            max-height: 400px;
+            object-fit: cover;
+        }
+        .modal-info {
+            padding: 20px;
+        }
+        .close-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: #ff4757;
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>GSAP Flip 布局过渡动画</h1>
+    <div class="controls">
+        <button id="gridBtn">网格布局</button>
+        <button id="listBtn">列表布局</button>
+    </div>
+    <div class="grid-layout" id="cardsContainer">
+        <div class="card">
+            <img src="https://source.unsplash.com/random/300x200?nature" alt="Nature">
+            <div class="card-content">
+                <h3>自然风光</h3>
+                <p>探索大自然的美丽与宁静。</p>
+            </div>
+        </div>
+        <div class="card">
+            <img src="https://source.unsplash.com/random/300x200?city" alt="City">
+            <div class="card-content">
+                <h3>城市景观</h3>
+                <p>现代都市的繁华与活力。</p>
+            </div>
+        </div>
+        <div class="card">
+            <img src="https://source.unsplash.com/random/300x200?animal" alt="Animal">
+            <div class="card-content">
+                <h3>野生动物</h3>
+                <p>感受野生动物的神奇魅力。</p>
+            </div>
+        </div>
+        <div class="card">
+            <img src="https://source.unsplash.com/random/300x200?food" alt="Food">
+            <div class="card-content">
+                <h3>美食佳肴</h3>
+                <p>品尝世界各地的美味。</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 模态框 -->
+<div class="modal" id="modal">
+    <div class="modal-content" id="modalContent">
+        <img id="modalImg" src="" alt="">
+        <div class="modal-info">
+            <h2 id="modalTitle"></h2>
+            <p id="modalDesc"></p>
+        </div>
+    </div>
+    <div class="close-btn" id="closeBtn">×</div>
+</div>
+
+<!-- 引入 GSAP 和 Flip 插件 -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/Flip.min.js"></script>
+
+<script>
+    gsap.registerPlugin(Flip);
+
+    document.addEventListener('DOMContentLoaded', () => {
+        const cardsContainer = document.getElementById('cardsContainer');
+        const gridBtn = document.getElementById('gridBtn');
+        const listBtn = document.getElementById('listBtn');
+        const cards = gsap.utils.toArray('.card');
+        const modal = document.getElementById('modal');
+        const modalContent = document.getElementById('modalContent');
+        const closeBtn = document.getElementById('closeBtn');
+
+        // 切换布局函数
+        function toggleLayout(isGrid) {
+            const state = Flip.getState(cards); // 捕获当前状态
+            cardsContainer.classList.toggle('grid-layout', isGrid);
+            cardsContainer.classList.toggle('list-layout', !isGrid);
+            Flip.from(state, {
+                duration: 0.8,
+                ease: 'power2.inOut',
+                scale: true, // 允许缩放过渡
+                stagger: 0.05, // 交错动画
+                absolute: true, // 处理位置变化
+                onComplete: () => gsap.to(cards, { opacity: 1 }) // 确保动画完成后不闪烁
+            });
+        }
+
+        // 按钮事件
+        gridBtn.addEventListener('click', () => toggleLayout(true));
+        listBtn.addEventListener('click', () => toggleLayout(false));
+
+        // 卡片点击放大为模态框
+        cards.forEach(card => {
+            card.addEventListener('click', () => {
+                const state = Flip.getState(card); // 捕获卡片状态
+                const img = card.querySelector('img');
+                const title = card.querySelector('h3').textContent;
+                const desc = card.querySelector('p').textContent;
+
+                // 更新模态框内容
+                document.getElementById('modalImg').src = img.src;
+                document.getElementById('modalTitle').textContent = title;
+                document.getElementById('modalDesc').textContent = desc;
+
+                // 显示模态框并播放动画
+                modal.classList.add('active');
+                Flip.from(state, {
+                    targets: modalContent,
+                    duration: 0.7,
+                    ease: 'back.out(1.2)',
+                    scale: true,
+                    absolute: true,
+                    onStart: () => {
+                        gsap.set(modalContent, { opacity: 0 }); // 初始透明
+                    },
+                    onComplete: () => {
+                        gsap.to(modalContent, { opacity: 1 }); // 渐显
+                    }
+                });
+            });
+        });
+
+        // 关闭模态框
+        closeBtn.addEventListener('click', () => {
+            const state = Flip.getState(modalContent);
+            modal.classList.remove('active');
+            Flip.from(state, {
+                targets: cards, // 返回到原始卡片
+                duration: 0.5,
+                ease: 'power2.in',
+                onComplete: () => {
+                    gsap.set(cards, { clearProps: 'all' }); // 清除动画属性
+                }
+            });
+        });
+    });
+</script>
+</body>
+</html>

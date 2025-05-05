@@ -5,6 +5,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>扩散展开的下拉菜单</title>
   <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
     /* 全局样式 */
     body {
       margin: 0;
@@ -53,7 +59,7 @@
     /* 下拉菜单 */
     .dropdown-menu {
       position: absolute;
-      top: 50px; /* 距离头像下方 10px */
+      top: 60px; /* 距离头像下方 20px */
       right: 0;
       width: 200px;
       background: rgba(255, 255, 255, 0.95);
@@ -65,7 +71,9 @@
       opacity: 0; /* 初始透明度为 0 */
       visibility: hidden; /* 隐藏菜单 */
       transition: all 0.3s ease; /* 平滑过渡 */
-      origin: top right; /* 动画原点为右上角 */
+      /*transform-origin: top left; !* 动画原点为左上角 *!*/
+      /*transform-origin: top center; !* 动画原点为中间 *!*/
+      transform-origin: top right; /* 动画原点为右上角 */
     }
 
     /* 下拉菜单显示状态 */

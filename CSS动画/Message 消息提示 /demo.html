@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>优雅的消息提示</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #f5f5f5;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 800px;
+            padding: 20px;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            background-color: #4a6bdf;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+            margin: 5px;
+        }
+
+        .btn:hover {
+            background-color: #3a56c0;
+        }
+
+        .message-container {
+            position: fixed;
+            top: 20px;
+            left: 0;
+            right: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            pointer-events: none;
+            z-index: 1000;
+        }
+
+        .message {
+            padding: 12px 24px;
+            margin-bottom: 10px;
+            border-radius: 4px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            max-width: 80%;
+            opacity: 0;
+            transform: translateY(-20px);
+        }
+
+        .message.success {
+            background-color: #f0f9eb;
+            color: #67c23a;
+            border: 1px solid #e1f3d8;
+        }
+
+        .message.error {
+            background-color: #fef0f0;
+            color: #f56c6c;
+            border: 1px solid #fde2e2;
+        }
+
+        .message.warning {
+            background-color: #fdf6ec;
+            color: #e6a23c;
+            border: 1px solid #faecd8;
+        }
+
+        .message.info {
+            background-color: #edf2fc;
+            color: #909399;
+            border: 1px solid #ebeeff;
+        }
+
+        .message-icon {
+            margin-right: 10px;
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>消息提示演示</h1>
+    <p>点击下方按钮显示不同类型的消息提示</p>
+
+    <div>
+        <button class="btn" id="successBtn">成功消息</button>
+        <button class="btn" id="errorBtn">错误消息</button>
+        <button class="btn" id="warningBtn">警告消息</button>
+        <button class="btn" id="infoBtn">信息消息</button>
+    </div>
+</div>
+
+<div class="message-container" id="messageContainer"></div>
+
+<!-- 引入GSAP库 -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/gsap.min.js"></script>
+
+<script>
+    // 消息类型和图标
+    const messageTypes = {
+        success: { icon: '✓' },
+        error: { icon: '✗' },
+        warning: { icon: '⚠' },
+        info: { icon: 'ℹ' }
+    };
+
+    // 显示消息函数
+    function showMessage(type, text, duration = 3000) {
+        const messageContainer = document.getElementById('messageContainer');
+        const message = document.createElement('div');
+        message.className = `message ${type}`;
+
+        const icon = document.createElement('span');
+        icon.className = 'message-icon';
+        icon.textContent = messageTypes[type].icon;
+
+        const textNode = document.createElement('span');
+        textNode.textContent = text;
+
+        message.appendChild(icon);
+        message.appendChild(textNode);
+        messageContainer.appendChild(message);
+
+        // 使用GSAP动画
+        const tl = gsap.timeline();
+
+        // 入场动画
+        tl.to(message, {
+            duration: 0.4,
+            opacity: 1,
+            y: 0,
+            ease: "back.out(1.7)"
+        });
+
+        // 停留时间
+        tl.to(message, {
+            duration: duration / 1000,
+            opacity: 1
+        });
+
+        // 退场动画
+        // tl.to(message, {
+        //     duration: 0.3,
+        //     opacity: 0,
+        //     y: -20,
+        //     ease: "power1.in",
+        //     onComplete: () => {
+        //         message.remove();
+        //     }
+        // });
+
+        // 拟自然重力效果，类似Toast消息的常见消失方式
+        tl.to(message, {
+            duration: 0.4,
+            y: -40,
+            opacity: 0,
+            ease: "power1.in",
+            onComplete: () => {
+                message.remove();
+            }
+        });
+
+        // 带有弹性效果的消失，适合活泼的界面风格
+        // tl.to(message, {
+        //     duration: 0.5,
+        //     opacity: 0,
+        //     y: -30,
+        //     scale: 0.8,
+        //     ease: "elastic.in(1, 0.5)",
+        //     onComplete: () => {
+        //         message.remove();
+        //     }
+        // });
+
+    }
+
+    // 绑定按钮事件
+    document.getElementById('successBtn').addEventListener('click', () => {
+        showMessage('success', '操作成功完成！这是一条成功消息。');
+    });
+
+    document.getElementById('errorBtn').addEventListener('click', () => {
+        showMessage('error', '操作失败！发生了未知错误。');
+    });
+
+    document.getElementById('warningBtn').addEventListener('click', () => {
+        showMessage('warning', '警告！您正在执行敏感操作。');
+    });
+
+    document.getElementById('infoBtn').addEventListener('click', () => {
+        showMessage('info', '提示：这是信息类消息，仅供参考。');
+    });
+</script>
+</body>
+</html>
