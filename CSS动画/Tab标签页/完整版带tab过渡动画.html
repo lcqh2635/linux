@@ -344,19 +344,19 @@
                     currentContent = newContent;
                     
                     // Segmented风格的高亮动画
-                    gsap.to(highlight, {
-                        x: newX,
-                        width: newWidth,
-                        scaleX: 1.1,
-                        duration: 0.3,
-                        ease: "back.out(1.2)", // 控制回弹的强度，数值越大回弹越明显。适合需要强调变化的交互元素（如按钮、开关、标签切换）
-                        onComplete: () => {
-                            gsap.to(highlight, {
-                                scaleX: 1,
-                                duration: 0.1
-                            });
-                        }
-                    });
+                    // gsap.to(highlight, {
+                    //     x: newX,
+                    //     width: newWidth,
+                    //     scaleX: 1.1,
+                    //     duration: 0.3,
+                    //     ease: "back.out(1.2)", // 控制回弹的强度，数值越大回弹越明显。适合需要强调变化的交互元素（如按钮、开关、标签切换）
+                    //     onComplete: () => {
+                    //         gsap.to(highlight, {
+                    //             scaleX: 1,
+                    //             duration: 0.1
+                    //         });
+                    //     }
+                    // });
                     
                     // gsap.to(highlight, {
                     //     x: newX,
@@ -364,6 +364,27 @@
                     //     duration: 0.25,
                     //     ease: "power2.out" // 更符合现代UI规范
                     // });
+
+                    // gsap.to(highlight, {
+                    //     x: newX,
+                    //     width: newWidth,
+                    //     duration: 0.3,
+                    //     ease: "elastic.out(1, 0.5)" // 更柔和的弹性
+                    // });
+
+                    // gsap.to(highlight, {
+                    //     x: newX,
+                    //     width: newWidth,
+                    //     duration: 0.3,
+                    //     ease: "expo.out" // 平滑加速然后急停
+                    // });
+
+                    gsap.to(highlight, {
+                        x: newX,
+                        width: newWidth,
+                        duration: 0.4,
+                        ease: "sine.inOut" // 最自然的缓入缓出
+                    });
                     
                     // 确保活动标签可见
                     ensureTabVisible(newTab);

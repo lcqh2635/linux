@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GSAP Flip布局动画示例</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/Flip.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+
+        .card-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            padding: 20px;
+            position: relative;
+            overflow: hidden;
+            transform-origin: center;
+            will-change: transform, opacity; /* 优化性能 */
+        }
+
+        .card h3 {
+            margin-top: 0;
+            color: #333;
+        }
+
+        .card p {
+            color: #666;
+        }
+
+        .card .value {
+            font-size: 24px;
+            font-weight: bold;
+            margin: 10px 0;
+            color: #2c3e50;
+        }
+
+        .card .change {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+
+        .positive {
+            background: #e8f5e9;
+            color: #2e7d32;
+        }
+
+        .negative {
+            background: #ffebee;
+            color: #c62828;
+        }
+
+        .controls {
+            margin-bottom: 20px;
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        button {
+            padding: 8px 16px;
+            background: #3498db;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        button:hover {
+            background: #2980b9;
+        }
+
+        .loading-shimmer {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.8) 50%, rgba(255,255,255,0) 100%);
+            transform: translateX(-100%);
+            z-index: 1;
+        }
+    </style>
+</head>
+<body>
+<h1>GSAP Flip布局动画示例</h1>
+
+<div class="controls">
+    <button id="updateData">更新数据</button>
+    <button id="addCard">添加卡片</button>
+    <button id="removeCard">移除卡片</button>
+    <button id="shuffle">随机排序</button>
+    <button id="toggleLoading">切换加载状态</button>
+</div>
+
+<div class="card-container" id="cardContainer">
+    <div class="card" data-id="1">
+        <h3>用户数量</h3>
+        <div class="value">1,245</div>
+        <p>本月新增用户</p>
+        <span class="change positive">↑ 12%</span>
+        <div class="loading-shimmer"></div>
+    </div>
+    <div class="card" data-id="2">
+        <h3>收入</h3>
+        <div class="value">$8,752</div>
+        <p>本月总收入</p>
+        <span class="change positive">↑ 5%</span>
+        <div class="loading-shimmer"></div>
+    </div>
+    <div class="card" data-id="3">
+        <h3>转化率</h3>
+        <div class="value">3.2%</div>
+        <p>网站转化率</p>
+        <span class="change negative">↓ 0.8%</span>
+        <div class="loading-shimmer"></div>
+    </div>
+</div>
+
+<script>
+    // 注册 Flip 插件
+    gsap.registerPlugin(Flip);
+
+    // 初始化卡片动画
+    function initCardAnimations() {
+        const cards = gsap.utils.toArray('.card');
+
+        // 初始进入动画
+        gsap.from(cards, {
+            duration: 0.6,
+            y: 20,
+            opacity: 0,
+            stagger: 0.1,
+            ease: "power2.out"
+        });
+
+        // 悬停动画
+        cards.forEach(card => {
+            card.addEventListener('mouseenter', () => {
+                gsap.to(card, {
+                    duration: 0.3,
+                    y: -5,
+                    boxShadow: '0 5px 15px rgba(0,0,0,0.2)',
+                    ease: "power2.out"
+                });
+            });
+
+            card.addEventListener('mouseleave', () => {
+                gsap.to(card, {
+                    duration: 0.3,
+                    y: 0,
+                    boxShadow: '0 2px 10px rgba(0,0,0,0.1)',
+                    ease: "power2.out"
+                });
+            });
+        });
+    }
+
+    // 更新数据时的动画
+    function updateData() {
+        const cards = gsap.utils.toArray('.card');
+        const newValues = [
+            { value: (Math.random() * 2000 + 1000).toFixed(0), change: (Math.random() * 20 - 5).toFixed(1) },
+            { value: '$' + (Math.random() * 10000 + 5000).toFixed(0), change: (Math.random() * 15 - 3).toFixed(1) },
+            { value: (Math.random() * 5 + 1).toFixed(1) + '%', change: (Math.random() * 2 - 1).toFixed(1) }
+        ];
+
+        cards.forEach((card, index) => {
+            const valueEl = card.querySelector('.value');
+            const changeEl = card.querySelector('.change');
+            const newValue = newValues[index];
+
+            // 数值变化动画
+            gsap.to(valueEl, {
+                duration: 0.3,
+                scale: 1.2,
+                color: "#e74c3c",
+                yoyo: true,
+                repeat: 1,
+                ease: "power2.inOut",
+                onComplete: () => {
+                    valueEl.textContent = newValue.value;
+                    gsap.to(valueEl, { color: "#2c3e50", duration: 0.2 });
+                }
+            });
+
+            // 变化百分比动画
+            if (parseFloat(newValue.change) >= 0) {
+                changeEl.textContent = `↑ ${newValue.change}%`;
+                changeEl.className = "change positive";
+                gsap.fromTo(changeEl,
+                    { backgroundColor: "#a5d6a7" },
+                    { backgroundColor: "#e8f5e9", duration: 0.5 }
+                );
+            } else {
+                changeEl.textContent = `↓ ${Math.abs(newValue.change)}%`;
+                changeEl.className = "change negative";
+                gsap.fromTo(changeEl,
+                    { backgroundColor: "#ef9a9a" },
+                    { backgroundColor: "#ffebee", duration: 0.5 }
+                );
+            }
+        });
+    }
+
+    // 添加新卡片动画
+    function addCard() {
+        const cardContainer = document.getElementById('cardContainer');
+        const newId = Date.now();
+        const cardTypes = [
+            { title: "页面浏览量", value: (Math.random() * 10000 + 5000).toFixed(0), desc: "总PV量", change: (Math.random() * 15).toFixed(1) },
+            { title: "平均停留", value: (Math.random() * 5 + 1).toFixed(1) + 'min', desc: "用户平均停留时间", change: (Math.random() * 2).toFixed(1) },
+            { title: "跳出率", value: (Math.random() * 30 + 20).toFixed(1) + '%', desc: "网站跳出率", change: (Math.random() * 10 - 5).toFixed(1) }
+        ];
+
+        const type = cardTypes[Math.floor(Math.random() * cardTypes.length)];
+        const isPositive = parseFloat(type.change) >= 0;
+
+        const newCard = document.createElement('div');
+        newCard.className = 'card';
+        newCard.dataset.id = newId;
+        newCard.innerHTML = `
+                <h3>${type.title}</h3>
+                <div class="value">${type.value}</div>
+                <p>${type.desc}</p>
+                <span class="change ${isPositive ? 'positive' : 'negative'}">${isPositive ? '↑' : '↓'} ${Math.abs(type.change)}%</span>
+                <div class="loading-shimmer"></div>
+            `;
+
+        // 初始设置为透明和缩小状态
+        gsap.set(newCard, { opacity: 0, scale: 0.8, y: 20 });
+
+        // 记录当前布局状态
+        const state = Flip.getState('.card');
+
+        cardContainer.appendChild(newCard);
+
+        // 添加进入动画并应用Flip布局动画
+        Flip.from(state, {
+            duration: 0.5,
+            ease: "power1.inOut",
+            onComplete: () => {
+                // 单独的新卡片入场动画
+                gsap.to(newCard, {
+                    opacity: 1,
+                    scale: 1,
+                    y: 0,
+                    ease: "back.out(1.7)",
+                    duration: 0.5
+                });
+            }
+        });
+
+        // 为新卡片添加悬停动画
+        newCard.addEventListener('mouseenter', () => {
+            gsap.to(newCard, {
+                duration: 0.3,
+                y: -5,
+                boxShadow: '0 5px 15px rgba(0,0,0,0.2)',
+                ease: "power2.out"
+            });
+        });
+
+        newCard.addEventListener('mouseleave', () => {
+            gsap.to(newCard, {
+                duration: 0.3,
+                y: 0,
+                boxShadow: '0 2px 10px rgba(0,0,0,0.1)',
+                ease: "power2.out"
+            });
+        });
+    }
+
+    // 使用Flip优化后的移除卡片动画
+    function removeCard() {
+        const cards = gsap.utils.toArray('.card');
+        if (cards.length === 0) return;
+
+        const randomCard = cards[Math.floor(Math.random() * cards.length)];
+
+        // 1. 记录当前布局状态
+        const state = Flip.getState('.card', { nested: true });
+
+        // 2. 从DOM中移除卡片
+        randomCard.remove();
+
+        // 3. 执行Flip动画
+        Flip.from(state, {
+            duration: 0.5,
+            ease: "power1.inOut",
+            onStart: () => {
+                // 同时执行卡片的移除动画
+                gsap.to(randomCard, {
+                    duration: 0.5,
+                    opacity: 0,
+                    scale: 0.8,
+                    y: -20,
+                    ease: "back.in(1.7)"
+                });
+            }
+        });
+    }
+
+    // 随机排序卡片
+    function shuffleCards() {
+        const container = document.getElementById('cardContainer');
+        const cards = Array.from(container.children);
+
+        // 1. 记录当前状态
+        const state = Flip.getState('.card');
+
+        // 2. 随机排序数组
+        for (let i = cards.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [cards[i], cards[j]] = [cards[j], cards[i]];
+        }
+
+        // 3. 重新添加卡片到容器
+        cards.forEach(card => container.appendChild(card));
+
+        // 4. 执行Flip动画
+        Flip.from(state, {
+            duration: 0.6,
+            ease: "power1.inOut",
+            stagger: 0.05
+        });
+    }
+
+    // 加载状态动画
+    function toggleLoading() {
+        const shimmers = gsap.utils.toArray('.loading-shimmer');
+
+        if (shimmers[0].style.visibility === 'visible') {
+            // 隐藏加载动画
+            gsap.to(shimmers, {
+                duration: 0.3,
+                opacity: 0,
+                onComplete: () => {
+                    shimmers.forEach(shimmer => {
+                        shimmer.style.visibility = 'hidden';
+                        gsap.killTweensOf(shimmer);
+                    });
+                }
+            });
+        } else {
+            // 显示加载动画
+            shimmers.forEach(shimmer => {
+                shimmer.style.visibility = 'visible';
+                gsap.fromTo(shimmer,
+                    { opacity: 0, xPercent: -100 },
+                    {
+                        opacity: 1,
+                        xPercent: 100,
+                        duration: 1.5,
+                        ease: "none",
+                        repeat: -1
+                    }
+                );
+            });
+        }
+    }
+
+    // 初始化
+    document.addEventListener('DOMContentLoaded', () => {
+        initCardAnimations();
+
+        // 设置事件监听器
+        document.getElementById('updateData').addEventListener('click', updateData);
+        document.getElementById('addCard').addEventListener('click', addCard);
+        document.getElementById('removeCard').addEventListener('click', removeCard);
+        document.getElementById('shuffle').addEventListener('click', shuffleCards);
+        document.getElementById('toggleLoading').addEventListener('click', toggleLoading);
+    });
+</script>
+</body>
+</html>

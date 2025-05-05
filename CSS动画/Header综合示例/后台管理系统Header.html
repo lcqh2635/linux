@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>后台管理系统 - Header</title>
+    <style>
+        /* 基础样式重置 */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+        }
+        
+        body {
+            background-color: #f5f7fa;
+            color: #333;
+        }
+        
+        /* Header 容器 */
+        .admin-header {
+            position: relative;
+            height: 64px;
+            background: linear-gradient(135deg, #1976d2, #2196f3);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            display: flex;
+            align-items: center;
+            padding: 0 24px;
+            color: white;
+            z-index: 100;
+        }
+        
+        /* Logo 区域 */
+        .header-logo {
+            display: flex;
+            align-items: center;
+            margin-right: 32px;
+            cursor: pointer;
+        }
+        
+        .logo-icon {
+            font-size: 24px;
+            margin-right: 8px;
+            transition: transform 0.3s ease;
+        }
+        
+        .logo-text {
+            font-size: 18px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+        
+        .header-logo:hover .logo-icon {
+            transform: rotate(15deg);
+        }
+        
+        /* 面包屑导航 */
+        .breadcrumb {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            font-size: 14px;
+        }
+        
+        .breadcrumb-item {
+            display: flex;
+            align-items: center;
+            color: rgba(255, 255, 255, 0.8);
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+        
+        .breadcrumb-item:hover {
+            color: white;
+        }
+        
+        .breadcrumb-separator {
+            margin: 0 8px;
+            color: rgba(255, 255, 255, 0.5);
+        }
+        
+        .breadcrumb-item.active {
+            color: white;
+            font-weight: 500;
+        }
+        
+        /* 工具栏 */
+        .header-toolbar {
+            display: flex;
+            align-items: center;
+            margin-left: auto;
+        }
+        
+        .toolbar-item {
+            position: relative;
+            margin-left: 16px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            transition: all 0.2s ease;
+            color: white;
+        }
+        
+        .toolbar-item:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+        
+        .toolbar-item i {
+            font-size: 18px;
+        }
+        
+        .badge {
+            position: absolute;
+            top: -2px;
+            right: -2px;
+            background-color: #ff5252;
+            color: white;
+            border-radius: 10px;
+            padding: 2px 5px;
+            font-size: 10px;
+            font-weight: bold;
+            min-width: 18px;
+            text-align: center;
+            line-height: 1;
+        }
+        
+        /* 用户菜单 */
+        .user-menu {
+            margin-left: 16px;
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            padding: 4px 8px;
+            border-radius: 20px;
+            transition: background-color 0.2s;
+        }
+        
+        .user-menu:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+        
+        .user-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background-color: #e3f2fd;
+            color: #1976d2;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin-right: 8px;
+            overflow: hidden;
+        }
+        
+        .user-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .user-name {
+            font-size: 14px;
+            margin-right: 4px;
+        }
+        
+        .user-dropdown-icon {
+            font-size: 16px;
+            transition: transform 0.2s;
+        }
+        
+        .user-menu.active .user-dropdown-icon {
+            transform: rotate(180deg);
+        }
+        
+        /* 下拉菜单 */
+        .dropdown-menu {
+            position: absolute;
+            top: 72px;
+            right: 24px;
+            background-color: white;
+            border-radius: 6px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.15);
+            width: 240px;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-10px);
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            z-index: 1000;
+        }
+        
+        .dropdown-menu.active {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+        
+        .dropdown-header {
+            padding: 16px;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            align-items: center;
+        }
+        
+        .dropdown-header .user-avatar {
+            width: 40px;
+            height: 40px;
+            margin-right: 12px;
+        }
+        
+        .dropdown-user-info h4 {
+            font-size: 14px;
+            margin-bottom: 2px;
+            color: #333;
+        }
+        
+        .dropdown-user-info p {
+            font-size: 12px;
+            color: #666;
+        }
+        
+        .dropdown-list {
+            padding: 8px 0;
+        }
+        
+        .dropdown-item {
+            padding: 10px 16px;
+            display: flex;
+            align-items: center;
+            color: #555;
+            transition: background-color 0.2s;
+        }
+        
+        .dropdown-item:hover {
+            background-color: #f5f7fa;
+        }
+        
+        .dropdown-item i {
+            margin-right: 12px;
+            color: #666;
+            font-size: 16px;
+            width: 20px;
+            text-align: center;
+        }
+        
+        .dropdown-divider {
+            height: 1px;
+            background-color: #eee;
+            margin: 8px 0;
+        }
+        
+        /* 搜索框 */
+        .search-box {
+            position: relative;
+            margin-right: 16px;
+            width: 200px;
+            transition: width 0.3s ease;
+        }
+        
+        .search-box.active {
+            width: 240px;
+        }
+        
+        .search-input {
+            width: 100%;
+            height: 36px;
+            border: none;
+            border-radius: 18px;
+            padding: 0 36px 0 16px;
+            background-color: rgba(255, 255, 255, 0.2);
+            color: white;
+            font-size: 14px;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+        
+        .search-input::placeholder {
+            color: rgba(255, 255, 255, 0.7);
+        }
+        
+        .search-input:focus {
+            background-color: rgba(255, 255, 255, 0.3);
+        }
+        
+        .search-icon {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: white;
+            cursor: pointer;
+        }
+        
+        /* 响应式调整 */
+        @media (max-width: 992px) {
+            .breadcrumb {
+                display: none;
+            }
+            
+            .search-box {
+                width: 36px;
+                margin-right: 8px;
+            }
+            
+            .search-input {
+                opacity: 0;
+                cursor: pointer;
+                padding-left: 36px;
+            }
+            
+            .search-box.active {
+                width: 180px;
+            }
+            
+            .search-box.active .search-input {
+                opacity: 1;
+                cursor: text;
+            }
+        }
+        
+        /* 图标字体 - 实际项目中建议使用真实图标库 */
+        .icon {
+            font-style: normal;
+            font-family: 'Material Icons';
+            font-weight: normal;
+            font-style: normal;
+            font-size: 24px;
+            line-height: 1;
+            letter-spacing: normal;
+            text-transform: none;
+            display: inline-block;
+            white-space: nowrap;
+            word-wrap: normal;
+            direction: ltr;
+            -webkit-font-feature-settings: 'liga';
+            -webkit-font-smoothing: antialiased;
+        }
+    </style>
+    <!-- 引入 GSAP -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/gsap.min.js"></script>
+    <!-- 引入 Material Icons -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+</head>
+<body>
+    <header class="admin-header">
+        <!-- Logo 区域 -->
+        <div class="header-logo">
+            <span class="logo-icon icon">dashboard</span>
+            <span class="logo-text">AdminPro</span>
+        </div>
+        
+        <!-- 面包屑导航 -->
+        <div class="breadcrumb">
+            <div class="breadcrumb-item active">
+                <span class="icon" style="font-size: 18px; margin-right: 6px;">home</span>
+                <span>首页</span>
+            </div>
+            <span class="breadcrumb-separator">/</span>
+            <div class="breadcrumb-item">
+                <span>系统管理</span>
+            </div>
+            <span class="breadcrumb-separator">/</span>
+            <div class="breadcrumb-item">
+                <span>用户管理</span>
+            </div>
+        </div>
+        
+        <!-- 搜索框 -->
+        <div class="search-box">
+            <input type="text" class="search-input" placeholder="搜索...">
+            <span class="search-icon icon">search</span>
+        </div>
+        
+        <!-- 工具栏 -->
+        <div class="header-toolbar">
+            <div class="toolbar-item" title="消息">
+                <span class="icon">notifications</span>
+                <span class="badge">5</span>
+            </div>
+            <div class="toolbar-item" title="邮件">
+                <span class="icon">email</span>
+                <span class="badge">12</span>
+            </div>
+            <div class="toolbar-item" title="任务">
+                <span class="icon">assignment</span>
+                <span class="badge">3</span>
+            </div>
+            <div class="toolbar-item" title="全屏" id="fullscreen-btn">
+                <span class="icon">fullscreen</span>
+            </div>
+            
+            <!-- 用户菜单 -->
+            <div class="user-menu" id="user-menu">
+                <div class="user-avatar">
+                    <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="用户头像">
+                </div>
+                <span class="user-name">张经理</span>
+                <span class="user-dropdown-icon icon">arrow_drop_down</span>
+            </div>
+        </div>
+        
+        <!-- 下拉菜单 -->
+        <div class="dropdown-menu" id="dropdown-menu">
+            <div class="dropdown-header">
+                <div class="user-avatar">
+                    <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="用户头像">
+                </div>
+                <div class="dropdown-user-info">
+                    <h4>张经理</h4>
+                    <p>admin@example.com</p>
+                </div>
+            </div>
+            <div class="dropdown-list">
+                <div class="dropdown-item">
+                    <span class="icon">person</span>
+                    <span>个人中心</span>
+                </div>
+                <div class="dropdown-item">
+                    <span class="icon">settings</span>
+                    <span>账户设置</span>
+                </div>
+                <div class="dropdown-item">
+                    <span class="icon">message</span>
+                    <span>我的消息</span>
+                    <span class="badge" style="margin-left: auto;">5</span>
+                </div>
+                <div class="dropdown-item">
+                    <span class="icon">task</span>
+                    <span>我的任务</span>
+                    <span class="badge" style="margin-left: auto;">3</span>
+                </div>
+                <div class="dropdown-divider"></div>
+                <div class="dropdown-item">
+                    <span class="icon">help</span>
+                    <span>帮助中心</span>
+                </div>
+                <div class="dropdown-item">
+                    <span class="icon">logout</span>
+                    <span>退出登录</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // 用户菜单交互
+            const userMenu = document.getElementById('user-menu');
+            const dropdownMenu = document.getElementById('dropdown-menu');
+            
+            userMenu.addEventListener('click', function() {
+                this.classList.toggle('active');
+                dropdownMenu.classList.toggle('active');
+                
+                // 使用 GSAP 实现更流畅的动画
+                if (dropdownMenu.classList.contains('active')) {
+                    gsap.fromTo(dropdownMenu, 
+                        { opacity: 0, y: -10 },
+                        { opacity: 1, y: 0, duration: 0.3, ease: "power2.out" }
+                    );
+                }
+            });
+            
+            // 点击其他地方关闭下拉菜单
+            document.addEventListener('click', function(e) {
+                if (!userMenu.contains(e.target) {
+                    userMenu.classList.remove('active');
+                    dropdownMenu.classList.remove('active');
+                }
+            });
+            
+            // 搜索框交互
+            const searchBox = document.querySelector('.search-box');
+            const searchInput = document.querySelector('.search-input');
+            const searchIcon = document.querySelector('.search-icon');
+            
+            searchIcon.addEventListener('click', function() {
+                searchBox.classList.toggle('active');
+                if (searchBox.classList.contains('active')) {
+                    searchInput.focus();
+                }
+            });
+            
+            // 全屏功能
+            const fullscreenBtn = document.getElementById('fullscreen-btn');
+            fullscreenBtn.addEventListener('click', toggleFullScreen);
+            
+            function toggleFullScreen() {
+                if (!document.fullscreenElement) {
+                    document.documentElement.requestFullscreen().catch(err => {
+                        console.error(`全屏错误: ${err.message}`);
+                    });
+                    fullscreenBtn.innerHTML = '<span class="icon">fullscreen_exit</span>';
+                } else {
+                    if (document.exitFullscreen) {
+                        document.exitFullscreen();
+                        fullscreenBtn.innerHTML = '<span class="icon">fullscreen</span>';
+                    }
+                }
+            }
+            
+            // 面包屑导航动画
+            const breadcrumbItems = document.querySelectorAll('.breadcrumb-item:not(.active)');
+            breadcrumbItems.forEach(item => {
+                item.addEventListener('mouseenter', () => {
+                    gsap.to(item, {
+                        scale: 1.05,
+                        duration: 0.2
+                    });
+                });
+                
+                item.addEventListener('mouseleave', () => {
+                    gsap.to(item, {
+                        scale: 1,
+                        duration: 0.2
+                    });
+                });
+            });
+            
+            // 工具栏按钮动画
+            const toolbarItems = document.querySelectorAll('.toolbar-item');
+            toolbarItems.forEach(item => {
+                item.addEventListener('mouseenter', () => {
+                    gsap.to(item, {
+                        scale: 1.1,
+                        duration: 0.2
+                    });
+                });
+                
+                item.addEventListener('mouseleave', () => {
+                    gsap.to(item, {
+                        scale: 1,
+                        duration: 0.2
+                    });
+                });
+                
+                item.addEventListener('click', () => {
+                    gsap.to(item, {
+                        scale: 0.9,
+                        duration: 0.1,
+                        yoyo: true,
+                        repeat: 1
+                    });
+                });
+            });
+            
+            // Logo 动画
+            const logo = document.querySelector('.header-logo');
+            logo.addEventListener('mouseenter', () => {
+                gsap.to('.logo-icon', {
+                    rotation: 15,
+                    duration: 0.3
+                });
+            });
+            
+            logo.addEventListener('mouseleave', () => {
+                gsap.to('.logo-icon', {
+                    rotation: 0,
+                    duration: 0.3
+                });
+            });
+        });
+    </script>
+</body>
+</html>
