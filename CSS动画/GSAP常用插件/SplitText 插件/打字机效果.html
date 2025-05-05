@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>打字机效果（使用SplitText）</title>
+    <title>优雅的打字机效果</title>
     <style>
         body {
             font-family: 'Courier New', monospace;
@@ -11,32 +11,32 @@
             justify-content: center;
             align-items: center;
             min-height: 100vh;
-            background: #121212;
+            background: #1a1a1a;
             margin: 0;
-            color: #00ff00;
+            color: #00ff88;
+            line-height: 1.6;
         }
         .container {
             max-width: 800px;
             padding: 2rem;
             border: 1px solid #333;
             background: rgba(0, 0, 0, 0.7);
-            position: relative;
+            box-shadow: 0 0 20px rgba(0, 255, 136, 0.1);
         }
         #text {
-            font-size: 1.5rem;
-            line-height: 1.6;
+            font-size: 1.4rem;
+            min-height: 200px;
         }
         .char {
-            display: inline-block;
             opacity: 0;
         }
         .cursor {
             display: inline-block;
             width: 10px;
-            height: 1.5rem;
-            background: #00ff00;
-            animation: blink 0.7s infinite;
+            height: 1.4rem;
+            background: #00ff88;
             vertical-align: middle;
+            animation: blink 0.8s infinite;
             margin-left: 2px;
         }
         @keyframes blink {
@@ -44,26 +44,28 @@
             50% { opacity: 0; }
         }
         .btn {
-            padding: 0.8rem 1.5rem;
+            padding: 0.8rem 1.8rem;
             background: transparent;
-            color: #00ff00;
-            border: 1px solid #00ff00;
-            cursor: pointer;
+            color: #00ff88;
+            border: 1px solid #00ff88;
             font-family: 'Courier New', monospace;
+            font-size: 1rem;
             margin-top: 2rem;
+            cursor: pointer;
             transition: all 0.3s;
         }
         .btn:hover {
-            background: rgba(0, 255, 0, 0.1);
+            background: rgba(0, 255, 136, 0.1);
+            box-shadow: 0 0 10px rgba(0, 255, 136, 0.3);
         }
     </style>
 </head>
 <body>
 <div class="container">
-    <div id="text">欢迎使用增强版打字机效果\n\nSplitText插件让实现更简单\n每个字符都有独立的控制\n可以创建更复杂的打字节奏</div>
+    <div id="text">const greeting = "你好，世界！";\n\nfunction typewriterEffect() {\n  // 这是一个优雅的打字机效果演示\n  // 使用GSAP的SplitText插件实现\n  // 每个字符都有自然的打字节奏\n  console.log("开始动画...");\n}</div>
     <span class="cursor"></span>
     <div>
-        <button class="btn" id="replay">重新打字</button>
+        <button class="btn" id="replay">重新播放 (Ctrl+R)</button>
     </div>
 </div>
 
@@ -74,57 +76,99 @@
     // 注册插件
     gsap.registerPlugin(SplitText);
 
-    let split;
-    let tl;
+    let splitInstance;
+    let typewriterTL;
 
-    function initAnimation() {
+    function initTypewriter() {
         // 清除现有实例和动画
-        if (split) split.revert();
-        if (tl) tl.kill();
+        if (splitInstance) splitInstance.revert();
+        if (typewriterTL) typewriterTL.kill();
 
-        // 使用SplitText分割字符
-        split = new SplitText("#text", {
+        // 使用SplitText.create()静态方法
+        splitInstance = SplitText.create("#text", {
             type: "chars",
-            charsClass: "char"
-        });
+            charsClass: "char",
+            onSplit: (self) => {
+                // 初始状态：所有字符透明
+                gsap.set(self.chars, { opacity: 0 });
 
-        // 隐藏所有字符
-        gsap.set(split.chars, { opacity: 0 });
+                // 创建打字机时间轴
+                typewriterTL = gsap.timeline({
+                    onStart: () => document.querySelector(".cursor").style.animationPlayState = "running",
+                    onComplete: () => document.querySelector(".cursor").style.animationPlayState = "paused"
+                });
 
-        // 创建时间轴
-        tl = gsap.timeline();
+                // 为每个字符添加动画
+                self.chars.forEach((char, i) => {
+                    const charText = char.textContent;
+                    let delay = 0.05; // 基础延迟
 
-        // 为每个字符添加动画
-        split.chars.forEach((char, i) => {
-            // 根据字符类型设置不同的延迟
-            let delay = 0.05;
-            const text = char.textContent;
+                    // 根据字符类型调整延迟
+                    if (charText.match(/[{}();:]/)) delay = 0.2;
+                    else if (charText.match(/[\[\]'"=]/)) delay = 0.15;
+                    else if (charText === " ") delay = 0.03;
+                    else if (charText === "\n") delay = 0.4;
 
-            if (text.match(/[,.!?;:]/)) delay = 0.3;
-            if (text === " " || text === "\n") delay = 0.03;
+                    // 长单词后的空格增加延迟
+                    if (charText === " " && i > 0 && self.chars[i-1].textContent !== " ") {
+                        let wordLength = 0;
+                        for (let j = i-1; j >= 0 && self.chars[j].textContent !== " "; j--) {
+                            wordLength++;
+                        }
+                        if (wordLength > 8) delay = 0.2;
+                    }
 
-            // 长单词后的空格延迟更长
-            if (text === " " && i > 0 && split.chars[i-1].textContent !== " ") {
-                let wordLength = 0;
-                for (let j = i-1; j >= 0 && split.chars[j].textContent !== " "; j--) {
-                    wordLength++;
-                }
-                if (wordLength > 8) delay = 0.2;
+                    // 添加到时间轴
+                    typewriterTL.to(char, {
+                        opacity: 1,
+                        duration: 0.02,
+                        ease: "none",
+                        onStart: () => {
+                            // 模拟打字声音
+                            if (charText !== " " && charText !== "\n") {
+                                const pitch = 0.8 + Math.random() * 0.4;
+                                playTypeSound(pitch);
+                            }
+                        }
+                    }, i * delay);
+                });
             }
-
-            // 换行符增加更多延迟
-            if (text === "\n") delay = 0.5;
-
-            tl.to(char, {
-                duration: 0.01,
-                opacity: 1,
-                ease: "none"
-            }, i * delay);
         });
     }
 
-    document.addEventListener('DOMContentLoaded', initAnimation);
-    document.getElementById("replay").addEventListener("click", initAnimation);
+    // 简单的打字声音效果
+    function playTypeSound(pitch = 1) {
+        const ctx = new (window.AudioContext || window.webkitAudioContext)();
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+
+        osc.type = "sine";
+        osc.frequency.value = 120 * pitch;
+        gain.gain.value = 0.02;
+
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+
+        osc.start();
+        gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.1);
+        osc.stop(ctx.currentTime + 0.1);
+    }
+
+    // 初始化动画
+    document.addEventListener('DOMContentLoaded', () => {
+        initTypewriter();
+
+        // 重新播放按钮
+        document.getElementById("replay").addEventListener("click", initTypewriter);
+
+        // 键盘快捷键
+        document.addEventListener("keydown", (e) => {
+            if (e.ctrlKey && e.key === "r") {
+                e.preventDefault();
+                initTypewriter();
+            }
+        });
+    });
 </script>
 </body>
 </html>

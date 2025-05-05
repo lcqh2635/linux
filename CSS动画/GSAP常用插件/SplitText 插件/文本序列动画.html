@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>文本序列动画</title>
+    <title>文本序列动画（SplitText.create版）</title>
     <style>
         body {
             font-family: 'Helvetica Neue', sans-serif;
@@ -65,46 +65,49 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/gsap.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/SplitText.min.js"></script>
 <script>
+    // 注册插件
     gsap.registerPlugin(SplitText);
 
     let splits = [];
-    let tl;
+    let masterTL;
 
     function initAnimation() {
         // 清除现有动画和分割
-        if (tl) tl.kill();
+        if (masterTL) masterTL.kill();
         splits.forEach(split => split.revert());
         splits = [];
 
-        // 分割每行文本
+        // 使用SplitText.create()处理每行文本
         const lines = document.querySelectorAll("#text div");
-        lines.forEach(line => {
-            const split = new SplitText(line, {
-                type: "lines,words",
-                linesClass: "line",
-                wordsClass: "word"
+        lines.forEach((line, index) => {
+            const split = SplitText.create(line, {
+                type: "words",
+                wordsClass: "word",
+                onSplit: (self) => {
+                    // 设置初始状态
+                    gsap.set(self.words, {
+                        opacity: 0,
+                        y: "100%"
+                    });
+
+                    // 添加到分割实例数组
+                    splits.push(self);
+
+                    // 如果是第一行，创建主时间轴
+                    if (index === 0) {
+                        masterTL = gsap.timeline();
+                    }
+
+                    // 为每行添加动画到时间轴
+                    masterTL.to(self.words, {
+                        duration: 0.8,
+                        opacity: 1,
+                        y: "0%",
+                        stagger: 0.1,
+                        ease: "back.out"
+                    }, index * 0.5); // 行间延迟
+                }
             });
-            splits.push(split);
-
-            // 设置初始状态
-            gsap.set(split.words, {
-                opacity: 0,
-                y: "100%"
-            });
-        });
-
-        // 创建序列动画
-        tl = gsap.timeline();
-
-        lines.forEach((line, i) => {
-            const split = splits[i];
-            tl.to(split.words, {
-                duration: 0.8,
-                opacity: 1,
-                y: "0%",
-                stagger: 0.1,
-                ease: "back.out"
-            }, i * 0.5); // 每行之间延迟
         });
     }
 
