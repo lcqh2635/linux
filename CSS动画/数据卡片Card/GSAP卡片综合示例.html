@@ -251,19 +251,28 @@
         cardContainer.appendChild(newCard);
 
         // 添加进入动画并应用Flip布局动画
-        Flip.from(state, {
+        // Flip.from(state, {
+        //     duration: 0.5,
+        //     ease: "power1.inOut",
+        //     onComplete: () => {
+        //         // 单独的新卡片入场动画
+        //         gsap.to(newCard, {
+        //             opacity: 1,
+        //             scale: 1,
+        //             y: 0,
+        //             ease: "back.out(1.7)",
+        //             duration: 0.5
+        //         });
+        //     }
+        // });
+
+        // 添加进入动画
+        gsap.to(newCard, {
             duration: 0.5,
-            ease: "power1.inOut",
-            onComplete: () => {
-                // 单独的新卡片入场动画
-                gsap.to(newCard, {
-                    opacity: 1,
-                    scale: 1,
-                    y: 0,
-                    ease: "back.out(1.7)",
-                    duration: 0.5
-                });
-            }
+            opacity: 1,
+            scale: 1,
+            y: 0,
+            ease: "back.out(1.7)"
         });
 
         // 为新卡片添加悬停动画
