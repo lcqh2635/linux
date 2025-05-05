@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>打字机效果（使用SplitText）</title>
+    <style>
+        body {
+            font-family: 'Courier New', monospace;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: #121212;
+            margin: 0;
+            color: #00ff00;
+        }
+        .container {
+            max-width: 800px;
+            padding: 2rem;
+            border: 1px solid #333;
+            background: rgba(0, 0, 0, 0.7);
+            position: relative;
+        }
+        #text {
+            font-size: 1.5rem;
+            line-height: 1.6;
+        }
+        .char {
+            display: inline-block;
+            opacity: 0;
+        }
+        .cursor {
+            display: inline-block;
+            width: 10px;
+            height: 1.5rem;
+            background: #00ff00;
+            animation: blink 0.7s infinite;
+            vertical-align: middle;
+            margin-left: 2px;
+        }
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+        .btn {
+            padding: 0.8rem 1.5rem;
+            background: transparent;
+            color: #00ff00;
+            border: 1px solid #00ff00;
+            cursor: pointer;
+            font-family: 'Courier New', monospace;
+            margin-top: 2rem;
+            transition: all 0.3s;
+        }
+        .btn:hover {
+            background: rgba(0, 255, 0, 0.1);
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div id="text">欢迎使用增强版打字机效果\n\nSplitText插件让实现更简单\n每个字符都有独立的控制\n可以创建更复杂的打字节奏</div>
+    <span class="cursor"></span>
+    <div>
+        <button class="btn" id="replay">重新打字</button>
+    </div>
+</div>
+
+<!-- 无需手动注册，可直接使用 -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/gsap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/SplitText.min.js"></script>
+<script>
+    // 注册插件
+    gsap.registerPlugin(SplitText);
+
+    let split;
+    let tl;
+
+    function initAnimation() {
+        // 清除现有实例和动画
+        if (split) split.revert();
+        if (tl) tl.kill();
+
+        // 使用SplitText分割字符
+        split = new SplitText("#text", {
+            type: "chars",
+            charsClass: "char"
+        });
+
+        // 隐藏所有字符
+        gsap.set(split.chars, { opacity: 0 });
+
+        // 创建时间轴
+        tl = gsap.timeline();
+
+        // 为每个字符添加动画
+        split.chars.forEach((char, i) => {
+            // 根据字符类型设置不同的延迟
+            let delay = 0.05;
+            const text = char.textContent;
+
+            if (text.match(/[,.!?;:]/)) delay = 0.3;
+            if (text === " " || text === "\n") delay = 0.03;
+
+            // 长单词后的空格延迟更长
+            if (text === " " && i > 0 && split.chars[i-1].textContent !== " ") {
+                let wordLength = 0;
+                for (let j = i-1; j >= 0 && split.chars[j].textContent !== " "; j--) {
+                    wordLength++;
+                }
+                if (wordLength > 8) delay = 0.2;
+            }
+
+            // 换行符增加更多延迟
+            if (text === "\n") delay = 0.5;
+
+            tl.to(char, {
+                duration: 0.01,
+                opacity: 1,
+                ease: "none"
+            }, i * delay);
+        });
+    }
+
+    document.addEventListener('DOMContentLoaded', initAnimation);
+    document.getElementById("replay").addEventListener("click", initAnimation);
+</script>
+</body>
+</html>
