@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>GSAP 数据卡片动画(优化版)</title>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/Flip.min.js"></script>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -146,6 +147,9 @@
 </div>
 
 <script>
+  // 注册 Flip 插件
+  gsap.registerPlugin(Flip);
+
   // 初始化卡片动画
   function initCardAnimations() {
     const cards = gsap.utils.toArray('.card');
@@ -294,14 +298,36 @@
     const randomCard = cards[Math.floor(Math.random() * cards.length)];
 
     // 直接使用缩放和淡出动画，不添加任何蒙层
-    gsap.to(randomCard, {
+    // gsap.to(randomCard, {
+    //   duration: 0.5,
+    //   opacity: 0,
+    //   scale: 0.2,
+    //   y: -20,
+    //   ease: "back.in(1.7)",
+    //   onComplete: () => {
+    //     randomCard.remove();
+    //   }
+    // });
+
+    // 1. 记录当前布局状态
+    const state = Flip.getState('.card', { nested: true });
+
+    // 2. 从DOM中移除卡片
+    randomCard.remove();
+
+    // 3. 执行Flip动画
+    Flip.from(state, {
       duration: 0.5,
-      opacity: 0,
-      scale: 0.8,
-      y: -20,
-      ease: "back.in(1.7)",
-      onComplete: () => {
-        randomCard.remove();
+      ease: "power1.inOut",
+      onStart: () => {
+        // 同时执行卡片的移除动画
+        gsap.to(randomCard, {
+          duration: 0.5,
+          opacity: 0,
+          scale: 0.8,
+          y: -20,
+          ease: "back.in(1.7)"
+        });
       }
     });
   }
