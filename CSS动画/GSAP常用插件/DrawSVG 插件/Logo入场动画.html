@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Logo入场动画 - GSAP DrawSVG</title>
+  <style>
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      background: #f0f2f5;
+      font-family: 'Arial', sans-serif;
+      overflow: hidden;
+    }
+
+    .logo-container {
+      width: 300px;
+      height: 300px;
+      position: relative;
+    }
+
+    #logo-svg {
+      width: 100%;
+      height: 100%;
+      filter: drop-shadow(0 5px 15px rgba(0, 0, 0, 0.2));
+    }
+
+    .company-name {
+      position: absolute;
+      bottom: -50px;
+      width: 100%;
+      text-align: center;
+      font-size: 24px;
+      font-weight: bold;
+      color: #333;
+      opacity: 0;
+      transform: translateY(20px);
+    }
+
+    .tagline {
+      position: absolute;
+      bottom: -80px;
+      width: 100%;
+      text-align: center;
+      font-size: 16px;
+      color: #666;
+      opacity: 0;
+      transform: translateY(20px);
+    }
+  </style>
+</head>
+<body>
+<div class="logo-container">
+  <svg id="logo-svg" viewBox="0 0 200 200">
+    <!-- 外框圆环 -->
+    <circle id="outer-circle" fill="none" stroke="#4a6bdf" stroke-width="8"
+            cx="100" cy="100" r="80" stroke-dasharray="502" stroke-dashoffset="502"/>
+
+    <!-- 内部齿轮形状 -->
+    <path id="gear" fill="none" stroke="#ff7b25" stroke-width="5"
+          d="M100,20 L110,30 L125,25 L130,40 L145,45 L140,60 L150,70 L140,80 L145,95 L130,100 L125,115 L110,110 L100,120 L90,110 L75,115 L70,100 L55,95 L60,80 L50,70 L60,60 L55,45 L70,40 L75,25 L90,30 Z"/>
+
+    <!-- 中心点 -->
+    <circle id="center-dot" fill="#4a6bdf" cx="100" cy="100" r="10" opacity="0"/>
+
+    <!-- 隐藏的填充路径，用于后续动画 -->
+    <path id="logo-fill" fill="#ffffff" stroke="none" opacity="0"
+          d="M100,20 C120,20 140,30 150,50 C160,70 160,90 150,110 C140,130 120,140 100,140 C80,140 60,130 50,110 C40,90 40,70 50,50 C60,30 80,20 100,20 Z"/>
+  </svg>
+
+  <div class="company-name">TechGear Inc.</div>
+  <div class="tagline">Innovation in Motion</div>
+</div>
+
+<!-- 引入GSAP库和插件 -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/gsap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/DrawSVGPlugin.min.js"></script>
+<script>
+  // 注册插件
+  gsap.registerPlugin(DrawSVGPlugin);
+
+  // 创建主时间线
+  const logoAnimation = gsap.timeline({defaults: {ease: "power2.inOut"}});
+
+  // 动画序列
+  logoAnimation
+          // 绘制外圆
+          .fromTo("#outer-circle",
+                  {drawSVG: "0% 0%"},
+                  {drawSVG: "0% 100%", duration: 1.5})
+
+          // 绘制齿轮
+          .fromTo("#gear",
+                  {drawSVG: "0% 0%"},
+                  {drawSVG: "0% 100%", duration: 2}, "-=0.5")
+
+          // 显示中心点
+          .to("#center-dot",
+                  {opacity: 1, scale: 0, duration: 0.5}, "-=1")
+          .to("#center-dot",
+                  {scale: 1.2, duration: 0.3})
+          .to("#center-dot",
+                  {scale: 1, duration: 0.2})
+
+          // 填充logo颜色
+          .to("#logo-fill",
+                  {opacity: 1, duration: 0.5})
+          .to("#outer-circle",
+                  {stroke: "#2c4ac7", duration: 0.5}, "-=0.5")
+          .to("#gear",
+                  {stroke: "#e56a12", duration: 0.5}, "-=0.5")
+
+          // 显示公司名称和标语
+          .to(".company-name",
+                  {opacity: 1, y: 0, duration: 0.8, ease: "back.out"}, "-=0.3")
+          .to(".tagline",
+                  {opacity: 1, y: 0, duration: 0.8, ease: "back.out"}, "-=0.5");
+
+  // 点击重新播放动画
+  document.addEventListener('click', () => {
+    logoAnimation.restart();
+  });
+</script>
+</body>
+</html>

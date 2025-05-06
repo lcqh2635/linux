@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GSAP ScrollTrigger 高级示例</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+
+        body {
+            background: #f5f5f5;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .container {
+            width: 100%;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 50px;
+            background: white;
+            margin-bottom: 50vh; /* 留出滚动空间 */
+        }
+
+        .box {
+            width: 200px;
+            height: 200px;
+            background: #a777e3;
+            border-radius: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 30px 0;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .box p {
+            color: white;
+            font-size: 24px;
+            font-weight: bold;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .instructions {
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #eee;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body>
+<div class="instructions">
+    <h1>GSAP ScrollTrigger 高级示例</h1>
+    <p>向下滚动查看效果。当滚动时，动画会平滑跟随，停止滚动时会自动捕捉到最近的动画阶段。</p>
+</div>
+
+<div class="container">
+    <div class="box">
+        <p>我会缩放、旋转并改变背景色</p>
+    </div>
+</div>
+
+<div class="instructions">
+    <h2>动画阶段说明</h2>
+    <p>1. 文字缩放和旋转 (start 标签)</p>
+    <p>2. 盒子背景色变化 (color 标签)</p>
+    <p>3. 盒子旋转360度 (spin 标签)</p>
+</div>
+
+<!-- 引入 GSAP 和 ScrollTrigger -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/ScrollTrigger.min.js"></script>
+
+<script>
+    // 注册 ScrollTrigger 插件
+    gsap.registerPlugin(ScrollTrigger);
+
+    // 创建时间轴并添加 ScrollTrigger 配置
+    let tl = gsap.timeline({
+        scrollTrigger: {
+            trigger: '.container', // 触发元素
+            pin: true, // 动画期间固定容器
+            start: 'top top', // 当容器顶部到达视口顶部时开始
+            end: '+=500', // 从开始位置再滚动500px后结束
+            scrub: 1, // 平滑跟随滚动(1秒延迟)
+            snap: {
+                snapTo: 'labels', // 捕捉到最近的标签
+                duration: {min: 0.2, max: 3}, // 捕捉动画持续时间
+                delay: 0.2, // 滚动停止后0.2秒开始捕捉
+                ease: 'power1.inOut' // 捕捉动画的缓动效果
+            },
+            markers: true // 显示标记(调试用，生产环境应设为false)
+        }
+    });
+
+    // 添加动画和标签到时间轴
+    tl.addLabel('start') // 添加第一个标签
+        .from('.box p', {
+            scale: 0.3,
+            rotation: 45,
+            autoAlpha: 0, // autoAlpha是opacity和visibility的组合
+            ease: "power2.out"
+        })
+        .addLabel('color') // 添加第二个标签
+        .from('.box', {
+            backgroundColor: '#28a92b',
+            duration: 0.5
+        })
+        .addLabel('spin') // 添加第三个标签
+        .to('.box', {
+            rotation: 360,
+            duration: 1,
+            ease: "elastic.out(1, 0.3)"
+        })
+        .addLabel('end'); // 添加结束标签
+
+    // 在控制台打印时间轴信息(调试用)
+    console.log(tl);
+</script>
+</body>
+</html>

@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>高级滚动产品展示 - GSAP ScrollTrigger</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+        }
+
+        body {
+            background-color: #f8f9fa;
+            color: #333;
+            overflow-x: hidden;
+        }
+
+        .progress-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+        }
+
+        .progress-bar {
+            height: 100%;
+            width: 0;
+            background: linear-gradient(90deg, #ff6b6b, #4ecdc4);
+        }
+
+        .product-showcase {
+            width: 100%;
+            position: relative;
+        }
+
+        .product-section {
+            min-height: 100vh;
+            padding: 80px 5%;
+            display: flex;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .product-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+        }
+
+        .product-text {
+            flex: 1;
+            padding-right: 50px;
+            opacity: 0;
+            transform: translateY(50px);
+        }
+
+        .product-image {
+            flex: 1;
+            position: relative;
+            opacity: 0;
+            transform: translateY(50px);
+        }
+
+        .product-image img {
+            width: 100%;
+            max-width: 600px;
+            height: auto;
+            border-radius: 10px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+            transform-style: preserve-3d;
+        }
+
+        h2 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            color: #2c3e50;
+        }
+
+        .product-feature {
+            margin-bottom: 15px;
+            padding-left: 25px;
+            position: relative;
+            font-size: 1.1rem;
+            line-height: 1.6;
+        }
+
+        .product-feature:before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: #4ecdc4;
+            font-weight: bold;
+        }
+
+        .price-tag {
+            display: inline-block;
+            background: linear-gradient(135deg, #4ecdc4, #556270);
+            color: white;
+            padding: 10px 25px;
+            border-radius: 30px;
+            font-size: 1.3rem;
+            font-weight: bold;
+            margin-top: 20px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transform: scale(0);
+        }
+
+        .final-cta {
+            text-align: center;
+            background: linear-gradient(135deg, #556270, #2c3e50);
+            color: white;
+            padding: 100px 20px;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .final-cta h2 {
+            color: white;
+            font-size: 3rem;
+            margin-bottom: 30px;
+            opacity: 0;
+            transform: translateY(50px);
+        }
+
+        .cta-button {
+            display: inline-block;
+            background: #ff6b6b;
+            color: white;
+            padding: 15px 40px;
+            border-radius: 30px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+            opacity: 0;
+            transform: scale(0.8);
+        }
+
+        .navigation {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 10px 20px;
+            border-radius: 30px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            opacity: 0;
+        }
+
+        .nav-link {
+            margin: 0 10px;
+            text-decoration: none;
+            color: #2c3e50;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+<!-- 滚动进度条 -->
+<div class="progress-container">
+    <div class="progress-bar"></div>
+</div>
+
+<!-- 固定导航 -->
+<nav class="navigation">
+    <a href="#product1" class="nav-link">智能手表</a>
+    <a href="#product2" class="nav-link">无线耳机</a>
+    <a href="#product3" class="nav-link">笔记本电脑</a>
+</nav>
+
+<!-- 产品展示部分 -->
+<div class="product-showcase">
+    <!-- 产品1 -->
+    <section class="product-section" id="product1">
+        <div class="product-content">
+            <div class="product-text">
+                <h2>智能手表 Pro</h2>
+                <p>全新升级的智能手表，为您的生活带来更多便利</p>
+                <div class="product-feature">24小时心率监测</div>
+                <div class="product-feature">30天超长续航</div>
+                <div class="product-feature">50米防水设计</div>
+                <div class="product-feature">智能通知提醒</div>
+                <div class="price-tag">¥1299</div>
+            </div>
+            <div class="product-image">
+                <img src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?ixlib=rb-1.2.1&auto=format&fit=crop&w=1000&q=80"
+                     alt="智能手表">
+            </div>
+        </div>
+    </section>
+
+    <!-- 产品2 -->
+    <section class="product-section" id="product2">
+        <div class="product-content">
+            <div class="product-image">
+                <img src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?ixlib=rb-1.2.1&auto=format&fit=crop&w=1000&q=80"
+                     alt="无线耳机">
+            </div>
+            <div class="product-text">
+                <h2>无线降噪耳机</h2>
+                <p>沉浸式音乐体验，世界由你掌控</p>
+                <div class="product-feature">主动降噪技术</div>
+                <div class="product-feature">30小时续航</div>
+                <div class="product-feature">IPX5防水等级</div>
+                <div class="product-feature">触控操作</div>
+                <div class="price-tag">¥899</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 产品3 -->
+    <section class="product-section" id="product3">
+        <div class="product-content">
+            <div class="product-text">
+                <h2>超薄笔记本电脑</h2>
+                <p>极致轻薄，性能强劲</p>
+                <div class="product-feature">13.3英寸2K屏幕</div>
+                <div class="product-feature">第11代英特尔处理器</div>
+                <div class="product-feature">16GB内存 + 512GB SSD</div>
+                <div class="product-feature">1.2kg超轻重量</div>
+                <div class="price-tag">¥6999</div>
+            </div>
+            <div class="product-image">
+                <img src="https://images.unsplash.com/photo-1496181133206-80ce9b88a853?ixlib=rb-1.2.1&auto=format&fit=crop&w=1000&q=80"
+                     alt="笔记本电脑">
+            </div>
+        </div>
+    </section>
+</div>
+
+<!-- 最终行动号召 -->
+<section class="final-cta">
+    <h2>准备好升级你的科技生活了吗？</h2>
+    <a href="#" class="cta-button">立即购买</a>
+</section>
+
+<!-- 引入GSAP和ScrollTrigger -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/ScrollTrigger.min.js"></script>
+
+
+<script>
+    // 注册ScrollTrigger插件
+    gsap.registerPlugin(ScrollTrigger);
+
+    // 初始化所有元素为可见(修复图片不显示问题)
+    gsap.set([".product-text", ".product-image", ".price-tag", ".final-cta h2", ".cta-button"], {
+        visibility: "visible"
+    });
+
+    // 使用时间轴方式控制整个产品展示
+    let productTimeline = gsap.timeline({
+        scrollTrigger: {
+            trigger: ".product-showcase",
+            start: "top top",
+            end: "+=3000", // 根据内容长度调整
+            pin: true,    // 固定产品展示容器
+            scrub: 1,     // 平滑跟随滚动
+            snap: {
+                snapTo: [0, 0.33, 0.66, 1], // 对应4个主要位置(3产品+CTA)
+                duration: {min: 0.2, max: 1},
+                delay: 0.2
+            },
+            markers: false // 调试时可设为true
+        }
+    });
+
+    // 添加产品1动画
+    productTimeline.addLabel("product1")
+        .from("#product1 .product-text", {
+            x: -100,
+            opacity: 0,
+            duration: 0.8
+        })
+        .from("#product1 .product-image", {
+            x: 100,
+            opacity: 0,
+            duration: 0.8
+        }, "-=0.5")
+        .from("#product1 .price-tag", {
+            scale: 0,
+            ease: "back.out(4)"
+        });
+
+    // 添加产品2动画
+    productTimeline.addLabel("product2")
+        .from("#product2 .product-text", {
+            x: 100,
+            opacity: 0,
+            duration: 0.8
+        })
+        .from("#product2 .product-image", {
+            x: -100,
+            opacity: 0,
+            duration: 0.8
+        }, "-=0.5")
+        .from("#product2 .price-tag", {
+            scale: 0,
+            ease: "back.out(4)"
+        });
+
+    // 添加产品3动画
+    productTimeline.addLabel("product3")
+        .from("#product3 .product-text", {
+            x: -100,
+            opacity: 0,
+            duration: 0.8
+        })
+        .from("#product3 .product-image", {
+            x: 100,
+            opacity: 0,
+            duration: 0.8
+        }, "-=0.5")
+        .from("#product3 .price-tag", {
+            scale: 0,
+            ease: "back.out(4)"
+        });
+
+    // 最终CTA动画
+    productTimeline.addLabel("finalCta")
+        .to(".final-cta h2", {
+            y: 0,
+            opacity: 1,
+            duration: 0.8
+        })
+        .to(".cta-button", {
+            scale: 1,
+            opacity: 1,
+            duration: 0.8,
+            ease: "elastic.out(1, 0.5)"
+        }, "-=0.3");
+
+    // 导航栏动画
+    gsap.from(".navigation", {
+        scrollTrigger: {
+            trigger: "body",
+            start: "top top",
+            toggleActions: "play none none none"
+        },
+        opacity: 1,
+        y: -20,
+        duration: 1
+    });
+
+    // 滚动进度条动画
+    gsap.to(".progress-bar", {
+        scrollTrigger: {
+            scrub: 0.5
+        },
+        width: "100%"
+    });
+
+    // 图片悬浮效果(独立于时间轴)
+    gsap.to(".product-image img", {
+        scrollTrigger: {
+            trigger: ".product-image",
+            start: "top 80%",
+            scrub: 1
+        },
+        y: -20,
+        ease: "none"
+    });
+</script>
+</body>
+</html>

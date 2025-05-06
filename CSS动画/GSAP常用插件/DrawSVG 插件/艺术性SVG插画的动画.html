@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>艺术性SVG插画动画</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: #1a1a2e;
+            overflow: hidden;
+            font-family: 'Helvetica Neue', sans-serif;
+        }
+
+        .art-container {
+            width: 90vmin;
+            height: 90vmin;
+            position: relative;
+        }
+
+        #art-svg {
+            width: 100%;
+            height: 100%;
+            filter: drop-shadow(0 0 20px rgba(0, 0, 0, 0.5));
+        }
+
+        .title {
+            position: absolute;
+            bottom: 10%;
+            left: 0;
+            width: 100%;
+            text-align: center;
+            color: white;
+            font-size: 3vmin;
+            opacity: 0;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.8);
+        }
+
+        .controls {
+            position: absolute;
+            bottom: 5%;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 15px;
+        }
+
+        button {
+            padding: 12px 24px;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 30px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(5px);
+        }
+
+        button:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .loading-message {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: white;
+            z-index: 100;
+        }
+    </style>
+</head>
+<body>
+<div class="art-container">
+    <svg id="art-svg" viewBox="0 0 800 800">
+        <!-- 背景装饰线条 -->
+        <path id="bg-line1" fill="none" stroke="#4a4a8a" stroke-width="1.5" opacity="0.8"
+              d="M100,100 C200,50 300,150 400,100 C500,50 600,150 700,100"/>
+        <path id="bg-line2" fill="none" stroke="#4a4a8a" stroke-width="1.5" opacity="0.8"
+              d="M100,700 C200,650 300,750 400,700 C500,650 600,750 700,700"/>
+
+        <!-- 中心花朵 -->
+        <path id="flower-core" fill="none" stroke="#ff9ff3" stroke-width="3"
+              d="M400,400 C420,380 440,390 450,410 C460,430 450,450 430,460 C410,470 390,460 380,440 C370,420 380,400 400,400 Z"/>
+
+        <path id="flower-petal1" fill="none" stroke="#feca57" stroke-width="2.5"
+              d="M400,350 C430,330 460,340 480,360 C500,380 490,410 470,430 C450,450 420,440 400,420"/>
+
+        <path id="flower-petal2" fill="none" stroke="#ff6b6b" stroke-width="2.5"
+              d="M350,400 C330,430 340,460 360,480 C380,500 410,490 430,470 C450,450 440,420 420,400"/>
+
+        <path id="flower-petal3" fill="none" stroke="#1dd1a1" stroke-width="2.5"
+              d="M400,450 C430,470 460,460 480,440 C500,420 490,390 470,370 C450,350 420,360 400,380"/>
+
+        <path id="flower-petal4" fill="none" stroke="#5f27cd" stroke-width="2.5"
+              d="M450,400 C470,420 490,410 500,390 C510,370 500,350 480,340 C460,330 440,340 430,360"/>
+
+        <!-- 装饰性螺旋 -->
+        <path id="spiral1" fill="none" stroke="#00d2d3" stroke-width="2"
+              d="M200,200 Q250,150 300,200 Q350,250 300,300 Q250,350 200,300 Q150,250 200,200 Z"/>
+
+        <path id="spiral2" fill="none" stroke="#ff9ff3" stroke-width="2"
+              d="M600,600 Q550,550 600,500 Q650,450 700,500 Q750,550 700,600 Q650,650 600,600 Z"/>
+
+        <!-- 飘动的丝带 -->
+        <path id="ribbon1" fill="none" stroke="#feca57" stroke-width="2"
+              d="M150,500 C200,450 250,480 300,500 C350,520 400,510 450,530 C500,550 550,540 600,520 C650,500 700,530 750,500"/>
+
+        <path id="ribbon2" fill="none" stroke="#ff6b6b" stroke-width="2"
+              d="M150,300 C200,350 250,320 300,300 C350,280 400,290 450,270 C500,250 550,260 600,280 C650,300 700,270 750,300"/>
+
+        <!-- 装饰点 -->
+        <circle id="dot1" fill="#ff9ff3" cx="200" cy="600" r="5" opacity="0"/>
+        <circle id="dot2" fill="#5f27cd" cx="600" cy="200" r="5" opacity="0"/>
+        <circle id="dot3" fill="#1dd1a1" cx="100" cy="400" r="5" opacity="0"/>
+        <circle id="dot4" fill="#feca57" cx="700" cy="500" r="5" opacity="0"/>
+    </svg>
+
+    <div class="title">艺术性SVG插画动画</div>
+
+    <div class="controls">
+        <button id="play-btn">播放动画</button>
+        <button id="reset-btn">重置</button>
+    </div>
+</div>
+
+<div class="loading-message" id="loading-message">加载资源中...</div>
+
+<!-- 引入GSAP库和插件 -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/gsap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/DrawSVGPlugin.min.js"></script>
+
+<script>
+    // 显示加载状态
+    const loadingMessage = document.getElementById('loading-message');
+
+    // 检查GSAP是否加载成功
+    if (typeof gsap === 'undefined') {
+        loadingMessage.textContent = '错误: GSAP库加载失败';
+        console.error('GSAP库加载失败，请检查网络连接');
+        throw new Error('GSAP库加载失败');
+    }
+
+    // 检查DrawSVG插件是否加载成功
+    if (typeof DrawSVGPlugin === 'undefined') {
+        loadingMessage.textContent = '错误: DrawSVG插件加载失败';
+        console.error('DrawSVG插件加载失败，请检查网络连接');
+        throw new Error('DrawSVG插件加载失败');
+    }
+
+    // 注册插件
+    try {
+        gsap.registerPlugin(DrawSVGPlugin);
+        loadingMessage.textContent = '资源加载成功，准备动画...';
+    } catch (e) {
+        loadingMessage.textContent = '错误: 插件注册失败';
+        console.error('插件注册失败:', e);
+        throw e;
+    }
+
+    // 确保DOM完全加载
+    document.addEventListener('DOMContentLoaded', () => {
+        // 获取按钮元素
+        const playBtn = document.getElementById('play-btn');
+        const resetBtn = document.getElementById('reset-btn');
+
+        if (!playBtn || !resetBtn) {
+            loadingMessage.textContent = '错误: 按钮元素未找到';
+            console.error('按钮元素未找到');
+            return;
+        }
+
+        // 创建主时间线
+        const artTimeline = gsap.timeline({paused: true, defaults: {ease: "sine.inOut"}});
+
+        // 动画序列
+        artTimeline
+            // 背景线条动画
+            .fromTo(["#bg-line1", "#bg-line2"],
+                {drawSVG: "0% 0%"},
+                {drawSVG: "0% 100%", duration: 2, stagger: 0.3}, 0)
+
+            // 花朵核心动画
+            .fromTo("#flower-core",
+                {drawSVG: "0% 0%"},
+                {drawSVG: "0% 100%", duration: 1.5}, 0.5)
+            .to("#flower-core",
+                {fill: "rgba(255, 159, 243, 0.2)", duration: 0.5}, "-=0.5")
+
+            // 花瓣动画
+            .fromTo("#flower-petal1",
+                {drawSVG: "0% 0%"},
+                {drawSVG: "0% 100%", duration: 1.8}, 1)
+            .fromTo("#flower-petal2",
+                {drawSVG: "0% 0%"},
+                {drawSVG: "0% 100%", duration: 1.8}, 1.2)
+            .fromTo("#flower-petal3",
+                {drawSVG: "0% 0%"},
+                {drawSVG: "0% 100%", duration: 1.8}, 1.4)
+            .fromTo("#flower-petal4",
+                {drawSVG: "0% 0%"},
+                {drawSVG: "0% 100%", duration: 1.8}, 1.6)
+
+            // 螺旋动画
+            .fromTo("#spiral1",
+                {drawSVG: "50% 50%"},
+                {drawSVG: "0% 100%", duration: 2.5, ease: "elastic.out"}, 2)
+            .fromTo("#spiral2",
+                {drawSVG: "50% 50%"},
+                {drawSVG: "0% 100%", duration: 2.5, ease: "elastic.out"}, 2.2)
+
+            // 丝带动画
+            .fromTo("#ribbon1",
+                {drawSVG: "0% 0%"},
+                {drawSVG: "0% 100%", duration: 2}, 2.5)
+            .fromTo("#ribbon2",
+                {drawSVG: "0% 0%"},
+                {drawSVG: "0% 100%", duration: 2}, 2.7)
+
+            // 装饰点动画
+            .to("#dot1",
+                {opacity: 1, scale: 0, duration: 0.3}, 3)
+            .to("#dot1",
+                {scale: 1.5, duration: 0.3}, "-=0.2")
+            .to("#dot1",
+                {scale: 1, duration: 0.2}, "-=0.1")
+
+            .to("#dot2",
+                {opacity: 1, scale: 0, duration: 0.3}, 3.2)
+            .to("#dot2",
+                {scale: 1.5, duration: 0.3}, "-=0.2")
+            .to("#dot2",
+                {scale: 1, duration: 0.2}, "-=0.1")
+
+            .to("#dot3",
+                {opacity: 1, scale: 0, duration: 0.3}, 3.4)
+            .to("#dot3",
+                {scale: 1.5, duration: 0.3}, "-=0.2")
+            .to("#dot3",
+                {scale: 1, duration: 0.2}, "-=0.1")
+
+            .to("#dot4",
+                {opacity: 1, scale: 0, duration: 0.3}, 3.6)
+            .to("#dot4",
+                {scale: 1.5, duration: 0.3}, "-=0.2")
+            .to("#dot4",
+                {scale: 1, duration: 0.2}, "-=0.1")
+
+            // 标题动画
+            .to(".title",
+                {opacity: 1, y: -10, duration: 1, ease: "elastic.out(1, 0.5)"}, 3.5)
+            .then(() => {
+                loadingMessage.style.display = 'none';
+            });
+
+        // 控制按钮
+        playBtn.addEventListener('click', () => {
+            console.log('播放按钮点击');
+            artTimeline.play();
+        });
+
+        resetBtn.addEventListener('click', () => {
+            console.log('重置按钮点击');
+            artTimeline.restart();
+            artTimeline.pause();
+        });
+
+        // 初始状态
+        artTimeline.pause();
+        loadingMessage.textContent = '准备就绪，点击播放按钮开始动画';
+
+        // 3秒后隐藏加载消息
+        setTimeout(() => {
+            loadingMessage.style.opacity = '0';
+            setTimeout(() => {
+                loadingMessage.style.display = 'none';
+            }, 500);
+        }, 3000);
+    });
+</script>
+</body>
+</html>
