@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>优雅的双栏登录注册页面</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+            background: #f5f5f5;
+        }
+
+        .left-section {
+            flex: 1;
+            background: linear-gradient(135deg, #6e8efb, #a777e3);
+            color: white;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .left-content {
+            z-index: 2;
+            text-align: center;
+            max-width: 500px;
+        }
+
+        .left-section h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            font-weight: 700;
+        }
+
+        .left-section p {
+            font-size: 1.1rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+        }
+
+        .right-section {
+            flex: 1;
+            background: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+
+        .form-container {
+            width: 400px;
+            padding: 2rem;
+            border-radius: 10px;
+            background: white;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .form-title {
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+            color: #333;
+            text-align: center;
+            font-weight: 600;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+            position: relative;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #555;
+            font-weight: 500;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 1rem;
+            transition: all 0.3s;
+        }
+
+        .form-control:focus {
+            border-color: #6e8efb;
+            box-shadow: 0 0 0 3px rgba(110, 142, 251, 0.2);
+            outline: none;
+        }
+
+        .remember-forgot {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .remember-me {
+            display: flex;
+            align-items: center;
+        }
+
+        .remember-me input {
+            margin-right: 8px;
+        }
+
+        .forgot-password {
+            color: #6e8efb;
+            text-decoration: none;
+            font-size: 0.9rem;
+        }
+
+        .forgot-password:hover {
+            text-decoration: underline;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 6px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #6e8efb, #a777e3);
+            color: white;
+            margin-bottom: 1.5rem;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(110, 142, 251, 0.4);
+        }
+
+        .social-login {
+            text-align: center;
+            margin-top: 2rem;
+        }
+
+        .social-login p {
+            color: #777;
+            margin-bottom: 1rem;
+            position: relative;
+        }
+
+        .social-login p::before,
+        .social-login p::after {
+            content: "";
+            position: absolute;
+            top: 50%;
+            width: 30%;
+            height: 1px;
+            background: #ddd;
+        }
+
+        .social-login p::before {
+            left: 0;
+        }
+
+        .social-login p::after {
+            right: 0;
+        }
+
+        .social-icons {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+        }
+
+        .social-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .social-icon:hover {
+            transform: translateY(-3px);
+        }
+
+        .facebook {
+            background: #3b5998;
+        }
+
+        .google {
+            background: #db4437;
+        }
+
+        .twitter {
+            background: #1da1f2;
+        }
+
+        .switch-form {
+            text-align: center;
+            margin-top: 1.5rem;
+            color: #777;
+        }
+
+        .switch-form a {
+            color: #6e8efb;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .switch-form a:hover {
+            text-decoration: underline;
+        }
+
+        .decoration-circle {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .circle-1 {
+            width: 300px;
+            height: 300px;
+            top: -100px;
+            left: -100px;
+        }
+
+        .circle-2 {
+            width: 200px;
+            height: 200px;
+            bottom: -50px;
+            right: -50px;
+        }
+
+        .circle-3 {
+            width: 150px;
+            height: 150px;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .form-switch {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 2rem;
+        }
+
+        .register-form {
+            transform: translateX(100%);
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .active-form {
+            transform: translateX(0);
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .floating-image {
+            position: absolute;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+            100% { transform: translateY(0px); }
+        }
+
+        .image-1 {
+            width: 200px;
+            top: 20%;
+            left: 10%;
+            animation-delay: 0s;
+        }
+
+        .image-2 {
+            width: 150px;
+            bottom: 15%;
+            right: 15%;
+            animation-delay: 0.5s;
+        }
+
+        .image-3 {
+            width: 120px;
+            top: 60%;
+            left: 25%;
+            animation-delay: 1s;
+        }
+
+        @media (max-width: 768px) {
+            body {
+                flex-direction: column;
+            }
+
+            .left-section {
+                display: none;
+            }
+
+            .right-section {
+                padding: 1rem;
+            }
+
+            .form-container {
+                width: 100%;
+                max-width: 400px;
+                box-shadow: none;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="left-section">
+    <div class="decoration-circle circle-1"></div>
+    <div class="decoration-circle circle-2"></div>
+    <div class="decoration-circle circle-3"></div>
+
+    <img src="https://cdn-icons-png.flaticon.com/512/3143/3143465.png" alt="Floating Image" class="floating-image image-1">
+    <img src="https://cdn-icons-png.flaticon.com/512/3143/3143467.png" alt="Floating Image" class="floating-image image-2">
+    <img src="https://cdn-icons-png.flaticon.com/512/3143/3143470.png" alt="Floating Image" class="floating-image image-3">
+
+    <div class="left-content">
+        <h1>欢迎回来</h1>
+        <p>加入我们的社区，发现无限可能。无论您是首次来访还是回归用户，我们都为您准备了精彩的体验。</p>
+    </div>
+</div>
+
+<div class="right-section">
+    <div class="form-container">
+        <div class="form-switch login-form active-form">
+            <h2 class="form-title">登录</h2>
+            <form id="loginForm">
+                <div class="form-group">
+                    <label for="loginEmail">电子邮箱</label>
+                    <input type="email" id="loginEmail" class="form-control" placeholder="请输入您的邮箱" required>
+                </div>
+                <div class="form-group">
+                    <label for="loginPassword">密码</label>
+                    <input type="password" id="loginPassword" class="form-control" placeholder="请输入您的密码" required>
+                </div>
+                <div class="remember-forgot">
+                    <div class="remember-me">
+                        <input type="checkbox" id="rememberMe">
+                        <label for="rememberMe">记住我</label>
+                    </div>
+                    <a href="#" class="forgot-password">忘记密码?</a>
+                </div>
+                <button type="submit" class="btn btn-primary">登录</button>
+            </form>
+
+            <div class="social-login">
+                <p>或通过以下方式登录</p>
+                <div class="social-icons">
+                    <div class="social-icon facebook">
+                        <i class="fab fa-facebook-f"></i>
+                    </div>
+                    <div class="social-icon google">
+                        <i class="fab fa-google"></i>
+                    </div>
+                    <div class="social-icon twitter">
+                        <i class="fab fa-twitter"></i>
+                    </div>
+                </div>
+            </div>
+
+            <div class="switch-form">
+                <p>还没有账号? <a href="#" id="showRegister">立即注册</a></p>
+            </div>
+        </div>
+
+        <div class="form-switch register-form">
+            <h2 class="form-title">注册</h2>
+            <form id="registerForm">
+                <div class="form-group">
+                    <label for="registerName">用户名</label>
+                    <input type="text" id="registerName" class="form-control" placeholder="请输入您的用户名" required>
+                </div>
+                <div class="form-group">
+                    <label for="registerEmail">电子邮箱</label>
+                    <input type="email" id="registerEmail" class="form-control" placeholder="请输入您的邮箱" required>
+                </div>
+                <div class="form-group">
+                    <label for="registerPassword">密码</label>
+                    <input type="password" id="registerPassword" class="form-control" placeholder="请输入您的密码" required>
+                </div>
+                <div class="form-group">
+                    <label for="confirmPassword">确认密码</label>
+                    <input type="password" id="confirmPassword" class="form-control" placeholder="请再次输入密码" required>
+                </div>
+                <button type="submit" class="btn btn-primary">注册</button>
+            </form>
+
+            <div class="switch-form">
+                <p>已有账号? <a href="#" id="showLogin">立即登录</a></p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // 初始化GSAP动画
+        gsap.from('.left-section', { duration: 1, x: -100, opacity: 0, ease: 'power3.out' });
+        gsap.from('.right-section', { duration: 1, x: 100, opacity: 0, ease: 'power3.out', delay: 0.2 });
+        gsap.from('.form-container', { duration: 0.8, y: 50, opacity: 0, ease: 'back.out', delay: 0.5 });
+
+        // 装饰圆圈动画
+        gsap.to('.circle-1', { duration: 10, rotation: 360, repeat: -1, ease: 'none' });
+        gsap.to('.circle-2', { duration: 15, rotation: -360, repeat: -1, ease: 'none' });
+        gsap.to('.circle-3', { duration: 20, rotation: 360, repeat: -1, ease: 'none' });
+
+        // 表单切换
+        const showRegister = document.getElementById('showRegister');
+        const showLogin = document.getElementById('showLogin');
+        const loginForm = document.querySelector('.login-form');
+        const registerForm = document.querySelector('.register-form');
+
+        showRegister.addEventListener('click', function(e) {
+            e.preventDefault();
+            gsap.to(loginForm, { duration: 0.5, x: -100, opacity: 0, ease: 'power3.inOut',
+                onComplete: function() {
+                    loginForm.classList.remove('active-form');
+                }
+            });
+            gsap.fromTo(registerForm, { x: 100, opacity: 0 }, {
+                duration: 0.5, x: 0, opacity: 1, ease: 'power3.inOut', delay: 0.3,
+                onStart: function() {
+                    registerForm.classList.add('active-form');
+                }
+            });
+        });
+
+        showLogin.addEventListener('click', function(e) {
+            e.preventDefault();
+            gsap.to(registerForm, { duration: 0.5, x: 100, opacity: 0, ease: 'power3.inOut',
+                onComplete: function() {
+                    registerForm.classList.remove('active-form');
+                }
+            });
+            gsap.fromTo(loginForm, { x: -100, opacity: 0 }, {
+                duration: 0.5, x: 0, opacity: 1, ease: 'power3.inOut', delay: 0.3,
+                onStart: function() {
+                    loginForm.classList.add('active-form');
+                }
+            });
+        });
+
+        // 表单提交处理
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+            const rememberMe = document.getElementById('rememberMe').checked;
+
+            // 这里添加实际的登录逻辑
+            console.log('登录:', { email, password, rememberMe });
+
+            // 模拟登录成功动画
+            gsap.to('.btn-primary', {
+                duration: 0.3,
+                backgroundColor: '#4CAF50',
+                onComplete: function() {
+                    setTimeout(() => {
+                        alert('登录成功!');
+                        gsap.to('.btn-primary', { duration: 0.3, background: 'linear-gradient(135deg, #6e8efb, #a777e3)' });
+                    }, 500);
+                }
+            });
+        });
+
+        document.getElementById('registerForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const name = document.getElementById('registerName').value;
+            const email = document.getElementById('registerEmail').value;
+            const password = document.getElementById('registerPassword').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+
+            if (password !== confirmPassword) {
+                alert('两次输入的密码不一致!');
+                return;
+            }
+
+            // 这里添加实际的注册逻辑
+            console.log('注册:', { name, email, password });
+
+            // 模拟注册成功动画
+            gsap.to('.btn-primary', {
+                duration: 0.3,
+                backgroundColor: '#4CAF50',
+                onComplete: function() {
+                    setTimeout(() => {
+                        alert('注册成功!');
+                        gsap.to('.btn-primary', { duration: 0.3, background: 'linear-gradient(135deg, #6e8efb, #a777e3)' });
+
+                        // 自动切换回登录表单
+                        showLogin.click();
+                    }, 500);
+                }
+            });
+        });
+
+        // 社交图标悬停效果
+        const socialIcons = document.querySelectorAll('.social-icon');
+        socialIcons.forEach(icon => {
+            icon.addEventListener('mouseenter', function() {
+                gsap.to(this, { duration: 0.3, scale: 1.1, ease: 'back.out' });
+            });
+
+            icon.addEventListener('mouseleave', function() {
+                gsap.to(this, { duration: 0.3, scale: 1, ease: 'back.in' });
+            });
+
+            icon.addEventListener('click', function() {
+                gsap.to(this, {
+                    duration: 0.2,
+                    scale: 0.9,
+                    y: 5,
+                    onComplete: function() {
+                        gsap.to(this, { duration: 0.2, scale: 1, y: 0 });
+                    }.bind(this)
+                });
+
+                // 这里添加实际的社交登录逻辑
+                const platform = this.classList.contains('facebook') ? 'Facebook' :
+                    this.classList.contains('google') ? 'Google' : 'Twitter';
+                alert(`即将通过${platform}登录`);
+            });
+        });
+
+        // 忘记密码点击效果
+        document.querySelector('.forgot-password').addEventListener('click', function(e) {
+            e.preventDefault();
+            const email = prompt('请输入您的邮箱地址，我们将发送重置密码链接:');
+            if (email) {
+                // 这里添加实际的忘记密码逻辑
+                console.log('发送重置密码链接到:', email);
+                alert(`重置密码链接已发送到 ${email}`);
+            }
+        });
+    });
+</script>
+</body>
+</html>

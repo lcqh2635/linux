@@ -1,0 +1,692 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>3D插画风格登录页面</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --primary-color: #4361ee;
+      --secondary-color: #3f37c9;
+      --text-color: #2b2d42;
+      --bg-color: #f8f9fa;
+      --card-color: #ffffff;
+      --input-bg: #f1f3f5;
+      --shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+      --transition: all 0.3s ease;
+    }
+
+    .dark-mode {
+      --primary-color: #4895ef;
+      --secondary-color: #4361ee;
+      --text-color: #f8f9fa;
+      --bg-color: #121212;
+      --card-color: #1e1e1e;
+      --input-bg: #2d2d2d;
+      --shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+      background-color: var(--bg-color);
+      color: var(--text-color);
+      transition: var(--transition);
+      min-height: 100vh;
+      display: flex;
+      overflow-x: hidden;
+    }
+
+    .container {
+      display: flex;
+      width: 100%;
+      min-height: 100vh;
+    }
+
+    .login-section {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 2rem;
+      position: relative;
+    }
+
+    .login-card {
+      background-color: var(--card-color);
+      padding: 3rem;
+      border-radius: 20px;
+      box-shadow: var(--shadow);
+      width: 100%;
+      max-width: 450px;
+      transition: var(--transition);
+      z-index: 2;
+    }
+
+    .login-header {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
+    .login-header h1 {
+      font-size: 2rem;
+      margin-bottom: 0.5rem;
+      font-weight: 700;
+    }
+
+    .login-header p {
+      color: #6c757d;
+      font-size: 0.9rem;
+    }
+
+    .dark-mode .login-header p {
+      color: #adb5bd;
+    }
+
+    .form-group {
+      margin-bottom: 1.5rem;
+      position: relative;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: 500;
+      font-size: 0.9rem;
+    }
+
+    .form-control {
+      width: 100%;
+      padding: 0.8rem 1rem;
+      border: none;
+      border-radius: 10px;
+      background-color: var(--input-bg);
+      color: var(--text-color);
+      font-size: 1rem;
+      transition: var(--transition);
+    }
+
+    .form-control:focus {
+      outline: none;
+      box-shadow: 0 0 0 2px var(--primary-color);
+    }
+
+    .options {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.5rem;
+      font-size: 0.9rem;
+    }
+
+    .checkbox-group {
+      display: flex;
+      align-items: center;
+    }
+
+    .checkbox-group input {
+      margin-right: 0.5rem;
+    }
+
+    .forgot-password {
+      color: var(--primary-color);
+      text-decoration: none;
+      transition: var(--transition);
+    }
+
+    .forgot-password:hover {
+      text-decoration: underline;
+    }
+
+    .btn {
+      width: 100%;
+      padding: 0.8rem;
+      border: none;
+      border-radius: 10px;
+      background-color: var(--primary-color);
+      color: white;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: var(--transition);
+      margin-bottom: 1.5rem;
+    }
+
+    .btn:hover {
+      background-color: var(--secondary-color);
+      transform: translateY(-2px);
+    }
+
+    .social-login {
+      text-align: center;
+      margin-bottom: 1.5rem;
+    }
+
+    .social-login p {
+      position: relative;
+      margin-bottom: 1rem;
+      font-size: 0.9rem;
+      color: #6c757d;
+    }
+
+    .dark-mode .social-login p {
+      color: #adb5bd;
+    }
+
+    .social-login p::before,
+    .social-login p::after {
+      content: "";
+      position: absolute;
+      top: 50%;
+      width: 30%;
+      height: 1px;
+      background-color: #dee2e6;
+    }
+
+    .dark-mode .social-login p::before,
+    .dark-mode .social-login p::after {
+      background-color: #495057;
+    }
+
+    .social-login p::before {
+      left: 0;
+    }
+
+    .social-login p::after {
+      right: 0;
+    }
+
+    .social-icons {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+    }
+
+    .social-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background-color: var(--input-bg);
+      color: var(--text-color);
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .social-icon:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .dark-mode .social-icon:hover {
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    }
+
+    .register-link {
+      text-align: center;
+      font-size: 0.9rem;
+    }
+
+    .register-link a {
+      color: var(--primary-color);
+      text-decoration: none;
+      font-weight: 500;
+      transition: var(--transition);
+    }
+
+    .register-link a:hover {
+      text-decoration: underline;
+    }
+
+    .illustration-section {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: linear-gradient(135deg, #4361ee, #3a0ca3);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .dark-mode .illustration-section {
+      background: linear-gradient(135deg, #2b2d42, #1a1a2e);
+    }
+
+    .character {
+      position: relative;
+      width: 400px;
+      height: 400px;
+      z-index: 1;
+    }
+
+    .character-part {
+      position: absolute;
+      transition: transform 0.5s ease-out;
+    }
+
+    .head {
+      width: 120px;
+      height: 120px;
+      background-color: #ffd166;
+      border-radius: 50%;
+      top: 80px;
+      left: 140px;
+      z-index: 3;
+    }
+
+    .body {
+      width: 150px;
+      height: 180px;
+      background-color: #06d6a0;
+      border-radius: 30px;
+      top: 190px;
+      left: 125px;
+      z-index: 2;
+    }
+
+    .arm-left {
+      width: 40px;
+      height: 120px;
+      background-color: #06d6a0;
+      border-radius: 20px;
+      top: 200px;
+      left: 85px;
+      transform-origin: top center;
+      z-index: 1;
+    }
+
+    .arm-right {
+      width: 40px;
+      height: 120px;
+      background-color: #06d6a0;
+      border-radius: 20px;
+      top: 200px;
+      left: 275px;
+      transform-origin: top center;
+      z-index: 1;
+    }
+
+    .leg-left {
+      width: 50px;
+      height: 140px;
+      background-color: #118ab2;
+      border-radius: 20px;
+      top: 360px;
+      left: 140px;
+      transform-origin: top center;
+      z-index: 1;
+    }
+
+    .leg-right {
+      width: 50px;
+      height: 140px;
+      background-color: #118ab2;
+      border-radius: 20px;
+      top: 360px;
+      left: 210px;
+      transform-origin: top center;
+      z-index: 1;
+    }
+
+    .eye-left, .eye-right {
+      width: 20px;
+      height: 20px;
+      background-color: var(--text-color);
+      border-radius: 50%;
+      top: 110px;
+    }
+
+    .eye-left {
+      left: 160px;
+    }
+
+    .eye-right {
+      left: 200px;
+    }
+
+    .mouth {
+      width: 40px;
+      height: 10px;
+      background-color: #ef476f;
+      border-radius: 5px;
+      top: 140px;
+      left: 170px;
+    }
+
+    .bubble {
+      position: absolute;
+      background-color: white;
+      border-radius: 50%;
+      opacity: 0.2;
+    }
+
+    .controls {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      display: flex;
+      gap: 10px;
+      z-index: 10;
+    }
+
+    .control-btn {
+      background-color: rgba(255, 255, 255, 0.2);
+      border: none;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: white;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .control-btn:hover {
+      background-color: rgba(255, 255, 255, 0.3);
+      transform: scale(1.1);
+    }
+
+    .dropdown {
+      position: relative;
+      display: inline-block;
+    }
+
+    .dropdown-content {
+      display: none;
+      position: absolute;
+      right: 0;
+      background-color: var(--card-color);
+      min-width: 120px;
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+      border-radius: 10px;
+      z-index: 1;
+      overflow: hidden;
+    }
+
+    .dark-mode .dropdown-content {
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+    }
+
+    .dropdown-content a {
+      color: var(--text-color);
+      padding: 10px 15px;
+      text-decoration: none;
+      display: block;
+      font-size: 0.9rem;
+      transition: var(--transition);
+    }
+
+    .dropdown-content a:hover {
+      background-color: var(--input-bg);
+    }
+
+    .dropdown:hover .dropdown-content {
+      display: block;
+    }
+
+    @media (max-width: 992px) {
+      .illustration-section {
+        display: none;
+      }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="login-section">
+    <div class="login-card">
+      <div class="login-header">
+        <h1>欢迎回来</h1>
+        <p>请输入您的凭据以登录您的帐户</p>
+      </div>
+      <form>
+        <div class="form-group">
+          <label for="email">电子邮箱</label>
+          <input type="email" id="email" class="form-control" placeholder="请输入您的邮箱地址" required>
+        </div>
+        <div class="form-group">
+          <label for="password">密码</label>
+          <input type="password" id="password" class="form-control" placeholder="请输入您的密码" required>
+        </div>
+        <div class="options">
+          <div class="checkbox-group">
+            <input type="checkbox" id="remember">
+            <label for="remember">记住我</label>
+          </div>
+          <a href="#" class="forgot-password">忘记密码?</a>
+        </div>
+        <button type="submit" class="btn">登录</button>
+        <div class="social-login">
+          <p>或使用以下方式登录</p>
+          <div class="social-icons">
+            <div class="social-icon">
+              <i class="fab fa-google"></i>
+            </div>
+            <div class="social-icon">
+              <i class="fab fa-facebook-f"></i>
+            </div>
+            <div class="social-icon">
+              <i class="fab fa-twitter"></i>
+            </div>
+            <div class="social-icon">
+              <i class="fab fa-github"></i>
+            </div>
+          </div>
+        </div>
+        <div class="register-link">
+          还没有账号? <a href="#">立即注册</a>
+        </div>
+      </form>
+    </div>
+  </div>
+  <div class="illustration-section">
+    <div class="character">
+      <div class="character-part head"></div>
+      <div class="character-part body"></div>
+      <div class="character-part arm-left"></div>
+      <div class="character-part arm-right"></div>
+      <div class="character-part leg-left"></div>
+      <div class="character-part leg-right"></div>
+      <div class="character-part eye-left"></div>
+      <div class="character-part eye-right"></div>
+      <div class="character-part mouth"></div>
+    </div>
+    <div class="controls">
+      <div class="control-btn" id="theme-toggle">
+        <i class="fas fa-moon"></i>
+      </div>
+      <div class="dropdown">
+        <div class="control-btn">
+          <i class="fas fa-globe"></i>
+        </div>
+        <div class="dropdown-content">
+          <a href="#">中文</a>
+          <a href="#">English</a>
+          <a href="#">Español</a>
+          <a href="#">日本語</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/gsap.min.js"></script>
+<script>
+  // 暗黑模式切换
+  const themeToggle = document.getElementById('theme-toggle');
+  const themeIcon = themeToggle.querySelector('i');
+
+  themeToggle.addEventListener('click', () => {
+    document.body.classList.toggle('dark-mode');
+
+    if (document.body.classList.contains('dark-mode')) {
+      themeIcon.classList.remove('fa-moon');
+      themeIcon.classList.add('fa-sun');
+    } else {
+      themeIcon.classList.remove('fa-sun');
+      themeIcon.classList.add('fa-moon');
+    }
+  });
+
+  // 3D角色动画
+  document.addEventListener('mousemove', (e) => {
+    const x = e.clientX / window.innerWidth;
+    const y = e.clientY / window.innerHeight;
+
+    gsap.to('.head', {
+      duration: 0.5,
+      x: (x - 0.5) * 20,
+      y: (y - 0.5) * 20,
+      ease: 'power2.out'
+    });
+
+    gsap.to('.arm-left', {
+      duration: 0.5,
+      rotation: (x - 0.5) * 30,
+      ease: 'power2.out'
+    });
+
+    gsap.to('.arm-right', {
+      duration: 0.5,
+      rotation: (x - 0.5) * -30,
+      ease: 'power2.out'
+    });
+
+    gsap.to('.leg-left', {
+      duration: 0.5,
+      rotation: (x - 0.5) * 15,
+      ease: 'power2.out'
+    });
+
+    gsap.to('.leg-right', {
+      duration: 0.5,
+      rotation: (x - 0.5) * -15,
+      ease: 'power2.out'
+    });
+
+    gsap.to('.eye-left, .eye-right', {
+      duration: 0.3,
+      x: (x - 0.5) * 5,
+      y: (y - 0.5) * 5,
+      ease: 'power2.out'
+    });
+  });
+
+  // 创建气泡背景
+  function createBubbles() {
+    const section = document.querySelector('.illustration-section');
+    for (let i = 0; i < 15; i++) {
+      const bubble = document.createElement('div');
+      bubble.classList.add('bubble');
+
+      const size = Math.random() * 100 + 50;
+      const posX = Math.random() * 100;
+      const posY = Math.random() * 100;
+      const delay = Math.random() * 5;
+      const duration = Math.random() * 10 + 10;
+
+      bubble.style.width = `${size}px`;
+      bubble.style.height = `${size}px`;
+      bubble.style.left = `${posX}%`;
+      bubble.style.top = `${posY}%`;
+
+      section.appendChild(bubble);
+
+      // 气泡浮动动画
+      gsap.to(bubble, {
+        y: -window.innerHeight,
+        duration: duration,
+        delay: delay,
+        ease: 'none',
+        repeat: -1,
+        repeatDelay: 0
+      });
+
+      // 重置位置
+      gsap.set(bubble, {
+        y: window.innerHeight
+      });
+    }
+  }
+
+  // 初始化
+  document.addEventListener('DOMContentLoaded', () => {
+    createBubbles();
+
+    // 初始角色动画
+    gsap.from('.character-part', {
+      duration: 1,
+      y: 100,
+      opacity: 0,
+      stagger: 0.1,
+      ease: 'back.out(1.7)'
+    });
+
+    // 登录表单动画
+    gsap.from('.login-card > *', {
+      duration: 0.8,
+      y: 30,
+      opacity: 0,
+      stagger: 0.1,
+      ease: 'power2.out',
+      delay: 0.5
+    });
+  });
+
+  // 表单提交
+  document.querySelector('form').addEventListener('submit', (e) => {
+    e.preventDefault();
+
+    const email = document.getElementById('email').value;
+    const password = document.getElementById('password').value;
+    const remember = document.getElementById('remember').checked;
+
+    // 这里可以添加实际的登录逻辑
+    console.log('登录信息:', { email, password, remember });
+
+    // 模拟登录成功动画
+    gsap.to('.login-card', {
+      duration: 0.5,
+      y: -20,
+      boxShadow: '0 20px 50px rgba(70, 130, 180, 0.3)',
+      ease: 'power2.out'
+    });
+
+    gsap.to('.character', {
+      duration: 0.8,
+      scale: 1.1,
+      y: -20,
+      ease: 'elastic.out(1, 0.5)'
+    });
+
+    // 手臂挥动动画
+    gsap.to('.arm-left', {
+      duration: 0.3,
+      rotation: -90,
+      repeat: 1,
+      yoyo: true,
+      ease: 'power2.inOut'
+    });
+
+    gsap.to('.arm-right', {
+      duration: 0.3,
+      rotation: 90,
+      repeat: 1,
+      yoyo: true,
+      ease: 'power2.inOut',
+      delay: 0.3
+    });
+  });
+</script>
+</body>
+</html>
