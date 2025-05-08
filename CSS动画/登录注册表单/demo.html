@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>沉浸式登录体验</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #4361ee;
+            --secondary-color: #3f37c9;
+            --text-color: #ffffff;
+            --card-color: rgba(255, 255, 255, 0.1);
+            --input-bg: rgba(255, 255, 255, 0.15);
+            --shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            --transition: all 0.5s cubic-bezier(0.25, 0.8, 0.25, 1);
+            --social-divider-color: rgba(255, 255, 255, 0.3);
+            --blur-intensity: 5px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            overflow: hidden;
+            color: var(--text-color);
+        }
+
+        /* 全屏背景容器 */
+        .background-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        /* 背景图片 */
+        .background-image {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center;
+            transition: var(--transition);
+            transform: scale(1.05);
+            filter: brightness(0.7);
+        }
+
+        /* 背景遮罩 */
+        .background-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(0, 0, 0, 0.7) 0%, rgba(0, 0, 0, 0.3) 100%);
+        }
+
+        /* 主容器 */
+        .container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 2rem;
+            backdrop-filter: blur(var(--blur-intensity));
+        }
+
+        /* 登录卡片 */
+        .login-card {
+            background-color: var(--card-color);
+            padding: 3rem;
+            border-radius: 20px;
+            box-shadow: var(--shadow);
+            width: 100%;
+            max-width: 450px;
+            transition: var(--transition);
+            backdrop-filter: blur(var(--blur-intensity));
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transform: translateY(20px);
+            opacity: 0;
+        }
+
+        .login-card.active {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        .login-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .login-header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            font-weight: 300;
+            letter-spacing: 1px;
+        }
+
+        .login-header p {
+            font-size: 1rem;
+            opacity: 0.8;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+            position: relative;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 0.8rem 1rem;
+            border: none;
+            border-radius: 10px;
+            background-color: var(--input-bg);
+            color: var(--text-color);
+            font-size: 1rem;
+            transition: var(--transition);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .form-control::placeholder {
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .form-control:focus {
+            outline: none;
+            box-shadow: 0 0 0 2px var(--primary-color);
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .options {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            font-size: 0.9rem;
+        }
+
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+        }
+
+        .checkbox-group input {
+            margin-right: 0.5rem;
+            accent-color: var(--primary-color);
+        }
+
+        .forgot-password {
+            color: var(--text-color);
+            text-decoration: none;
+            transition: var(--transition);
+            opacity: 0.8;
+        }
+
+        .forgot-password:hover {
+            opacity: 1;
+            text-decoration: underline;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 1rem;
+            border: none;
+            border-radius: 10px;
+            background-color: var(--primary-color);
+            color: white;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            margin-bottom: 1.5rem;
+            letter-spacing: 1px;
+        }
+
+        .btn:hover {
+            background-color: var(--secondary-color);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .social-login {
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .social-login p {
+            position: relative;
+            margin-bottom: 1rem;
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+
+        .social-login p::before,
+        .social-login p::after {
+            content: "";
+            position: absolute;
+            top: 50%;
+            width: 30%;
+            height: 1px;
+            background-color: var(--social-divider-color);
+        }
+
+        .social-login p::before {
+            left: 0;
+        }
+
+        .social-login p::after {
+            right: 0;
+        }
+
+        .social-icons {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+        }
+
+        .social-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: var(--input-bg);
+            color: var(--text-color);
+            cursor: pointer;
+            transition: var(--transition);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .social-icon:hover {
+            transform: translateY(-3px);
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .register-link {
+            text-align: center;
+            font-size: 0.9rem;
+        }
+
+        .register-link a {
+            color: var(--text-color);
+            text-decoration: none;
+            font-weight: 500;
+            transition: var(--transition);
+            opacity: 0.8;
+        }
+
+        .register-link a:hover {
+            opacity: 1;
+            text-decoration: underline;
+        }
+
+        /* 背景切换按钮 */
+        .bg-switcher {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            display: flex;
+            gap: 10px;
+            z-index: 10;
+        }
+
+        .bg-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: rgba(0, 0, 0, 0.5);
+            border: none;
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            transition: var(--transition);
+            backdrop-filter: blur(5px);
+        }
+
+        .bg-btn:hover {
+            background-color: var(--primary-color);
+            transform: scale(1.1);
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            .login-card {
+                padding: 2rem;
+            }
+
+            .login-header h1 {
+                font-size: 2rem;
+            }
+
+            .container {
+                padding: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+<!-- 全屏背景容器 -->
+<div class="background-container">
+    <!-- 背景图片 -->
+    <img src="https://source.unsplash.com/random/1920x1080/?nature,mountain" alt="背景图片" class="background-image" id="background-image">
+    <!-- 背景遮罩 -->
+    <div class="background-overlay"></div>
+</div>
+
+<!-- 主内容 -->
+<div class="container">
+    <div class="login-card" id="login-card">
+        <div class="login-header">
+            <h1>欢迎回来</h1>
+            <p>探索无限可能的世界</p>
+        </div>
+        <form>
+            <div class="form-group">
+                <label for="email">电子邮箱</label>
+                <input type="email" id="email" class="form-control" placeholder="请输入您的邮箱地址" required>
+            </div>
+            <div class="form-group">
+                <label for="password">密码</label>
+                <input type="password" id="password" class="form-control" placeholder="请输入您的密码" required>
+            </div>
+            <div class="options">
+                <div class="checkbox-group">
+                    <input type="checkbox" id="remember">
+                    <label for="remember">记住我</label>
+                </div>
+                <a href="#" class="forgot-password" id="forgot-password-btn">忘记密码?</a>
+            </div>
+            <button type="submit" class="btn">登 录</button>
+            <div class="social-login">
+                <p>或使用以下方式登录</p>
+                <div class="social-icons">
+                    <div class="social-icon">
+                        <i class="fab fa-google"></i>
+                    </div>
+                    <div class="social-icon">
+                        <i class="fab fa-facebook-f"></i>
+                    </div>
+                    <div class="social-icon">
+                        <i class="fab fa-twitter"></i>
+                    </div>
+                    <div class="social-icon">
+                        <i class="fab fa-github"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="register-link">
+                还没有账号? <a href="#" id="register-btn">立即注册</a>
+            </div>
+        </form>
+    </div>
+
+    <!-- 注册卡片 (初始隐藏) -->
+    <div class="login-card" id="register-card">
+        <div class="login-header">
+            <h1>创建账号</h1>
+            <p>加入我们的旅程</p>
+        </div>
+        <form>
+            <div class="form-group">
+                <label for="reg-name">用户名</label>
+                <input type="text" id="reg-name" class="form-control" placeholder="请输入用户名" required>
+            </div>
+            <div class="form-group">
+                <label for="reg-email">电子邮箱</label>
+                <input type="email" id="reg-email" class="form-control" placeholder="请输入您的邮箱地址" required>
+            </div>
+            <div class="form-group">
+                <label for="reg-password">密码</label>
+                <input type="password" id="reg-password" class="form-control" placeholder="请输入密码(至少8位)" required>
+            </div>
+            <div class="form-group">
+                <label for="reg-confirm-password">确认密码</label>
+                <input type="password" id="reg-confirm-password" class="form-control" placeholder="请再次输入密码" required>
+            </div>
+            <button type="submit" class="btn">注 册</button>
+            <div class="register-link">
+                已有账号? <a href="#" id="login-btn">立即登录</a>
+            </div>
+        </form>
+    </div>
+
+    <!-- 忘记密码卡片 (初始隐藏) -->
+    <div class="login-card" id="forgot-password-card">
+        <div class="login-header">
+            <h1>找回密码</h1>
+            <p>我们将发送重置链接到您的邮箱</p>
+        </div>
+        <form>
+            <div class="form-group">
+                <label for="forgot-email">电子邮箱</label>
+                <input type="email" id="forgot-email" class="form-control" placeholder="请输入您的注册邮箱" required>
+            </div>
+            <button type="submit" class="btn">发送重置链接</button>
+            <div class="register-link">
+                <a href="#" id="back-to-login">返回登录</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- 背景切换按钮 -->
+<div class="bg-switcher">
+    <button class="bg-btn" id="bg-prev"><i class="fas fa-chevron-left"></i></button>
+    <button class="bg-btn" id="bg-next"><i class="fas fa-chevron-right"></i></button>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/gsap.min.js"></script>
+<script>
+    // 背景图片数组
+    const backgrounds = [
+        'https://source.unsplash.com/random/1920x1080/?nature,mountain',
+        'https://source.unsplash.com/random/1920x1080/?ocean,beach',
+        'https://source.unsplash.com/random/1920x1080/?city,night',
+        'https://source.unsplash.com/random/1920x1080/?forest,fog',
+        'https://source.unsplash.com/random/1920x1080/?desert,sunset'
+    ];
+
+    let currentBgIndex = 0;
+    const bgImage = document.getElementById('background-image');
+
+    // 初始化动画
+    document.addEventListener('DOMContentLoaded', () => {
+        // 显示登录卡片
+        gsap.to('#login-card', {
+            duration: 1,
+            y: 0,
+            opacity: 1,
+            ease: 'power3.out',
+            delay: 0.5
+        });
+
+        // 背景图片初始动画
+        gsap.from('.background-image', {
+            duration: 2,
+            scale: 1.2,
+            ease: 'power2.inOut'
+        });
+    });
+
+    // 切换背景图片
+    function changeBackground(direction) {
+        if (direction === 'next') {
+            currentBgIndex = (currentBgIndex + 1) % backgrounds.length;
+        } else {
+            currentBgIndex = (currentBgIndex - 1 + backgrounds.length) % backgrounds.length;
+        }
+
+        // 创建新图片元素
+        const newImg = new Image();
+        newImg.src = backgrounds[currentBgIndex];
+        newImg.className = 'background-image';
+        newImg.style.opacity = 0;
+
+        newImg.onload = () => {
+            const container = document.querySelector('.background-container');
+            const oldImg = document.querySelector('.background-image');
+
+            // 添加新图片
+            container.appendChild(newImg);
+
+            // 动画过渡
+            gsap.to(newImg, {
+                duration: 1.5,
+                opacity: 1,
+                scale: 1.05,
+                ease: 'power2.inOut',
+                onComplete: () => {
+                    // 移除旧图片
+                    container.removeChild(oldImg);
+                }
+            });
+        };
+    }
+
+    // 背景切换按钮事件
+    document.getElementById('bg-next').addEventListener('click', () => changeBackground('next'));
+    document.getElementById('bg-prev').addEventListener('click', () => changeBackground('prev'));
+
+    // 自动切换背景 (可选)
+    let bgInterval = setInterval(() => changeBackground('next'), 10000);
+
+    // 鼠标悬停时暂停自动切换
+    document.querySelector('.background-container').addEventListener('mouseenter', () => {
+        clearInterval(bgInterval);
+    });
+
+    document.querySelector('.background-container').addEventListener('mouseleave', () => {
+        bgInterval = setInterval(() => changeBackground('next'), 10000);
+    });
+
+    // 表单切换功能
+    const loginCard = document.getElementById('login-card');
+    const registerCard = document.getElementById('register-card');
+    const forgotPasswordCard = document.getElementById('forgot-password-card');
+
+    document.getElementById('register-btn').addEventListener('click', (e) => {
+        e.preventDefault();
+        switchForm(loginCard, registerCard);
+    });
+
+    document.getElementById('login-btn').addEventListener('click', (e) => {
+        e.preventDefault();
+        switchForm(registerCard, loginCard);
+    });
+
+    document.getElementById('forgot-password-btn').addEventListener('click', (e) => {
+        e.preventDefault();
+        switchForm(loginCard, forgotPasswordCard);
+    });
+
+    document.getElementById('back-to-login').addEventListener('click', (e) => {
+        e.preventDefault();
+        switchForm(forgotPasswordCard, loginCard);
+    });
+
+    // 表单切换动画
+    function switchForm(fromCard, toCard) {
+        if (fromCard) {
+            gsap.to(fromCard, {
+                duration: 0.5,
+                y: 20,
+                opacity: 0,
+                ease: 'power2.in',
+                onComplete: () => {
+                    fromCard.style.display = 'none';
+                    showForm(toCard);
+                }
+            });
+        } else {
+            showForm(toCard);
+        }
+    }
+
+    function showForm(card) {
+        card.style.display = 'block';
+        gsap.fromTo(card,
+            { y: -20, opacity: 0 },
+            {
+                duration: 0.5,
+                y: 0,
+                opacity: 1,
+                ease: 'power2.out'
+            }
+        );
+    }
+
+    // 表单提交处理
+    document.querySelectorAll('form').forEach(form => {
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+
+            // 模拟提交成功动画
+            gsap.to(form, {
+                duration: 0.3,
+                y: -10,
+                boxShadow: '0 15px 30px rgba(0, 0, 0, 0.4)',
+                repeat: 1,
+                yoyo: true,
+                ease: 'power2.inOut'
+            });
+
+            // 如果是登录或注册表单，显示成功消息
+            if (form.parentElement.id === 'login-card' || form.parentElement.id === 'register-card') {
+                setTimeout(() => {
+                    alert('操作成功！');
+                }, 1000);
+            }
+        });
+    });
+</script>
+</body>
+</html>

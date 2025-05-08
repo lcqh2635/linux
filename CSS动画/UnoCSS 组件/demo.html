@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UnoCSS 示例</title>
+    <style>
+        /* 常规 CSS（可选） */
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+    </style>
+</head>
+<body>
+<h1 class="text-2xl font-bold text-blue-600 mb-4">UnoCSS 示例</h1>
+
+<div class="flex flex-col gap-4">
+
+    <!-- 结合自定义 CSS 和 UnoCSS -->
+    <div class="rounded-lg shadow-md p-4">
+        <h2 class="text-xl font-semibold text-purple-700">自定义卡片</h2>
+        <p class="mt-2 text-gray-600">这个卡片结合了自定义 CSS 和 UnoCSS 类。</p>
+    </div>
+
+    <div class="rounded-lg shadow-lg p-4">
+        <h2 class="text-xl font-semibold text-purple-700">自定义卡片</h2>
+        <p class="mt-2 text-gray-600">这个卡片结合了自定义 CSS 和 UnoCSS 类。</p>
+    </div>
+
+    <div class="rounded-lg shadow-xl p-4">
+        <h2 class="text-xl font-semibold text-purple-700">自定义卡片</h2>
+        <p class="mt-2 text-gray-600">这个卡片结合了自定义 CSS 和 UnoCSS 类。</p>
+    </div>
+
+
+    <!-- 卡片组件示例 -->
+    <div class="max-w-sm rounded-lg overflow-hidden shadow-lg border border-gray-200">
+        <div class="p-6">
+            <h3 class="text-xl font-bold text-gray-800 mb-2">卡片标题</h3>
+            <p class="text-gray-600 mb-4">这里是卡片内容，使用 UnoCSS 实用类构建。</p>
+        </div>
+    </div>
+</div>
+
+<!-- 引入 UnoCSS 运行时 -->
+<script src="https://cdn.jsdelivr.net/npm/@unocss/runtime"></script>
+<script>
+
+</script>
+</body>
+</html>

@@ -365,12 +365,12 @@
                     //     ease: "power2.out" // 更符合现代UI规范
                     // });
 
-                    // gsap.to(highlight, {
-                    //     x: newX,
-                    //     width: newWidth,
-                    //     duration: 0.3,
-                    //     ease: "elastic.out(1, 0.5)" // 更柔和的弹性
-                    // });
+                    gsap.to(highlight, {
+                        x: newX,
+                        width: newWidth,
+                        duration: 0.3,
+                        ease: "elastic.out(1, 0.5)" // 更柔和的弹性
+                    });
 
                     // gsap.to(highlight, {
                     //     x: newX,
@@ -379,12 +379,12 @@
                     //     ease: "expo.out" // 平滑加速然后急停
                     // });
 
-                    gsap.to(highlight, {
-                        x: newX,
-                        width: newWidth,
-                        duration: 0.4,
-                        ease: "sine.inOut" // 最自然的缓入缓出
-                    });
+                    // gsap.to(highlight, {
+                    //     x: newX,
+                    //     width: newWidth,
+                    //     duration: 0.4,
+                    //     ease: "sine.inOut" // 最自然的缓入缓出
+                    // });
                     
                     // 确保活动标签可见
                     ensureTabVisible(newTab);

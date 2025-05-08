@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>3D插画风格登录页面</title>
+    <title>太空主题登录页面</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
@@ -18,8 +18,8 @@
             --social-divider-color: #dee2e6;
             --control-btn-bg: rgba(0, 0, 0, 0.1);
             --control-btn-color: #2b2d42;
-            --dropdown-gap: 10px; /* 新增下拉菜单间距变量 */
-            --active-language-bg: rgba(67, 97, 238, 0.1); /* 新增激活语言背景色 */
+            --dropdown-gap: 10px;
+            --active-language-bg: rgba(67, 97, 238, 0.1);
         }
 
         .dark-mode {
@@ -33,7 +33,7 @@
             --social-divider-color: #495057;
             --control-btn-bg: rgba(255, 255, 255, 0.2);
             --control-btn-color: white;
-            --active-language-bg: rgba(72, 149, 239, 0.2); /* 暗色模式下的激活语言背景色 */
+            --active-language-bg: rgba(72, 149, 239, 0.2);
         }
 
         * {
@@ -56,6 +56,7 @@
             display: flex;
             width: 100%;
             min-height: 100vh;
+            flex-direction: row-reverse;
         }
 
         .login-section {
@@ -270,121 +271,139 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            background: linear-gradient(135deg, #4361ee, #3a0ca3);
+            background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
             position: relative;
             overflow: hidden;
         }
 
         .dark-mode .illustration-section {
-            background: linear-gradient(135deg, #2b2d42, #1a1a2e);
+            background: linear-gradient(135deg, #000000, #0a0a2a, #000033);
         }
 
-        .character {
+        .stars {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        .star {
+            position: absolute;
+            background-color: white;
+            border-radius: 50%;
+            animation: twinkle 5s infinite alternate;
+        }
+
+        @keyframes twinkle {
+            0% { opacity: 0.3; }
+            100% { opacity: 1; }
+        }
+
+        .planet {
+            position: absolute;
+            width: 200px;
+            height: 200px;
+            background: radial-gradient(circle at 30% 30%, #3a1c71, #d76d77, #ffaf7b);
+            border-radius: 50%;
+            top: 50px;
+            right: 50px;
+            box-shadow: 0 0 50px rgba(255, 175, 123, 0.5);
+            animation: float 15s infinite ease-in-out;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(5deg); }
+        }
+
+        .astronaut {
             position: relative;
-            width: 400px;
+            width: 300px;
             height: 400px;
             z-index: 1;
         }
 
-        .character-part {
+        .astronaut-part {
             position: absolute;
             transition: transform 0.5s ease-out;
         }
 
-        .head {
+        .helmet {
             width: 120px;
             height: 120px;
-            background-color: #ffd166;
+            background-color: white;
             border-radius: 50%;
             top: 80px;
-            left: 140px;
+            left: 90px;
             z-index: 3;
+            box-shadow: inset -10px -10px 30px rgba(0,0,0,0.2);
         }
 
-        .body {
+        .visor {
+            width: 60px;
+            height: 30px;
+            background: linear-gradient(135deg, #6dd5ed, #2193b0);
+            border-radius: 15px;
+            top: 110px;
+            left: 110px;
+            z-index: 4;
+        }
+
+        .suit {
             width: 150px;
             height: 180px;
-            background-color: #06d6a0;
-            border-radius: 30px;
+            background-color: white;
+            border-radius: 30px 30px 10px 10px;
             top: 190px;
-            left: 125px;
+            left: 75px;
             z-index: 2;
         }
 
-        .arm-left {
+        .arm-left, .arm-right {
             width: 40px;
             height: 120px;
-            background-color: #06d6a0;
+            background-color: white;
             border-radius: 20px;
             top: 200px;
-            left: 85px;
             transform-origin: top center;
             z-index: 1;
         }
 
+        .arm-left {
+            left: 35px;
+        }
+
         .arm-right {
-            width: 40px;
-            height: 120px;
-            background-color: #06d6a0;
-            border-radius: 20px;
-            top: 200px;
-            left: 275px;
+            left: 225px;
+        }
+
+        .leg-left, .leg-right {
+            width: 50px;
+            height: 140px;
+            background-color: white;
+            border-radius: 10px 10px 20px 20px;
+            top: 360px;
             transform-origin: top center;
             z-index: 1;
         }
 
         .leg-left {
-            width: 50px;
-            height: 140px;
-            background-color: #118ab2;
-            border-radius: 20px;
-            top: 360px;
-            left: 140px;
-            transform-origin: top center;
-            z-index: 1;
+            left: 90px;
         }
 
         .leg-right {
-            width: 50px;
-            height: 140px;
-            background-color: #118ab2;
-            border-radius: 20px;
-            top: 360px;
-            left: 210px;
-            transform-origin: top center;
-            z-index: 1;
-        }
-
-        .eye-left, .eye-right {
-            width: 20px;
-            height: 20px;
-            background-color: var(--text-color);
-            border-radius: 50%;
-            top: 110px;
-        }
-
-        .eye-left {
             left: 160px;
         }
 
-        .eye-right {
-            left: 200px;
-        }
-
-        .mouth {
-            width: 40px;
-            height: 10px;
-            background-color: #ef476f;
-            border-radius: 5px;
-            top: 140px;
-            left: 170px;
-        }
-
-        .bubble {
-            position: absolute;
-            background-color: white;
-            border-radius: 50%;
-            opacity: 0.2;
+        .backpack {
+            width: 60px;
+            height: 80px;
+            background-color: #3a0ca3;
+            border-radius: 15px;
+            top: 200px;
+            left: 195px;
+            z-index: 1;
         }
 
         .controls {
@@ -504,19 +523,6 @@
 </head>
 <body>
 <div class="container">
-    <div class="illustration-section">
-        <div class="character">
-            <div class="character-part head"></div>
-            <div class="character-part body"></div>
-            <div class="character-part arm-left"></div>
-            <div class="character-part arm-right"></div>
-            <div class="character-part leg-left"></div>
-            <div class="character-part leg-right"></div>
-            <div class="character-part eye-left"></div>
-            <div class="character-part eye-right"></div>
-            <div class="character-part mouth"></div>
-        </div>
-    </div>
     <div class="login-section">
         <div class="controls">
             <div class="control-btn" id="theme-toggle">
@@ -524,7 +530,7 @@
             </div>
             <div class="dropdown" id="language-dropdown">
                 <div class="control-btn" id="language-toggle">
-                    <i class="fas fa-globe"></i>
+                    <img src="https://flagcdn.com/w20/cn.png" style="width:20px;height:15px;border-radius:2px;">
                 </div>
                 <div class="dropdown-content">
                     <a href="#" data-lang="zh" class="active">
@@ -654,6 +660,20 @@
             </form>
         </div>
     </div>
+    <div class="illustration-section">
+        <div class="stars" id="stars-container"></div>
+        <div class="planet"></div>
+        <div class="astronaut">
+            <div class="astronaut-part helmet"></div>
+            <div class="astronaut-part visor"></div>
+            <div class="astronaut-part suit"></div>
+            <div class="astronaut-part arm-left"></div>
+            <div class="astronaut-part arm-right"></div>
+            <div class="astronaut-part leg-left"></div>
+            <div class="astronaut-part leg-right"></div>
+            <div class="astronaut-part backpack"></div>
+        </div>
+    </div>
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/gsap.min.js"></script>
@@ -662,14 +682,7 @@
     const themeToggle = document.getElementById('theme-toggle');
     const themeIcon = themeToggle.querySelector('i');
 
-    // 修复主题切换时的闪烁问题
-    const socialLoginLine = document.querySelector('.social-login p');
-    gsap.set(socialLoginLine, { opacity: 1 }); // 初始设置不透明度
-
     themeToggle.addEventListener('click', () => {
-        // 先设置不透明度为1，防止闪烁
-        gsap.set(socialLoginLine, { opacity: 1 });
-
         document.body.classList.toggle('dark-mode');
 
         if (document.body.classList.contains('dark-mode')) {
@@ -685,30 +698,7 @@
     const languageDropdown = document.getElementById('language-dropdown');
     const languageToggle = document.getElementById('language-toggle');
     const dropdownContent = languageDropdown.querySelector('.dropdown-content');
-    let currentLanguage = 'zh'; // 默认语言设置为中文
-
-    // 点击语言图标切换下拉菜单
-    languageToggle.addEventListener('click', (e) => {
-        e.stopPropagation();
-        languageDropdown.classList.toggle('active');
-    });
-
-    // 点击语言选项
-    dropdownContent.querySelectorAll('a').forEach(item => {
-        item.addEventListener('click', (e) => {
-            const lang = item.getAttribute('data-lang');
-            if (lang === currentLanguage) {
-                e.preventDefault();
-                return;
-            }
-
-            // 更新当前语言
-            setActiveLanguage(lang);
-            console.log('切换语言:', lang);
-            // 这里可以添加实际的语言切换逻辑
-            languageDropdown.classList.remove('active');
-        });
-    });
+    let currentLanguage = 'zh';
 
     // 设置激活语言
     function setActiveLanguage(lang) {
@@ -729,6 +719,28 @@
 
     // 初始化设置默认语言
     setActiveLanguage(currentLanguage);
+
+    // 点击语言图标切换下拉菜单
+    languageToggle.addEventListener('click', (e) => {
+        e.stopPropagation();
+        languageDropdown.classList.toggle('active');
+    });
+
+    // 点击语言选项
+    dropdownContent.querySelectorAll('a').forEach(item => {
+        item.addEventListener('click', (e) => {
+            const lang = item.getAttribute('data-lang');
+            if (lang === currentLanguage) {
+                e.preventDefault();
+                return;
+            }
+
+            // 更新当前语言
+            setActiveLanguage(lang);
+            console.log('切换语言:', lang);
+            languageDropdown.classList.remove('active');
+        });
+    });
 
     // 点击页面其他位置关闭下拉菜单
     document.addEventListener('click', (e) => {
@@ -768,7 +780,6 @@
 
     // 卡片切换动画
     function switchCard(fromCard, toCard) {
-        // 动画效果
         gsap.to(fromCard, {
             duration: 0.3,
             opacity: 0,
@@ -795,7 +806,7 @@
         const x = e.clientX / window.innerWidth;
         const y = e.clientY / window.innerHeight;
 
-        gsap.to('.head', {
+        gsap.to('.helmet', {
             duration: 0.5,
             x: (x - 0.5) * 20,
             y: (y - 0.5) * 20,
@@ -826,7 +837,7 @@
             ease: 'power2.out'
         });
 
-        gsap.to('.eye-left, .eye-right', {
+        gsap.to('.visor', {
             duration: 0.3,
             x: (x - 0.5) * 5,
             y: (y - 0.5) * 5,
@@ -834,40 +845,22 @@
         });
     });
 
-    // 创建气泡背景
-    function createBubbles() {
-        const section = document.querySelector('.illustration-section');
-        for (let i = 0; i < 15; i++) {
-            const bubble = document.createElement('div');
-            bubble.classList.add('bubble');
+    // 创建星星背景
+    function createStars() {
+        const starsContainer = document.getElementById('stars-container');
 
-            const size = Math.random() * 100 + 50;
-            const posX = Math.random() * 100;
-            const posY = Math.random() * 100;
-            const delay = Math.random() * 5;
-            const duration = Math.random() * 10 + 10;
+        for (let i = 0; i < 100; i++) {
+            const star = document.createElement('div');
+            star.classList.add('star');
+            star.style.width = `${Math.random() * 3}px`;
+            star.style.height = star.style.width;
+            star.style.top = `${Math.random() * 100}%`;
+            star.style.left = `${Math.random() * 100}%`;
+            star.style.opacity = Math.random();
+            star.style.animationDelay = `${Math.random() * 5}s`;
+            star.style.animationDuration = `${5 + Math.random() * 10}s`;
 
-            bubble.style.width = `${size}px`;
-            bubble.style.height = `${size}px`;
-            bubble.style.left = `${posX}%`;
-            bubble.style.top = `${posY}%`;
-
-            section.appendChild(bubble);
-
-            // 气泡浮动动画
-            gsap.to(bubble, {
-                y: -window.innerHeight,
-                duration: duration,
-                delay: delay,
-                ease: 'none',
-                repeat: -1,
-                repeatDelay: 0
-            });
-
-            // 重置位置
-            gsap.set(bubble, {
-                y: window.innerHeight
-            });
+            starsContainer.appendChild(star);
         }
     }
 
@@ -902,7 +895,45 @@
             ease: 'power2.out'
         });
 
-        gsap.to('.character', {
+        animateAstronautCelebration();
+    }
+
+    function handleRegister() {
+        const name = document.getElementById('reg-name').value;
+        const email = document.getElementById('reg-email').value;
+        const password = document.getElementById('reg-password').value;
+        const confirmPassword = document.getElementById('reg-confirm-password').value;
+
+        console.log('注册信息:', { name, email, password, confirmPassword });
+
+        // 模拟注册成功动画
+        gsap.to('.register-card', {
+            duration: 0.5,
+            y: -20,
+            boxShadow: '0 20px 50px rgba(70, 130, 180, 0.3)',
+            ease: 'power2.out'
+        });
+
+        animateAstronautCelebration();
+    }
+
+    function handleForgotPassword() {
+        const email = document.getElementById('reset-email').value;
+
+        console.log('重置密码:', { email });
+
+        // 模拟发送成功动画
+        gsap.to('.forgot-password-card', {
+            duration: 0.5,
+            y: -20,
+            boxShadow: '0 20px 50px rgba(70, 130, 180, 0.3)',
+            ease: 'power2.out'
+        });
+    }
+
+    // 宇航员庆祝动画
+    function animateAstronautCelebration() {
+        gsap.to('.astronaut', {
             duration: 0.8,
             scale: 1.1,
             y: -20,
@@ -926,52 +957,30 @@
             ease: 'power2.inOut',
             delay: 0.3
         });
-    }
 
-    function handleRegister() {
-        const name = document.getElementById('reg-name').value;
-        const email = document.getElementById('reg-email').value;
-        const password = document.getElementById('reg-password').value;
-        const confirmPassword = document.getElementById('reg-confirm-password').value;
-
-        console.log('注册信息:', { name, email, password, confirmPassword });
-
-        // 模拟注册成功动画
-        gsap.to('.register-card', {
+        // 头盔发光效果
+        gsap.to('.helmet', {
             duration: 0.5,
-            y: -20,
-            boxShadow: '0 20px 50px rgba(70, 130, 180, 0.3)',
-            ease: 'power2.out'
-        });
-
-        gsap.to('.character', {
-            duration: 0.8,
-            scale: 1.1,
-            y: -20,
-            ease: 'elastic.out(1, 0.5)'
-        });
-    }
-
-    function handleForgotPassword() {
-        const email = document.getElementById('reset-email').value;
-
-        console.log('重置密码:', { email });
-
-        // 模拟发送成功动画
-        gsap.to('.forgot-password-card', {
-            duration: 0.5,
-            y: -20,
-            boxShadow: '0 20px 50px rgba(70, 130, 180, 0.3)',
-            ease: 'power2.out'
+            boxShadow: '0 0 20px rgba(109, 213, 237, 0.8)',
+            repeat: 1,
+            yoyo: true
         });
     }
 
     // 初始化
     document.addEventListener('DOMContentLoaded', () => {
-        createBubbles();
+        createStars();
 
-        // 初始角色动画
-        gsap.from('.character-part', {
+        // 行星动画
+        gsap.to('.planet', {
+            duration: 30,
+            rotation: 360,
+            repeat: -1,
+            ease: 'none'
+        });
+
+        // 初始宇航员动画
+        gsap.from('.astronaut-part', {
             duration: 1,
             y: 100,
             opacity: 0,

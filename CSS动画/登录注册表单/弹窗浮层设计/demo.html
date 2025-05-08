@@ -1,0 +1,644 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>电商网站 - 登录浮层</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #4361ee;
+            --secondary-color: #3f37c9;
+            --text-color: #2b2d42;
+            --bg-color: #f8f9fa;
+            --card-color: #ffffff;
+            --input-bg: #f1f3f5;
+            --shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s ease;
+            --social-divider-color: #dee2e6;
+            --active-language-bg: rgba(67, 97, 238, 0.1);
+            --overlay-bg: rgba(0, 0, 0, 0.5);
+        }
+
+        .dark-mode {
+            --primary-color: #4895ef;
+            --secondary-color: #4361ee;
+            --text-color: #f8f9fa;
+            --bg-color: #121212;
+            --card-color: #1e1e1e;
+            --input-bg: #2d2d2d;
+            --shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            --social-divider-color: #495057;
+            --active-language-bg: rgba(72, 149, 239, 0.2);
+            --overlay-bg: rgba(0, 0, 0, 0.7);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            transition: var(--transition);
+            min-height: 100vh;
+        }
+
+        /* 模拟电商页面内容 */
+        .page-content {
+            padding: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2rem;
+            border-bottom: 1px solid var(--input-bg);
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 1.5rem;
+        }
+
+        .nav-links a {
+            color: var(--text-color);
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .nav-links a:hover {
+            color: var(--primary-color);
+        }
+
+        .auth-buttons button {
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .login-btn {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+        }
+
+        .login-btn:hover {
+            background-color: var(--secondary-color);
+        }
+
+        /* 登录浮层样式 */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: var(--overlay-bg);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .modal-container {
+            background-color: var(--card-color);
+            border-radius: 15px;
+            box-shadow: var(--shadow);
+            width: 100%;
+            max-width: 450px;
+            transform: translateY(20px);
+            transition: transform 0.3s ease, opacity 0.3s ease;
+            opacity: 0;
+        }
+
+        .modal-overlay.active .modal-container {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem;
+            border-bottom: 1px solid var(--input-bg);
+        }
+
+        .modal-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--text-color);
+            transition: var(--transition);
+        }
+
+        .close-btn:hover {
+            color: var(--primary-color);
+        }
+
+        .modal-body {
+            padding: 1.5rem;
+        }
+
+        /* 表单样式 */
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            font-size: 0.9rem;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 0.8rem 1rem;
+            border: none;
+            border-radius: 10px;
+            background-color: var(--input-bg);
+            color: var(--text-color);
+            font-size: 1rem;
+            transition: var(--transition);
+        }
+
+        .form-control:focus {
+            outline: none;
+            box-shadow: 0 0 0 2px var(--primary-color);
+        }
+
+        .options {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            font-size: 0.9rem;
+        }
+
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+        }
+
+        .checkbox-group input {
+            margin-right: 0.5rem;
+        }
+
+        .link-btn {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 500;
+            transition: var(--transition);
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 0;
+            font-size: inherit;
+        }
+
+        .link-btn:hover {
+            text-decoration: underline;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 0.8rem;
+            border: none;
+            border-radius: 10px;
+            background-color: var(--primary-color);
+            color: white;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            margin-bottom: 1.5rem;
+        }
+
+        .btn:hover {
+            background-color: var(--secondary-color);
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background-color: var(--input-bg);
+            color: var(--text-color);
+        }
+
+        .btn-secondary:hover {
+            background-color: var(--input-bg);
+            opacity: 0.9;
+        }
+
+        .social-login {
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .social-login p {
+            position: relative;
+            margin-bottom: 1rem;
+            font-size: 0.9rem;
+            color: #6c757d;
+        }
+
+        .dark-mode .social-login p {
+            color: #adb5bd;
+        }
+
+        .social-login p::before,
+        .social-login p::after {
+            content: "";
+            position: absolute;
+            top: 50%;
+            width: 30%;
+            height: 1px;
+            background-color: var(--social-divider-color);
+            transition: var(--transition);
+        }
+
+        .social-login p::before {
+            left: 0;
+        }
+
+        .social-login p::after {
+            right: 0;
+        }
+
+        .social-icons {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+        }
+
+        .social-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: var(--input-bg);
+            color: var(--text-color);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .social-icon:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .dark-mode .social-icon:hover {
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .switch-link {
+            text-align: center;
+            font-size: 0.9rem;
+        }
+
+        /* 暗黑模式切换按钮 */
+        .theme-toggle {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background-color: var(--primary-color);
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            z-index: 999;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            transition: var(--transition);
+        }
+
+        .theme-toggle:hover {
+            transform: scale(1.1);
+        }
+    </style>
+</head>
+<body>
+<!-- 模拟电商页面 -->
+<header>
+    <div class="logo">电商商城</div>
+    <nav class="nav-links">
+        <a href="#">首页</a>
+        <a href="#">商品</a>
+        <a href="#">分类</a>
+        <a href="#">关于我们</a>
+    </nav>
+    <div class="auth-buttons">
+        <button class="login-btn" id="open-login-modal">登录/注册</button>
+    </div>
+</header>
+
+<div class="page-content">
+    <h1>欢迎来到我们的电商商城</h1>
+    <p>请点击右上角登录按钮体验完整功能</p>
+    <!-- 这里可以添加更多页面内容 -->
+</div>
+
+<!-- 暗黑模式切换按钮 -->
+<div class="theme-toggle" id="theme-toggle">
+    <i class="fas fa-moon"></i>
+</div>
+
+<!-- 登录浮层 -->
+<div class="modal-overlay" id="login-modal">
+    <div class="modal-container">
+        <div class="modal-header">
+            <h2 class="modal-title">欢迎回来</h2>
+            <button class="close-btn" id="close-modal">&times;</button>
+        </div>
+        <div class="modal-body">
+            <!-- 登录卡片 -->
+            <div class="login-card" id="login-card">
+                <p style="text-align: center; margin-bottom: 1.5rem; color: #6c757d;">请输入您的凭据以登录您的帐户</p>
+                <form id="login-form">
+                    <div class="form-group">
+                        <label for="email">电子邮箱</label>
+                        <input type="email" id="email" class="form-control" placeholder="请输入您的邮箱地址" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="password">密码</label>
+                        <input type="password" id="password" class="form-control" placeholder="请输入您的密码" required>
+                    </div>
+                    <div class="options">
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="remember">
+                            <label for="remember">记住我</label>
+                        </div>
+                        <button type="button" class="link-btn" id="forgot-password-btn">忘记密码?</button>
+                    </div>
+                    <button type="submit" class="btn">登录</button>
+                    <div class="social-login">
+                        <p>或使用以下方式登录</p>
+                        <div class="social-icons">
+                            <div class="social-icon">
+                                <i class="fab fa-google"></i>
+                            </div>
+                            <div class="social-icon">
+                                <i class="fab fa-facebook-f"></i>
+                            </div>
+                            <div class="social-icon">
+                                <i class="fab fa-twitter"></i>
+                            </div>
+                            <div class="social-icon">
+                                <i class="fab fa-github"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="switch-link">
+                        还没有账号? <button type="button" class="link-btn" id="register-btn">立即注册</button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- 注册卡片 -->
+            <div class="login-card register-card" id="register-card" style="display: none;">
+                <p style="text-align: center; margin-bottom: 1.5rem; color: #6c757d;">填写以下信息创建新帐户</p>
+                <form id="register-form">
+                    <div class="form-group">
+                        <label for="reg-name">用户名</label>
+                        <input type="text" id="reg-name" class="form-control" placeholder="请输入用户名" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="reg-email">电子邮箱</label>
+                        <input type="email" id="reg-email" class="form-control" placeholder="请输入您的邮箱地址" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="reg-password">密码</label>
+                        <input type="password" id="reg-password" class="form-control" placeholder="请输入密码(至少8位)" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="reg-confirm-password">确认密码</label>
+                        <input type="password" id="reg-confirm-password" class="form-control" placeholder="请再次输入密码" required>
+                    </div>
+                    <button type="submit" class="btn">注册</button>
+                    <div class="social-login">
+                        <p>或使用以下方式注册</p>
+                        <div class="social-icons">
+                            <div class="social-icon">
+                                <i class="fab fa-google"></i>
+                            </div>
+                            <div class="social-icon">
+                                <i class="fab fa-facebook-f"></i>
+                            </div>
+                            <div class="social-icon">
+                                <i class="fab fa-twitter"></i>
+                            </div>
+                            <div class="social-icon">
+                                <i class="fab fa-github"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="switch-link">
+                        已有账号? <button type="button" class="link-btn" id="login-btn">立即登录</button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- 忘记密码卡片 -->
+            <div class="login-card forgot-password-card" id="forgot-password-card" style="display: none;">
+                <p style="text-align: center; margin-bottom: 1.5rem; color: #6c757d;">请输入您的邮箱以重置密码</p>
+                <form id="forgot-password-form">
+                    <div class="form-group">
+                        <label for="reset-email">电子邮箱</label>
+                        <input type="email" id="reset-email" class="form-control" placeholder="请输入您的注册邮箱" required>
+                    </div>
+                    <button type="submit" class="btn">发送重置链接</button>
+                    <div class="switch-link">
+                        <button type="button" class="btn btn-secondary" id="back-to-login">返回登录</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/gsap.min.js"></script>
+<script>
+    // 暗黑模式切换
+    const themeToggle = document.getElementById('theme-toggle');
+    const themeIcon = themeToggle.querySelector('i');
+
+    themeToggle.addEventListener('click', () => {
+        document.body.classList.toggle('dark-mode');
+
+        if (document.body.classList.contains('dark-mode')) {
+            themeIcon.classList.remove('fa-moon');
+            themeIcon.classList.add('fa-sun');
+        } else {
+            themeIcon.classList.remove('fa-sun');
+            themeIcon.classList.add('fa-moon');
+        }
+    });
+
+    // 登录浮层控制
+    const loginModal = document.getElementById('login-modal');
+    const openLoginBtn = document.getElementById('open-login-modal');
+    const closeModalBtn = document.getElementById('close-modal');
+
+    openLoginBtn.addEventListener('click', () => {
+        loginModal.classList.add('active');
+        // 重置显示登录表单
+        switchCard(null, document.getElementById('login-card'));
+    });
+
+    closeModalBtn.addEventListener('click', () => {
+        loginModal.classList.remove('active');
+    });
+
+    // 点击浮层外部关闭
+    loginModal.addEventListener('click', (e) => {
+        if (e.target === loginModal) {
+            loginModal.classList.remove('active');
+        }
+    });
+
+    // 页面切换功能
+    const loginCard = document.getElementById('login-card');
+    const registerCard = document.getElementById('register-card');
+    const forgotPasswordCard = document.getElementById('forgot-password-card');
+    const registerBtn = document.getElementById('register-btn');
+    const loginBtn = document.getElementById('login-btn');
+    const forgotPasswordBtn = document.getElementById('forgot-password-btn');
+    const backToLoginBtn = document.getElementById('back-to-login');
+
+    // 切换到注册页面
+    registerBtn.addEventListener('click', () => {
+        switchCard(loginCard, registerCard);
+    });
+
+    // 切换到登录页面
+    loginBtn.addEventListener('click', () => {
+        switchCard(registerCard, loginCard);
+    });
+
+    // 切换到忘记密码页面
+    forgotPasswordBtn.addEventListener('click', () => {
+        switchCard(loginCard, forgotPasswordCard);
+    });
+
+    // 返回登录页面
+    backToLoginBtn.addEventListener('click', () => {
+        switchCard(forgotPasswordCard, loginCard);
+    });
+
+    // 卡片切换动画
+    function switchCard(fromCard, toCard) {
+        if (fromCard) {
+            gsap.to(fromCard, {
+                duration: 0.3,
+                opacity: 0,
+                y: 20,
+                ease: "power2.in",
+                onComplete: () => {
+                    fromCard.style.display = 'none';
+                    showCard(toCard);
+                }
+            });
+        } else {
+            showCard(toCard);
+        }
+    }
+
+    function showCard(card) {
+        card.style.display = 'block';
+        gsap.fromTo(card,
+            { opacity: 0, y: -20 },
+            {
+                duration: 0.3,
+                opacity: 1,
+                y: 0,
+                ease: "power2.out"
+            }
+        );
+    }
+
+    // 表单提交处理
+    document.getElementById('login-form').addEventListener('submit', (e) => {
+        e.preventDefault();
+        handleLogin();
+    });
+
+    document.getElementById('register-form').addEventListener('submit', (e) => {
+        e.preventDefault();
+        handleRegister();
+    });
+
+    document.getElementById('forgot-password-form').addEventListener('submit', (e) => {
+        e.preventDefault();
+        handleForgotPassword();
+    });
+
+    function handleLogin() {
+        const email = document.getElementById('email').value;
+        const password = document.getElementById('password').value;
+        const remember = document.getElementById('remember').checked;
+
+        console.log('登录信息:', { email, password, remember });
+
+        // 模拟登录成功
+        alert('登录成功！');
+        loginModal.classList.remove('active');
+    }
+
+    function handleRegister() {
+        const name = document.getElementById('reg-name').value;
+        const email = document.getElementById('reg-email').value;
+        const password = document.getElementById('reg-password').value;
+        const confirmPassword = document.getElementById('reg-confirm-password').value;
+
+        console.log('注册信息:', { name, email, password, confirmPassword });
+
+        // 模拟注册成功
+        alert('注册成功！');
+        switchCard(registerCard, loginCard);
+    }
+
+    function handleForgotPassword() {
+        const email = document.getElementById('reset-email').value;
+
+        console.log('重置密码:', { email });
+
+        // 模拟发送成功
+        alert('重置链接已发送到您的邮箱！');
+        switchCard(forgotPasswordCard, loginCard);
+    }
+</script>
+</body>
+</html>
