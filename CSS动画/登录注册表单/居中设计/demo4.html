@@ -1,0 +1,809 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>登录注册切换页面</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --primary-color: #4361ee;
+      --secondary-color: #3f37c9;
+      --text-color: #2b2d42;
+      --bg-color: #f8f9fa;
+      --card-color: #ffffff;
+      --input-bg: #f1f3f5;
+      --shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+      --transition: all 0.3s ease;
+      --social-divider-color: #dee2e6;
+      --active-language-bg: rgba(67, 97, 238, 0.1);
+      --control-btn-bg: rgba(0, 0, 0, 0.1);
+      --control-btn-color: #2b2d42;
+      --dropdown-gap: 10px;
+    }
+
+    .dark-mode {
+      --primary-color: #4895ef;
+      --secondary-color: #4361ee;
+      --text-color: #f8f9fa;
+      --bg-color: #121212;
+      --card-color: #1e1e1e;
+      --input-bg: #2d2d2d;
+      --shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+      --social-divider-color: #495057;
+      --active-language-bg: rgba(72, 149, 239, 0.2);
+      --control-btn-bg: rgba(255, 255, 255, 0.2);
+      --control-btn-color: white;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+      background-color: var(--bg-color);
+      color: var(--text-color);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow-x: hidden;
+    }
+
+    /* 全局控制按钮 */
+    .global-controls {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      display: flex;
+      gap: 10px;
+      z-index: 1000;
+    }
+
+    .control-btn {
+      background-color: var(--control-btn-bg);
+      border: none;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: var(--control-btn-color);
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .control-btn:hover {
+      background-color: var(--primary-color);
+      color: white;
+      transform: scale(1.1);
+    }
+
+    .dropdown {
+      position: relative;
+      display: inline-block;
+    }
+
+    .dropdown-content {
+      position: absolute;
+      right: 0;
+      background-color: var(--card-color);
+      min-width: 160px;
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+      border-radius: 10px;
+      z-index: 1;
+      overflow: hidden;
+      transform-origin: top right;
+      transform: scale(0);
+      opacity: 0;
+      transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      margin-top: var(--dropdown-gap);
+    }
+
+    .dropdown.active .dropdown-content {
+      transform: scale(1);
+      opacity: 1;
+    }
+
+    .dark-mode .dropdown-content {
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+    }
+
+    .dropdown-content a {
+      color: var(--text-color);
+      padding: 10px 15px;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      font-size: 0.9rem;
+      transition: var(--transition);
+    }
+
+    .dropdown-content a:hover {
+      background-color: var(--input-bg);
+    }
+
+    .dropdown-content a.active {
+      background-color: var(--active-language-bg);
+      color: var(--primary-color);
+      cursor: default;
+      pointer-events: none;
+    }
+
+    .dropdown-content a.active .flag-icon {
+      box-shadow: 0 0 0 2px var(--primary-color);
+    }
+
+    .flag-icon {
+      width: 20px;
+      height: 15px;
+      margin-right: 10px;
+      border-radius: 2px;
+    }
+
+    /* 登录注册容器 */
+    .auth-container {
+      position: relative;
+      width: 900px;
+      max-width: 90%;
+      height: 550px;
+      background-color: var(--card-color);
+      border-radius: 20px;
+      box-shadow: var(--shadow);
+      overflow: hidden;
+      transition: var(--transition);
+    }
+
+    .auth-forms {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      display: flex;
+    }
+
+    .form-wrapper {
+      position: absolute;
+      width: 50%;
+      height: 100%;
+      padding: 2.5rem;
+      transition: transform 0.6s ease-in-out;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .login-wrapper {
+      left: 0;
+      transform: translateX(0);
+    }
+
+    .register-wrapper {
+      left: 50%;
+      transform: translateX(0);
+    }
+
+    .auth-container.active .login-wrapper {
+      transform: translateX(-100%);
+    }
+
+    .auth-container.active .register-wrapper {
+      transform: translateX(-100%);
+    }
+
+    .card-title {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
+    .card-title h1 {
+      font-size: 2rem;
+      margin-bottom: 0.5rem;
+      font-weight: 700;
+    }
+
+    .card-title p {
+      color: #6c757d;
+      font-size: 0.9rem;
+    }
+
+    .dark-mode .card-title p {
+      color: #adb5bd;
+    }
+
+    .form-group {
+      margin-bottom: 1.5rem;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: 500;
+      font-size: 0.9rem;
+    }
+
+    .form-control {
+      width: 100%;
+      padding: 0.8rem 1rem;
+      border: none;
+      border-radius: 10px;
+      background-color: var(--input-bg);
+      color: var(--text-color);
+      font-size: 1rem;
+      transition: var(--transition);
+    }
+
+    .form-control:focus {
+      outline: none;
+      box-shadow: 0 0 0 2px var(--primary-color);
+    }
+
+    .options {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.5rem;
+      font-size: 0.9rem;
+    }
+
+    .checkbox-group {
+      display: flex;
+      align-items: center;
+    }
+
+    .checkbox-group input {
+      margin-right: 0.5rem;
+    }
+
+    .link-btn {
+      color: var(--primary-color);
+      text-decoration: none;
+      font-weight: 500;
+      transition: var(--transition);
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 0;
+      font-size: inherit;
+    }
+
+    .link-btn:hover {
+      text-decoration: underline;
+    }
+
+    .btn {
+      width: 100%;
+      padding: 0.8rem;
+      border: none;
+      border-radius: 10px;
+      background-color: var(--primary-color);
+      color: white;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: var(--transition);
+      margin-bottom: 1.5rem;
+    }
+
+    .btn:hover {
+      background-color: var(--secondary-color);
+      transform: translateY(-2px);
+    }
+
+    .social-login {
+      text-align: center;
+      margin-bottom: 1.5rem;
+    }
+
+    .social-login p {
+      position: relative;
+      margin-bottom: 1rem;
+      font-size: 0.9rem;
+      color: #6c757d;
+    }
+
+    .dark-mode .social-login p {
+      color: #adb5bd;
+    }
+
+    .social-login p::before,
+    .social-login p::after {
+      content: "";
+      position: absolute;
+      top: 50%;
+      width: 30%;
+      height: 1px;
+      background-color: var(--social-divider-color);
+    }
+
+    .social-login p::before {
+      left: 0;
+    }
+
+    .social-login p::after {
+      right: 0;
+    }
+
+    .social-icons {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+    }
+
+    .social-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background-color: var(--input-bg);
+      color: var(--text-color);
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .social-icon:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .dark-mode .social-icon:hover {
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    }
+
+    /* 切换面板 - 修复后的样式 */
+    .toggle-panel {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 50%;
+      height: 100%;
+      overflow: hidden;
+      transition: transform 0.6s ease-in-out;
+      z-index: 10;
+    }
+
+    .toggle-content {
+      position: relative;
+      width: 200%;
+      height: 100%;
+      left: -100%;
+      transition: transform 0.6s ease-in-out;
+      display: flex;
+    }
+
+    .auth-container.active .toggle-content {
+      transform: translateX(100%);
+    }
+
+    .toggle-panel-left,
+    .toggle-panel-right {
+      width: 50%;
+      height: 100%;
+      padding: 2.5rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      color: white;
+    }
+
+    .toggle-panel-left {
+      background: linear-gradient(135deg, #4361ee, #3a0ca3);
+    }
+
+    .toggle-panel-right {
+      background: linear-gradient(135deg, #3a0ca3, #4361ee);
+    }
+
+    .toggle-panel h2 {
+      font-size: 1.8rem;
+      margin-bottom: 1rem;
+    }
+
+    .toggle-panel p {
+      font-size: 0.9rem;
+      margin-bottom: 2rem;
+      max-width: 80%;
+    }
+
+    .toggle-btn {
+      padding: 0.8rem 2rem;
+      border: 1px solid white;
+      border-radius: 50px;
+      background-color: transparent;
+      color: white;
+      font-size: 0.9rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .toggle-btn:hover {
+      background-color: white;
+      color: var(--primary-color);
+    }
+
+    @media (max-width: 768px) {
+      .auth-container {
+        height: auto;
+        min-height: 100vh;
+        border-radius: 0;
+      }
+
+      .form-wrapper {
+        position: relative;
+        width: 100%;
+        padding: 2rem 1.5rem;
+      }
+
+      .login-wrapper {
+        transform: translateX(0) !important;
+      }
+
+      .register-wrapper {
+        transform: translateX(0) !important;
+        display: none;
+      }
+
+      .auth-container.active .login-wrapper {
+        display: none;
+      }
+
+      .auth-container.active .register-wrapper {
+        display: flex;
+      }
+
+      .toggle-panel {
+        display: none;
+      }
+    }
+  </style>
+</head>
+<body>
+<!-- 全局控制按钮 - 固定在右上角 -->
+<div class="global-controls">
+  <div class="dropdown" id="language-dropdown">
+    <div class="control-btn" id="language-toggle">
+      <i class="fas fa-globe"></i>
+    </div>
+    <div class="dropdown-content">
+      <a href="#" data-lang="zh" class="active">
+        <img src="https://flagcdn.com/w20/cn.png" class="flag-icon" alt="中文"> 中文
+      </a>
+      <a href="#" data-lang="en">
+        <img src="https://flagcdn.com/w20/us.png" class="flag-icon" alt="English"> English
+      </a>
+      <a href="#" data-lang="es">
+        <img src="https://flagcdn.com/w20/es.png" class="flag-icon" alt="Español"> Español
+      </a>
+      <a href="#" data-lang="ja">
+        <img src="https://flagcdn.com/w20/jp.png" class="flag-icon" alt="日本語"> 日本語
+      </a>
+    </div>
+  </div>
+  <div class="control-btn" id="theme-toggle">
+    <i class="fas fa-moon"></i>
+  </div>
+</div>
+
+<!-- 登录注册容器 -->
+<div class="auth-container" id="auth-container">
+  <div class="auth-forms">
+    <!-- 登录表单 -->
+    <div class="form-wrapper login-wrapper">
+      <div class="card-title">
+        <h1>欢迎回来</h1>
+        <p>请输入您的凭据以登录您的帐户</p>
+      </div>
+      <form id="login-form">
+        <div class="form-group">
+          <label for="email">电子邮箱</label>
+          <input type="email" id="email" class="form-control" placeholder="请输入您的邮箱地址" required>
+        </div>
+        <div class="form-group">
+          <label for="password">密码</label>
+          <input type="password" id="password" class="form-control" placeholder="请输入您的密码" required>
+        </div>
+        <div class="options">
+          <div class="checkbox-group">
+            <input type="checkbox" id="remember">
+            <label for="remember">记住我</label>
+          </div>
+          <button type="button" class="link-btn" id="forgot-password-btn">忘记密码?</button>
+        </div>
+        <button type="submit" class="btn">登录</button>
+        <div class="social-login">
+          <p>或使用以下方式登录</p>
+          <div class="social-icons">
+            <div class="social-icon">
+              <i class="fab fa-google"></i>
+            </div>
+            <div class="social-icon">
+              <i class="fab fa-facebook-f"></i>
+            </div>
+            <div class="social-icon">
+              <i class="fab fa-twitter"></i>
+            </div>
+            <div class="social-icon">
+              <i class="fab fa-github"></i>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+
+    <!-- 注册表单 -->
+    <div class="form-wrapper register-wrapper">
+      <div class="card-title">
+        <h1>创建账号</h1>
+        <p>填写以下信息创建新帐户</p>
+      </div>
+      <form id="register-form">
+<!--        <div class="form-group">-->
+<!--          <label for="reg-name">用户名</label>-->
+<!--          <input type="text" id="reg-name" class="form-control" placeholder="请输入用户名" required>-->
+<!--        </div>-->
+        <div class="form-group">
+          <label for="reg-email">电子邮箱</label>
+          <input type="email" id="reg-email" class="form-control" placeholder="请输入您的邮箱地址" required>
+        </div>
+        <div class="form-group">
+          <label for="reg-password">密码</label>
+          <input type="password" id="reg-password" class="form-control" placeholder="请输入密码(至少8位)" required>
+        </div>
+<!--        <div class="form-group">-->
+<!--          <label for="reg-confirm-password">确认密码</label>-->
+<!--          <input type="password" id="reg-confirm-password" class="form-control" placeholder="请再次输入密码" required>-->
+<!--        </div>-->
+        <button type="submit" class="btn">注册</button>
+        <div class="social-login">
+          <p>或使用以下方式注册</p>
+          <div class="social-icons">
+            <div class="social-icon">
+              <i class="fab fa-google"></i>
+            </div>
+            <div class="social-icon">
+              <i class="fab fa-facebook-f"></i>
+            </div>
+            <div class="social-icon">
+              <i class="fab fa-twitter"></i>
+            </div>
+            <div class="social-icon">
+              <i class="fab fa-github"></i>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+
+    <!-- 切换面板 - 修复后的结构 -->
+    <div class="toggle-panel">
+      <div class="toggle-content">
+        <div class="toggle-panel-left">
+          <h2>新用户?</h2>
+          <p>注册账号，开启您的个性化体验之旅</p>
+          <button class="toggle-btn" id="show-register">注册</button>
+        </div>
+        <div class="toggle-panel-right">
+          <h2>已有账号?</h2>
+          <p>立即登录您的账号，继续您的旅程</p>
+          <button class="toggle-btn" id="show-login">登录</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/gsap.min.js"></script>
+<script>
+  // 防止主题切换时的闪烁
+  document.addEventListener('DOMContentLoaded', function() {
+    // 确保所有元素在页面加载时就有正确的样式
+    document.body.style.visibility = 'hidden';
+
+    // 添加过渡样式
+    const style = document.createElement('style');
+    style.textContent = `
+                body, .auth-container, .form-control, .social-icon, .social-login p::before,
+                .social-login p::after, .toggle-btn, .toggle-panel {
+                    transition: background-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease, transform 0.6s ease-in-out;
+                }
+            `;
+    document.head.appendChild(style);
+
+    // 确保页面加载完成后再显示
+    setTimeout(() => {
+      document.body.style.visibility = 'visible';
+    }, 50);
+  });
+
+  // 暗黑模式切换
+  const themeToggle = document.getElementById('theme-toggle');
+  const themeIcon = themeToggle.querySelector('i');
+
+  themeToggle.addEventListener('click', () => {
+    document.body.classList.toggle('dark-mode');
+
+    if (document.body.classList.contains('dark-mode')) {
+      themeIcon.classList.remove('fa-moon');
+      themeIcon.classList.add('fa-sun');
+    } else {
+      themeIcon.classList.remove('fa-sun');
+      themeIcon.classList.add('fa-moon');
+    }
+  });
+
+  // 语言切换功能
+  const languageDropdown = document.getElementById('language-dropdown');
+  const languageToggle = document.getElementById('language-toggle');
+  const dropdownContent = languageDropdown.querySelector('.dropdown-content');
+  let currentLanguage = 'zh'; // 默认语言设置为中文
+
+  // 点击语言图标切换下拉菜单
+  languageToggle.addEventListener('click', (e) => {
+    e.stopPropagation();
+    languageDropdown.classList.toggle('active');
+  });
+
+  // 点击语言选项
+  dropdownContent.querySelectorAll('a').forEach(item => {
+    item.addEventListener('click', (e) => {
+      const lang = item.getAttribute('data-lang');
+      if (lang === currentLanguage) {
+        e.preventDefault();
+        return;
+      }
+
+      // 更新当前语言
+      setActiveLanguage(lang);
+      console.log('切换语言:', lang);
+      // 这里可以添加实际的语言切换逻辑
+      languageDropdown.classList.remove('active');
+    });
+  });
+
+  // 设置激活语言
+  function setActiveLanguage(lang) {
+    currentLanguage = lang;
+
+    // 更新所有语言选项状态
+    dropdownContent.querySelectorAll('a').forEach(item => {
+      if (item.getAttribute('data-lang') === lang) {
+        item.classList.add('active');
+        // 更新语言图标显示
+        const flagIcon = item.querySelector('.flag-icon').src;
+        languageToggle.innerHTML = `<img src="${flagIcon}" style="width:20px;height:15px;border-radius:2px;">`;
+      } else {
+        item.classList.remove('active');
+      }
+    });
+  }
+
+  // 初始化设置默认语言
+  setActiveLanguage(currentLanguage);
+
+  // 点击页面其他位置关闭下拉菜单
+  document.addEventListener('click', (e) => {
+    if (!languageDropdown.contains(e.target)) {
+      languageDropdown.classList.remove('active');
+    }
+  });
+
+  // 登录注册切换
+  const authContainer = document.getElementById('auth-container');
+  const showRegisterBtn = document.getElementById('show-register');
+  const showLoginBtn = document.getElementById('show-login');
+  const forgotPasswordBtn = document.getElementById('forgot-password-btn');
+
+  // 修复切换按钮点击事件
+  showRegisterBtn.addEventListener('click', (e) => {
+    e.preventDefault();
+    authContainer.classList.add('active');
+  });
+
+  showLoginBtn.addEventListener('click', (e) => {
+    e.preventDefault();
+    authContainer.classList.remove('active');
+  });
+
+  forgotPasswordBtn.addEventListener('click', () => {
+    alert('忘记密码功能: 请通过邮件重置密码');
+  });
+
+  // 表单提交处理
+  document.getElementById('login-form').addEventListener('submit', (e) => {
+    e.preventDefault();
+    handleLogin();
+  });
+
+  document.getElementById('register-form').addEventListener('submit', (e) => {
+    e.preventDefault();
+    handleRegister();
+  });
+
+  function handleLogin() {
+    const email = document.getElementById('email').value;
+    const password = document.getElementById('password').value;
+    const remember = document.getElementById('remember').checked;
+
+    console.log('登录信息:', { email, password, remember });
+
+    // 模拟登录成功
+    alert('登录成功！');
+  }
+
+  function handleRegister() {
+    const name = document.getElementById('reg-name').value;
+    const email = document.getElementById('reg-email').value;
+    const password = document.getElementById('reg-password').value;
+    const confirmPassword = document.getElementById('reg-confirm-password').value;
+
+    console.log('注册信息:', { name, email, password, confirmPassword });
+
+    // 模拟注册成功
+    alert('注册成功！');
+    authContainer.classList.remove('active');
+  }
+
+  // 添加GSAP动画增强效果
+  document.addEventListener('DOMContentLoaded', function() {
+    gsap.from(".auth-container", {
+      duration: 0.8,
+      y: 50,
+      opacity: 0,
+      ease: "back.out(1.7)"
+    });
+
+    gsap.from(".form-wrapper", {
+      duration: 0.8,
+      y: 30,
+      opacity: 0,
+      stagger: 0.1,
+      delay: 0.3,
+      ease: "power2.out"
+    });
+
+    gsap.from(".toggle-panel h2", {
+      duration: 0.6,
+      y: -30,
+      opacity: 0,
+      stagger: 0.1,
+      delay: 0.6,
+      ease: "back.out(1.7)"
+    });
+
+    gsap.from(".toggle-panel p", {
+      duration: 0.6,
+      y: 30,
+      opacity: 0,
+      stagger: 0.1,
+      delay: 0.8,
+      ease: "back.out(1.7)"
+    });
+
+    gsap.from(".toggle-btn", {
+      duration: 0.6,
+      scale: 0,
+      opacity: 0,
+      stagger: 0.1,
+      delay: 1,
+      ease: "back.out(1.7)"
+    });
+
+    gsap.from(".global-controls", {
+      duration: 0.6,
+      y: -30,
+      opacity: 0,
+      delay: 0.5,
+      ease: "back.out(1.7)"
+    });
+  });
+</script>
+</body>
+</html>
