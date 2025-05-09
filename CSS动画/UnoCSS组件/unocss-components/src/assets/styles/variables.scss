@@ -23,9 +23,9 @@ $colors: (
 
 // 语义化颜色别名（推荐使用CSS变量动态切换）
 :root {
-  --color-primary: #{map-get($colors, 'primary')};
-  --color-text: #{map-get($colors, 'gray-900')};
-  --color-bg: #{map-get($colors, 'white')};
+  //--color-primary: #{map-get($colors, 'primary')};
+  //--color-text: #{map-get($colors, 'gray-900')};
+  //--color-bg: #{map-get($colors, 'white')};
 }
 
 // ==================== 2. 间距系统 ====================

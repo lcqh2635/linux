@@ -58,22 +58,22 @@
 /// 生成margin/padding工具类
 /// @param {string} $type - 'm'（margin）或 'p'（padding）
 /// @param {string} $direction - 方向（t/r/b/l/x/y）
-@mixin spacing-utils($type, $direction: null) {
-  $property: if($type == 'm', 'margin', 'padding');
-
-  @each $size, $value in spacing-sizes() { // 使用variables中的间距
-    .#{$type}#{$direction}-#{$size} {
-      @if $direction == 't' { #{$property}-top: $value; }
-      @else if $direction == 'b' { #{$property}-bottom: $value; }
-      @else if $direction == 'x' {
-        #{$property}-left: $value;
-        #{$property}-right: $value;
-      }
-        // ...其他方向
-      @else { #{$property}: $value; } // 默认全方向
-    }
-  }
-}
+//@mixin spacing-utils($type, $direction: null) {
+//  $property: if($type == 'm', 'margin', 'padding');
+//
+//  @each $size, $value in spacing-sizes() { // 使用variables中的间距
+//    .#{$type}#{$direction}-#{$size} {
+//      @if $direction == 't' { #{$property}-top: $value; }
+//      @else if $direction == 'b' { #{$property}-bottom: $value; }
+//      @else if $direction == 'x' {
+//        #{$property}-left: $value;
+//        #{$property}-right: $value;
+//      }
+//        // ...其他方向
+//      @else { #{$property}: $value; } // 默认全方向
+//    }
+//  }
+//}
 
 // 生成工具类（按需启用）
 @include spacing-utils('m'); // .m-sm, .m-md...

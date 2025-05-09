@@ -13,6 +13,7 @@ import {ElementPlusResolver} from 'unplugin-vue-components/resolvers';
 import {FileSystemIconLoader} from 'unplugin-icons/loaders';
 import {presetIcons} from 'unocss';
 import {fileURLToPath} from 'url';
+import consoleArt from "./src/plugins/consoleArt.ts";
 
 // 更多 vite 配置详细细节可以参考官网: https://cn.vitejs.dev/config/
 export default defineConfig(({command, mode}) => {
@@ -39,6 +40,8 @@ export default defineConfig(({command, mode}) => {
         // 插件配置
         plugins: [
             vue(),
+            // 自定义 Vite 插件，艺术输出控制台信息
+            consoleArt(),
             // 自动导入插件，自动引入全局组件、插件、指令等
             // 自动导入 Vue 相关 API（如 ref, computed）
             AutoImport({
