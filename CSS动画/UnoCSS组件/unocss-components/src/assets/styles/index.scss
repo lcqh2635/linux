@@ -79,3 +79,28 @@ button:focus-visible {
     background-color: #f9f9f9;
   }
 }
+
+
+/**
+ * 全局样式入口文件
+ * 注意加载顺序：基础 → 工具 → 组件 → 覆盖
+ */
+
+// 1. 初始化样式（最优先加载）
+@use 'reset';
+
+// 3. 布局框架（如网格系统、通用容器）
+@use 'layouts';
+
+// 4. 主题样式（颜色、字体等动态主题）
+@use 'themes';
+
+// 5. 动画（可能依赖主题变量）
+@use 'animate';
+
+// 6. 全局组件样式（如按钮、输入框等基础组件）
+// @use 'components/button';
+// @use 'components/input';
+
+// 7. 覆盖样式（最后加载，用于调整第三方库或特殊情况）
+// @use 'overrides';

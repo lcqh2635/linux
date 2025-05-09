@@ -1,22 +1,22 @@
 /// <reference types="vitest/config" />
-import {defineConfig, loadEnv} from 'vite'
-import {defaultExclude} from "vitest/config"
-import {resolve, dirname} from 'node:path'
-import {ElementPlusResolver} from "unplugin-vue-components/resolvers"
-import {FileSystemIconLoader} from "unplugin-icons/loaders"
-import {presetIcons} from "unocss"
-import {fileURLToPath} from 'url'
-import vue from '@vitejs/plugin-vue'
-import AutoImport from 'unplugin-auto-import/vite'
-import Components from 'unplugin-vue-components/vite'
-import Icons from 'unplugin-icons/vite'
-import UnoCSS from "unocss/vite"
-import VueI18nPlugin from '@intlify/unplugin-vue-i18n/vite'
-import postcssPresetEnv from "postcss-preset-env"
+import {defineConfig, loadEnv} from 'vite';
+import {defaultExclude} from 'vitest/config';
+import {resolve, dirname} from 'node:path';
+import vue from '@vitejs/plugin-vue';
+import AutoImport from 'unplugin-auto-import/vite';
+import Components from 'unplugin-vue-components/vite';
+import Icons from 'unplugin-icons/vite';
+import UnoCSS from 'unocss/vite'; // 原子化 CSS
+import VueI18nPlugin from '@intlify/unplugin-vue-i18n/vite';
+import postcssPresetEnv from 'postcss-preset-env';
+import {ElementPlusResolver} from 'unplugin-vue-components/resolvers';
+import {FileSystemIconLoader} from 'unplugin-icons/loaders';
+import {presetIcons} from 'unocss';
+import {fileURLToPath} from 'url';
 
 // 更多 vite 配置详细细节可以参考官网: https://cn.vitejs.dev/config/
 export default defineConfig(({command, mode}) => {
-    console.log("执行的命令为: ", command)
+    console.log("执行的命令为: ", command);
     // 根据当前工作目录中的 `mode` 加载 .env 文件
     // 设置第三个参数为 '' 来加载所有环境变量，而不管是否有 VITE_ 前缀。
     // 如果是两个参数则读取我们配置在 .env.mode的环境变量；加第三个参数 ”“ 则当前主机的全量环境变量配置
@@ -40,6 +40,7 @@ export default defineConfig(({command, mode}) => {
         plugins: [
             vue(),
             // 自动导入插件，自动引入全局组件、插件、指令等
+            // 自动导入 Vue 相关 API（如 ref, computed）
             AutoImport({
                 // 全局导入注册，配置的插件中的函数、对象能够自动引入，不用显示声明
                 imports: ["vue", "vue-router", "vue-i18n", "pinia"],
@@ -189,9 +190,14 @@ export default defineConfig(({command, mode}) => {
             // 指定传递给 CSS 预处理器的选项，参考 https://cn.vitejs.dev/config/shared-options.html#css-preprocessoroptions
             preprocessorOptions: {
                 scss: {
-                    // 引入全局变量文件，自定义样式变量必须有 css 预处理器处理后才能生效，直接在 main.ts 中引入 scss 文件会报错
-                    // 参考 element plus 官方文档，https://element-plus.org/zh-CN/guide/theming.html#%E5%A6%82%E4%BD%95%E8%A6%86%E7%9B%96%E5%AE%83
-                    additionalData: `@import "@assets/styles/variables.scss";`, // 路径别名需配置
+                    // 全局注入变量和 Mixin，全局注入 SCSS 代码到所有样式文件的头部（相当于自动在每个文件开头添加代码）。避免在每个文件手动写 @use
+                    // @use 和 @import 都可以用来引入其他样式文件，但 @use 是现代 Sass 模块系统的推荐方式，而 @import 已被官方标记为逐步淘汰
+                    // as * 的作用：将 variables.scss 和 mixins.scss 的所有成员全局暴露，使得项目中任何 SCSS 文件无需再次 @use 即可直接使用这些变量和 Mixin
+                    additionalData: `
+                        @use "@assets/styles/variables.scss" as *;
+                        @use "@assets/styles/mixins.scss" as *;
+                        $injected-color: ${process.env.NODE_ENV === 'production' ? 'green' : 'red'};
+                    `,
                 },
             },
         },
