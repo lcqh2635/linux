@@ -179,6 +179,8 @@
   },
   "active": "746e66e10ef8f587",
   "lastOpenFiles": [
+    "CSS动画/UnoCSS 组件/unocss-components/src/types/auto-import.d.ts",
+    "CSS动画/UnoCSS 组件/unocss-components/src/main.ts~",
     "CSS动画/UnoCSS 组件/unocss-components/src/assets/fonts/fonts.scss~",
     "CSS动画/UnoCSS 组件/unocss-components/src/assets/fonts/思源字体/思源黑体 Regular/n4JnS6vmhgCT/OPnO5PEBdGFT.woff2",
     "CSS动画/UnoCSS 组件/unocss-components/src/assets/fonts/思源字体/思源黑体 Regular/n4JnS6vmhgCT/OPnO5PEBdGFT.woff",
@@ -188,8 +190,6 @@
     "CSS动画/UnoCSS 组件/unocss-components/src/assets/fonts/思源字体/思源黑体 Medium/ZSRJRlKjCdKU/NcGk9Q11hSCp.woff",
     "CSS动画/UnoCSS 组件/unocss-components/src/assets/fonts/思源字体/思源黑体 Medium/ZSRJRlKjCdKU",
     "CSS动画/UnoCSS 组件/unocss-components/src/assets/fonts/思源字体/思源黑体 Medium",
-    "CSS动画/UnoCSS 组件/unocss-components/src/assets/fonts/思源字体/思源黑体 Bold/gzeBRqjJBwlT/MyaxEu5CwXSL.woff2",
-    "CSS动画/UnoCSS 组件/unocss-components/src/assets/fonts/思源字体/思源黑体 Bold/gzeBRqjJBwlT/MyaxEu5CwXSL.woff",
     "CSS动画/UnoCSS 组件/unocss-components/src/assets/icons/weixin.svg",
     "CSS动画/UnoCSS 组件/unocss-components/src/assets/icons/QQ.svg",
     "CSS动画/UnoCSS 组件/unocss-components/src/assets/icons/bilibili.svg",
