@@ -186,15 +186,12 @@ export default defineConfig(({command, mode}) => {
                     // ...(process.env.NODE_ENV === 'production' ? { cssnano: {} } : {})
                 ],
             },
-            // 指定传递给 CSS 预处理器的选项
+            // 指定传递给 CSS 预处理器的选项，参考 https://cn.vitejs.dev/config/shared-options.html#css-preprocessoroptions
             preprocessorOptions: {
                 scss: {
                     // 引入全局变量文件，自定义样式变量必须有 css 预处理器处理后才能生效，直接在 main.ts 中引入 scss 文件会报错
                     // 参考 element plus 官方文档，https://element-plus.org/zh-CN/guide/theming.html#%E5%A6%82%E4%BD%95%E8%A6%86%E7%9B%96%E5%AE%83
-                    additionalData: `
-                        @use "src/styles/variables.scss" as *;
-                        @use "src/styles/element/index.scss" as *;
-                    `,
+                    additionalData: `@import "@assets/styles/variables.scss";`, // 路径别名需配置
                 },
             },
         },
@@ -221,6 +218,17 @@ export default defineConfig(({command, mode}) => {
             __APP_VERSION__: JSON.stringify(env.APP_VERSION),
         },
 
+        // vitest 单元测试配置，参考官方文档 https://cn.vitest.dev/
+        // vitest 一个原生支持 Vite 的测试框架。非常快速 并且非常容易上手。
+        // 官方文档 https://cn.vitest.dev/
+        // 如果使用 Bun 作为软件包管理器，请确保使用 bun run test 命令而不是 bun test 命令，否则 Bun 将运行自己的测试运行程序。
+        test: {
+            // ...
+            testTimeout: 30_000,
+            name: "unit",
+            exclude: [...defaultExclude, "**/svelte-scoped/**", "**/test-dom/**"],
+        },
+
         // 构建配置
         build: {
             // 构建时的目标环境
@@ -233,17 +241,6 @@ export default defineConfig(({command, mode}) => {
             emptyOutDir: true,
             // 构建后是否生成 source map 文件
             sourcemap: false,
-        },
-
-        // vitest 单元测试配置，参考官方文档 https://cn.vitest.dev/
-        // vitest 一个原生支持 Vite 的测试框架。非常快速 并且非常容易上手。
-        // 官方文档 https://cn.vitest.dev/
-        // 如果使用 Bun 作为软件包管理器，请确保使用 bun run test 命令而不是 bun test 命令，否则 Bun 将运行自己的测试运行程序。
-        test: {
-            // ...
-            testTimeout: 30_000,
-            name: "unit",
-            exclude: [...defaultExclude, "**/svelte-scoped/**", "**/test-dom/**"],
         },
 
         // 日志级别，默认为 info
