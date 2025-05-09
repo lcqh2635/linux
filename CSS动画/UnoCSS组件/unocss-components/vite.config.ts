@@ -18,6 +18,9 @@ import consoleArt from "./plugins/consoleArt.ts";
 // 更多 vite 配置详细细节可以参考官网: https://cn.vitejs.dev/config/
 export default defineConfig(({command, mode}) => {
     console.log("执行的命令为: ", command);
+    // 要使用 Bun 这个全局变量，必须使用 bun run --bun dev 命令运行，使用 --bun 参数来强制指定使用 bun 运行，
+    // 否则会使用 node 也就说：bun run dev 启动的也是 node 运行，而不是 bun 运行
+    console.log("Bun 版本：", Bun.version)
     // 根据当前工作目录中的 `mode` 加载 .env 文件
     // 设置第三个参数为 '' 来加载所有环境变量，而不管是否有 VITE_ 前缀。
     // 如果是两个参数则读取我们配置在 .env.mode的环境变量；加第三个参数 ”“ 则当前主机的全量环境变量配置

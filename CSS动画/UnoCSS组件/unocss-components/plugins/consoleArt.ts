@@ -84,11 +84,11 @@ export default function consoleArt(options?: ConsoleArtOptions): Plugin {
                 // 获取项目信息
                 // const pkg = JSON.parse(fs.readFileSync('package.json', 'utf-8'))
 
+                // 要使用 Bun 这个全局变量，必须使用 bun run --bun dev 命令运行，使用 --bun 参数来强制指定使用 bun 运行，
+                // 否则会使用 node 也就说：bun run dev 启动的也是 node 运行，而不是 bun 运行
                 // 使用 Bun.file 读取 package.json 并转为 JSON 对象
                 // const pkg = await Bun.file('package.json',  { encoding: "utf-8" }).json();
-
-                const file = Bun.file('package.json');
-                const pkg = await file.json()
+                const pkg = await Bun.file('package.json').json();
 
                 // 使用 figlet 生成 ASCII 艺术字
                 const ascii = figlet.textSync(pkg.name.replace(/-/g,  ' '), {
