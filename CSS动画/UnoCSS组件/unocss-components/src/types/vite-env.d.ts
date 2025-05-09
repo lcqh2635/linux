@@ -1,6 +1,6 @@
 /// <reference types="vite/client" />
 
-// env.d.ts 是 TypeScript 的类型声明文件，专门用于为环境变量提供类型支持
+// vite-env.d.ts ( env.d.ts ) 是 TypeScript 的类型声明文件，专门用于为环境变量提供类型支持
 // 使用统一前缀（如 VITE_ 或 VUE_APP_）保持与 .env 文件中的变量名完全一致
 // 自定义环境变量的 TypeScript 智能提示，参考 vite 文档  https://cn.vitejs.dev/guide/env-and-mode.html#intellisense
 interface ImportMetaEnv {

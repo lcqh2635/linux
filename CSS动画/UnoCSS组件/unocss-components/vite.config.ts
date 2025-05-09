@@ -1,19 +1,21 @@
 /// <reference types="vitest/config" />
-import {type ConfigEnv, defineConfig, loadEnv, type UserConfig} from 'vite'
+import {defineConfig, loadEnv} from 'vite'
+import {defaultExclude} from "vitest/config"
+import {resolve, dirname} from 'node:path'
+import {ElementPlusResolver} from "unplugin-vue-components/resolvers"
+import {FileSystemIconLoader} from "unplugin-icons/loaders"
+import {presetIcons} from "unocss"
+import {fileURLToPath} from 'url'
 import vue from '@vitejs/plugin-vue'
 import AutoImport from 'unplugin-auto-import/vite'
 import Components from 'unplugin-vue-components/vite'
 import Icons from 'unplugin-icons/vite'
-import UnoCSS from "unocss/vite";
-import {ElementPlusResolver} from "unplugin-vue-components/resolvers";
-import {FileSystemIconLoader} from "unplugin-icons/loaders";
-import {presetIcons} from "unocss";
-import {defaultExclude} from "vitest/config";
-import postcssPresetEnv from "postcss-preset-env";
-import * as path from "node:path";
+import UnoCSS from "unocss/vite"
+import VueI18nPlugin from '@intlify/unplugin-vue-i18n/vite'
+import postcssPresetEnv from "postcss-preset-env"
 
 // 更多 vite 配置详细细节可以参考官网: https://cn.vitejs.dev/config/
-export default defineConfig(({command, mode}: ConfigEnv): UserConfig => {
+export default defineConfig(({command, mode}) => {
     console.log("执行的命令为: ", command)
     // 根据当前工作目录中的 `mode` 加载 .env 文件
     // 设置第三个参数为 '' 来加载所有环境变量，而不管是否有 VITE_ 前缀。
@@ -98,6 +100,12 @@ export default defineConfig(({command, mode}: ConfigEnv): UserConfig => {
                         autoInstall: true,
                     }),
                 ],
+            }),
+            // 配置参考 https://vue-i18n.intlify.dev/guide/advanced/optimization#how-to-configure
+            VueI18nPlugin({
+                /* 配置选项 */
+                // locale messages 资源预编译选项
+                include: resolve(dirname(fileURLToPath(import.meta.url)), './src/locales/**'),
             }),
         ],
 
@@ -196,11 +204,11 @@ export default defineConfig(({command, mode}: ConfigEnv): UserConfig => {
         // 对应的也要在 tsconfig.json 中配置 alias 以获得智能类型提示
         resolve: {
             alias: {
-                "@": path.resolve(process.cwd(), "src"),
-                "@views": path.resolve(process.cwd(), "src/views"),
-                "@assets": path.resolve(process.cwd(), "src/assets"),
-                "@components": path.resolve(process.cwd(), "src/components"),
-                "@utils": path.resolve(process.cwd(), "src/utils"),
+                "@": resolve(process.cwd(), "src"),
+                "@views": resolve(process.cwd(), "src/views"),
+                "@assets": resolve(process.cwd(), "src/assets"),
+                "@components": resolve(process.cwd(), "src/components"),
+                "@utils": resolve(process.cwd(), "src/utils"),
             },
         },
 
