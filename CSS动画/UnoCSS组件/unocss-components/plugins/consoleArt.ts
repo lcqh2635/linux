@@ -85,7 +85,10 @@ export default function consoleArt(options?: ConsoleArtOptions): Plugin {
                 // const pkg = JSON.parse(fs.readFileSync('package.json', 'utf-8'))
 
                 // 使用 Bun.file 读取 package.json 并转为 JSON 对象
-                const pkg = await Bun.file('package.json',  { encoding: "utf-8" }).json();
+                // const pkg = await Bun.file('package.json',  { encoding: "utf-8" }).json();
+
+                const file = Bun.file('package.json');
+                const pkg = await file.json()
 
                 // 使用 figlet 生成 ASCII 艺术字
                 const ascii = figlet.textSync(pkg.name.replace(/-/g,  ' '), {
