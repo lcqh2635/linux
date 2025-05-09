@@ -19,11 +19,12 @@
       // 此映射相对于 baseUrl ，当我们输入 @/ 时会被映射成 src/
       "@/*": ["src/*"],
       "@views/*": ["src/views/*"],
-      "@types/*": ["src/types/*"],
       "@assets/*": ["src/assets/*"],
+      "@types/*": ["src/types/*"],
       "@components/*": ["src/components/*"],
       "@hooks/*": ["src/hooks/*"],
       "@layouts/*": ["src/layouts/*"],
+      "@plugins/*": ["src/plugins/*"]
     }
   },
   "include": ["src/**/*.ts", "src/**/*.tsx", "src/**/*.vue"]

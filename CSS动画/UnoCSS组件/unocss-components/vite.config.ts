@@ -13,7 +13,7 @@ import {ElementPlusResolver} from 'unplugin-vue-components/resolvers';
 import {FileSystemIconLoader} from 'unplugin-icons/loaders';
 import {presetIcons} from 'unocss';
 import {fileURLToPath} from 'url';
-import consoleArt from "./src/plugins/consoleArt.ts";
+import consoleArt from "./plugins/consoleArt.ts";
 
 // 更多 vite 配置详细细节可以参考官网: https://cn.vitejs.dev/config/
 export default defineConfig(({command, mode}) => {
@@ -215,6 +215,8 @@ export default defineConfig(({command, mode}) => {
                 "@assets": resolve(process.cwd(), "src/assets"),
                 "@components": resolve(process.cwd(), "src/components"),
                 "@utils": resolve(process.cwd(), "src/utils"),
+                "@hooks": resolve(process.cwd(), "src/hooks"),
+                "@plugins": resolve(process.cwd(), "src/plugins"),
             },
         },
 
