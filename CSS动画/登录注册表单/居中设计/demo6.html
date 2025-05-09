@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>动态登录注册切换</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/gsap.min.js"></script>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: #333;
+    }
+
+    .container {
+      position: relative;
+      width: 800px;
+      height: 500px;
+      background-color: white;
+      border-radius: 20px;
+      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+      overflow: hidden;
+    }
+
+    .form-container {
+      position: absolute;
+      top: 0;
+      width: 50%;
+      height: 100%;
+      padding: 50px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      transition: all 0.6s ease-in-out;
+    }
+
+    .login-container {
+      left: 0;
+      z-index: 2;
+    }
+
+    .register-container {
+      left: 50%;
+      z-index: 1;
+      opacity: 0;
+    }
+
+    h2 {
+      font-size: 28px;
+      margin-bottom: 30px;
+      color: #444;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+      position: relative;
+    }
+
+    input {
+      width: 100%;
+      padding: 12px 15px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      font-size: 16px;
+      transition: all 0.3s;
+    }
+
+    input:focus {
+      border-color: #667eea;
+      outline: none;
+      box-shadow: 0 0 0 2px rgba(102, 126, 234, 0.2);
+    }
+
+    label {
+      position: absolute;
+      left: 15px;
+      top: 12px;
+      color: #777;
+      font-size: 16px;
+      transition: all 0.3s;
+      pointer-events: none;
+    }
+
+    input:focus + label,
+    input:not(:placeholder-shown) + label {
+      top: -10px;
+      left: 10px;
+      font-size: 12px;
+      background-color: white;
+      padding: 0 5px;
+      color: #667eea;
+    }
+
+    button {
+      background: linear-gradient(to right, #667eea, #764ba2);
+      color: white;
+      border: none;
+      padding: 12px 20px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+      font-weight: 500;
+      width: 100%;
+      margin-top: 10px;
+      transition: all 0.3s;
+    }
+
+    button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .toggle-container {
+      position: absolute;
+      top: 0;
+      left: 50%;
+      width: 50%;
+      height: 100%;
+      overflow: hidden;
+      transition: all 0.6s ease-in-out;
+      z-index: 10;
+    }
+
+    .toggle {
+      position: relative;
+      background: linear-gradient(to right, #667eea, #764ba2);
+      height: 100%;
+      width: 200%;
+      left: -100%;
+      transition: all 0.6s ease-in-out;
+    }
+
+    .toggle-panel {
+      position: absolute;
+      width: 50%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 0 40px;
+      text-align: center;
+      top: 0;
+      transition: all 0.6s ease-in-out;
+      color: white;
+    }
+
+    .toggle-left {
+      left: 0;
+      transform: translateX(-200%);
+    }
+
+    .toggle-right {
+      right: 0;
+      transform: translateX(0);
+    }
+
+    .toggle-panel h2 {
+      color: white;
+    }
+
+    .toggle-panel p {
+      margin-bottom: 30px;
+      font-size: 14px;
+    }
+
+    .ghost-btn {
+      background: transparent;
+      border: 1px solid white;
+    }
+
+    .ghost-btn:hover {
+      background: white;
+      color: #667eea;
+    }
+
+    /* 激活状态 */
+    .container.active .login-container {
+      transform: translateX(100%);
+      opacity: 0;
+    }
+
+    .container.active .register-container {
+      transform: translateX(-100%);
+      opacity: 1;
+      z-index: 5;
+    }
+
+    .container.active .toggle-container {
+      transform: translateX(-100%);
+    }
+
+    .container.active .toggle {
+      transform: translateX(50%);
+    }
+
+    .container.active .toggle-left {
+      transform: translateX(0);
+    }
+
+    .container.active .toggle-right {
+      transform: translateX(200%);
+    }
+  </style>
+</head>
+<body>
+<div class="container" id="container">
+  <div class="form-container login-container">
+    <form>
+      <h2>欢迎回来</h2>
+      <div class="form-group">
+        <input type="text" id="login-email" placeholder=" " required>
+        <label for="login-email">邮箱</label>
+      </div>
+      <div class="form-group">
+        <input type="password" id="login-password" placeholder=" " required>
+        <label for="login-password">密码</label>
+      </div>
+      <button type="submit">登录</button>
+    </form>
+  </div>
+
+  <div class="form-container register-container">
+    <form>
+      <h2>创建账号</h2>
+      <div class="form-group">
+        <input type="text" id="register-name" placeholder=" " required>
+        <label for="register-name">用户名</label>
+      </div>
+      <div class="form-group">
+        <input type="email" id="register-email" placeholder=" " required>
+        <label for="register-email">邮箱</label>
+      </div>
+      <div class="form-group">
+        <input type="password" id="register-password" placeholder=" " required>
+        <label for="register-password">密码</label>
+      </div>
+      <button type="submit">注册</button>
+    </form>
+  </div>
+
+  <div class="toggle-container">
+    <div class="toggle">
+      <div class="toggle-panel toggle-left">
+        <h2>已有账号?</h2>
+        <p>输入您的个人信息，开始使用我们的服务</p>
+        <button class="ghost-btn" id="login">登录</button>
+      </div>
+      <div class="toggle-panel toggle-right">
+        <h2>新用户?</h2>
+        <p>注册账号，享受我们的所有服务</p>
+        <button class="ghost-btn" id="register">注册</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const loginBtn = document.getElementById('login');
+    const registerBtn = document.getElementById('register');
+    const container = document.getElementById('container');
+
+    // 使用GSAP实现更流畅的动画
+    registerBtn.addEventListener('click', function() {
+      gsap.to(container, {
+        duration: 0.8,
+        ease: "power2.inOut",
+        onStart: function() {
+          container.classList.add('active');
+        }
+      });
+    });
+
+    loginBtn.addEventListener('click', function() {
+      gsap.to(container, {
+        duration: 0.8,
+        ease: "power2.inOut",
+        onStart: function() {
+          container.classList.remove('active');
+        }
+      });
+    });
+
+    // 输入框动画
+    const inputs = document.querySelectorAll('input');
+    inputs.forEach(input => {
+      input.addEventListener('focus', function() {
+        const label = this.nextElementSibling;
+        gsap.to(label, {
+          duration: 0.3,
+          y: -22,
+          x: -5,
+          fontSize: '12px',
+          color: '#667eea',
+          ease: "power2.out"
+        });
+      });
+
+      input.addEventListener('blur', function() {
+        if (!this.value) {
+          const label = this.nextElementSibling;
+          gsap.to(label, {
+            duration: 0.3,
+            y: 0,
+            x: 0,
+            fontSize: '16px',
+            color: '#777',
+            ease: "power2.out"
+          });
+        }
+      });
+    });
+
+    // 按钮悬停效果
+    const buttons = document.querySelectorAll('button');
+    buttons.forEach(button => {
+      button.addEventListener('mouseenter', function() {
+        gsap.to(this, {
+          duration: 0.2,
+          y: -2,
+          boxShadow: '0 5px 15px rgba(0, 0, 0, 0.1)',
+          ease: "power2.out"
+        });
+      });
+
+      button.addEventListener('mouseleave', function() {
+        gsap.to(this, {
+          duration: 0.2,
+          y: 0,
+          boxShadow: 'none',
+          ease: "power2.out"
+        });
+      });
+    });
+  });
+</script>
+</body>
+</html>

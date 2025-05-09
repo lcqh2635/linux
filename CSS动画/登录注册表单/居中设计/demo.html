@@ -186,14 +186,85 @@
             transform: translateX(0);
         }
 
-        .auth-container.active .login-wrapper {
-            transform: translateX(-100%);
+        /* 切换面板 - 修复后的样式 */
+        .toggle-panel {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            width: 50%;
+            height: 100%;
+            overflow: hidden;
+            transition: transform 0.6s ease-in-out;
+            z-index: 100; /* 增加z-index确保在最上层 */
         }
 
-        .auth-container.active .register-wrapper {
-            transform: translateX(-100%);
+        .toggle-content {
+            position: relative;
+            width: 200%;
+            height: 100%;
+            left: 0;
+            transition: transform 0.6s ease-in-out;
+            display: flex;
         }
 
+        .toggle-panel-left,
+        .toggle-panel-right {
+            width: 50%;
+            height: 100%;
+            padding: 2.5rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            color: white;
+        }
+
+        .auth-container.active .toggle-content {
+            transform: translateX(-50%);
+        }
+
+        .toggle-panel-left {
+            background: linear-gradient(135deg, #4361ee, #3a0ca3);
+        }
+
+        .toggle-panel-right {
+            background: linear-gradient(135deg, #3a0ca3, #4361ee);
+        }
+
+        .toggle-panel h2 {
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+        }
+
+        .toggle-panel p {
+            font-size: 0.9rem;
+            margin-bottom: 2rem;
+            max-width: 80%;
+        }
+
+        .toggle-btn {
+            padding: 0.8rem 2rem;
+            border: 2px solid white; /* 加粗边框 */
+            border-radius: 50px;
+            background-color: transparent;
+            color: white;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative; /* 确保按钮层级 */
+            z-index: 10; /* 确保按钮在最上层 */
+        }
+
+        .toggle-btn:hover {
+            background-color: white;
+            color: var(--primary-color);
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        /* 表单样式 */
         .card-title {
             text-align: center;
             margin-bottom: 2rem;
@@ -355,80 +426,6 @@
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
         }
 
-        /* 切换面板 - 修复后的样式 */
-        .toggle-panel {
-            position: absolute;
-            top: 0;
-            right: 0;  /* 改为从右侧定位 */
-            width: 50%;
-            height: 100%;
-            z-index: 100;  /* 确保在最上层 */
-            pointer-events: none; /* 允许点击穿透 */
-        }
-
-        .toggle-content {
-            position: relative;
-            width: 200%;
-            height: 100%;
-            left: 0;
-            transition: transform 0.6s ease-in-out;
-            display: flex;
-            pointer-events: auto; /* 仅内容区域可点击 */
-        }
-
-        .auth-container.active .toggle-content {
-            transform: translateX(-50%);
-        }
-
-        .toggle-panel-left,
-        .toggle-panel-right {
-            width: 50%;
-            height: 100%;
-            padding: 2.5rem;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-            color: white;
-        }
-
-        .toggle-panel-left {
-            background: linear-gradient(135deg, #4361ee, #3a0ca3);
-        }
-
-        .toggle-panel-right {
-            background: linear-gradient(135deg, #3a0ca3, #4361ee);
-        }
-
-        .toggle-panel h2 {
-            font-size: 1.8rem;
-            margin-bottom: 1rem;
-        }
-
-        .toggle-panel p {
-            font-size: 0.9rem;
-            margin-bottom: 2rem;
-            max-width: 80%;
-        }
-
-        .toggle-btn {
-            padding: 0.8rem 2rem;
-            border: 1px solid white;
-            border-radius: 50px;
-            background-color: transparent;
-            color: white;
-            font-size: 0.9rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: var(--transition);
-        }
-
-        .toggle-btn:hover {
-            background-color: white;
-            color: var(--primary-color);
-        }
-
         @media (max-width: 768px) {
             .auth-container {
                 height: auto;
@@ -553,14 +550,14 @@
                     <label for="reg-email">电子邮箱</label>
                     <input type="email" id="reg-email" class="form-control" placeholder="请输入您的邮箱地址" required>
                 </div>
-<!--                <div class="form-group">-->
-<!--                    <label for="reg-password">密码</label>-->
-<!--                    <input type="password" id="reg-password" class="form-control" placeholder="请输入密码(至少8位)" required>-->
-<!--                </div>-->
-<!--                <div class="form-group">-->
-<!--                    <label for="reg-confirm-password">确认密码</label>-->
-<!--                    <input type="password" id="reg-confirm-password" class="form-control" placeholder="请再次输入密码" required>-->
-<!--                </div>-->
+                <div class="form-group">
+                    <label for="reg-password">密码</label>
+                    <input type="password" id="reg-password" class="form-control" placeholder="请输入密码(至少8位)" required>
+                </div>
+                <div class="form-group">
+                    <label for="reg-confirm-password">确认密码</label>
+                    <input type="password" id="reg-confirm-password" class="form-control" placeholder="请再次输入密码" required>
+                </div>
                 <button type="submit" class="btn">注册</button>
                 <div class="social-login">
                     <p>或使用以下方式注册</p>
@@ -704,12 +701,16 @@
     // 修复切换按钮点击事件
     showRegisterBtn.addEventListener('click', (e) => {
         e.preventDefault();
-        authContainer.classList.add('active');
+        gsap.to(".login-wrapper", { x: "-100%", duration: 0.6 });
+        gsap.to(".register-wrapper", { x: "-100%", duration: 0.6 });
+        gsap.to(".toggle-content", { x: "-50%", duration: 0.6 });
     });
 
     showLoginBtn.addEventListener('click', (e) => {
         e.preventDefault();
-        authContainer.classList.remove('active');
+        gsap.to(".login-wrapper", { x: "0%", duration: 0.6 });
+        gsap.to(".register-wrapper", { x: "0%", duration: 0.6 });
+        gsap.to(".toggle-content", { x: "0%", duration: 0.6 });
     });
 
     forgotPasswordBtn.addEventListener('click', () => {
@@ -748,7 +749,6 @@
 
         // 模拟注册成功
         alert('注册成功！');
-        authContainer.classList.remove('active');
     }
 
     // 添加GSAP动画增强效果

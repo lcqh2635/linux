@@ -177,19 +177,23 @@
       "table-editor-obsidian:Advanced Tables Toolbar": false
     }
   },
-  "active": "746e66e10ef8f587",
+  "active": "d31f45e327d326ae",
   "lastOpenFiles": [
-    "CSS动画/登录注册表单/居中设计/demo2.html~",
+    "CSS动画/前端项目目录结构.md~",
+    "CSS动画/项目常用依赖的命令列表.md~",
+    "CSS动画/项目常用依赖的命令列表.md",
+    "CSS动画/前端项目目录结构.md",
+    "CSS动画/UnoCSS 组件/前端项目目录结构.md",
+    "CSS动画/UnoCSS 组件/项目常用依赖的命令列表.md",
+    "CSS动画/登录注册表单/居中设计/demo5.html~",
+    "CSS动画/登录注册表单/居中设计/demo6.html~",
+    "CSS动画/登录注册表单/居中设计/demo6.html",
+    "CSS动画/登录注册表单/居中设计/demo5.html",
     "CSS动画/登录注册表单/居中设计/demo.html~",
+    "CSS动画/登录注册表单/居中设计/demo2.html~",
     "CSS动画/登录注册表单/居中设计/demo4.html~",
     "CSS动画/登录注册表单/居中设计/demo4.html",
     "CSS动画/登录注册表单/居中设计/demo3.html~",
-    "CSS动画/登录注册表单/居中设计/demo3.html",
-    "CSS动画/登录注册表单/居中设计/demo2.html",
-    "CSS动画/登录注册表单/居中设计/demo.html",
-    "CSS动画/登录注册表单/居中设计",
-    "CSS动画/登录注册表单/demo.html~",
-    "CSS动画/登录注册表单/毛玻璃效果设计/demo6.html~",
     "fedora/6、Fedora 开发环境搭建.md",
     "CSS动画/Vue Router/Layout 布局文件和 App.vue 两者的关系.md",
     "CSS动画/GSAP常用插件/ScrollTrigger 插件/ScrollTrigger 插件的两种使用方式.md",
@@ -210,10 +214,6 @@
     "CSS动画/GSAP 常用方法详解.md",
     "fedora/5、Fedora 安装常用软件.md",
     "fedora/2、Fedora 主题和字体安装配置.md",
-    "manjaro/Gnome 常用软件安装和配置.md",
-    "fedora/4、Fedora 系统优化.md",
-    "fedora/Fedora 初次安装后的配置.md",
-    "fedora/Untitled.md",
-    "fedora/5、Fedora 常用软件安装.md"
+    "manjaro/Gnome 常用软件安装和配置.md"
   ]
 }
