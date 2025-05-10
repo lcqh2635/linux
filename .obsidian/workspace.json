@@ -179,7 +179,9 @@
   },
   "active": "746e66e10ef8f587",
   "lastOpenFiles": [
+    "CSS动画/项目常用依赖的命令列表.md~",
     "CSS动画/UnoCSS组件/unocss-components/plugins/consoleArt.ts~",
+    "CSS动画/UnoCSS组件/unocss-components/tsconfig.app.json~",
     "CSS动画/UnoCSS组件/unocss-components/vite.config.ts~",
     "CSS动画/UnoCSS组件/unocss-components/src/plugins/RegisterElementPlusIcon.ts~",
     "CSS动画/UnoCSS组件/unocss-components/src/plugins/PluginInterface.ts~",
@@ -189,8 +191,6 @@
     "CSS动画/UnoCSS组件/unocss-components/src/plugins/PluginManager.ts",
     "CSS动画/UnoCSS组件/unocss-components/src/plugins/PluginInterface.ts",
     "CSS动画/UnoCSS组件/unocss-components/plugins/vitePluginVueMonitorBuild.ts",
-    "CSS动画/UnoCSS组件/unocss-components/plugins/vitePluginVueMonitor.ts",
-    "CSS动画/UnoCSS组件/unocss-components/plugins/consoleArt.ts",
     "CSS动画/UnoCSS组件/unocss-components/node_modules/figlet/README.md",
     "CSS动画/UnoCSS组件/unocss-components/node_modules/@types/figlet/README.md",
     "CSS动画/UnoCSS组件/unocss-components/src/assets/styles/前端项目中样式文件的组织事项.md",
