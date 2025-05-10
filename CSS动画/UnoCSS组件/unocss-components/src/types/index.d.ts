@@ -55,22 +55,6 @@ export interface PageResult<T> {
     pageSize: number;
 }
 
-/**
- * 通用键值对类型
- */
-type KeyValue<T = string> = Record<string, T>;
-
-/**
- * 树形节点接口
- * @template T - 数据类型
- */
-export interface TreeNode<T = KeyValue> {
-    id: string | number;
-    parentId: string | number | null;
-    children?: TreeNode<T>[];
-    [key: string]: any;
-}
-
 
 // 5. 实际业务相关的综合类型示例
 /**
@@ -86,7 +70,48 @@ export interface UserInfo {
     email?: string;
     phone?: string;
     createTime: string;
-};
+}
+
+/**
+ * 系统配置项
+ */
+export interface SystemConfig {
+    theme: 'light' | 'dark';
+    primaryColor: string;
+    layout: 'vertical' | 'horizontal' | 'mix';
+    collapsed: boolean;
+    showBreadcrumb: boolean;
+    showTabs: boolean;
+    showFooter: boolean;
+}
+
+interface User {
+    id: number;
+    name: string;
+    age?: number;
+}
+
+// 可通过 extends 继承；可用 implements 实现
+interface Admin extends User {
+    role: string;
+}
+
+
+/**
+ * 通用键值对类型
+ */
+type KeyValue<T = string> = Record<string, T>;
+
+/**
+ * 树形节点接口
+ * @template T - 数据类型
+ */
+export interface TreeNode<T = KeyValue> {
+    id: string | number;
+    parentId: string | number | null;
+    children?: TreeNode<T>[];
+    [key: string]: any;
+}
 
 /**
  * 菜单项类型
@@ -111,47 +136,3 @@ export type MenuItem = {
     };
     children?: MenuItem[];
 };
-
-/**
- * 系统配置项
- */
-export interface SystemConfig {
-    theme: 'light' | 'dark';
-    primaryColor: string;
-    layout: 'vertical' | 'horizontal' | 'mix';
-    collapsed: boolean;
-    showBreadcrumb: boolean;
-    showTabs: boolean;
-    showFooter: boolean;
-};
-
-// 6. 工具类型
-/**
- * 将T中所有属性变为可选，同时递归处理嵌套对象
- */
-type DeepPartial<T> = {
-    [P in keyof T]?: T[P] extends object ? DeepPartial<T[P]> : T[P];
-};
-
-/**
- * 将T中所有属性变为必填，同时递归处理嵌套对象
- */
-type DeepRequired<T> = {
-    [P in keyof T]-?: T[P] extends object ? DeepRequired<T[P]> : T[P];
-};
-
-/**
- * 从T中提取指定的属性K，并设为必填
- */
-type WithRequired<T, K extends keyof T> = T & { [P in K]-?: T[P] };
-
-interface User {
-    id: number;
-    name: string;
-    age?: number;
-}
-
-// 扩展
-interface Admin extends User {
-    role: string;
-}
