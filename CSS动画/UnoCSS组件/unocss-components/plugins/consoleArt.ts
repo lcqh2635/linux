@@ -31,6 +31,7 @@ interface ConsoleArtOptions {
     showBuildInfo?: boolean
 }
 
+// 自定义 Vite 插件，参数官网： https://cn.vite.dev/guide/api-plugin.html#plugin-ordering
 export default function consoleArt(options?: ConsoleArtOptions): Plugin {
     console.log("插件可选配置参数：" + options)
     let viteConfig: ResolvedConfig
