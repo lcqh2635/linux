@@ -16,7 +16,7 @@ src/
 ├── router/
 │   ├── guards/          # 路由守卫
 │   │   ├── auth.ts      # 认证守卫
-│   │   ├── progress.guard.ts  # 页面进度条守卫
+│   │   ├── progress.ts  # 页面进度条守卫
 │   │   └── index.ts     # 路由守卫入口
 │   ├── modules/         # 模块化路由
 │   │   ├── auth.router.ts       # 认证相关路由
@@ -112,7 +112,7 @@ export function setupAuthGuard(router: Router) {
 }
 ```
 
-### 进度条守卫 (`router/guards/progress.guard.ts`)
+### 进度条守卫 (`router/guards/progress.ts`)
 
 ```typescript
 import type { Router } from 'vue-router'

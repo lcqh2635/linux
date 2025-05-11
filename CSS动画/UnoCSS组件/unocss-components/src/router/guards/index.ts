@@ -1,6 +1,6 @@
 import type { Router } from 'vue-router'
 import { setupAuthGuard } from './auth'
-import { setupProgressGuard } from './progress.guard.ts'
+import { setupProgressGuard } from './progress.ts'
 
 /**
  * 安装路由守卫
