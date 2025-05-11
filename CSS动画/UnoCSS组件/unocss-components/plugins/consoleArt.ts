@@ -42,7 +42,8 @@ export default function consoleArt(options?: ConsoleArtOptions): Plugin {
         "你知道吗？按住 Alt 点击浏览器刷新可以强制清除缓存",
         "尝试 Ctrl+Shift+R 进行硬刷新",
         "使用 .env.local 文件保存本地敏感配置",
-        "Vite 的热更新延迟通常在 50ms 以内"
+        "Vite 的热更新延迟通常在 50ms 以内",
+        "你知道吗？使用 bun upgrade --interactive 可以交互式升级",
     ]
 
     return {

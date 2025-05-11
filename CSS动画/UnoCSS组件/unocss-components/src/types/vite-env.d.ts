@@ -1,4 +1,5 @@
 /// <reference types="vite/client" />
+/// <reference types="bun-types" />
 
 /**
  * 系统环境变量类型
