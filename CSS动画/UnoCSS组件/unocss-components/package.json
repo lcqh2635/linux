@@ -10,6 +10,7 @@
     "dev": "bunx --bun vite --mode .env.development",
     "prod": "bunx --bun vite --mode .env.production",
     "test": "bunx --bun vitest --mode .env.test",
+    "test:coverage": "vitest run --coverage",
     "build": "bunx --bun vue-tsc -b && bunx --bun vite build",
     "build:staging": "vite build --mode staging",
     "preview": "bun vite preview",
