@@ -1,5 +1,6 @@
 // router/modules/dynamic.router.ts
 import type { AppRouteRecordRaw } from '../types'
+import router from "@/router";
 
 export async function setupDynamicRoutes() {
     // 模拟从API获取动态路由

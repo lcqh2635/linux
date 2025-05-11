@@ -23,6 +23,15 @@ const exceptionRouter: AppRouteRecordRaw[] = [
         }
     },
     {
+        path: '/500',
+        name: RouteNames.SERVER_ERROR,
+        component: () => import('@/views/exception/500.vue'),
+        meta: {
+            title: '服务器错误',
+            hidden: true
+        }
+    },
+    {
         path: '/:pathMatch(.*)*',
         redirect: '/404',
         meta: {

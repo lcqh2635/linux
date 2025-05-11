@@ -38,5 +38,6 @@ export const RouteNames = {
     LOGIN: 'Login',
     DASHBOARD: 'Dashboard',
     FORBIDDEN: 'Forbidden',
-    NOT_FOUND: 'NotFound'
+    NOT_FOUND: 'NotFound',
+    SERVER_ERROR: 'ServerError',
 } as const
