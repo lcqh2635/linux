@@ -7,6 +7,15 @@
  * 2. 文件名通常固定为 shims-vue.d.ts
  */
 
+// 声明图片等静态资源模块
+declare module '*.png';
+declare module '*.jpg';
+declare module '*.jpeg';
+declare module '*.gif';
+declare module '*.svg';
+declare module '*.ico';
+declare module '*.webp';
+
 // 声明一个模块，用于匹配所有以 ".vue" 结尾的文件，并将其识别为一个 Vue 组件
 declare module '*.vue' {
     import type { ComponentOptions } from 'vue'
@@ -33,13 +42,3 @@ declare module '*.json5' {
     const data: Record<string, any>
     export default data
 }
-
-
-// 声明图片等静态资源模块
-declare module '*.png';
-declare module '*.jpg';
-declare module '*.jpeg';
-declare module '*.gif';
-declare module '*.svg';
-declare module '*.ico';
-declare module '*.webp';
