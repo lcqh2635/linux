@@ -32,7 +32,7 @@ export interface AppRouteRecordRaw {
     children?: AppRouteRecordRaw[]
 }
 
-// 使用常量替代枚举（推荐）
+// 路由名称常量定义，使用常量替代枚举（推荐）
 export const RouteNames = {
     HOME: 'Home',
     LOGIN: 'Login',

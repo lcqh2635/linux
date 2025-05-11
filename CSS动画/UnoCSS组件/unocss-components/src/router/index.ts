@@ -8,7 +8,7 @@ import { AppRouteRecordRaw } from './types'
  */
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
-    routes: moduleRoutes as unknown as RouteRecordRaw[], // 转换类型
+    routes: moduleRoutes as unknown as AppRouteRecordRaw[], // 转换类型
     strict: true, // 严格模式
     scrollBehavior: () => ({ left: 0, top: 0 }) // 滚动行为
 })
