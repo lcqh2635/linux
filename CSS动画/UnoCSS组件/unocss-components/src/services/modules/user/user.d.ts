@@ -1,4 +1,4 @@
-import type { BaseResponse, PaginationResponse } from '../types'
+import type { BaseResponse, PaginationResponse } from '../../api/types.ts'
 
 /**
  * 用户基本信息

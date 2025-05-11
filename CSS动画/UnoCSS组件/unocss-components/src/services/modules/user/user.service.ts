@@ -1,4 +1,4 @@
-import http from '../api'
+import http from '../../api/http.ts'
 import type {
     UserInfo,
     UserQueryParams,
@@ -6,7 +6,7 @@ import type {
     BaseResponse,
     PaginationResponse
 } from './user.d.ts'
-import type { PaginationParams, CustomRequestConfig } from '../types'
+import type { PaginationParams, CustomRequestConfig } from '../../api/types.ts'
 
 /**
  * 用户服务API

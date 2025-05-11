@@ -7,7 +7,7 @@ const authRouter: AppRouteRecordRaw[] = [
     {
         path: '/login',
         name: RouteNames.LOGIN,
-        component: () => import('@views/auth/Login.vue'),
+        component: () => import('@views/auth/LoginView.vue'),
         meta: {
             title: '登录',
             hidden: true // 不在菜单显示
@@ -16,7 +16,7 @@ const authRouter: AppRouteRecordRaw[] = [
     {
         path: '/register',
         name: 'Register',
-        component: () => import('@views/auth/Register.vue'),
+        component: () => import('@views/auth/RegisterView.vue'),
         meta: {
             title: '注册',
             hidden: true

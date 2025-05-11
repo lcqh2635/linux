@@ -1,16 +1,16 @@
-import http from '../api'
+import http from '../../api/http.ts'
 import type {
     LoginParams,
     LoginResponse,
     RefreshTokenResponse,
     BaseResponse
-} from './auth.d.ts'
-import type { CustomRequestConfig } from '../types'
+} from './types.ts'
+import type { CustomRequestConfig } from '../../api/types.ts'
 
 /**
  * 认证服务API
  */
-export const authService = {
+export const api = {
     /**
      * 用户登录
      * @param params - 登录参数
@@ -65,4 +65,4 @@ export const authService = {
     }
 }
 
-export type AuthService = typeof authService
+export type AuthService = typeof api
