@@ -128,6 +128,9 @@
   /* ==================== 现代前端扩展 ==================== */
   "browserslist": [           // 浏览器兼容性
     "> 1%",
-    "last 2 versions"
+    "last 2 versions",
+    // "not ie <= 11",
+    // "not op_mini all",
+    "not dead"
   ]
 }
