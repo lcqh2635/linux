@@ -1,6 +1,6 @@
 import type { Router } from 'vue-router'
 import { useUserStore } from '@/stores/user'
-import { RouteNames } from '../constants'
+import {RouteNames} from "@/router/constants.ts";
 
 /**
  * 认证路由守卫

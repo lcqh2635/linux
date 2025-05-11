@@ -1,5 +1,4 @@
-import type { AppRouteRecordRaw } from '../types'
-import { RouteNames } from '../constants'
+import {type AppRouteRecordRaw, RouteNames} from '../types'
 
 /**
  * 仪表盘相关路由
@@ -16,7 +15,7 @@ const dashboardRouter: AppRouteRecordRaw[] = [
     {
         path: '/dashboard',
         name: RouteNames.DASHBOARD,
-        component: () => import('@/views/dashboard/index.vue'),
+        component: () => import('@views/dashboard/index.vue'),
         meta: {
             title: '控制台',
             icon: 'dashboard',
@@ -26,7 +25,7 @@ const dashboardRouter: AppRouteRecordRaw[] = [
     {
         path: '/dashboard/workbench',
         name: 'Workbench',
-        component: () => import('@/views/dashboard/workbench.vue'),
+        component: () => import('@views/dashboard/workbench.vue'),
         meta: {
             title: '工作台',
             keepAlive: true

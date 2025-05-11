@@ -1,5 +1,4 @@
-import type { AppRouteRecordRaw } from '../types'
-import { RouteNames } from '../constants'
+import {type AppRouteRecordRaw, RouteNames} from '../types'
 
 /**
  * 异常页面路由
