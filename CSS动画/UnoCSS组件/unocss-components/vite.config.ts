@@ -110,9 +110,17 @@ export default defineConfig(({command, mode}) => {
             }),
             // 配置参考 https://vue-i18n.intlify.dev/guide/advanced/optimization#how-to-configure
             vueI18n({
-                /* 配置选项 */
-                // locale messages 资源预编译选项
-                include: resolve(dirname(fileURLToPath(import.meta.url)), './src/locales/**'),
+                // 启用运行时仅支持组合API
+                runtimeOnly: true,
+                // 国际化文件目录
+                include: resolve(
+                    dirname(fileURLToPath(import.meta.url)),
+                    './src/locales/**'
+                ),
+                // 默认语言环境
+                defaultSFCLang: 'json',
+                // 是否允许组件中使用 legacy 语法
+                compositionOnly: false,
                 // 是否全局注入 $t 函数
                 globalSFCScope: true,
             }),
