@@ -4,11 +4,13 @@ import '@assets/styles/index.scss'
 import '@unocss/reset/tailwind.css'
 import router from "@/router";
 import pinia from "@/stores";
+import {i18n} from "@/locales";
 
 const app = createApp(App)
 
 app.use(router)
 app.use(pinia)
+app.use(i18n)
 
 // 等待路由准备就绪后再挂载应用
 router.isReady().then(() => {

@@ -7,7 +7,7 @@ import AutoImport from 'unplugin-auto-import/vite';
 import Components from 'unplugin-vue-components/vite';
 import Icons from 'unplugin-icons/vite';
 import UnoCSS from 'unocss/vite'; // 原子化 CSS
-import VueI18nPlugin from '@intlify/unplugin-vue-i18n/vite';
+import vueI18n from '@intlify/unplugin-vue-i18n/vite'
 import postcssPresetEnv from 'postcss-preset-env';
 import {ElementPlusResolver} from 'unplugin-vue-components/resolvers';
 import {FileSystemIconLoader} from 'unplugin-icons/loaders';
@@ -109,10 +109,12 @@ export default defineConfig(({command, mode}) => {
                 ],
             }),
             // 配置参考 https://vue-i18n.intlify.dev/guide/advanced/optimization#how-to-configure
-            VueI18nPlugin({
+            vueI18n({
                 /* 配置选项 */
                 // locale messages 资源预编译选项
                 include: resolve(dirname(fileURLToPath(import.meta.url)), './src/locales/**'),
+                // 是否全局注入 $t 函数
+                globalSFCScope: true,
             }),
         ],
 
