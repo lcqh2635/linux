@@ -1,6 +1,6 @@
 import type { AxiosInstance, AxiosResponse, InternalAxiosRequestConfig } from 'axios'
-import { useAuthStore } from '@/stores/auth'
 import router from '@/router'
+import {useAuthStore} from "@/stores/modules/auth.store.ts";
 
 /**
  * 配置拦截器
