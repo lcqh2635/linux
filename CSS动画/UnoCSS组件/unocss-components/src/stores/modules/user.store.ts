@@ -1,6 +1,6 @@
 import {defineStore} from 'pinia'
 import {ref, computed} from 'vue'
-import type {UserInfo} from '@/types/user' // 假设有定义的用户类型
+import type {UserInfo} from "@/types";
 
 /**
  * 用户信息store
