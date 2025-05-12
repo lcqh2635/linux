@@ -81,6 +81,7 @@ function handleHttpError(error: any) {
                 router.push('/404')
                 break
             case 500:
+                router.push('/500')
                 // 服务端错误处理
                 break
         }
