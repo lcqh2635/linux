@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>高级商品细节放大镜</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f5f5f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .product-viewer {
+            max-width: 1200px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            overflow: hidden;
+            display: flex;
+        }
+
+        .product-gallery {
+            flex: 1;
+            padding: 40px;
+            position: relative;
+        }
+
+        .magnifier-container {
+            position: relative;
+            width: 100%;
+            height: 400px;
+            overflow: hidden;
+            border-radius: 8px;
+            cursor: none;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+        }
+
+        .main-image {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            transition: transform 0.2s ease-out;
+        }
+
+        .magnifier-lens {
+            position: absolute;
+            width: 200px;
+            height: 200px;
+            border: 2px solid rgba(255, 255, 255, 0.8);
+            border-radius: 50%;
+            background-color: rgba(255, 255, 255, 0.2);
+            pointer-events: none;
+            transform: translate(-50%, -50%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            backdrop-filter: blur(2px);
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+            z-index: 10;
+        }
+
+        .magnifier-view {
+            position: absolute;
+            width: 400px;
+            height: 400px;
+            top: 0;
+            left: calc(100% + 20px);
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
+            opacity: 0;
+            pointer-events: none;
+            transform: scale(0.95);
+            transform-origin: left center;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.1);
+            border: 1px solid #eee;
+            z-index: 5;
+        }
+
+        .magnifier-view.active {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .magnified-image {
+            position: absolute;
+            width: auto;
+            height: auto;
+            max-width: none;
+            max-height: none;
+            transform-origin: 0 0;
+        }
+
+        .thumbnail-container {
+            display: flex;
+            gap: 12px;
+            margin-top: 25px;
+            padding: 5px;
+            overflow-x: auto;
+            scrollbar-width: thin;
+            scrollbar-color: #ddd transparent;
+        }
+
+        .thumbnail-container::-webkit-scrollbar {
+            height: 5px;
+        }
+
+        .thumbnail-container::-webkit-scrollbar-thumb {
+            background-color: #ddd;
+            border-radius: 3px;
+        }
+
+        .thumbnail {
+            width: 80px;
+            height: 80px;
+            border-radius: 6px;
+            object-fit: cover;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+            flex-shrink: 0;
+        }
+
+        .thumbnail:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .thumbnail.active {
+            border-color: #4a6bff;
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(74, 107, 255, 0.3);
+        }
+
+        .product-details {
+            flex: 1;
+            padding: 40px;
+            background: linear-gradient(135deg, #f9f9f9 0%, #ffffff 100%);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .product-title {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: #222;
+        }
+
+        .product-price {
+            font-size: 24px;
+            font-weight: 700;
+            color: #4a6bff;
+            margin: 15px 0 25px;
+        }
+
+        .product-description {
+            color: #555;
+            line-height: 1.6;
+            margin-bottom: 25px;
+        }
+
+        .zoom-level-control {
+            display: flex;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        .zoom-label {
+            margin-right: 15px;
+            font-weight: 500;
+            color: #666;
+        }
+
+        .zoom-buttons {
+            display: flex;
+            gap: 8px;
+        }
+
+        .zoom-btn {
+            width: 36px;
+            height: 36px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            background: white;
+            transition: all 0.2s ease;
+        }
+
+        .zoom-btn:hover {
+            background: #f5f5f5;
+        }
+
+        .zoom-btn.active {
+            background: #4a6bff;
+            color: white;
+            border-color: #4a6bff;
+        }
+
+        .product-actions {
+            margin-top: auto;
+        }
+
+        .btn {
+            padding: 12px 25px;
+            font-size: 16px;
+            font-weight: 600;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .btn-primary {
+            background: #4a6bff;
+            color: white;
+            border: none;
+            box-shadow: 0 4px 12px rgba(74, 107, 255, 0.3);
+        }
+
+        .btn-primary:hover {
+            background: #3a5bef;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(74, 107, 255, 0.4);
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 1px solid #ddd;
+            color: #555;
+            margin-left: 12px;
+        }
+
+        .btn-outline:hover {
+            background: #f9f9f9;
+            border-color: #ccc;
+        }
+
+        @media (max-width: 992px) {
+            .product-viewer {
+                flex-direction: column;
+            }
+
+            .magnifier-view {
+                display: none;
+            }
+
+            .magnifier-lens {
+                display: none;
+            }
+
+            .magnifier-container {
+                cursor: zoom-in;
+            }
+
+            .main-image {
+                object-fit: cover;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="product-viewer">
+    <div class="product-gallery">
+        <div class="magnifier-container" id="magnifierContainer">
+            <img src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" alt="Product" class="main-image" id="mainImage">
+            <div class="magnifier-lens" id="magnifierLens"></div>
+            <div class="magnifier-view" id="magnifierView">
+                <img src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?ixlib=rb-1.2.1&auto=format&fit=crop&w=1600&q=80" alt="Zoomed Product" class="magnified-image" id="magnifiedImage">
+            </div>
+        </div>
+        <div class="thumbnail-container">
+            <img src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?ixlib=rb-1.2.1&auto=format&fit=crop&w=200&q=80" alt="Thumbnail 1" class="thumbnail active" data-main="https://images.unsplash.com/photo-1523275335684-37898b6baf30?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" data-zoom="https://images.unsplash.com/photo-1523275335684-37898b6baf30?ixlib=rb-1.2.1&auto=format&fit=crop&w=1600&q=80">
+            <img src="https://images.unsplash.com/photo-1572635196237-14b3f281503f?ixlib=rb-1.2.1&auto=format&fit=crop&w=200&q=80" alt="Thumbnail 2" class="thumbnail" data-main="https://images.unsplash.com/photo-1572635196237-14b3f281503f?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" data-zoom="https://images.unsplash.com/photo-1572635196237-14b3f281503f?ixlib=rb-1.2.1&auto=format&fit=crop&w=1600&q=80">
+            <img src="https://images.unsplash.com/photo-1546868871-7041f2a55e12?ixlib=rb-1.2.1&auto=format&fit=crop&w=200&q=80" alt="Thumbnail 3" class="thumbnail" data-main="https://images.unsplash.com/photo-1546868871-7041f2a55e12?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" data-zoom="https://images.unsplash.com/photo-1546868871-7041f2a55e12?ixlib=rb-1.2.1&auto=format&fit=crop&w=1600&q=80">
+            <img src="https://images.unsplash.com/photo-1526170375885-4d8ecf77b99f?ixlib=rb-1.2.1&auto=format&fit=crop&w=200&q=80" alt="Thumbnail 4" class="thumbnail" data-main="https://images.unsplash.com/photo-1526170375885-4d8ecf77b99f?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" data-zoom="https://images.unsplash.com/photo-1526170375885-4d8ecf77b99f?ixlib=rb-1.2.1&auto=format&fit=crop&w=1600&q=80">
+        </div>
+    </div>
+    <div class="product-details">
+        <h1 class="product-title">专业数码相机 X200</h1>
+        <div class="product-price">¥8,999</div>
+        <p class="product-description">
+            X200专业数码相机配备全画幅传感器和先进的图像处理器，提供卓越的画质表现。2420万有效像素，ISO范围100-51200，支持4K/60p视频拍摄。5轴机身防抖系统，双SD卡槽设计，全天候防护机身。
+        </p>
+
+        <div class="zoom-level-control">
+            <span class="zoom-label">放大级别:</span>
+            <div class="zoom-buttons">
+                <button class="zoom-btn active" data-zoom="2">2×</button>
+                <button class="zoom-btn" data-zoom="3">3×</button>
+                <button class="zoom-btn" data-zoom="4">4×</button>
+            </div>
+        </div>
+
+        <div class="product-actions">
+            <button class="btn btn-primary">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                    <path d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .491.592l-1.5 8A.5.5 0 0 1 13 12H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5zM3.102 4l1.313 7h8.17l1.313-7H3.102zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/>
+                </svg>
+                加入购物车
+            </button>
+            <button class="btn btn-outline">查看详情</button>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/gsap.min.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const magnifierContainer = document.getElementById('magnifierContainer');
+        const mainImage = document.getElementById('mainImage');
+        const magnifierLens = document.getElementById('magnifierLens');
+        const magnifierView = document.getElementById('magnifierView');
+        const magnifiedImage = document.getElementById('magnifiedImage');
+        const thumbnails = document.querySelectorAll('.thumbnail');
+        const zoomButtons = document.querySelectorAll('.zoom-btn');
+
+        let isMagnifierActive = false;
+        let currentZoomLevel = 2;
+        let lensSize = 200;
+
+        // 初始化GSAP动画
+        gsap.set(magnifierView, { opacity: 0, scale: 0.95 });
+
+        // 鼠标进入图片区域时显示放大镜
+        magnifierContainer.addEventListener('mouseenter', function() {
+            isMagnifierActive = true;
+            gsap.to(magnifierLens, { opacity: 1, duration: 0.2 });
+            gsap.to(magnifierView, {
+                opacity: 1,
+                scale: 1,
+                duration: 0.3,
+                ease: "back.out(1.2)"
+            });
+        });
+
+        // 鼠标离开图片区域时隐藏放大镜
+        magnifierContainer.addEventListener('mouseleave', function() {
+            isMagnifierActive = false;
+            gsap.to(magnifierLens, { opacity: 0, duration: 0.2 });
+            gsap.to(magnifierView, {
+                opacity: 0,
+                scale: 0.95,
+                duration: 0.3,
+                ease: "back.in(1.2)"
+            });
+        });
+
+        // 鼠标移动时更新放大镜位置
+        magnifierContainer.addEventListener('mousemove', function(e) {
+            if (!isMagnifierActive) return;
+
+            const containerRect = magnifierContainer.getBoundingClientRect();
+            const imgRect = mainImage.getBoundingClientRect();
+
+            // 计算鼠标相对于图片的位置
+            let x = e.clientX - imgRect.left;
+            let y = e.clientY - imgRect.top;
+
+            // 限制放大镜不超出图片边界
+            x = Math.max(lensSize / 2, Math.min(x, imgRect.width - lensSize / 2));
+            y = Math.max(lensSize / 2, Math.min(y, imgRect.height - lensSize / 2));
+
+            // 更新放大镜位置
+            gsap.to(magnifierLens, {
+                x: x,
+                y: y,
+                duration: 0.1,
+                ease: "power1.out"
+            });
+
+            // 计算放大的背景位置
+            const bgPosX = (x / imgRect.width) * 100;
+            const bgPosY = (y / imgRect.height) * 100;
+
+            // 计算放大图片的位置和尺寸
+            const zoomWidth = imgRect.width * currentZoomLevel;
+            const zoomHeight = imgRect.height * currentZoomLevel;
+
+            // 更新放大图片
+            magnifiedImage.style.width = `${zoomWidth}px`;
+            magnifiedImage.style.height = `${zoomHeight}px`;
+            magnifiedImage.style.transform = `translate(-${bgPosX}%, -${bgPosY}%) scale(${currentZoomLevel})`;
+        });
+
+        // 缩略图点击事件
+        thumbnails.forEach(thumb => {
+            thumb.addEventListener('click', function() {
+                // 更新激活状态
+                thumbnails.forEach(t => t.classList.remove('active'));
+                this.classList.add('active');
+
+                // 获取大图和放大图URL
+                const mainSrc = this.getAttribute('data-main');
+                const zoomSrc = this.getAttribute('data-zoom');
+
+                // 使用GSAP实现图片切换动画
+                gsap.to(mainImage, {
+                    opacity: 0,
+                    duration: 0.3,
+                    onComplete: () => {
+                        mainImage.src = mainSrc;
+                        magnifiedImage.src = zoomSrc;
+                        gsap.to(mainImage, { opacity: 1, duration: 0.3 });
+                    }
+                });
+
+                // 放大区域也做动画
+                gsap.to(magnifierView, {
+                    opacity: 0,
+                    scale: 0.9,
+                    duration: 0.2,
+                    onComplete: () => {
+                        gsap.to(magnifierView, {
+                            opacity: 1,
+                            scale: 1,
+                            duration: 0.3,
+                            ease: "back.out(1.2)"
+                        });
+                    }
+                });
+            });
+        });
+
+        // 放大级别按钮点击事件
+        zoomButtons.forEach(btn => {
+            btn.addEventListener('click', function() {
+                zoomButtons.forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                currentZoomLevel = parseFloat(this.getAttribute('data-zoom'));
+
+                // 添加点击动画
+                gsap.to(this, {
+                    scale: 0.9,
+                    duration: 0.1,
+                    yoyo: true,
+                    repeat: 1
+                });
+            });
+        });
+
+        // 响应式调整放大镜大小
+        function adjustLensSize() {
+            if (window.innerWidth < 992) {
+                lensSize = 150;
+            } else {
+                lensSize = 200;
+            }
+            magnifierLens.style.width = `${lensSize}px`;
+            magnifierLens.style.height = `${lensSize}px`;
+        }
+
+        window.addEventListener('resize', adjustLensSize);
+        adjustLensSize();
+    });
+</script>
+</body>
+</html>

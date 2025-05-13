@@ -298,24 +298,23 @@
       input.addEventListener('focus', function() {
         const label = this.nextElementSibling;
         gsap.to(label, {
-          duration: 0.3,
-          y: -22,
-          x: -5,
+          top: -10,
+          left: 10,
           fontSize: '12px',
           color: '#667eea',
+          duration: 0.3,
           ease: "power2.out"
         });
       });
-
       input.addEventListener('blur', function() {
-        if (!this.value) {
+        if (this.value === '') {
           const label = this.nextElementSibling;
           gsap.to(label, {
-            duration: 0.3,
-            y: 0,
-            x: 0,
+            top: 12,
+            left: 15,
             fontSize: '16px',
             color: '#777',
+            duration: 0.3,
             ease: "power2.out"
           });
         }

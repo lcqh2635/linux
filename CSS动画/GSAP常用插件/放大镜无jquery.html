@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>优化版放大镜效果</title>
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            display: grid;
+            place-items: center;
+            background: linear-gradient(to bottom right, #000, #0000),
+            radial-gradient(circle at 0 100%, #cc338b, #284242);
+            font-family: "Italiana", serif;
+        }
+
+        .card {
+            position: relative;
+            display: grid;
+            place-items: start center;
+            width: calc(100% - 2rem);
+            max-width: 25rem;
+            outline: 3px solid #284242;
+            border-radius: 1rem;
+            box-shadow: 0.5rem 0.5rem 3rem -0.75rem rgba(0 0 0 / 0.7);
+            text-align: center;
+            overflow: hidden;
+            cursor: none;
+        }
+
+        .card > * {
+            grid-area: 1/1;
+        }
+
+        .card-image {
+            max-width: 100%;
+            object-fit: cover;
+            transform-origin: 90% 90%;
+            filter: brightness(1.3);
+            scale: 1.5;
+            transition: all 3s ease;
+        }
+
+        .card:hover .card-image {
+            filter: brightness(1);
+            scale: 1;
+        }
+
+        /* 放大镜样式 */
+        .magnifying-glass {
+            position: absolute;
+            height: 220px;
+            width: 220px;
+            scale: 0;
+            transition: scale 0.3s ease;
+            border-radius: 50%;
+            background: transparent;
+            box-shadow: inset 1px 2px 4px 3px rgba(255, 255, 255, 0.3),
+            inset 1px 2px 3px 2px rgba(255, 255, 255, 0.05),
+            inset 0 -40px 47px -18px rgba(0, 0, 0, 0.2),
+            inset -5px 5px 8px 0 rgba(0, 0, 0, 0.7),
+            inset -30px 15px 20px -10px rgba(0, 0, 0, 0.25),
+            inset -10px 10px 30px -5px rgba(0, 0, 0, 0.7),
+            inset -10px 10px 10px -5px rgba(0, 0, 0, 0.3),
+            inset 50px -50px 20px -10px rgba(108, 108, 108, 0.1),
+            1px 3px 8px 1px rgba(0, 0, 0, 0.4),
+            15px 38px 20px -30px rgba(0, 0, 0, 0.5),
+            0 0 3px rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            pointer-events: none;
+            z-index: 10;
+            background-repeat: no-repeat;
+            opacity: 0;
+            transform: translate(-50%, -50%);
+        }
+
+        .card:hover .magnifying-glass {
+            scale: 1;
+            opacity: 1;
+        }
+    </style>
+</head>
+<body>
+<div class="card">
+    <!-- 图片 -->
+    <img class="card-image" src="https://assets.codepen.io/4787486/man-in-suit-portrait.jpg" alt="Portrait of a man in suit"/>
+    <!-- 放大镜 -->
+    <div class="magnifying-glass"></div>
+</div>
+
+<script src='https://unpkg.co/gsap@3/dist/gsap.min.js'></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const card = document.querySelector('.card');
+        const magnifyingGlass = document.querySelector('.magnifying-glass');
+        const cardImage = document.querySelector('.card-image');
+
+        // 设置放大镜背景图片
+        magnifyingGlass.style.backgroundImage = `url('${cardImage.src}')`;
+
+        // 获取图片原始尺寸
+        let imgNaturalWidth = 0;
+        let imgNaturalHeight = 0;
+
+        const img = new Image();
+        img.src = cardImage.src;
+        img.onload = function() {
+            imgNaturalWidth = this.naturalWidth;
+            imgNaturalHeight = this.naturalHeight;
+        };
+
+        // 鼠标移动事件处理
+        card.addEventListener('mousemove', function(e) {
+            const rect = card.getBoundingClientRect();
+            const mouseX = e.clientX - rect.left;
+            const mouseY = e.clientY - rect.top;
+
+            // 计算放大镜位置
+            const glassX = mouseX;
+            const glassY = mouseY;
+
+            // 确保放大镜不会超出卡片边界
+            const glassWidth = parseInt(magnifyingGlass.style.width) || 220;
+            const glassHeight = parseInt(magnifyingGlass.style.height) || 220;
+
+            // 计算背景位置
+            if (imgNaturalWidth && imgNaturalHeight) {
+                const bgX = (mouseX / cardImage.width) * imgNaturalWidth - glassWidth / 2;
+                const bgY = (mouseY / cardImage.height) * imgNaturalHeight - glassHeight / 2;
+
+                magnifyingGlass.style.backgroundPosition = `-${bgX}px -${bgY}px`;
+                magnifyingGlass.style.backgroundSize = `${imgNaturalWidth}px ${imgNaturalHeight}px`;
+            }
+
+            // 更新放大镜位置
+            magnifyingGlass.style.left = `${glassX}px`;
+            magnifyingGlass.style.top = `${glassY}px`;
+        });
+
+        // 初始化动画
+        const tl = gsap.timeline();
+        tl.to(".card-image", {
+            filter: "brightness(1)",
+            scale: 1,
+            duration: 3,
+            ease: "expo.inOut"
+        });
+    });
+</script>
+</body>
+</html>

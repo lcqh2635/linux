@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+  <style>
+    * {
+      position: relative;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: "Pontano Sans", sans-serif;
+      font-size: 1.125rem;
+      line-height: 1.5;
+      margin: 0;
+      padding: 0;
+      color: #888;
+      background: #fff;
+      text-rendering: optimizeLegibility;
+    }
+
+    h1, h2 {
+      color: #333;
+      font-weight: normal;
+      margin: 1.75rem 0 1rem 0;
+    }
+
+    h1 {
+      font-size: 2.5rem;
+    }
+
+    h2 {
+      font-size: 2.125rem;
+      margin: 0;
+    }
+
+    .app {
+      margin: auto;
+      padding: 1rem;
+      padding-top: 3rem;
+      max-width: 75rem;
+      width: 100%;
+      display: flex;
+    }
+
+    .main-content {
+      padding-left: 1.5rem;
+      flex: 1;
+    }
+
+    .image-content {
+      width: 100%;
+      max-width: 400px;
+    }
+
+    .description {
+      border-top: 0.0625rem solid #e3dddd;
+      margin: 2rem 0;
+    }
+
+    .button {
+      position: relative;
+      display: inline-block;
+      background: #3e3e3f;
+      color: #fff;
+      border: none;
+      border-radius: 0;
+      padding: 1.25rem 2.5rem;
+      font-size: 1rem;
+      text-transform: uppercase;
+      cursor: pointer;
+      letter-spacing: 0.0625rem;
+    }
+
+    .image-container::before {
+      float: left;
+      padding-top: 133.76623376623376%;
+      content: "";
+    }
+
+    .image-container::after {
+      display: block;
+      content: "";
+      clear: both;
+    }
+
+    .images {
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      grid-template-rows: repeat(4, 1fr);
+      gap: 8px;
+      grid-template-areas:
+    "img-1 img-1 img-1"
+    "img-1 img-1 img-1"
+    "img-1 img-1 img-1"
+    "img-2 img-3 img-4";
+    }
+
+    .product {
+      /*background-size: contain;*/
+      background-size: cover;
+      background-repeat: no-repeat;
+      background-color: #fff;
+      cursor: pointer;
+      border: 1px solid #e3dddd;
+      will-change: transform;
+    }
+
+    .product[data-grid="img-1"] {
+      grid-area: img-1;
+      z-index: 1;
+      cursor: default;
+    }
+
+    .product[data-grid="img-2"] {
+      grid-area: img-2;
+    }
+
+    .product[data-grid="img-2"] {
+      grid-area: img-3;
+    }
+
+    .product[data-grid="img-4"] {
+      grid-area: img-4;
+    }
+
+    .product-1 {
+      background-image: url(https://assets.codepen.io/106114/iphone-1.webp);
+    }
+
+    .product-2 {
+      background-image: url(https://assets.codepen.io/106114/iphone-2.webp);
+    }
+
+    .product-3 {
+      background-image: url(https://assets.codepen.io/106114/iphone-3.webp);
+    }
+
+    .product-4 {
+      background-image: url(https://assets.codepen.io/106114/iphone-4.webp);
+    }
+
+    @media (max-width: 800px) {
+      .app {
+        flex-direction: column;
+      }
+
+      .image-content {
+        max-width: unset;
+      }
+
+      .main-content {
+        padding-top: 1.5rem;
+      }
+    }
+  </style>
+</head>
+<body>
+<div class="app">
+  <div class="image-content">
+    <div class="image-container">
+      <div class="images">
+        <div class="product product-1" data-grid="img-1"></div>
+        <div class="product product-2" data-grid="img-2"></div>
+        <div class="product product-3" data-grid="img-3"></div>
+        <div class="product product-4" data-grid="img-4"></div>
+      </div>
+    </div>
+  </div>
+  <div class="main-content">
+    <h1>iPhone 13 Pro</h1>
+    <h2>$1,099</h2>
+    <div class="description">
+      <p>
+        iPhone 13 专业版。有史以来最大的 Pro 相机系统升级。Super Retina XDR 显示屏搭载 ProMotion 自适应刷新率，带来更快、更灵敏的感觉。快如闪电的 A15 仿生芯片。超快的 5G.1 耐用的设计和电池寿命的巨大飞跃。
+      </p>
+      <p>
+        全新的 iPhone 13 系列释放了 T-Mobile 5G 网络的强大功能，利用扩展范围 5G 实现广泛覆盖，利用超大容量 5G 在更多地方实现超快的速度。得益于首次在 iPhone 13 上显示的全新超大容量 5G 图标，您将能够看到您何时位于 5GUC 覆盖的区域。所有数据计划都包括通过 T-Mobile 访问 5G。探索 iPhone 13 规格、评论，并立即购买可用颜色和存储大小。
+      </p>
+    </div>
+    <div class="button">加入购物车</div>
+  </div>
+</div>
+
+<!-- 引入 GSAP 和 Flip 插件 -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/Flip.min.js"></script>
+<script>
+  gsap.registerPlugin(Flip);
+
+  let products = gsap.utils.toArray(".product");
+  let active = products[0];
+
+  products.forEach(el => {
+    el.addEventListener("click", () => changeGrid(el));
+  });
+
+  function changeGrid(el) {
+    if (el === active) return;
+
+    let state = Flip.getState(products);
+    active.dataset.grid = el.dataset.grid;
+    el.dataset.grid = "img-1";
+    active = el;
+
+    Flip.from(state, {
+      duration: 0.3,
+      absolute: true,
+      ease: "power1.inOut"
+    });
+  }
+</script>
+</body>
+</html>

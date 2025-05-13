@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>动态登录注册切换</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #333;
+            overflow: hidden;
+        }
+
+        .container {
+            position: relative;
+            width: 800px;
+            height: 500px;
+            background-color: white;
+            border-radius: 20px;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+        }
+
+        .form-container {
+            position: absolute;
+            top: 0;
+            height: 100%;
+            width: 50%;
+            transition: all 0.6s ease-in-out;
+            padding: 50px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .login-container {
+            left: 0;
+            z-index: 2;
+        }
+
+        .input-group {
+            position: relative;
+            margin-bottom: 25px;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+            transition: all 0.3s;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 2px rgba(102, 126, 234, 0.2);
+        }
+
+        label {
+            position: absolute;
+            left: 15px;
+            top: 12px;
+            color: #777;
+            font-size: 16px;
+            transition: all 0.3s;
+            pointer-events: none;
+        }
+
+        input:focus + label,
+        input:not(:placeholder-shown) + label {
+            top: -10px;
+            left: 10px;
+            font-size: 12px;
+            background-color: white;
+            padding: 0 5px;
+            color: #667eea;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="form-container login-container">
+        <form action="#">
+            <div class="input-group">
+                <input type="email" id="loginEmail" placeholder=" ">
+                <label for="loginEmail">邮箱</label>
+            </div>
+            <div class="input-group">
+                <input type="password" id="loginPassword" placeholder=" ">
+                <label for="loginPassword">密码</label>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/gsap.min.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // 添加输入框动画
+        const inputs = document.querySelectorAll('input');
+        inputs.forEach(input => {
+            input.addEventListener('focus', function() {
+                const label = this.nextElementSibling;
+                gsap.to(label, {
+                    top: -10,
+                    left: 10,
+                    fontSize: '12px',
+                    color: '#667eea',
+                    duration: 0.3,
+                    ease: "power2.out"
+                });
+            });
+
+            input.addEventListener('blur', function() {
+                if (this.value === '') {
+                    const label = this.nextElementSibling;
+                    gsap.to(label, {
+                        top: 12,
+                        left: 15,
+                        fontSize: '16px',
+                        color: '#777',
+                        duration: 0.3,
+                        ease: "power2.out"
+                    });
+                }
+            });
+        });
+    });
+</script>
+</body>
+</html>

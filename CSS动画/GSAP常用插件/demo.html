@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>电商商品放大镜效果</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f8f9fa;
+            color: #333;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .product-container {
+            display: flex;
+            max-width: 1200px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            overflow: hidden;
+            position: relative;
+        }
+
+        .product-gallery {
+            flex: 1;
+            padding: 30px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .main-image-container {
+            position: relative;
+            width: 100%;
+            max-width: 500px;
+            height: 400px;
+            overflow: hidden;
+            border-radius: 8px;
+            cursor: zoom-in;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        }
+
+        .main-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+
+        .zoom-lens {
+            position: absolute;
+            width: 150px;
+            height: 150px;
+            border: 2px solid rgba(255, 255, 255, 0.8);
+            border-radius: 50%;
+            background-color: rgba(255, 255, 255, 0.3);
+            pointer-events: none;
+            transform: translate(-50%, -50%);
+            opacity: 0;
+            transition: opacity 0.2s ease;
+            backdrop-filter: blur(2px);
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .zoom-result {
+            position: absolute;
+            width: 400px;
+            height: 400px;
+            top: 0;
+            left: calc(100% + 20px);
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+            opacity: 0;
+            pointer-events: none;
+            transform: scale(0.95);
+            transform-origin: left center;
+            transition: opacity 0.3s ease, transform 0.3s ease;
+            border: 1px solid #eee;
+        }
+
+        .zoom-result.active {
+            opacity: 1;
+            transform: scale(1);
+            pointer-events: auto;
+        }
+
+        .zoom-result-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+
+        .thumbnail-container {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+            padding: 10px 0;
+            overflow-x: auto;
+            width: 100%;
+            scrollbar-width: thin;
+            scrollbar-color: #ddd transparent;
+        }
+
+        .thumbnail-container::-webkit-scrollbar {
+            height: 6px;
+        }
+
+        .thumbnail-container::-webkit-scrollbar-thumb {
+            background-color: #ddd;
+            border-radius: 3px;
+        }
+
+        .thumbnail {
+            width: 70px;
+            height: 70px;
+            border-radius: 6px;
+            object-fit: cover;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border: 2px solid transparent;
+        }
+
+        .thumbnail:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .thumbnail.active {
+            border-color: #4a6bff;
+        }
+
+        .product-details {
+            flex: 1;
+            padding: 40px;
+            background: linear-gradient(135deg, #f9f9f9 0%, #ffffff 100%);
+        }
+
+        .product-title {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 10px;
+            color: #222;
+        }
+
+        .product-brand {
+            color: #666;
+            font-size: 16px;
+            margin-bottom: 20px;
+            display: inline-block;
+            padding: 4px 10px;
+            background: #f0f0f0;
+            border-radius: 4px;
+        }
+
+        .product-price {
+            font-size: 24px;
+            font-weight: 700;
+            color: #4a6bff;
+            margin: 20px 0;
+        }
+
+        .product-description {
+            color: #555;
+            line-height: 1.6;
+            margin-bottom: 25px;
+        }
+
+        .color-options {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .color-option {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            cursor: pointer;
+            border: 2px solid transparent;
+            transition: transform 0.2s ease;
+        }
+
+        .color-option:hover {
+            transform: scale(1.1);
+        }
+
+        .color-option.active {
+            border-color: #333;
+            transform: scale(1.1);
+        }
+
+        .size-options {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 30px;
+        }
+
+        .size-option {
+            padding: 8px 15px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .size-option:hover {
+            background: #f0f0f0;
+        }
+
+        .size-option.active {
+            background: #4a6bff;
+            color: white;
+            border-color: #4a6bff;
+        }
+
+        .add-to-cart {
+            background: #4a6bff;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            font-size: 16px;
+            font-weight: 600;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(74, 107, 255, 0.3);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .add-to-cart:hover {
+            background: #3a5bef;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(74, 107, 255, 0.4);
+        }
+
+        .add-to-cart:active {
+            transform: translateY(0);
+        }
+
+        .product-meta {
+            margin-top: 30px;
+            font-size: 14px;
+            color: #777;
+        }
+
+        @media (max-width: 992px) {
+            .product-container {
+                flex-direction: column;
+            }
+
+            .zoom-result {
+                display: none;
+            }
+
+            .main-image-container {
+                height: 300px;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="product-container">
+    <div class="product-gallery">
+        <div class="main-image-container" id="imageContainer">
+            <img src="https://images.unsplash.com/photo-1546868871-7041f2a55e12?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" alt="Product" class="main-image" id="mainImage">
+            <div class="zoom-lens" id="zoomLens"></div>
+            <div class="zoom-result" id="zoomResult">
+                <img src="https://images.unsplash.com/photo-1546868871-7041f2a55e12?ixlib=rb-1.2.1&auto=format&fit=crop&w=1600&q=80" alt="Zoomed Product" class="zoom-result-img" id="zoomResultImg">
+            </div>
+        </div>
+        <div class="thumbnail-container">
+            <img src="https://images.unsplash.com/photo-1546868871-7041f2a55e12?ixlib=rb-1.2.1&auto=format&fit=crop&w=200&q=80" alt="Thumbnail 1" class="thumbnail active" data-main="https://images.unsplash.com/photo-1546868871-7041f2a55e12?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" data-zoom="https://images.unsplash.com/photo-1546868871-7041f2a55e12?ixlib=rb-1.2.1&auto=format&fit=crop&w=1600&q=80">
+            <img src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?ixlib=rb-1.2.1&auto=format&fit=crop&w=200&q=80" alt="Thumbnail 2" class="thumbnail" data-main="https://images.unsplash.com/photo-1523275335684-37898b6baf30?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" data-zoom="https://images.unsplash.com/photo-1523275335684-37898b6baf30?ixlib=rb-1.2.1&auto=format&fit=crop&w=1600&q=80">
+            <img src="https://images.unsplash.com/photo-1572635196237-14b3f281503f?ixlib=rb-1.2.1&auto=format&fit=crop&w=200&q=80" alt="Thumbnail 3" class="thumbnail" data-main="https://images.unsplash.com/photo-1572635196237-14b3f281503f?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" data-zoom="https://images.unsplash.com/photo-1572635196237-14b3f281503f?ixlib=rb-1.2.1&auto=format&fit=crop&w=1600&q=80">
+            <img src="https://images.unsplash.com/photo-1526170375885-4d8ecf77b99f?ixlib=rb-1.2.1&auto=format&fit=crop&w=200&q=80" alt="Thumbnail 4" class="thumbnail" data-main="https://images.unsplash.com/photo-1526170375885-4d8ecf77b99f?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" data-zoom="https://images.unsplash.com/photo-1526170375885-4d8ecf77b99f?ixlib=rb-1.2.1&auto=format&fit=crop&w=1600&q=80">
+        </div>
+    </div>
+    <div class="product-details">
+        <h1 class="product-title">高级智能手表 Pro</h1>
+        <span class="product-brand">TechMaster</span>
+        <div class="product-price">¥2,499</div>
+        <p class="product-description">
+            这款智能手表采用最新一代处理器，提供超长续航和流畅体验。1.4英寸AMOLED显示屏，支持全天候显示。内置GPS、心率监测、血氧检测等功能，支持50米防水，是您健康生活和运动训练的理想伴侣。
+        </p>
+        <div class="color-options">
+            <div class="color-option active" style="background-color: #2c3e50;" data-color="深空灰"></div>
+            <div class="color-option" style="background-color: #e74c3c;" data-color="玫瑰金"></div>
+            <div class="color-option" style="background-color: #3498db;" data-color="午夜蓝"></div>
+            <div class="color-option" style="background-color: #f1c40f;" data-color="香槟金"></div>
+        </div>
+        <div class="size-options">
+            <div class="size-option active">40mm</div>
+            <div class="size-option">44mm</div>
+        </div>
+        <button class="add-to-cart">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                <path d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .491.592l-1.5 8A.5.5 0 0 1 13 12H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5zM3.102 4l1.313 7h8.17l1.313-7H3.102zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/>
+            </svg>
+            加入购物车
+        </button>
+        <div class="product-meta">
+            <p>免费送货 | 30天无理由退换 | 2年保修</p>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/gsap.min.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const imageContainer = document.getElementById('imageContainer');
+        const mainImage = document.getElementById('mainImage');
+        const zoomLens = document.getElementById('zoomLens');
+        const zoomResult = document.getElementById('zoomResult');
+        const zoomResultImg = document.getElementById('zoomResultImg');
+        const thumbnails = document.querySelectorAll('.thumbnail');
+        const colorOptions = document.querySelectorAll('.color-option');
+        const sizeOptions = document.querySelectorAll('.size-option');
+
+        let isZoomActive = false;
+        let lensSize = 150;
+
+        // 初始化GSAP动画
+        gsap.set(zoomResult, { opacity: 0, scale: 0.95 });
+
+        // 鼠标进入图片区域时显示放大镜
+        imageContainer.addEventListener('mouseenter', function() {
+            isZoomActive = true;
+            gsap.to(zoomLens, { opacity: 1, duration: 0.2 });
+            gsap.to(zoomResult, {
+                opacity: 1,
+                scale: 1,
+                duration: 0.3,
+                ease: "back.out(1.2)"
+            });
+        });
+
+        // 鼠标离开图片区域时隐藏放大镜
+        imageContainer.addEventListener('mouseleave', function() {
+            isZoomActive = false;
+            gsap.to(zoomLens, { opacity: 0, duration: 0.2 });
+            gsap.to(zoomResult, {
+                opacity: 0,
+                scale: 0.95,
+                duration: 0.3,
+                ease: "back.in(1.2)"
+            });
+        });
+
+        // 鼠标移动时更新放大镜位置
+        imageContainer.addEventListener('mousemove', function(e) {
+            if (!isZoomActive) return;
+
+            const containerRect = imageContainer.getBoundingClientRect();
+            const imgRect = mainImage.getBoundingClientRect();
+
+            // 计算鼠标相对于图片的位置
+            let x = e.clientX - imgRect.left;
+            let y = e.clientY - imgRect.top;
+
+            // 限制放大镜不超出图片边界
+            x = Math.max(lensSize / 2, Math.min(x, imgRect.width - lensSize / 2));
+            y = Math.max(lensSize / 2, Math.min(y, imgRect.height - lensSize / 2));
+
+            // 更新放大镜位置
+            gsap.to(zoomLens, {
+                x: x,
+                y: y,
+                duration: 0.1,
+                ease: "power1.out"
+            });
+
+            // 计算放大的背景位置
+            const backgroundX = (x / imgRect.width) * 100;
+            const backgroundY = (y / imgRect.height) * 100;
+
+            // 更新放大图片的位置
+            zoomResultImg.style.transform = `translate(-${backgroundX}%, -${backgroundY}%) scale(2)`;
+        });
+
+        // 缩略图点击事件
+        thumbnails.forEach(thumb => {
+            thumb.addEventListener('click', function() {
+                // 更新激活状态
+                thumbnails.forEach(t => t.classList.remove('active'));
+                this.classList.add('active');
+
+                // 获取大图和放大图URL
+                const mainSrc = this.getAttribute('data-main');
+                const zoomSrc = this.getAttribute('data-zoom');
+
+                // 使用GSAP实现图片切换动画
+                gsap.to(mainImage, {
+                    opacity: 0,
+                    duration: 0.3,
+                    onComplete: () => {
+                        mainImage.src = mainSrc;
+                        zoomResultImg.src = zoomSrc;
+                        gsap.to(mainImage, { opacity: 1, duration: 0.3 });
+                    }
+                });
+
+                // 放大区域也做动画
+                gsap.to(zoomResult, {
+                    opacity: 0,
+                    scale: 0.9,
+                    duration: 0.2,
+                    onComplete: () => {
+                        gsap.to(zoomResult, {
+                            opacity: 1,
+                            scale: 1,
+                            duration: 0.3,
+                            ease: "back.out(1.2)"
+                        });
+                    }
+                });
+            });
+        });
+
+        // 颜色选项点击事件
+        colorOptions.forEach(option => {
+            option.addEventListener('click', function() {
+                colorOptions.forEach(opt => opt.classList.remove('active'));
+                this.classList.add('active');
+
+                // 添加点击动画
+                gsap.to(this, {
+                    scale: 0.9,
+                    duration: 0.1,
+                    yoyo: true,
+                    repeat: 1
+                });
+            });
+        });
+
+        // 尺寸选项点击事件
+        sizeOptions.forEach(option => {
+            option.addEventListener('click', function() {
+                sizeOptions.forEach(opt => opt.classList.remove('active'));
+                this.classList.add('active');
+
+                // 添加点击动画
+                gsap.to(this, {
+                    scale: 0.95,
+                    duration: 0.1,
+                    yoyo: true,
+                    repeat: 1
+                });
+            });
+        });
+
+        // 加入购物车按钮动画
+        const addToCartBtn = document.querySelector('.add-to-cart');
+        addToCartBtn.addEventListener('click', function() {
+            gsap.to(this, {
+                scale: 0.95,
+                duration: 0.1,
+                yoyo: true,
+                repeat: 1,
+                onComplete: () => {
+                    // 这里可以添加加入购物车的逻辑
+                    alert('商品已加入购物车！');
+                }
+            });
+        });
+
+        // 响应式调整放大镜大小
+        function adjustLensSize() {
+            if (window.innerWidth < 992) {
+                lensSize = 100;
+            } else {
+                lensSize = 150;
+            }
+            zoomLens.style.width = `${lensSize}px`;
+            zoomLens.style.height = `${lensSize}px`;
+        }
+
+        window.addEventListener('resize', adjustLensSize);
+        adjustLensSize();
+    });
+</script>
+</body>
+</html>
