@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>优化版回到顶部示例</title>
+    <style>
+        /* 基础样式重置与优化 */
+        :root {
+            --primary-color: #4361ee;
+            --primary-hover: #3a56d4;
+            --text-color: #2b2d42;
+            --light-color: #f8f9fa;
+            --shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
+            --transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', sans-serif;
+            line-height: 1.6;
+            color: var(--text-color);
+            background: linear-gradient(to bottom, #f5f7fa, #c3cfe2);
+            min-height: 200vh; /* 使用min-height代替height */
+            padding: 2rem;
+        }
+
+        h1 {
+            text-align: center;
+            margin: 2.5rem 0;
+            color: var(--text-color);
+            font-weight: 600;
+        }
+
+        .content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        p {
+            margin-bottom: 1.25rem;
+            color: var(--text-color);
+        }
+
+        /* 回到顶部按钮样式 - 优化版 */
+        .back-to-top {
+            /* 定位 */
+            position: fixed;
+            right: 2rem;
+            bottom: 2rem;
+            z-index: 99;
+
+            /* 初始状态 */
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(1rem);
+
+            /* 按钮样式 */
+            width: 3.125rem;
+            height: 3.125rem;
+            background-color: var(--primary-color);
+            color: var(--light-color);
+            border-radius: 50%;
+            border: none;
+            cursor: pointer;
+            box-shadow: var(--shadow);
+
+            /* 过渡效果 */
+            transition: var(--transition);
+
+            /* 布局 */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            /* 可访问性 */
+            outline: none;
+        }
+
+        /* 按钮显示状态 */
+        .back-to-top.show {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        /* 悬停和焦点状态 */
+        .back-to-top:hover,
+        .back-to-top:focus {
+            background-color: var(--primary-hover);
+            transform: translateY(-0.25rem);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        /* 按钮图标 - 使用伪元素创建更美观的箭头 */
+        .back-to-top::after {
+            content: '↑';
+            font-size: 1.25rem;
+            font-weight: bold;
+        }
+
+        /* 响应式设计优化 */
+        @media (max-width: 768px) {
+            .back-to-top {
+                width: 2.5rem;
+                height: 2.5rem;
+                right: 1rem;
+                bottom: 1rem;
+            }
+
+            .back-to-top::after {
+                font-size: 1rem;
+            }
+        }
+
+        /* 减少运动偏好设置 */
+        @media (prefers-reduced-motion: reduce) {
+            .back-to-top {
+                transition: none;
+            }
+        }
+    </style>
+</head>
+<body>
+<h1>优化版回到顶部按钮示例</h1>
+
+<div class="content">
+    <p>这是一个优化后的回到顶部实现，使用了现代浏览器支持的平滑滚动API，并改进了可访问性和性能。</p>
+
+    <!-- 更多内容用于使页面可滚动 -->
+    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam in dui mauris. Vivamus hendrerit arcu sed erat molestie vehicula. Sed auctor neque eu tellus rhoncus ut eleifend nibh porttitor. Ut in nulla enim. Phasellus molestie magna non est bibendum non venenatis nisl tempor. Suspendisse dictum feugiat nisl ut dapibus.</p>
+    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam in dui mauris. Vivamus hendrerit arcu sed erat molestie vehicula. Sed auctor neque eu tellus rhoncus ut eleifend nibh porttitor. Ut in nulla enim. Phasellus molestie magna non est bibendum non venenatis nisl tempor. Suspendisse dictum feugiat nisl ut dapibus.</p>
+    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam in dui mauris. Vivamus hendrerit arcu sed erat molestie vehicula. Sed auctor neque eu tellus rhoncus ut eleifend nibh porttitor. Ut in nulla enim. Phasellus molestie magna non est bibendum non venenatis nisl tempor. Suspendisse dictum feugiat nisl ut dapibus.</p>
+    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam in dui mauris. Vivamus hendrerit arcu sed erat molestie vehicula. Sed auctor neque eu tellus rhoncus ut eleifend nibh porttitor. Ut in nulla enim. Phasellus molestie magna non est bibendum non venenatis nisl tempor. Suspendisse dictum feugiat nisl ut dapibus.</p>
+    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam in dui mauris. Vivamus hendrerit arcu sed erat molestie vehicula. Sed auctor neque eu tellus rhoncus ut eleifend nibh porttitor. Ut in nulla enim. Phasellus molestie magna non est bibendum non venenatis nisl tempor. Suspendisse dictum feugiat nisl ut dapibus.</p>
+</div>
+
+<!-- 回到顶部按钮 - 添加了ARIA标签 -->
+<button class="back-to-top" aria-label="回到顶部" title="回到顶部"></button>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const backToTopButton = document.querySelector('.back-to-top');
+        const scrollThreshold = 300; // 显示按钮的滚动阈值
+        let isScrolling = false;
+
+        // 使用requestAnimationFrame进行节流的滚动处理
+        function handleScroll() {
+            if (isScrolling) return;
+
+            isScrolling = true;
+
+            requestAnimationFrame(() => {
+                // 更新按钮可见性
+                if (window.pageYOffset > scrollThreshold) {
+                    backToTopButton.classList.add('show');
+                } else {
+                    backToTopButton.classList.remove('show');
+                }
+
+                isScrolling = false;
+            });
+        }
+
+        // 使用被动事件监听器提升滚动性能
+        window.addEventListener('scroll', handleScroll, { passive: true });
+
+        // 平滑滚动到顶部
+        backToTopButton.addEventListener('click', (e) => {
+            e.preventDefault();
+
+            // 现代浏览器支持的平滑滚动API
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+
+            // 为按钮移除焦点，避免键盘导航时的焦点样式
+            backToTopButton.blur();
+        });
+
+        // 键盘可访问性 - 支持Enter键触发
+        backToTopButton.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                window.scrollTo({
+                    top: 0,
+                    behavior: 'smooth'
+                });
+            }
+        });
+    });
+</script>
+</body>
+</html>

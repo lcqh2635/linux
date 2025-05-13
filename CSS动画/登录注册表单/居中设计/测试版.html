@@ -8,149 +8,356 @@
     <style>
         @import url('https://fonts.googleapis.com/css?family=Montserrat:400,800');
 
+        :root {
+            --primary-color: #4361ee;
+            --secondary-color: #3f37c9;
+            --text-color: #2b2d42;
+            --bg-color: #f8f9fa;
+            --card-color: #ffffff;
+            --input-bg: #f1f3f5;
+            --shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s ease;
+            --social-divider-color: #dee2e6;
+            --active-language-bg: rgba(67, 97, 238, 0.1);
+            --control-btn-bg: rgba(0, 0, 0, 0.1);
+            --control-btn-color: #2b2d42;
+            --dropdown-gap: 10px;
+        }
+
+        .dark-mode {
+            --primary-color: #4895ef;
+            --secondary-color: #4361ee;
+            --text-color: #f8f9fa;
+            --bg-color: #121212;
+            --card-color: #1e1e1e;
+            --input-bg: #2d2d2d;
+            --shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            --social-divider-color: #495057;
+            --active-language-bg: rgba(72, 149, 239, 0.2);
+            --control-btn-bg: rgba(255, 255, 255, 0.2);
+            --control-btn-color: white;
+        }
+
         * {
+            margin: 0;
+            padding: 0;
             box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
 
         body {
-            background: #f6f5f7;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
-            flex-direction: column;
-            font-family: 'Montserrat', sans-serif;
-            height: 100vh;
-            margin: -20px 0 50px;
+            overflow-x: hidden;
         }
-
-        h1 {
-            font-weight: bold;
-            margin: 0;
-        }
-
-        h2 {
-            text-align: center;
-        }
-
-        p {
-            font-size: 14px;
-            font-weight: 100;
-            line-height: 20px;
-            letter-spacing: 0.5px;
-            margin: 20px 0 30px;
-        }
-
-        span {
-            font-size: 12px;
-        }
-
-        a {
-            color: #333;
-            font-size: 14px;
-            text-decoration: none;
-            margin: 15px 0;
-        }
-
-        button {
-            border-radius: 20px;
-            border: 1px solid #FF4B2B;
-            background-color: #FF4B2B;
-            color: #FFFFFF;
-            font-size: 12px;
-            font-weight: bold;
-            padding: 12px 45px;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-            transition: transform 80ms ease-in;
-        }
-
-        button:active {
-            transform: scale(0.95);
-        }
-
-        button:focus {
-            outline: none;
-        }
-
-        button.ghost {
-            background-color: transparent;
-            border-color: #FFFFFF;
-        }
-
-        form {
-            background-color: #FFFFFF;
+        /* 全局控制按钮 */
+        .global-controls {
+            position: fixed;
+            top: 20px;
+            right: 20px;
             display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-direction: column;
-            padding: 0 50px;
-            height: 100%;
-            text-align: center;
+            gap: 10px;
+            z-index: 1000;
         }
 
-        input {
-            background-color: #eee;
+        .control-btn {
+            background-color: var(--control-btn-bg);
             border: none;
-            padding: 12px 15px;
-            margin: 8px 0;
-            width: 100%;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: var(--control-btn-color);
+            cursor: pointer;
+            transition: var(--transition);
         }
 
-        .container {
-            background-color: #fff;
-            border-radius: 10px;
-            box-shadow: 0 14px 28px rgba(0,0,0,0.25),
-            0 10px 10px rgba(0,0,0,0.22);
+        .control-btn:hover {
+            background-color: var(--primary-color);
+            color: white;
+            transform: scale(1.1);
+        }
+
+        .dropdown {
             position: relative;
-            overflow: hidden;
-            width: 768px;
-            max-width: 100%;
-            min-height: 480px;
+            display: inline-block;
         }
 
-        .form-container {
+        .dropdown-content {
             position: absolute;
-            top: 0;
-            height: 100%;
-            transition: all 0.6s ease-in-out;
+            right: 0;
+            background-color: var(--card-color);
+            min-width: 160px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            z-index: 1;
+            overflow: hidden;
+            transform-origin: top right;
+            transform: scale(0);
+            opacity: 0;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            margin-top: var(--dropdown-gap);
         }
 
-        .sign-in-container {
+        .dropdown.active .dropdown-content {
+            transform: scale(1);
+            opacity: 1;
+        }
+
+        .dark-mode .dropdown-content {
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+        }
+
+        .dropdown-content a {
+            color: var(--text-color);
+            padding: 10px 15px;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            font-size: 0.9rem;
+            transition: var(--transition);
+        }
+
+        .dropdown-content a:hover {
+            background-color: var(--input-bg);
+        }
+
+        .dropdown-content a.active {
+            background-color: var(--active-language-bg);
+            color: var(--primary-color);
+            cursor: default;
+            pointer-events: none;
+        }
+
+        .dropdown-content a.active .flag-icon {
+            box-shadow: 0 0 0 2px var(--primary-color);
+        }
+
+        .flag-icon {
+            width: 20px;
+            height: 15px;
+            margin-right: 10px;
+            border-radius: 2px;
+        }
+
+
+        /* 登录注册容器 */
+        .auth-container {
+            position: relative;
+            width: 900px;
+            max-width: 90%;
+            height: 550px;
+            background-color: var(--card-color);
+            border-radius: 20px;
+            box-shadow: var(--shadow);
+            overflow: hidden;
+            transition: var(--transition);
+        }
+
+        .form-wrapper {
+            position: absolute;
+            width: 50%;
+            height: 100%;
+            padding: 2.5rem;
+            transition: transform 0.6s ease-in-out;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        
+        .login-wrapper {
             left: 0;
             width: 50%;
             z-index: 2;
         }
 
-        .container.right-panel-active .sign-in-container {
+        .auth-container.right-panel-active .login-wrapper {
             transform: translateX(100%);
         }
 
-        .sign-up-container {
+        .register-wrapper {
             left: 0;
             width: 50%;
             opacity: 0;
             z-index: 1;
         }
 
-        .container.right-panel-active .sign-up-container {
+        .auth-container.right-panel-active .register-wrapper {
             transform: translateX(100%);
             opacity: 1;
             z-index: 5;
             animation: show 0.6s;
         }
 
-        @keyframes show {
-            0%, 49.99% {
-                opacity: 0;
-                z-index: 1;
-            }
-
-            50%, 100% {
-                opacity: 1;
-                z-index: 5;
-            }
+        .card-title {
+            text-align: center;
+            margin-bottom: 2rem;
         }
 
+        .card-title h1 {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+            font-weight: 700;
+        }
+
+        .card-title p {
+            color: #6c757d;
+            font-size: 0.9rem;
+        }
+
+        .dark-mode .card-title p {
+            color: #adb5bd;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            font-size: 0.9rem;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 0.8rem 1rem;
+            border: none;
+            border-radius: 10px;
+            background-color: var(--input-bg);
+            color: var(--text-color);
+            font-size: 1rem;
+            transition: var(--transition);
+        }
+
+        .form-control:focus {
+            outline: none;
+            box-shadow: 0 0 0 2px var(--primary-color);
+        }
+
+        .options {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            font-size: 0.9rem;
+        }
+
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+        }
+
+        .checkbox-group input {
+            margin-right: 0.5rem;
+        }
+
+        .link-btn {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 500;
+            transition: var(--transition);
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 0;
+            font-size: inherit;
+        }
+
+        .link-btn:hover {
+            text-decoration: underline;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 0.8rem;
+            border: none;
+            border-radius: 10px;
+            background-color: var(--primary-color);
+            color: white;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            margin-bottom: 1.5rem;
+        }
+
+        .btn:hover {
+            background-color: var(--secondary-color);
+            transform: translateY(-2px);
+        }
+
+        .social-login {
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .social-login p {
+            position: relative;
+            margin-bottom: 1rem;
+            font-size: 0.9rem;
+            color: #6c757d;
+        }
+
+        .dark-mode .social-login p {
+            color: #adb5bd;
+        }
+
+        .social-login p::before,
+        .social-login p::after {
+            content: "";
+            position: absolute;
+            top: 50%;
+            width: 30%;
+            height: 1px;
+            background-color: var(--social-divider-color);
+        }
+
+        .social-login p::before {
+            left: 0;
+        }
+
+        .social-login p::after {
+            right: 0;
+        }
+
+        .social-icons {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+        }
+
+        .social-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: var(--input-bg);
+            color: var(--text-color);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .social-icon:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .dark-mode .social-icon:hover {
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+
+
+        /* 切换面板 */
         .overlay-container {
             position: absolute;
             top: 0;
@@ -162,7 +369,7 @@
             z-index: 100;
         }
 
-        .container.right-panel-active .overlay-container{
+        .auth-container.right-panel-active .overlay-container{
             transform: translateX(-100%);
         }
 
@@ -182,7 +389,7 @@
             transition: transform 0.6s ease-in-out;
         }
 
-        .container.right-panel-active .overlay {
+        .auth-container.right-panel-active .overlay {
             transform: translateX(50%);
         }
 
@@ -205,7 +412,7 @@
             transform: translateX(-20%);
         }
 
-        .container.right-panel-active .overlay-left {
+        .auth-container.right-panel-active .overlay-left {
             transform: translateX(0);
         }
 
@@ -214,94 +421,118 @@
             transform: translateX(0);
         }
 
-        .container.right-panel-active .overlay-right {
+        .auth-container.right-panel-active .overlay-right {
             transform: translateX(20%);
-        }
-
-        .social-container {
-            margin: 20px 0;
-        }
-
-        .social-container a {
-            border: 1px solid #DDDDDD;
-            border-radius: 50%;
-            display: inline-flex;
-            justify-content: center;
-            align-items: center;
-            margin: 0 5px;
-            height: 40px;
-            width: 40px;
-        }
-
-        footer {
-            background-color: #222;
-            color: #fff;
-            font-size: 14px;
-            bottom: 0;
-            position: fixed;
-            left: 0;
-            right: 0;
-            text-align: center;
-            z-index: 999;
-        }
-
-        footer p {
-            margin: 10px 0;
-        }
-
-        footer i {
-            color: red;
-        }
-
-        footer a {
-            color: #3c97bf;
-            text-decoration: none;
         }
     </style>
 </head>
 <body>
-<div class="container" id="container">
-    <div class="form-container sign-up-container">
-        <form action="#">
-            <h1>Create Account</h1>
-            <div class="social-container">
-                <a href="#" class="social"><i class="fab fa-facebook-f"></i></a>
-                <a href="#" class="social"><i class="fab fa-google-plus-g"></i></a>
-                <a href="#" class="social"><i class="fab fa-linkedin-in"></i></a>
+<!-- 全局控制按钮 - 固定在右上角 -->
+<div class="global-controls">
+    <div class="dropdown" id="language-dropdown">
+        <div class="control-btn" id="language-toggle">
+            <i class="fas fa-globe"></i>
+        </div>
+        <div class="dropdown-content">
+            <a href="#" data-lang="zh" class="active">
+                <img src="https://flagcdn.com/w20/cn.png" class="flag-icon" alt="中文"> 中文
+            </a>
+            <a href="#" data-lang="en">
+                <img src="https://flagcdn.com/w20/us.png" class="flag-icon" alt="English"> English
+            </a>
+            <a href="#" data-lang="es">
+                <img src="https://flagcdn.com/w20/es.png" class="flag-icon" alt="Español"> Español
+            </a>
+            <a href="#" data-lang="ja">
+                <img src="https://flagcdn.com/w20/jp.png" class="flag-icon" alt="日本語"> 日本語
+            </a>
+        </div>
+    </div>
+    <div class="control-btn" id="theme-toggle">
+        <i class="fas fa-moon"></i>
+    </div>
+</div>
+
+<!-- 登录注册容器 -->
+<div class="auth-container" id="auth-container">
+    <!-- 登录表单 -->
+    <div class="form-wrapper login-wrapper">
+        <div class="card-title">
+            <h1>欢迎回来</h1>
+            <p>请输入您的凭据以登录您的帐户</p>
+        </div>
+        <form id="login-form">
+            <div class="form-group">
+                <label for="email">电子邮箱</label>
+                <input type="email" id="email" class="form-control" placeholder="请输入您的邮箱地址" required>
             </div>
-            <span>or use your email for registration</span>
-            <input type="text" placeholder="Name" />
-            <input type="email" placeholder="Email" />
-            <input type="password" placeholder="Password" />
-            <button>Sign Up</button>
+            <div class="form-group">
+                <label for="password">密码</label>
+                <input type="password" id="password" class="form-control" placeholder="请输入您的密码" required>
+            </div>
+            <div class="options">
+                <div class="checkbox-group">
+                    <input type="checkbox" id="remember">
+                    <label for="remember">记住我</label>
+                </div>
+                <button type="button" class="link-btn" id="forgot-password-btn">忘记密码?</button>
+            </div>
+            <button type="submit" class="btn">登录</button>
+            <div class="social-login">
+                <p>或使用以下方式登录</p>
+                <div class="social-icons">
+                    <div class="social-icon">
+                        <i class="fab fa-google"></i>
+                    </div>
+                    <div class="social-icon">
+                        <i class="fab fa-facebook-f"></i>
+                    </div>
+                    <div class="social-icon">
+                        <i class="fab fa-twitter"></i>
+                    </div>
+                    <div class="social-icon">
+                        <i class="fab fa-github"></i>
+                    </div>
+                </div>
+            </div>
         </form>
     </div>
-    <div class="form-container sign-in-container">
-        <form action="#">
-            <h1>Sign in</h1>
-            <div class="social-container">
-                <a href="#" class="social"><i class="fab fa-facebook-f"></i></a>
-                <a href="#" class="social"><i class="fab fa-google-plus-g"></i></a>
-                <a href="#" class="social"><i class="fab fa-linkedin-in"></i></a>
+
+    <!-- 注册表单 -->
+    <div class="form-wrapper register-wrapper">
+        <div class="card-title">
+            <h1>创建账号</h1>
+            <p>填写以下信息创建新帐户</p>
+        </div>
+        <form id="register-form">
+            <div class="form-group">
+                <label for="reg-email">电子邮箱</label>
+                <input type="email" id="reg-email" class="form-control" placeholder="请输入您的邮箱地址" required>
             </div>
-            <span>or use your account</span>
-            <input type="email" placeholder="Email" />
-            <input type="password" placeholder="Password" />
-            <a href="#">Forgot your password?</a>
-            <button>Sign In</button>
+            <div class="form-group">
+                <label for="reg-password">密码</label>
+                <input type="password" id="reg-password" class="form-control" placeholder="请输入密码(至少8位)" required>
+            </div>
+            <div class="form-group">
+                <label for="reg-confirm-password">确认密码</label>
+                <input type="password" id="reg-confirm-password" class="form-control" placeholder="请再次输入密码" required>
+            </div>
+            <button type="submit" class="btn">注册</button>
         </form>
     </div>
+
+    <!-- 切换面板 -->
     <div class="overlay-container">
         <div class="overlay">
             <div class="overlay-panel overlay-left">
-                <h1>Welcome Back!</h1>
-                <p>To keep connected with us please login with your personal info</p>
-                <button class="ghost" id="signIn">Sign In</button>
+                <h2>新用户?</h2>
+                <p>注册账号，开启您的个性化体验之旅</p>
+                <button class="ghost" id="signIn">注册</button>
             </div>
             <div class="overlay-panel overlay-right">
-                <h1>Hello, Friend!</h1>
-                <p>Enter your personal details and start journey with us</p>
-                <button class="ghost" id="signUp">Sign Up</button>
+                <h2>已有账号?</h2>
+                <p>立即登录您的账号，继续您的旅程</p>
+                <button class="ghost" id="signUp">登录</button>
             </div>
         </div>
     </div>
@@ -309,10 +540,108 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/gsap.min.js"></script>
 <script>
+    // 防止主题切换时的闪烁
+    document.addEventListener('DOMContentLoaded', function() {
+        // 确保所有元素在页面加载时就有正确的样式
+        document.body.style.visibility = 'hidden';
+
+        // 添加过渡样式
+        const style = document.createElement('style');
+        style.textContent = `
+                body, .auth-container, .form-control, .social-icon, .social-login p::before,
+                .social-login p::after, .toggle-btn, .toggle-panel {
+                    transition: background-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease, transform 0.6s ease-in-out;
+                }
+            `;
+        document.head.appendChild(style);
+
+        // 确保页面加载完成后再显示
+        setTimeout(() => {
+            document.body.style.visibility = 'visible';
+        }, 50);
+    });
+
+    // 暗黑模式切换
+    const themeToggle = document.getElementById('theme-toggle');
+    const themeIcon = themeToggle.querySelector('i');
+
+    themeToggle.addEventListener('click', () => {
+        document.body.classList.toggle('dark-mode');
+
+        if (document.body.classList.contains('dark-mode')) {
+            themeIcon.classList.remove('fa-moon');
+            themeIcon.classList.add('fa-sun');
+        } else {
+            themeIcon.classList.remove('fa-sun');
+            themeIcon.classList.add('fa-moon');
+        }
+    });
+
+    // 语言切换功能
+    const languageDropdown = document.getElementById('language-dropdown');
+    const languageToggle = document.getElementById('language-toggle');
+    const dropdownContent = languageDropdown.querySelector('.dropdown-content');
+    let currentLanguage = 'zh'; // 默认语言设置为中文
+
+    // 点击语言图标切换下拉菜单
+    languageToggle.addEventListener('click', (e) => {
+        e.stopPropagation();
+        languageDropdown.classList.toggle('active');
+    });
+
+    // 点击语言选项
+    dropdownContent.querySelectorAll('a').forEach(item => {
+        item.addEventListener('click', (e) => {
+            const lang = item.getAttribute('data-lang');
+            if (lang === currentLanguage) {
+                e.preventDefault();
+                return;
+            }
+
+            // 更新当前语言
+            setActiveLanguage(lang);
+            console.log('切换语言:', lang);
+            // 这里可以添加实际的语言切换逻辑
+            languageDropdown.classList.remove('active');
+        });
+    });
+
+    // 设置激活语言
+    function setActiveLanguage(lang) {
+        currentLanguage = lang;
+
+        // 更新所有语言选项状态
+        dropdownContent.querySelectorAll('a').forEach(item => {
+            if (item.getAttribute('data-lang') === lang) {
+                item.classList.add('active');
+                // 更新语言图标显示
+                const flagIcon = item.querySelector('.flag-icon').src;
+                languageToggle.innerHTML = `<img src="${flagIcon}" style="width:20px;height:15px;border-radius:2px;">`;
+            } else {
+                item.classList.remove('active');
+            }
+        });
+    }
+
+    // 初始化设置默认语言
+    setActiveLanguage(currentLanguage);
+
+    // 点击页面其他位置关闭下拉菜单
+    document.addEventListener('click', (e) => {
+        if (!languageDropdown.contains(e.target)) {
+            languageDropdown.classList.remove('active');
+        }
+    });
+
+
+
+
+
+
     // 面板切换
     const signUpButton = document.getElementById('signUp');
     const signInButton = document.getElementById('signIn');
-    const container = document.getElementById('container');
+    const container = document.getElementById('auth-container');
 
     signUpButton.addEventListener('click', () => {
         container.classList.add("right-panel-active");

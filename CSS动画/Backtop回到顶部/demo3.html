@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>lodash-es 节流优化的回到顶部</title>
+    <!-- 使用 unpkg CDN 引入 lodash-es 的 throttle 函数 -->
+    <script src="https://unpkg.com/lodash-es@4.17.21/throttle.js"></script>
+    <style>
+        :root {
+            --primary-color: #4361ee;
+            --primary-hover: #3a56d4;
+            --text-color: #2b2d42;
+            --light-color: #f8f9fa;
+            --shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
+            --transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', sans-serif;
+            line-height: 1.6;
+            color: var(--text-color);
+            background: linear-gradient(to bottom, #f5f7fa, #c3cfe2);
+            min-height: 200vh;
+            padding: 2rem;
+        }
+
+        h1 {
+            text-align: center;
+            margin: 2.5rem 0;
+            color: var(--text-color);
+            font-weight: 600;
+        }
+
+        .content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        p {
+            margin-bottom: 1.25rem;
+            color: var(--text-color);
+        }
+
+        .back-to-top {
+            position: fixed;
+            right: 2rem;
+            bottom: 2rem;
+            z-index: 99;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(1rem);
+            width: 3.125rem;
+            height: 3.125rem;
+            background-color: var(--primary-color);
+            color: var(--light-color);
+            border-radius: 50%;
+            border: none;
+            cursor: pointer;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            outline: none;
+        }
+
+        .back-to-top.show {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .back-to-top:hover,
+        .back-to-top:focus {
+            background-color: var(--primary-hover);
+            transform: translateY(-0.25rem);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .back-to-top::after {
+            content: '↑';
+            font-size: 1.25rem;
+            font-weight: bold;
+        }
+
+        @media (max-width: 768px) {
+            .back-to-top {
+                width: 2.5rem;
+                height: 2.5rem;
+                right: 1rem;
+                bottom: 1rem;
+            }
+
+            .back-to-top::after {
+                font-size: 1rem;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .back-to-top {
+                transition: none;
+            }
+        }
+    </style>
+</head>
+<body>
+<h1>使用 lodash-es 节流的回到顶部</h1>
+
+<div class="content">
+    <p>这个版本使用 lodash-es 的 throttle 函数对滚动事件进行节流，优化性能。</p>
+
+    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam in dui mauris. Vivamus hendrerit arcu sed erat molestie vehicula. Sed auctor neque eu tellus rhoncus ut eleifend nibh porttitor. Ut in nulla enim. Phasellus molestie magna non est bibendum non venenatis nisl tempor. Suspendisse dictum feugiat nisl ut dapibus.</p>
+    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam in dui mauris. Vivamus hendrerit arcu sed erat molestie vehicula. Sed auctor neque eu tellus rhoncus ut eleifend nibh porttitor. Ut in nulla enim. Phasellus molestie magna non est bibendum non venenatis nisl tempor. Suspendisse dictum feugiat nisl ut dapibus.</p>
+    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam in dui mauris. Vivamus hendrerit arcu sed erat molestie vehicula. Sed auctor neque eu tellus rhoncus ut eleifend nibh porttitor. Ut in nulla enim. Phasellus molestie magna non est bibendum non venenatis nisl tempor. Suspendisse dictum feugiat nisl ut dapibus.</p>
+    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam in dui mauris. Vivamus hendrerit arcu sed erat molestie vehicula. Sed auctor neque eu tellus rhoncus ut eleifend nibh porttitor. Ut in nulla enim. Phasellus molestie magna non est bibendum non venenatis nisl tempor. Suspendisse dictum feugiat nisl ut dapibus.</p>
+    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam in dui mauris. Vivamus hendrerit arcu sed erat molestie vehicula. Sed auctor neque eu tellus rhoncus ut eleifend nibh porttitor. Ut in nulla enim. Phasellus molestie magna non est bibendum non venenatis nisl tempor. Suspendisse dictum feugiat nisl ut dapibus.</p>
+</div>
+
+<button class="back-to-top" aria-label="回到顶部" title="回到顶部"></button>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const backToTopButton = document.querySelector('.back-to-top');
+        const scrollThreshold = 300;
+
+        // 使用 lodash 的 throttle 函数创建节流处理函数
+        // 设置 100ms 的节流间隔，保证流畅性的同时优化性能
+        const handleScroll = _.throttle(() => {
+            if (window.pageYOffset > scrollThreshold) {
+                backToTopButton.classList.add('show');
+            } else {
+                backToTopButton.classList.remove('show');
+            }
+        }, 100);
+
+        // 添加滚动事件监听，使用 passive: true 提升性能
+        window.addEventListener('scroll', handleScroll, { passive: true });
+
+        // 平滑滚动到顶部
+        backToTopButton.addEventListener('click', (e) => {
+            e.preventDefault();
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+            backToTopButton.blur();
+        });
+
+        // 键盘可访问性支持
+        backToTopButton.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                window.scrollTo({
+                    top: 0,
+                    behavior: 'smooth'
+                });
+            }
+        });
+
+        // 在模块化项目中，推荐使用以下方式引入：
+        // import { throttle } from 'lodash-es';
+        // 然后直接使用 throttle 函数
+    });
+</script>
+</body>
+</html>
