@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>登录注册切换页面</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #4361ee;
+            --secondary-color: #3f37c9;
+            --text-color: #2b2d42;
+            --bg-color: #f8f9fa;
+            --card-color: #ffffff;
+            --input-bg: #f1f3f5;
+            --shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s ease;
+            --social-divider-color: #dee2e6;
+            --active-language-bg: rgba(67, 97, 238, 0.1);
+            --control-btn-bg: rgba(0, 0, 0, 0.1);
+            --control-btn-color: #2b2d42;
+            --dropdown-gap: 10px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow-x: hidden;
+        }
+
+        /* 全局控制按钮 */
+        .global-controls {
+            position: fixed;
+            top: 20px;
+            display: flex;
+            gap: 10px;
+            z-index: 1000;
+        }
+
+        .control-btn {
+            background-color: var(--control-btn-bg);
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: var(--control-btn-color);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .control-btn:hover {
+            background-color: var(--primary-color);
+            color: white;
+            transform: scale(1.1);
+        }
+
+        .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
+        .dropdown-content {
+            position: absolute;
+            background-color: var(--card-color);
+            min-width: 160px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            z-index: 1;
+            overflow: hidden;
+            left: 50%; /* 将菜单的左边移动到头像中心 */
+            margin-left: -80px; /* 手动偏移菜单宽度的一半（假设宽度为 160px） */
+            transform-origin: top center; /* 动画原点为头像中心 */
+            transform: scale(0);
+            opacity: 0;
+            /*transition: all 0.3s ease-in-out;*/
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            margin-top: var(--dropdown-gap);
+            will-change: transition, opacity;
+        }
+
+        .dropdown.active .dropdown-content {
+            transform: scale(1);
+            opacity: 1;
+        }
+
+        .dark-mode .dropdown-content {
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+        }
+
+        .dropdown-content a {
+            color: var(--text-color);
+            padding: 10px 15px;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            font-size: 0.9rem;
+            transition: var(--transition);
+        }
+
+        .dropdown-content a:hover {
+            background-color: var(--input-bg);
+        }
+
+        .dropdown-content a.active {
+            background-color: var(--active-language-bg);
+            color: var(--primary-color);
+            cursor: default;
+            pointer-events: none;
+        }
+
+        /*.dropdown-content a.active .flag-icon {*/
+        /*    box-shadow: 0 0 0 2px var(--primary-color);*/
+        /*}*/
+
+        .flag-icon {
+            width: 20px;
+            height: 15px;
+            margin-right: 10px;
+            border-radius: 2px;
+        }
+    </style>
+</head>
+<body>
+<!-- 全局控制按钮 - 固定在右上角 -->
+<div class="global-controls">
+    <!-- 语言切换 -->
+    <div class="dropdown" id="language-dropdown">
+        <div class="control-btn" id="language-toggle">
+            <i class="fas fa-globe"></i>
+        </div>
+        <div class="dropdown-content">
+            <a href="#" data-lang="zh" class="active">
+                <img src="https://flagcdn.com/w20/cn.png" class="flag-icon" alt="中文"> 中文
+            </a>
+            <a href="#" data-lang="en">
+                <img src="https://flagcdn.com/w20/us.png" class="flag-icon" alt="English"> English
+            </a>
+            <a href="#" data-lang="ja">
+                <img src="https://flagcdn.com/w20/jp.png" class="flag-icon" alt="日本語"> 日本語
+            </a>
+            <a href="#" data-lang="es">
+                <img src="https://flagcdn.com/w20/es.png" class="flag-icon" alt="Español"> Español
+            </a>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/gsap.min.js"></script>
+<script>
+    // 语言切换功能
+    const languageDropdown = document.getElementById('language-dropdown');
+    const languageToggle = document.getElementById('language-toggle');
+    const dropdownContent = languageDropdown.querySelector('.dropdown-content');
+    let currentLanguage = 'zh'; // 默认语言设置为中文
+
+    // 点击语言图标切换下拉菜单
+    languageToggle.addEventListener('click', (e) => {
+        e.stopPropagation();
+        languageDropdown.classList.toggle('active');
+    });
+
+    // 点击语言选项
+    dropdownContent.querySelectorAll('a').forEach(item => {
+        item.addEventListener('click', (e) => {
+            const lang = item.getAttribute('data-lang');
+            if (lang === currentLanguage) {
+                e.preventDefault();
+                return;
+            }
+
+            // 更新当前语言
+            setActiveLanguage(lang);
+            console.log('切换语言:', lang);
+            // 这里可以添加实际的语言切换逻辑
+            languageDropdown.classList.remove('active');
+        });
+    });
+
+    // 设置激活语言
+    function setActiveLanguage(lang) {
+        currentLanguage = lang;
+
+        // 更新所有语言选项状态
+        dropdownContent.querySelectorAll('a').forEach(item => {
+            if (item.getAttribute('data-lang') === lang) {
+                item.classList.add('active');
+                // 更新语言图标显示
+                const flagIcon = item.querySelector('.flag-icon').src;
+                languageToggle.innerHTML = `<img src="${flagIcon}" style="width:20px;height:15px;border-radius:2px;">`;
+            } else {
+                item.classList.remove('active');
+            }
+        });
+    }
+
+    // 初始化设置默认语言
+    setActiveLanguage(currentLanguage);
+
+    // 点击页面其他位置关闭下拉菜单
+    document.addEventListener('click', (e) => {
+        if (!languageDropdown.contains(e.target)) {
+            languageDropdown.classList.remove('active');
+        }
+    });
+</script>
+</body>
+</html>

@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>火箭回到顶部</title>
+    <!-- 使用ES模块方式引入lodash-es的throttle函数 -->
+    <script type="importmap">
+        {
+            "imports": {
+                "lodash-es/throttle": "https://cdn.jsdelivr.net/npm/lodash-es@4.17.21/throttle.js"
+            }
+        }
+    </script>
+    <!-- 引入Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #4361ee;
+            --primary-hover: #3a56d4;
+            --text-color: #2b2d42;
+            --light-color: #f8f9fa;
+            --shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
+            --transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', sans-serif;
+            line-height: 1.6;
+            color: var(--text-color);
+            background: linear-gradient(to bottom, #f5f7fa, #c3cfe2);
+            min-height: 200vh;
+            padding: 2rem;
+        }
+
+        h1 {
+            text-align: center;
+            margin: 2.5rem 0;
+            color: var(--text-color);
+            font-weight: 600;
+        }
+
+        .content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        p {
+            margin-bottom: 1.25rem;
+            color: var(--text-color);
+        }
+
+        .back-to-top {
+            position: fixed;
+            right: 2rem;
+            bottom: 2rem;
+            z-index: 99;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(1rem);
+            width: 3.125rem;
+            height: 3.125rem;
+            background-color: var(--primary-color);
+            color: var(--light-color);
+            border-radius: 50%;
+            border: none;
+            cursor: pointer;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            outline: none;
+        }
+
+        .back-to-top.show {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .back-to-top:hover,
+        .back-to-top:focus {
+            background-color: var(--primary-hover);
+            transform: translateY(-0.25rem);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Font Awesome 火箭图标样式 */
+        .fa-rocket {
+            font-size: 1.25rem;
+            transition: transform 0.3s ease;
+        }
+
+        /* 添加火箭发射动画 */
+        .back-to-top:hover .fa-rocket {
+            transform: translateY(-5px);
+        }
+
+        /* SVG 火箭图标样式 - 备用方案 */
+        .back-to-top svg {
+            width: 1.25rem;
+            height: 1.25rem;
+            fill: currentColor;
+            transition: transform 0.3s ease;
+        }
+
+        .back-to-top:hover svg {
+            transform: translateY(-5px);
+        }
+
+        @media (max-width: 768px) {
+            .back-to-top {
+                width: 2.5rem;
+                height: 2.5rem;
+                right: 1rem;
+                bottom: 1rem;
+            }
+
+            .fa-rocket,
+            .back-to-top svg {
+                font-size: 1rem;
+                width: 1rem;
+                height: 1rem;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .back-to-top,
+            .fa-rocket,
+            .back-to-top svg {
+                transition: none;
+            }
+        }
+    </style>
+</head>
+<body>
+<h1>火箭回到顶部按钮</h1>
+
+<div class="content">
+    <p>这个版本使用火箭图标代替箭头，点击时会有火箭发射的视觉效果。</p>
+
+    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam in dui mauris. Vivamus hendrerit arcu sed erat molestie vehicula. Sed auctor neque eu tellus rhoncus ut eleifend nibh porttitor. Ut in nulla enim. Phasellus molestie magna non est bibendum non venenatis nisl tempor. Suspendisse dictum feugiat nisl ut dapibus.</p>
+    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam in dui mauris. Vivamus hendrerit arcu sed erat molestie vehicula. Sed auctor neque eu tellus rhoncus ut eleifend nibh porttitor. Ut in nulla enim. Phasellus molestie magna non est bibendum non venenatis nisl tempor. Suspendisse dictum feugiat nisl ut dapibus.</p>
+    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam in dui mauris. Vivamus hendrerit arcu sed erat molestie vehicula. Sed auctor neque eu tellus rhoncus ut eleifend nibh porttitor. Ut in nulla enim. Phasellus molestie magna non est bibendum non venenatis nisl tempor. Suspendisse dictum feugiat nisl ut dapibus.</p>
+    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam in dui mauris. Vivamus hendrerit arcu sed erat molestie vehicula. Sed auctor neque eu tellus rhoncus ut eleifend nibh porttitor. Ut in nulla enim. Phasellus molestie magna non est bibendum non venenatis nisl tempor. Suspendisse dictum feugiat nisl ut dapibus.</p>
+    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam in dui mauris. Vivamus hendrerit arcu sed erat molestie vehicula. Sed auctor neque eu tellus rhoncus ut eleifend nibh porttitor. Ut in nulla enim. Phasellus molestie magna non est bibendum non venenatis nisl tempor. Suspendisse dictum feugiat nisl ut dapibus.</p>
+</div>
+
+<!-- 回到顶部按钮 - 使用火箭图标 -->
+<button class="back-to-top" aria-label="回到顶部" title="回到顶部">
+    <!-- Font Awesome 火箭图标 -->
+    <i class="fas fa-rocket"></i>
+
+    <!-- SVG 火箭备用图标 (在Font Awesome加载失败时显示) -->
+    <svg class="svg-icon" style="display: none;" viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M13.13 22.19L11.5 18.36C13.07 17.78 14.54 17 15.9 16.09L13.13 22.19M5.64 12.5L1.81 10.87L7.91 8.1C7 9.46 6.22 10.93 5.64 12.5M21.61 2.39C21.61 2.39 16.66 .269 11 5.93C8.81 8.12 7.5 10.53 6.65 12.64C6.37 13.39 6.16 14.15 6 14.9C5.87 15.32 5.78 15.74 5.72 16.15L8.28 18.71C8.74 18.78 9.18 18.87 9.6 19C10.34 19.16 11.11 19.37 11.86 19.65C13.97 18.5 16.38 17.19 18.57 15C24.23 9.34 22.11 4.39 22.11 4.39M18.71 8.28L16.15 5.72C15.74 5.78 15.32 5.87 14.9 6C14.15 6.16 13.39 6.37 12.64 6.65C10.53 7.5 8.12 8.81 5.93 11C4.33 12.57 3.34 14.25 2.88 15.88L8.12 21.12C9.75 20.66 11.43 19.67 13 18.07C15.19 15.88 16.5 13.47 17.35 11.36C17.63 10.61 17.84 9.85 18 9.1C18.13 8.68 18.22 8.26 18.28 7.85L15.72 5.28C15.19 5.13 14.65 5 14.1 4.87L12.71 3.5L14.12 2.11L21.89 9.88L20.5 11.29L19.13 9.9C19 9.35 18.87 8.81 18.71 8.28Z"/>
+    </svg>
+</button>
+
+<script type="module">
+    // 导入lodash-es的throttle函数
+    import throttle from 'lodash-es/throttle';
+
+    document.addEventListener('DOMContentLoaded', function() {
+        const backToTopButton = document.querySelector('.back-to-top');
+        const scrollThreshold = 300;
+
+        // 检测Font Awesome是否加载成功
+        function checkFontAwesomeLoaded() {
+            // 创建一个测试元素
+            const test = document.createElement('div');
+            test.className = 'fa fa-rocket';
+            test.style.position = 'absolute';
+            test.style.top = '-9999px';
+            test.style.left = '-9999px';
+            document.body.appendChild(test);
+
+            // 获取计算后的样式
+            const style = window.getComputedStyle(test, ':before');
+            const content = style.getPropertyValue('content');
+
+            // 移除测试元素
+            document.body.removeChild(test);
+
+            // 如果content不是none，说明Font Awesome已加载
+            return content && content !== 'none';
+        }
+
+        // 如果Font Awesome未加载，显示SVG图标
+        if (!checkFontAwesomeLoaded()) {
+            const faIcon = backToTopButton.querySelector('.fa-rocket');
+            const svgIcon = backToTopButton.querySelector('.svg-icon');
+
+            if (faIcon && svgIcon) {
+                faIcon.style.display = 'none';
+                svgIcon.style.display = 'block';
+            }
+        }
+
+        // 使用lodash的throttle函数包装滚动处理
+        const handleScroll = throttle(() => {
+            if (window.pageYOffset > scrollThreshold) {
+                backToTopButton.classList.add('show');
+            } else {
+                backToTopButton.classList.remove('show');
+            }
+        }, 100);
+
+        // 添加滚动事件监听
+        window.addEventListener('scroll', handleScroll, { passive: true });
+
+        // 平滑滚动到顶部
+        backToTopButton.addEventListener('click', (e) => {
+            e.preventDefault();
+
+            // 添加火箭发射动画效果
+            const icon = backToTopButton.querySelector('.fa-rocket, .svg-icon');
+            if (icon) {
+                icon.style.transform = 'translateY(-10px)';
+                setTimeout(() => {
+                    icon.style.transform = 'translateY(0)';
+                }, 300);
+            }
+
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+            backToTopButton.blur();
+        });
+
+        // 键盘可访问性
+        backToTopButton.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+
+                // 添加火箭发射动画效果
+                const icon = backToTopButton.querySelector('.fa-rocket, .svg-icon');
+                if (icon) {
+                    icon.style.transform = 'translateY(-10px)';
+                    setTimeout(() => {
+                        icon.style.transform = 'translateY(0)';
+                    }, 300);
+                }
+
+                window.scrollTo({
+                    top: 0,
+                    behavior: 'smooth'
+                });
+            }
+        });
+    });
+</script>
+</body>
+</html>
