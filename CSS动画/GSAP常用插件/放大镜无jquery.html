@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>优化版放大镜效果</title>
+    <title>平滑过渡放大镜效果</title>
     <style>
         * {
             padding: 0;
@@ -56,8 +56,6 @@
             position: absolute;
             height: 220px;
             width: 220px;
-            scale: 0;
-            transition: scale 0.3s ease;
             border-radius: 50%;
             background: transparent;
             box-shadow: inset 1px 2px 4px 3px rgba(255, 255, 255, 0.3),
@@ -76,12 +74,16 @@
             z-index: 10;
             background-repeat: no-repeat;
             opacity: 0;
-            transform: translate(-50%, -50%);
+            transform: translate(-50%, -50%) scale(0.2);
+            transition:
+                    opacity 0.5s ease-in-out,
+                    transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            will-change: transform, opacity;
         }
 
         .card:hover .magnifying-glass {
-            scale: 1;
             opacity: 1;
+            transform: translate(-50%, -50%) scale(1);
         }
     </style>
 </head>
@@ -124,12 +126,10 @@
             const glassX = mouseX;
             const glassY = mouseY;
 
-            // 确保放大镜不会超出卡片边界
-            const glassWidth = parseInt(magnifyingGlass.style.width) || 220;
-            const glassHeight = parseInt(magnifyingGlass.style.height) || 220;
-
             // 计算背景位置
             if (imgNaturalWidth && imgNaturalHeight) {
+                const glassWidth = 220;
+                const glassHeight = 220;
                 const bgX = (mouseX / cardImage.width) * imgNaturalWidth - glassWidth / 2;
                 const bgY = (mouseY / cardImage.height) * imgNaturalHeight - glassHeight / 2;
 
