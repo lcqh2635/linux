@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>水平动画标签页 (纯JS实现)</title>
+    <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/1.1.2/tailwind.min.css'>
+    <style>
+        /* 过渡动画效果 */
+        .ease-in {
+            transition-timing-function: cubic-bezier(0.4, 0, 1, 1);
+        }
+        .ease-out {
+            transition-timing-function: cubic-bezier(0, 0, 0.2, 1);
+        }
+        .ease-in-out {
+            transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .transition-fastest {
+            transition-duration: 75ms;
+        }
+        .transition-faster {
+            transition-duration: 100ms;
+        }
+        .transition-fast {
+            transition-duration: 150ms;
+        }
+        .transition-medium {
+            transition-duration: 200ms;
+        }
+        .transition-slow {
+            transition-duration: 300ms;
+        }
+        .transition-slower {
+            transition-duration: 500ms;
+        }
+        .transition-slowest {
+            transition-duration: 700ms;
+        }
+        .transition-all {
+            transition-property: all;
+        }
+        .transition-opacity {
+            transition-property: opacity;
+        }
+        .transition-transform {
+            transition-property: transform;
+        }
+
+        /* 自定义颜色类 */
+        .text-indigo-400 {
+            color: #818cf8;
+        }
+        .text-indigo-600 {
+            color: #4f46e5;
+        }
+        .text-gray-500 {
+            color: #6b7280;
+        }
+        .text-gray-700 {
+            color: #374151;
+        }
+
+        /* 水平标签页容器样式 */
+        .horizontal-tabs {
+            display: flex;
+            position: relative;
+            padding-bottom: 2px; /* 为底部指示器留出空间 */
+        }
+
+        /* 标签按钮样式 */
+        .tab-button {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.5rem 1rem;
+            position: relative;
+            white-space: nowrap;
+            outline: none;
+        }
+
+        /* 底部指示器样式 */
+        .tab-indicator {
+            position: absolute;
+            bottom: 0;
+            height: 2px;
+            background-color: #4f46e5; /* indigo-600 */
+            transition: all 0.3s ease-out;
+        }
+    </style>
+</head>
+<body>
+<div class="antialiased bg-gray-200 min-h-screen p-8">
+    <div class="flex justify-center">
+        <!-- 水平标签页容器 -->
+        <nav id="nav" class="horizontal-tabs">
+            <!-- 底部滑动指示器 -->
+<!--            <span id="indicator" class="tab-indicator ease-out transition-all transition-medium"></span>-->
+            <span id="indicator" class="absolute h-10 w-full bg-white rounded-lg shadow ease-out transition-transform transition-medium"></span>
+
+
+            <!-- 标签按钮列表 -->
+            <ul class="flex">
+                <li>
+                    <button
+                            type="button"
+                            data-index="0"
+                            class="tab-button focus:outline-none focus-visible:underline"
+                    >
+                        <svg
+                                class="tab-icon h-5 w-5 transition-all ease-out transition-medium text-gray-500"
+                                viewBox="0 0 24 24"
+                                fill="currentColor"
+                        >
+                            <path
+                                    fill-rule="evenodd"
+                                    clip-rule="evenodd"
+                                    d="M12.707 2.293a1 1 0 00-1.414 0l-9 9a1 1 0 101.414 1.414L4 12.414V21a1 1 0 001 1h5a1 1 0 001-1v-6h2v6a1 1 0 001 1h5a1 1 0 001-1v-8.586l.293.293a1 1 0 001.414-1.414l-9-9zM18 10.414l-6-6-6 6V20h3v-6a1 1 0 011-1h4a1 1 0 011 1v6h3v-9.586z"
+                            />
+                        </svg>
+                        <span class="tab-text ml-2 text-sm font-medium transition-all ease-out transition-medium text-gray-700">
+                            首页
+                        </span>
+                    </button>
+                </li>
+
+                <li>
+                    <button
+                            type="button"
+                            data-index="1"
+                            class="tab-button focus:outline-none focus-visible:underline"
+                    >
+                        <svg
+                                class="tab-icon h-5 w-5 transition-all ease-out transition-medium text-gray-500"
+                                viewBox="0 0 24 24"
+                                fill="currentColor"
+                        >
+                            <path
+                                    fill-rule="evenodd"
+                                    clip-rule="evenodd"
+                                    d="M11.617 1.076a1 1 0 011.09.217l5.657 5.657a9 9 0 11-13.113.41A1 1 0 017 8.022v2.292a2 2 0 104 0V2a1 1 0 01.617-.924zM13 4.414v5.9A4 4 0 015.212 11.6A7 7 0 1016.95 8.364L13 4.414z"
+                            />
+                        </svg>
+                        <span class="tab-text ml-2 text-sm font-medium transition-all ease-out transition-medium text-gray-700">
+                            热门
+                        </span>
+                    </button>
+                </li>
+
+                <li>
+                    <button
+                            type="button"
+                            data-index="2"
+                            class="tab-button focus:outline-none focus-visible:underline"
+                    >
+                        <svg
+                                class="tab-icon h-5 w-5 transition-all ease-out transition-medium text-gray-500"
+                                viewBox="0 0 24 24"
+                                fill="currentColor"
+                        >
+                            <path
+                                    fill-rule="evenodd"
+                                    clip-rule="evenodd"
+                                    d="M12 7a1 1 0 011-1h8a1 1 0 011 1v8a1 1 0 11-2 0V8h-7a1 1 0 01-1-1z"
+                            />
+                            <path
+                                    fill-rule="evenodd"
+                                    clip-rule="evenodd"
+                                    d="M20.707 7.293a1 1 0 010 1.414l-7 7a1 1 0 01-1.414 0L9 12.414l-5.293 5.293a1 1 0 01-1.414-1.414l6-6a1 1 0 011.414 0L13 13.586l6.293-6.293a1 1 0 011.414 0z"
+                            />
+                        </svg>
+                        <span class="tab-text ml-2 text-sm font-medium transition-all ease-out transition-medium text-gray-700">
+                            趋势
+                        </span>
+                    </button>
+                </li>
+
+                <li>
+                    <button
+                            type="button"
+                            data-index="3"
+                            class="tab-button focus:outline-none focus-visible:underline"
+                    >
+                        <svg
+                                class="tab-icon h-5 w-5 transition-all ease-out transition-medium text-gray-500"
+                                viewBox="0 0 24 24"
+                                fill="currentColor"
+                        >
+                            <path
+                                    fill-rule="evenodd"
+                                    clip-rule="evenodd"
+                                    d="M7 10a3 3 0 013-3h8a3 3 0 013 3v8a3 3 0 01-3 3h-8a3 3 0 01-3-3v-8zm3-1a1 1 0 00-1 1v8a1 1 0 001 1h8a1 1 0 001-1v-8a1 1 0 00-1-1h-8z"
+                            />
+                            <path
+                                    fill-rule="evenodd"
+                                    clip-rule="evenodd"
+                                    d="M3 6a3 3 0 013-3h10a1 1 0 110 2H6a1 1 0 00-1 1v10a1 1 0 11-2 0V6z"
+                            />
+                        </svg>
+                        <span class="tab-text ml-2 text-sm font-medium transition-all ease-out transition-medium text-gray-700">
+                            订阅
+                        </span>
+                    </button>
+                </li>
+            </ul>
+        </nav>
+    </div>
+</div>
+
+<span class="absolute h-10 w-full bg-white rounded-lg shadow ease-out transition-transform transition-medium">测试用例</span>
+
+
+<script>
+    // 页面加载完成后执行
+    document.addEventListener('DOMContentLoaded', function() {
+        // 获取DOM元素
+        const nav = document.getElementById('nav');
+        const indicator = document.getElementById('indicator');
+        const tabButtons = document.querySelectorAll('.tab-button');
+        const tabIcons = document.querySelectorAll('.tab-icon');
+        const tabTexts = document.querySelectorAll('.tab-text');
+
+        // 设置初始选中的标签页(索引1-热门)
+        let selectedTab = 1;
+
+        // 初始化指示器位置和样式
+        function initIndicator() {
+            // 获取第一个标签按钮的尺寸和位置
+            const firstTab = tabButtons[0];
+            const tabRect = firstTab.getBoundingClientRect();
+            const navRect = nav.getBoundingClientRect();
+
+            // 设置指示器初始宽度和位置
+            indicator.style.width = `${tabRect.width}px`;
+            indicator.style.left = `${tabRect.left - navRect.left}px`;
+        }
+
+        // 更新标签页样式
+        function updateTabStyles() {
+            // 获取当前选中的标签按钮
+            const currentTab = tabButtons[selectedTab];
+            const tabRect = currentTab.getBoundingClientRect();
+            const navRect = nav.getBoundingClientRect();
+
+            // 移动指示器到选中标签下方
+            indicator.style.width = `${tabRect.width}px`;
+            indicator.style.left = `${tabRect.left - navRect.left}px`;
+
+            // 更新所有标签的样式
+            tabButtons.forEach((button, index) => {
+                const isSelected = index === selectedTab;
+                button.setAttribute('aria-selected', isSelected);
+
+                // 更新图标和文本颜色
+                if (isSelected) {
+                    tabIcons[index].classList.remove('text-gray-500');
+                    tabIcons[index].classList.add('text-indigo-400');
+                    tabTexts[index].classList.remove('text-gray-700');
+                    tabTexts[index].classList.add('text-indigo-600');
+                } else {
+                    tabIcons[index].classList.remove('text-indigo-400');
+                    tabIcons[index].classList.add('text-gray-500');
+                    tabTexts[index].classList.remove('text-indigo-600');
+                    tabTexts[index].classList.add('text-gray-700');
+                }
+            });
+        }
+
+        // 为所有标签按钮添加点击事件
+        tabButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                // 更新选中的标签索引
+                selectedTab = parseInt(this.getAttribute('data-index'));
+                updateTabStyles();
+            });
+        });
+
+        // 初始化指示器和标签样式
+        initIndicator();
+        updateTabStyles();
+
+        // 窗口大小改变时重新计算指示器位置
+        window.addEventListener('resize', function() {
+            initIndicator();
+            updateTabStyles();
+        });
+    });
+</script>
+
+</body>
+</html>
