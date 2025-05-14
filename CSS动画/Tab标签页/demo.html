@@ -1,0 +1,1108 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>终极优化版标签页系统</title>
+    <!-- 引入GSAP动画库 -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <!-- 引入Font Awesome图标库 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* ========== 全局变量与基础样式 ========== */
+        :root {
+            /* 颜色系统 */
+            --primary-color: #4361ee;       /* 主色调 - 蓝色 */
+            --primary-hover: #3a56d4;      /* 主色调悬停状态 */
+            --text-primary: #1a1a1a;       /* 主要文字颜色 */
+            --text-secondary: #666;        /* 次要文字颜色 */
+            --bg-toolbar: #f5f7fa;        /* 工具栏背景 */
+            --bg-tab: #fff;               /* 标签背景 */
+            --bg-tab-hover: #f0f2f5;      /* 标签悬停背景 */
+            --border-color: #e1e3e7;      /* 边框颜色 */
+            --highlight-color: rgba(67, 97, 238, 0.1); /* 高亮颜色 */
+
+            /* 尺寸系统 */
+            --toolbar-height: 42px;        /* 工具栏高度 */
+            --tab-height: 36px;           /* 标签高度 */
+            --control-btn-size: 28px;     /* 控制按钮尺寸 */
+            --tab-border-radius: 8px;     /* 标签圆角 */
+
+            /* 动画参数 */
+            --transition-fast: 0.15s ease;
+            --transition-normal: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            --transition-slow: 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        body {
+            background-color: #f5f5f5;
+            padding: 20px;
+            color: var(--text-primary);
+        }
+
+        /* ========== 标签页容器 ========== */
+        .tab-container {
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            overflow: hidden;
+            max-width: 1000px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        /* ========== 工具栏区域 ========== */
+        .tabs-header {
+            position: relative;
+            background-color: var(--bg-toolbar);
+            display: flex;
+            align-items: center;
+            height: var(--toolbar-height);
+            padding: 0 12px;
+            border-bottom: 1px solid var(--border-color);
+            gap: 6px; /* 元素间距 */
+        }
+
+        /* 标签滚动区域 */
+        .tabs-scroll {
+            flex: 1;
+            overflow: hidden;
+            position: relative;
+            height: 100%;
+        }
+
+        /* 标签容器 */
+        .tabs-wrapper {
+            display: flex;
+            transition: transform var(--transition-normal);
+            height: 100%;
+            position: relative;
+            padding-left: 4px; /* 留出空间给第一个标签的阴影 */
+        }
+
+        /* ========== 单个标签样式 ========== */
+        .tab {
+            position: relative;
+            padding: 0 16px 0 12px;
+            cursor: pointer;
+            background-color: var(--bg-tab);
+            border: 1px solid var(--border-color);
+            border-bottom: none;
+            border-radius: var(--tab-border-radius) var(--tab-border-radius) 0 0;
+            margin-right: 2px;
+            transition: all var(--transition-normal);
+            user-select: none;
+            white-space: nowrap;
+            flex-shrink: 0;
+            z-index: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: var(--tab-height);
+            margin-top: 3px;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+        }
+
+        /* 标签文字 */
+        .tab-text {
+            transition: transform var(--transition-fast);
+            position: relative;
+            font-size: 13px;
+            color: var(--text-secondary);
+            max-width: 150px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        /* 激活状态的标签 */
+        .tab.active {
+            background-color: #fff;
+            border-color: var(--primary-color);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            z-index: 2;
+        }
+
+        .tab.active .tab-text {
+            color: var(--primary-color);
+            font-weight: 500;
+        }
+
+        /* 激活标签的下划线指示器 */
+        .tab.active::after {
+            content: '';
+            position: absolute;
+            bottom: -1px;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: var(--primary-color);
+            z-index: 3;
+        }
+
+        /* 标签悬停效果 */
+        .tab:hover {
+            background-color: var(--bg-tab-hover);
+        }
+
+        .tab:hover .tab-text {
+            transform: translateX(-4px);
+        }
+
+        /* 关闭按钮 */
+        .close-tab {
+            position: relative;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-left: 6px;
+            opacity: 0.6;
+            transition: all var(--transition-fast);
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+
+        .tab:hover .close-tab {
+            opacity: 1;
+        }
+
+        .close-tab:hover {
+            background-color: var(--highlight-color);
+            color: #ff4d4f;
+        }
+
+        /* 拖拽状态的标签 */
+        .tab.dragging {
+            opacity: 0.8;
+            transform: scale(0.98);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        /* ========== 内容区域 ========== */
+        .tab-content {
+            padding: 20px;
+            min-height: 300px;
+        }
+
+        .content {
+            display: none;
+            opacity: 0;
+            transform: translateY(10px);
+            animation: fadeIn 0.3s forwards;
+        }
+
+        @keyframes fadeIn {
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .content.active {
+            display: block;
+        }
+
+        /* ========== 控制按钮样式 ========== */
+        /* 导航按钮 */
+        .nav-button {
+            width: var(--control-btn-size);
+            height: var(--control-btn-size);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: var(--text-secondary);
+            font-size: 14px;
+            background-color: var(--bg-tab);
+            border-radius: 4px;
+            transition: all var(--transition-fast);
+            border: 1px solid var(--border-color);
+        }
+
+        .nav-button.visible {
+            display: flex;
+        }
+
+        .nav-button:hover {
+            background-color: var(--bg-tab-hover);
+            color: var(--primary-color);
+            border-color: var(--primary-color);
+        }
+
+        .nav-button.disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+            background-color: transparent;
+            border-color: transparent;
+        }
+
+        /* 添加按钮 */
+        .add-tab {
+            width: var(--control-btn-size);
+            height: var(--control-btn-size);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: var(--primary-color);
+            font-size: 16px;
+            background-color: var(--bg-tab);
+            border-radius: 4px;
+            transition: all var(--transition-fast);
+            border: 1px solid var(--border-color);
+        }
+
+        .add-tab:hover {
+            background-color: var(--bg-tab-hover);
+            color: var(--primary-hover);
+            border-color: var(--primary-color);
+        }
+
+        /* ========== 工具栏右侧功能区 ========== */
+        .toolbar-actions {
+            display: flex;
+            align-items: center;
+            margin-left: auto;
+            padding-left: 8px;
+            border-left: 1px solid var(--border-color);
+            gap: 6px;
+        }
+
+        /* 搜索框 */
+        .tab-search {
+            position: relative;
+            width: 180px;
+            height: var(--control-btn-size);
+            display: flex;
+            align-items: center;
+        }
+
+        .tab-search input {
+            width: 100%;
+            height: 100%;
+            padding: 0 30px 0 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            font-size: 13px;
+            outline: none;
+            transition: all var(--transition-fast);
+        }
+
+        .tab-search input:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 2px rgba(67, 97, 238, 0.2);
+        }
+
+        .tab-search::before {
+            content: '\f002';
+            font-family: 'Font Awesome 6 Free';
+            font-weight: 900;
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-secondary);
+            font-size: 12px;
+            pointer-events: none;
+        }
+
+        /* 下拉菜单 */
+        .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
+        .control-btn {
+            width: var(--control-btn-size);
+            height: var(--control-btn-size);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: var(--text-secondary);
+            font-size: 14px;
+            background-color: var(--bg-tab);
+            border-radius: 4px;
+            transition: all var(--transition-fast);
+            border: 1px solid var(--border-color);
+        }
+
+        .control-btn:hover {
+            background-color: var(--bg-tab-hover);
+            color: var(--primary-color);
+            border-color: var(--primary-color);
+        }
+
+        .dropdown-content {
+            position: absolute;
+            background-color: var(--bg-tab);
+            min-width: 180px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+            border-radius: 8px;
+            z-index: 100;
+            overflow: hidden;
+            right: 0;
+            transform-origin: top right;
+            transform: scale(0.9);
+            opacity: 0;
+            transition: all var(--transition-normal);
+            margin-top: 8px;
+            border: 1px solid var(--border-color);
+            visibility: hidden;
+        }
+
+        .dropdown.active .dropdown-content {
+            transform: scale(1);
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .dropdown-content a {
+            color: var(--text-primary);
+            padding: 8px 16px;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            font-size: 13px;
+            transition: var(--transition-fast);
+        }
+
+        .dropdown-content a:hover {
+            background-color: var(--highlight-color);
+            color: var(--primary-color);
+        }
+
+        .dropdown-content a.active {
+            background-color: var(--highlight-color);
+            color: var(--primary-color);
+            cursor: default;
+            pointer-events: none;
+        }
+
+        .dropdown-content a i {
+            margin-right: 8px;
+            width: 16px;
+            text-align: center;
+            font-size: 12px;
+        }
+
+        /* 语言选项图标 */
+        .flag-icon {
+            width: 16px;
+            height: 12px;
+            border-radius: 2px;
+            margin-right: 8px;
+            object-fit: cover;
+        }
+
+        /* ========== 上下文菜单 ========== */
+        .context-menu {
+            position: fixed;
+            background-color: white;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            border-radius: 8px;
+            z-index: 1000;
+            min-width: 160px;
+            border: 1px solid var(--border-color);
+            overflow: hidden;
+            animation: fadeInUp 0.2s ease-out;
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .context-menu ul {
+            list-style: none;
+        }
+
+        .context-menu li {
+            padding: 8px 16px;
+            font-size: 13px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            transition: all var(--transition-fast);
+        }
+
+        .context-menu li:hover {
+            background-color: var(--highlight-color);
+            color: var(--primary-color);
+        }
+
+        .context-menu li i {
+            margin-right: 8px;
+            width: 16px;
+            text-align: center;
+            font-size: 12px;
+        }
+
+        /* ========== 响应式设计 ========== */
+        @media (max-width: 768px) {
+            .tabs-header {
+                flex-wrap: wrap;
+                height: auto;
+                padding: 8px;
+                gap: 4px;
+            }
+
+            .tabs-scroll {
+                order: 1;
+                width: 100%;
+                margin-top: 8px;
+            }
+
+            .toolbar-actions {
+                border-left: none;
+                padding-left: 0;
+            }
+
+            .tab-search {
+                width: 140px;
+            }
+        }
+
+        /* ========== 性能优化相关 ========== */
+        .tab, .tab-highlight, .dropdown-content {
+            will-change: transform, opacity;
+        }
+
+        .tabs-wrapper {
+            contain: strict;
+        }
+    </style>
+</head>
+<body>
+<div class="tab-container">
+    <!-- 工具栏区域 -->
+    <div class="tabs-header">
+        <!-- 左侧导航按钮 -->
+        <div class="nav-button prev disabled" aria-label="Scroll tabs left">‹</div>
+
+        <!-- 标签页滚动区域 -->
+        <div class="tabs-scroll">
+            <div class="tabs-wrapper">
+                <!-- 初始标签页 -->
+                <div class="tab active" data-tab="tab1" role="tab" aria-selected="true" aria-controls="tab1" tabindex="0">
+                    <span class="tab-text">New Tab 1</span>
+                    <button class="close-tab" data-tab="tab1" aria-label="Close tab">×</button>
+                </div>
+                <div class="tab" data-tab="tab2" role="tab" aria-selected="false" aria-controls="tab2" tabindex="0">
+                    <span class="tab-text">New Tab 2</span>
+                    <button class="close-tab" data-tab="tab2" aria-label="Close tab">×</button>
+                </div>
+                <div class="tab" data-tab="tab3" role="tab" aria-selected="false" aria-controls="tab3" tabindex="0">
+                    <span class="tab-text">New Tab 3</span>
+                    <button class="close-tab" data-tab="tab3" aria-label="Close tab">×</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 右侧导航按钮 -->
+        <div class="nav-button next" aria-label="Scroll tabs right">›</div>
+
+        <!-- 添加标签按钮 -->
+        <button class="add-tab" aria-label="Add new tab">+</button>
+
+        <!-- 工具栏右侧功能区 -->
+        <div class="toolbar-actions">
+            <!-- 搜索框 -->
+            <div class="tab-search">
+                <input type="text" placeholder="搜索标签页..." aria-label="Search tabs">
+            </div>
+
+            <!-- 语言切换下拉菜单 -->
+            <div class="dropdown" id="language-dropdown">
+                <button class="control-btn" id="language-toggle" aria-label="Language settings">
+                    <i class="fas fa-globe"></i>
+                </button>
+                <div class="dropdown-content">
+                    <a href="#" data-lang="zh" class="active" role="menuitemradio" aria-checked="true">
+                        <img src="https://flagcdn.com/w20/cn.png" class="flag-icon" alt="中文" aria-hidden="true"> 中文
+                    </a>
+                    <a href="#" data-lang="en" role="menuitemradio" aria-checked="false">
+                        <img src="https://flagcdn.com/w20/us.png" class="flag-icon" alt="English" aria-hidden="true"> English
+                    </a>
+                    <a href="#" data-lang="ja" role="menuitemradio" aria-checked="false">
+                        <img src="https://flagcdn.com/w20/jp.png" class="flag-icon" alt="日本語" aria-hidden="true"> 日本語
+                    </a>
+                    <a href="#" data-lang="es" role="menuitemradio" aria-checked="false">
+                        <img src="https://flagcdn.com/w20/es.png" class="flag-icon" alt="Español" aria-hidden="true"> Español
+                    </a>
+                </div>
+            </div>
+
+            <!-- 更多操作按钮 -->
+            <div class="dropdown more-actions">
+                <button class="control-btn" aria-label="More actions">
+                    <i class="fas fa-ellipsis-v"></i>
+                </button>
+                <div class="dropdown-content" role="menu">
+                    <a href="#" role="menuitem"><i class="fas fa-cog"></i> 设置</a>
+                    <a href="#" role="menuitem"><i class="fas fa-download"></i> 导出</a>
+                    <a href="#" role="menuitem"><i class="fas fa-trash-alt"></i> 清空</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 内容区域 -->
+    <div class="tab-content">
+        <div class="content active" id="tab1" role="tabpanel" aria-labelledby="tab1">
+            <h3>New Tab Content 1</h3>
+            <p>This is the content for the first New Tab.</p>
+        </div>
+        <div class="content" id="tab2" role="tabpanel" aria-labelledby="tab2" hidden>
+            <h3>New Tab Content 2</h3>
+            <p>This is the content for the second New Tab.</p>
+        </div>
+        <div class="content" id="tab3" role="tabpanel" aria-labelledby="tab3" hidden>
+            <h3>New Tab Content 3</h3>
+            <p>This is the content for the third New Tab.</p>
+        </div>
+    </div>
+</div>
+
+<script>
+    // ========== 主功能实现 ==========
+    document.addEventListener('DOMContentLoaded', function() {
+        // 获取DOM元素
+        const tabsContainer = document.querySelector('.tabs-wrapper');
+        const tabsScroll = document.querySelector('.tabs-scroll');
+        const prevButton = document.querySelector('.nav-button.prev');
+        const nextButton = document.querySelector('.nav-button.next');
+        const addButton = document.querySelector('.add-tab');
+        const searchInput = document.querySelector('.tab-search input');
+        let currentTab = document.querySelector('.tab.active');
+        let currentContent = document.getElementById(currentTab.dataset.tab);
+        let currentPosition = 0;
+        let wrapperWidth = tabsScroll.offsetWidth;
+        let tabsWidth = tabsContainer.scrollWidth;
+        let tabCount = document.querySelectorAll('.tab').length;
+
+        // ========== 核心功能函数 ==========
+
+        /**
+         * 初始化标签页系统
+         */
+        function initTabs() {
+            // 设置现有标签的可访问性属性
+            document.querySelectorAll('.tab').forEach(tab => {
+                setupTabAccessibility(tab);
+                setupTabDrag(tab);
+                setupContextMenu(tab);
+            });
+
+            // 检查导航按钮状态
+            checkNavButtons();
+
+            // 添加窗口大小改变监听
+            window.addEventListener('resize', handleResize);
+
+            // 添加键盘导航支持
+            document.addEventListener('keydown', handleKeyboardNavigation);
+        }
+
+        /**
+         * 切换标签页
+         * @param {HTMLElement} newTab - 要切换到的标签元素
+         */
+        function switchTab(newTab) {
+            if (newTab === currentTab) return;
+
+            const tabId = newTab.getAttribute('data-tab');
+            const newContent = document.getElementById(tabId);
+            const oldTab = currentTab;
+
+            // 动画时间线
+            const tl = gsap.timeline();
+
+            // 1. 淡出当前内容
+            tl.to(currentContent, {
+                opacity: 0,
+                y: -10,
+                duration: 0.2,
+                ease: "power1.out",
+                onComplete: () => {
+                    currentContent.hidden = true;
+                    currentContent.classList.remove('active');
+                    oldTab.setAttribute('aria-selected', 'false');
+                }
+            });
+
+            // 2. 切换标签活动状态
+            tl.add(() => {
+                oldTab.classList.remove('active');
+                newTab.classList.add('active');
+                newTab.setAttribute('aria-selected', 'true');
+                currentTab = newTab;
+
+                newContent.hidden = false;
+                newContent.classList.add('active');
+                currentContent = newContent;
+
+                // 确保活动标签可见
+                ensureTabVisible(newTab);
+
+                // 更新URL hash (可选)
+                // window.location.hash = tabId;
+            }, "-=0.1");
+
+            // 3. 淡入新内容
+            tl.fromTo(newContent,
+                { opacity: 0, y: 10 },
+                { opacity: 1, y: 0, duration: 0.3, ease: "power1.in" }
+            );
+        }
+
+        /**
+         * 确保标签在可视区域内
+         * @param {HTMLElement} tab - 要确保可见的标签元素
+         */
+        function ensureTabVisible(tab) {
+            const tabRect = tab.getBoundingClientRect();
+            const wrapperRect = tabsScroll.getBoundingClientRect();
+
+            if (tabRect.left < wrapperRect.left) {
+                // 标签在左侧不可见
+                const diff = wrapperRect.left - tabRect.left;
+                currentPosition += diff;
+                tabsContainer.style.transform = `translateX(${currentPosition}px)`;
+            } else if (tabRect.right > wrapperRect.right) {
+                // 标签在右侧不可见
+                const diff = tabRect.right - wrapperRect.right;
+                currentPosition -= diff;
+                tabsContainer.style.transform = `translateX(${currentPosition}px)`;
+            }
+
+            updateNavButtons();
+        }
+
+        /**
+         * 检查导航按钮状态
+         */
+        function checkNavButtons() {
+            tabsWidth = tabsContainer.scrollWidth;
+            wrapperWidth = tabsScroll.offsetWidth;
+
+            if (tabsWidth > wrapperWidth) {
+                prevButton.classList.add('visible');
+                nextButton.classList.add('visible');
+            } else {
+                prevButton.classList.remove('visible');
+                nextButton.classList.remove('visible');
+                currentPosition = 0;
+                tabsContainer.style.transform = 'translateX(0)';
+            }
+
+            updateNavButtons();
+        }
+
+        /**
+         * 更新导航按钮状态
+         */
+        function updateNavButtons() {
+            prevButton.classList.toggle('disabled', currentPosition >= 0);
+            nextButton.classList.toggle('disabled',
+                currentPosition <= -(tabsWidth - wrapperWidth));
+        }
+
+        /**
+         * 添加新标签
+         */
+        function addNewTab() {
+            tabCount++;
+            const tabId = `tab${tabCount}`;
+
+            // 创建新标签
+            const newTab = document.createElement('div');
+            newTab.className = 'tab';
+            newTab.setAttribute('data-tab', tabId);
+            newTab.setAttribute('role', 'tab');
+            newTab.setAttribute('aria-selected', 'false');
+            newTab.setAttribute('aria-controls', tabId);
+            newTab.setAttribute('tabindex', '0');
+            newTab.innerHTML = `
+                    <span class="tab-text">New Tab ${tabCount}</span>
+                    <button class="close-tab" data-tab="${tabId}" aria-label="Close tab">×</button>
+                `;
+
+            // 创建新内容
+            const newContent = document.createElement('div');
+            newContent.className = 'content';
+            newContent.id = tabId;
+            newContent.setAttribute('role', 'tabpanel');
+            newContent.setAttribute('aria-labelledby', tabId);
+            newContent.hidden = true;
+            newContent.innerHTML = `
+                    <h3>New Tab Content ${tabCount}</h3>
+                    <p>This is the content for the new tab.</p>
+                `;
+
+            // 添加到DOM
+            tabsContainer.appendChild(newTab);
+            document.querySelector('.tab-content').appendChild(newContent);
+
+            // 设置事件监听
+            setupTabAccessibility(newTab);
+            setupTabDrag(newTab);
+            setupContextMenu(newTab);
+
+            // 切换到新标签
+            switchTab(newTab);
+
+            // 检查是否需要显示导航按钮
+            setTimeout(checkNavButtons, 0);
+        }
+
+        /**
+         * 关闭标签
+         * @param {HTMLElement} tabToClose - 要关闭的标签元素
+         */
+        function closeTab(tabToClose) {
+            const tabId = tabToClose.getAttribute('data-tab');
+            const contentToClose = document.getElementById(tabId);
+
+            // 如果关闭的是当前激活的标签
+            if (tabToClose.classList.contains('active')) {
+                // 找到下一个可用的标签
+                const nextTab = tabToClose.nextElementSibling || tabToClose.previousElementSibling;
+                if (nextTab) {
+                    switchTab(nextTab);
+                }
+            }
+
+            // 移除标签和内容
+            tabToClose.remove();
+            contentToClose.remove();
+
+            // 更新标签计数
+            tabCount = document.querySelectorAll('.tab').length;
+
+            // 如果没有标签了，添加一个新标签
+            if (tabCount === 0) {
+                addNewTab();
+            }
+
+            // 检查导航按钮状态
+            checkNavButtons();
+        }
+
+        // ========== 辅助功能函数 ==========
+
+        /**
+         * 设置标签页的可访问性
+         * @param {HTMLElement} tab - 标签元素
+         */
+        function setupTabAccessibility(tab) {
+            tab.addEventListener('click', function(e) {
+                if (e.target.classList.contains('close-tab')) return;
+                switchTab(this);
+            });
+
+            // 关闭按钮事件
+            const closeBtn = tab.querySelector('.close-tab');
+            closeBtn.addEventListener('click', function(e) {
+                e.stopPropagation();
+                closeTab(tab);
+            });
+
+            // 键盘支持
+            tab.addEventListener('keydown', function(e) {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    switchTab(this);
+                }
+            });
+        }
+
+        /**
+         * 设置标签页拖拽功能
+         * @param {HTMLElement} tab - 标签元素
+         */
+        function setupTabDrag(tab) {
+            tab.draggable = true;
+
+            tab.addEventListener('dragstart', (e) => {
+                tab.classList.add('dragging');
+                e.dataTransfer.setData('text/plain', tab.dataset.tab);
+                e.dataTransfer.effectAllowed = 'move';
+            });
+
+            tab.addEventListener('dragend', () => {
+                tab.classList.remove('dragging');
+            });
+        }
+
+        /**
+         * 设置标签页右键菜单
+         * @param {HTMLElement} tab - 标签元素
+         */
+        function setupContextMenu(tab) {
+            tab.addEventListener('contextmenu', (e) => {
+                e.preventDefault();
+
+                // 关闭其他打开的菜单
+                document.querySelectorAll('.context-menu').forEach(menu => menu.remove());
+
+                const menu = document.createElement('div');
+                menu.className = 'context-menu';
+                menu.style.left = `${e.clientX}px`;
+                menu.style.top = `${e.clientY}px`;
+                menu.innerHTML = `
+                        <ul role="menu">
+                            <li data-action="close" role="menuitem"><i class="fas fa-times"></i>关闭标签</li>
+                            <li data-action="close-others" role="menuitem"><i class="fas fa-times-circle"></i>关闭其他标签</li>
+                            <li data-action="close-right" role="menuitem"><i class="fas fa-arrow-right"></i>关闭右侧标签</li>
+                            <li data-action="reload" role="menuitem"><i class="fas fa-sync-alt"></i>刷新标签</li>
+                        </ul>
+                    `;
+
+                document.body.appendChild(menu);
+
+                // 点击菜单项处理
+                menu.querySelectorAll('li').forEach(item => {
+                    item.addEventListener('click', () => {
+                        const action = item.dataset.action;
+                        handleContextAction(action, tab);
+                        menu.remove();
+                    });
+                });
+
+                // 点击其他地方关闭菜单
+                const closeMenu = () => {
+                    menu.remove();
+                    document.removeEventListener('click', closeMenu);
+                };
+                document.addEventListener('click', closeMenu);
+            });
+        }
+
+        /**
+         * 处理右键菜单操作
+         * @param {string} action - 操作类型
+         * @param {HTMLElement} tab - 目标标签元素
+         */
+        function handleContextAction(action, tab) {
+            const tabs = [...document.querySelectorAll('.tab')];
+            const currentIndex = tabs.indexOf(tab);
+
+            switch (action) {
+                case 'close':
+                    closeTab(tab);
+                    break;
+
+                case 'close-others':
+                    tabs.forEach((t, i) => {
+                        if (i !== currentIndex) closeTab(t);
+                    });
+                    break;
+
+                case 'close-right':
+                    tabs.forEach((t, i) => {
+                        if (i > currentIndex) closeTab(t);
+                    });
+                    break;
+
+                case 'reload':
+                    // 模拟刷新操作
+                    const content = document.getElementById(tab.dataset.tab);
+                    content.innerHTML = `<p>${content.innerHTML}</p>`;
+                    break;
+            }
+        }
+
+        /**
+         * 处理拖放事件
+         */
+        function setupDragDrop() {
+            tabsContainer.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                const draggingTab = document.querySelector('.tab.dragging');
+                const tabs = [...document.querySelectorAll('.tab:not(.dragging)')];
+                const nextTab = tabs.find(tab => {
+                    return e.clientX <= tab.getBoundingClientRect().left + tab.offsetWidth / 2;
+                });
+
+                if (nextTab) {
+                    tabsContainer.insertBefore(draggingTab, nextTab);
+                } else {
+                    tabsContainer.appendChild(draggingTab);
+                }
+            });
+        }
+
+        /**
+         * 处理键盘导航
+         * @param {KeyboardEvent} e - 键盘事件
+         */
+        function handleKeyboardNavigation(e) {
+            // Ctrl+Tab 切换标签
+            if (e.ctrlKey && e.key === 'Tab') {
+                e.preventDefault();
+                const tabs = [...document.querySelectorAll('.tab[role="tab"]')];
+                const currentIndex = tabs.findIndex(t => t.getAttribute('aria-selected') === 'true');
+                const nextIndex = e.shiftKey ?
+                    (currentIndex - 1 + tabs.length) % tabs.length :
+                    (currentIndex + 1) % tabs.length;
+
+                switchTab(tabs[nextIndex]);
+                tabs[nextIndex].focus();
+            }
+        }
+
+        /**
+         * 处理窗口大小改变
+         */
+        function handleResize() {
+            checkNavButtons();
+        }
+
+        /**
+         * 初始化搜索功能
+         */
+        function initSearch() {
+            searchInput.addEventListener('input', (e) => {
+                const query = e.target.value.toLowerCase();
+                document.querySelectorAll('.tab').forEach(tab => {
+                    const text = tab.textContent.toLowerCase();
+                    tab.style.display = text.includes(query) ? 'flex' : 'none';
+                });
+
+                // 如果有活动标签但被隐藏了，切换到第一个可见标签
+                if (currentTab.style.display === 'none') {
+                    const firstVisible = document.querySelector('.tab[style="flex"]');
+                    if (firstVisible) switchTab(firstVisible);
+                }
+            });
+        }
+
+        // ========== 事件监听 ==========
+
+        // 导航按钮点击
+        prevButton.addEventListener('click', function() {
+            if (this.classList.contains('disabled')) return;
+
+            const moveBy = Math.min(wrapperWidth * 0.8, -currentPosition);
+            currentPosition += moveBy;
+            tabsContainer.style.transform = `translateX(${currentPosition}px)`;
+            updateNavButtons();
+        });
+
+        nextButton.addEventListener('click', function() {
+            if (this.classList.contains('disabled')) return;
+
+            const maxScroll = tabsWidth - wrapperWidth;
+            const moveBy = Math.min(wrapperWidth * 0.8, maxScroll + currentPosition);
+            currentPosition -= moveBy;
+            tabsContainer.style.transform = `translateX(${currentPosition}px)`;
+            updateNavButtons();
+        });
+
+        // 添加标签按钮
+        addButton.addEventListener('click', addNewTab);
+
+        // 初始化拖放功能
+        setupDragDrop();
+
+        // 初始化搜索功能
+        initSearch();
+
+        // 初始化标签页系统
+        initTabs();
+    });
+
+    // ========== 语言切换功能 ==========
+    const languageDropdown = document.getElementById('language-dropdown');
+    const languageToggle = document.getElementById('language-toggle');
+    const dropdownContent = languageDropdown.querySelector('.dropdown-content');
+    let currentLanguage = 'zh'; // 默认语言设置为中文
+
+    // 点击语言图标切换下拉菜单
+    languageToggle.addEventListener('click', (e) => {
+        e.stopPropagation();
+        languageDropdown.classList.toggle('active');
+
+        // 关闭其他打开的下拉菜单
+        document.querySelectorAll('.dropdown').forEach(dropdown => {
+            if (dropdown !== languageDropdown && dropdown.classList.contains('active')) {
+                dropdown.classList.remove('active');
+            }
+        });
+    });
+
+    // 点击语言选项
+    dropdownContent.querySelectorAll('a').forEach(item => {
+        item.addEventListener('click', (e) => {
+            const lang = item.getAttribute('data-lang');
+            if (lang === currentLanguage) {
+                e.preventDefault();
+                return;
+            }
+
+            // 更新当前语言
+            setActiveLanguage(lang);
+            console.log('切换语言:', lang);
+            // 这里可以添加实际的语言切换逻辑
+            languageDropdown.classList.remove('active');
+        });
+    });
+
+    /**
+     * 设置激活语言
+     * @param {string} lang - 语言代码
+     */
+    function setActiveLanguage(lang) {
+        currentLanguage = lang;
+
+        // 更新所有语言选项状态
+        dropdownContent.querySelectorAll('a').forEach(item => {
+            if (item.getAttribute('data-lang') === lang) {
+                item.classList.add('active');
+                item.setAttribute('aria-checked', 'true');
+                // 更新语言图标显示
+                const flagIcon = item.querySelector('.flag-icon').src;
+                languageToggle.innerHTML = `<img src="${flagIcon}" style="width:16px;height:12px;border-radius:2px;">`;
+            } else {
+                item.classList.remove('active');
+            }
+        });
+    }
+
+    // 初始化设置默认语言
+    setActiveLanguage(currentLanguage);
+
+    // 点击页面其他位置关闭下拉菜单
+    document.addEventListener('click', (e) => {
+        document.querySelectorAll('.dropdown').forEach(dropdown => {
+            if (!dropdown.contains(e.target)) {
+                dropdown.classList.remove('active');
+            }
+        });
+    });
+
+    // 更多操作下拉菜单交互
+    const moreActionsDropdown = document.querySelector('.more-actions');
+    const moreActionsToggle = moreActionsDropdown.querySelector('.control-btn');
+
+    moreActionsToggle.addEventListener('click', (e) => {
+        e.stopPropagation();
+        moreActionsDropdown.classList.toggle('active');
+
+        // 关闭其他打开的下拉菜单
+        document.querySelectorAll('.dropdown').forEach(dropdown => {
+            if (dropdown !== moreActionsDropdown && dropdown.classList.contains('active')) {
+                dropdown.classList.remove('active');
+            }
+        });
+    });
+</script>
+</body>
+</html>

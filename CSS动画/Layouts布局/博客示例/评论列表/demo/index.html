@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>现代化博客评论列表</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        /* CSS部分将在下面单独展示 */
+        /* 基础样式重置 */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f5f7fa;
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+        }
+
+        /* 评论容器样式 */
+        .comments-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: #fff;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            padding: 30px;
+        }
+
+        .comments-title {
+            font-size: 24px;
+            margin-bottom: 25px;
+            color: #2c3e50;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .comments-title i {
+            color: #3498db;
+        }
+
+        /* 评论表单样式 */
+        .comment-form {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 30px;
+            padding-bottom: 25px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .form-avatar .avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid #e0e6ed;
+        }
+
+        .form-content {
+            flex: 1;
+        }
+
+        .form-content textarea {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #e0e6ed;
+            border-radius: 8px;
+            resize: none;
+            font-family: inherit;
+            font-size: 14px;
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
+
+        .form-content textarea:focus {
+            outline: none;
+            border-color: #3498db;
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+        }
+
+        .form-actions {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 10px;
+        }
+
+        .submit-btn {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: background-color 0.3s, transform 0.2s;
+        }
+
+        .submit-btn:hover {
+            background-color: #2980b9;
+            transform: translateY(-2px);
+        }
+
+        /* 评论列表样式 */
+        .comments-list {
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+        }
+
+        .comment-item {
+            display: flex;
+            gap: 15px;
+            opacity: 0; /* 初始设置为透明，用于动画 */
+            transform: translateY(20px); /* 初始位置下移，用于动画 */
+        }
+
+        .comment-avatar {
+            flex-shrink: 0;
+        }
+
+        .comment-avatar img {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid #e0e6ed;
+        }
+
+        .comment-content {
+            flex: 1;
+            background-color: #f8fafc;
+            padding: 15px;
+            border-radius: 10px;
+            position: relative;
+        }
+
+        .comment-content::before {
+            content: '';
+            position: absolute;
+            left: -10px;
+            top: 15px;
+            width: 0;
+            height: 0;
+            border-top: 10px solid transparent;
+            border-bottom: 10px solid transparent;
+            border-right: 10px solid #f8fafc;
+        }
+
+        .comment-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+        }
+
+        .comment-author {
+            font-weight: 600;
+            color: #2c3e50;
+        }
+
+        .comment-time {
+            font-size: 12px;
+            color: #95a5a6;
+        }
+
+        .comment-text {
+            font-size: 14px;
+            color: #34495e;
+            margin-bottom: 10px;
+        }
+
+        .comment-actions {
+            display: flex;
+            gap: 15px;
+        }
+
+        .comment-action {
+            font-size: 12px;
+            color: #7f8c8d;
+            cursor: pointer;
+            transition: color 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .comment-action:hover {
+            color: #3498db;
+        }
+
+        .comment-action i {
+            font-size: 14px;
+        }
+
+        /* 加载更多按钮样式 */
+        .load-more {
+            text-align: center;
+            margin-top: 30px;
+        }
+
+        .load-more-btn {
+            background-color: transparent;
+            border: 1px solid #e0e6ed;
+            color: #7f8c8d;
+            padding: 8px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .load-more-btn:hover {
+            background-color: #f8fafc;
+            color: #3498db;
+            border-color: #3498db;
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 600px) {
+            .comment-form {
+                flex-direction: column;
+            }
+
+            .form-avatar {
+                display: none;
+            }
+
+            .comment-item {
+                flex-direction: column;
+            }
+
+            .comment-avatar {
+                margin-bottom: 10px;
+            }
+
+            .comment-content::before {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="comments-container">
+    <h1 class="comments-title"><i class="fas fa-comments"></i> 读者评论</h1>
+
+    <!-- 评论表单 -->
+    <div class="comment-form">
+        <div class="form-avatar">
+            <img src="https://randomuser.me/api/portraits/women/44.jpg" alt="用户头像" class="avatar">
+        </div>
+        <div class="form-content">
+            <textarea placeholder="写下你的评论..." rows="3"></textarea>
+            <div class="form-actions">
+                <button class="submit-btn">发表评论</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 评论列表 -->
+    <div class="comments-list">
+        <!-- 评论项将通过JavaScript动态生成 -->
+    </div>
+
+    <!-- 加载更多按钮 -->
+    <div class="load-more">
+        <button class="load-more-btn">加载更多评论 <i class="fas fa-arrow-down"></i></button>
+    </div>
+</div>
+
+<!-- 引入GSAP库 -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/gsap.min.js"></script>
+<script>
+    // JavaScript部分将在下面单独展示
+    // 模拟评论数据
+    const mockComments = [
+        {
+            id: 1,
+            author: "张美丽",
+            avatar: "https://randomuser.me/api/portraits/women/33.jpg",
+            time: "2小时前",
+            text: "这篇文章写得非常好，解决了我长期以来的困惑。作者的观点非常独到，期待更多这样的内容！",
+            likes: 24,
+            replies: 5
+        },
+        {
+            id: 2,
+            author: "科技爱好者",
+            avatar: "https://randomuser.me/api/portraits/men/45.jpg",
+            time: "5小时前",
+            text: "作为一个前端开发者，我发现文中提到的几个技巧对我的日常工作很有帮助。特别是关于性能优化的部分，非常实用。",
+            likes: 18,
+            replies: 3
+        },
+        {
+            id: 3,
+            author: "旅行达人",
+            avatar: "https://randomuser.me/api/portraits/women/68.jpg",
+            time: "1天前",
+            text: "虽然我不是技术背景，但作者用通俗易懂的语言解释了复杂的概念，让我也能理解其中的精髓。感谢分享！",
+            likes: 12,
+            replies: 2
+        },
+        {
+            id: 4,
+            author: "设计师小李",
+            avatar: "https://randomuser.me/api/portraits/men/22.jpg",
+            time: "2天前",
+            text: "从设计的角度看，这个方案确实考虑到了用户体验的方方面面。希望能看到更多跨学科的分析文章。",
+            likes: 8,
+            replies: 1
+        },
+        {
+            id: 5,
+            author: "产品经理老王",
+            avatar: "https://randomuser.me/api/portraits/men/60.jpg",
+            time: "3天前",
+            text: "作为一个产品经理，我认为这篇文章提出的方法论可以很好地应用到我们的产品迭代中。已经分享给团队了！",
+            likes: 15,
+            replies: 4
+        }
+    ];
+
+    // DOM元素
+    const commentsList = document.querySelector('.comments-list');
+    const loadMoreBtn = document.querySelector('.load-more-btn');
+    const submitBtn = document.querySelector('.submit-btn');
+    const commentTextarea = document.querySelector('.comment-form textarea');
+
+    // 当前显示的评论索引
+    let currentIndex = 0;
+    // 每次加载的评论数量
+    const commentsPerLoad = 3;
+
+    // 初始化：加载第一批评论
+    loadComments();
+
+    // 加载评论函数
+    function loadComments() {
+        // 计算本次要加载的评论
+        const commentsToLoad = mockComments.slice(currentIndex, currentIndex + commentsPerLoad);
+
+        // 如果没有更多评论，隐藏加载更多按钮
+        if (commentsToLoad.length === 0) {
+            loadMoreBtn.style.display = 'none';
+            return;
+        }
+
+        // 创建评论元素并添加到列表
+        commentsToLoad.forEach(comment => {
+            const commentElement = createCommentElement(comment);
+            commentsList.appendChild(commentElement);
+
+            // 使用GSAP为每个评论项添加动画
+            gsap.to(commentElement, {
+                opacity: 1,
+                y: 0,
+                duration: 0.6,
+                ease: "power2.out",
+                delay: 0.1 * (currentIndex % commentsPerLoad)
+            });
+        });
+
+        // 更新索引
+        currentIndex += commentsPerLoad;
+
+        // 如果已经加载完所有评论，隐藏加载更多按钮
+        if (currentIndex >= mockComments.length) {
+            loadMoreBtn.style.display = 'none';
+        }
+    }
+
+    // 创建单个评论元素的函数
+    function createCommentElement(comment) {
+        const commentItem = document.createElement('div');
+        commentItem.className = 'comment-item';
+
+        commentItem.innerHTML = `
+        <div class="comment-avatar">
+            <img src="${comment.avatar}" alt="${comment.author}的头像">
+        </div>
+        <div class="comment-content">
+            <div class="comment-header">
+                <span class="comment-author">${comment.author}</span>
+                <span class="comment-time">${comment.time}</span>
+            </div>
+            <div class="comment-text">${comment.text}</div>
+            <div class="comment-actions">
+                <div class="comment-action like-btn" data-id="${comment.id}">
+                    <i class="far fa-thumbs-up"></i> 赞 (${comment.likes})
+                </div>
+                <div class="comment-action reply-btn">
+                    <i class="far fa-comment-dots"></i> 回复 (${comment.replies})
+                </div>
+            </div>
+        </div>
+    `;
+
+        return commentItem;
+    }
+
+    // 加载更多按钮点击事件
+    loadMoreBtn.addEventListener('click', () => {
+        // 添加点击动画
+        gsap.to(loadMoreBtn, {
+            y: 3,
+            duration: 0.1,
+            yoyo: true,
+            repeat: 1
+        });
+
+        // 加载更多评论
+        loadComments();
+    });
+
+    // 点赞按钮事件委托
+    commentsList.addEventListener('click', (e) => {
+        if (e.target.closest('.like-btn')) {
+            const likeBtn = e.target.closest('.like-btn');
+            const icon = likeBtn.querySelector('i');
+            const id = likeBtn.dataset.id;
+
+            // 切换点赞状态
+            if (icon.classList.contains('far')) {
+                icon.classList.remove('far');
+                icon.classList.add('fas');
+
+                // 更新点赞数
+                const currentLikes = parseInt(likeBtn.textContent.match(/\d+/)[0]);
+                likeBtn.innerHTML = `<i class="fas fa-thumbs-up"></i> 赞 (${currentLikes + 1})`;
+
+                // 添加点赞动画
+                gsap.to(likeBtn, {
+                    scale: 1.2,
+                    duration: 0.2,
+                    yoyo: true,
+                    repeat: 1
+                });
+            } else {
+                icon.classList.remove('fas');
+                icon.classList.add('far');
+
+                // 更新点赞数
+                const currentLikes = parseInt(likeBtn.textContent.match(/\d+/)[0]);
+                likeBtn.innerHTML = `<i class="far fa-thumbs-up"></i> 赞 (${currentLikes - 1})`;
+            }
+        }
+    });
+
+    // 提交评论事件
+    submitBtn.addEventListener('click', () => {
+        const text = commentTextarea.value.trim();
+
+        if (text) {
+            // 创建新评论对象
+            const newComment = {
+                id: mockComments.length + 1,
+                author: "当前用户",
+                avatar: "https://randomuser.me/api/portraits/women/44.jpg",
+                time: "刚刚",
+                text: text,
+                likes: 0,
+                replies: 0
+            };
+
+            // 创建评论元素
+            const commentElement = createCommentElement(newComment);
+
+            // 添加到列表顶部
+            commentsList.insertBefore(commentElement, commentsList.firstChild);
+
+            // 重置文本框
+            commentTextarea.value = '';
+
+            // 添加新评论的入场动画
+            gsap.from(commentElement, {
+                opacity: 0,
+                y: 50,
+                duration: 0.6,
+                ease: "back.out(1.7)"
+            });
+
+            // 模拟添加到数据数组
+            mockComments.unshift(newComment);
+        }
+    });
+
+    // 文本框输入时调整高度
+    commentTextarea.addEventListener('input', function() {
+        this.style.height = 'auto';
+        this.style.height = (this.scrollHeight) + 'px';
+    });
+</script>
+</body>
+</html>

@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>现代化博客评论列表</title>
+    <style>
+        /* 基础样式重置 */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f5f7fa;
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* 评论区域标题 */
+        .comments-title {
+            font-size: 28px;
+            font-weight: 600;
+            margin-bottom: 30px;
+            color: #2c3e50;
+            position: relative;
+            padding-left: 15px;
+        }
+
+        .comments-title::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 5px;
+            height: 80%;
+            width: 4px;
+            background: linear-gradient(to bottom, #3498db, #9b59b6);
+            border-radius: 2px;
+        }
+
+        /* 评论列表容器 */
+        .comments-list {
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+        }
+
+        /* 单个评论项 */
+        .comment {
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            padding: 20px;
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            /*opacity: 0; !* 初始状态为透明，待动画显示 *!*/
+        }
+
+        .comment:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        /* 评论头部 - 作者信息 */
+        .comment-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .comment-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-right: 15px;
+            border: 2px solid #e0e6ed;
+        }
+
+        .comment-author {
+            font-weight: 600;
+            font-size: 16px;
+            color: #2c3e50;
+        }
+
+        .comment-meta {
+            display: flex;
+            align-items: center;
+            margin-top: 5px;
+            font-size: 13px;
+            color: #7f8c8d;
+        }
+
+        .comment-date {
+            margin-right: 10px;
+        }
+
+        .comment-badge {
+            background-color: #e3f2fd;
+            color: #1976d2;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        /* 评论内容 */
+        .comment-content {
+            color: #34495e;
+            margin-bottom: 15px;
+            line-height: 1.7;
+        }
+
+        /* 评论操作按钮 */
+        .comment-actions {
+            display: flex;
+            gap: 15px;
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid #f0f0f0;
+        }
+
+        .comment-action {
+            background: none;
+            border: none;
+            color: #7f8c8d;
+            font-size: 14px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            transition: color 0.2s ease;
+        }
+
+        .comment-action:hover {
+            color: #3498db;
+        }
+
+        .comment-action i {
+            margin-right: 5px;
+            font-size: 16px;
+        }
+
+        /* 回复按钮特殊样式 */
+        .reply-btn {
+            color: #3498db;
+            font-weight: 500;
+        }
+
+        /* 回复列表 */
+        .replies-list {
+            margin-top: 20px;
+            padding-left: 30px;
+            border-left: 2px dashed #e0e6ed;
+            display: none; /* 默认隐藏回复 */
+        }
+
+        /* 显示回复时的样式 */
+        .replies-list.visible {
+            display: block;
+        }
+
+        /* 回复项 - 比主评论稍小 */
+        .reply {
+            margin-top: 15px;
+            padding: 15px;
+            background-color: #f8fafc;
+            border-radius: 8px;
+            position: relative;
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 600px) {
+            .comment-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .comment-avatar {
+                margin-right: 0;
+                margin-bottom: 10px;
+            }
+
+            .replies-list {
+                padding-left: 15px;
+            }
+        }
+
+        /* 加载更多按钮 */
+        .load-more {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            margin-top: 30px;
+            display: block;
+            width: 100%;
+            transition: background-color 0.3s ease;
+        }
+
+        .load-more:hover {
+            background-color: #2980b9;
+        }
+
+        /* 模拟图标 - 实际项目中可以使用字体图标 */
+        .icon {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            background-color: currentColor;
+            mask-size: contain;
+            -webkit-mask-size: contain;
+            mask-position: center;
+            -webkit-mask-position: center;
+            mask-repeat: no-repeat;
+            -webkit-mask-repeat: no-repeat;
+        }
+
+        .icon-like {
+            mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3zM7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3'%3E%3C/path%3E%3C/svg%3E");
+        }
+
+        .icon-reply {
+            mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='9 17 4 12 9 7'%3E%3C/polyline%3E%3Cpath d='M20 18v-2a4 4 0 0 0-4-4H4'%3E%3C/path%3E%3C/svg%3E");
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1 class="comments-title">评论</h1>
+
+    <div class="comments-list" id="commentsContainer">
+        <!-- 评论将通过JavaScript动态加载 -->
+    </div>
+
+    <button class="load-more" id="loadMoreBtn">加载更多评论</button>
+</div>
+
+<!-- 引入GSAP库 -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/gsap.min.js"></script>
+
+<script>
+    // 评论数据 - 模拟从API获取
+    const commentsData = [
+        {
+            id: 1,
+            author: "张小明",
+            avatar: "https://randomuser.me/api/portraits/men/32.jpg",
+            date: "2023-05-15 14:30",
+            content: "这篇文章写得非常好，解决了我长期以来的困惑。作者对技术的理解非常深入，讲解也很清晰易懂。",
+            likes: 24,
+            isAuthor: false,
+            replies: [
+                {
+                    id: 101,
+                    author: "李华",
+                    avatar: "https://randomuser.me/api/portraits/women/44.jpg",
+                    date: "2023-05-15 15:12",
+                    content: "完全同意！我也从中学到了很多新知识。",
+                    likes: 5,
+                    isAuthor: true
+                },
+                {
+                    id: 102,
+                    author: "王磊",
+                    avatar: "https://randomuser.me/api/portraits/men/22.jpg",
+                    date: "2023-05-15 16:45",
+                    content: "特别是第二部分关于性能优化的内容，非常实用！",
+                    likes: 8,
+                    isAuthor: false
+                }
+            ]
+        },
+        {
+            id: 2,
+            author: "陈思思",
+            avatar: "https://randomuser.me/api/portraits/women/65.jpg",
+            date: "2023-05-16 09:20",
+            content: "有几个地方不太明白，能否详细解释一下第三章节的实现原理？",
+            likes: 12,
+            isAuthor: false,
+            replies: [
+                {
+                    id: 201,
+                    author: "作者",
+                    avatar: "https://randomuser.me/api/portraits/men/1.jpg",
+                    date: "2023-05-16 10:05",
+                    content: "感谢提问！第三章节主要讨论了异步编程的核心概念。简单来说，它通过事件循环机制来实现非阻塞I/O操作。我会在下一篇文章中详细讲解这部分内容。",
+                    likes: 15,
+                    isAuthor: true
+                }
+            ]
+        },
+        {
+            id: 3,
+            author: "技术达人",
+            avatar: "https://randomuser.me/api/portraits/men/75.jpg",
+            date: "2023-05-17 18:40",
+            content: "实践了一下文中的代码示例，效果非常好！比官方文档的解释更直观。",
+            likes: 32,
+            isAuthor: false,
+            replies: []
+        }
+    ];
+
+    // DOM元素
+    const commentsContainer = document.getElementById('commentsContainer');
+    const loadMoreBtn = document.getElementById('loadMoreBtn');
+
+    // 当前显示的评论索引
+    let currentIndex = 0;
+    // 每次加载的评论数量
+    const commentsPerLoad = 2;
+
+    // 初始化评论列表
+    function initComments() {
+        loadMoreComments();
+
+        // 点击加载更多按钮
+        loadMoreBtn.addEventListener('click', loadMoreComments);
+    }
+
+    // 加载更多评论
+    function loadMoreComments() {
+        const nextIndex = currentIndex + commentsPerLoad;
+        const commentsToShow = commentsData.slice(currentIndex, nextIndex);
+
+        if (commentsToShow.length === 0) {
+            loadMoreBtn.disabled = true;
+            loadMoreBtn.textContent = "没有更多评论了";
+            return;
+        }
+
+        // 创建评论元素并添加到容器
+        commentsToShow.forEach(comment => {
+            const commentElement = createCommentElement(comment);
+            commentsContainer.appendChild(commentElement);
+
+            // 使用GSAP动画显示评论
+            gsap.fromTo(commentElement,
+                { opacity: 0, y: 20 },
+                {
+                    opacity: 1,
+                    y: 0,
+                    duration: 0.6,
+                    ease: "power2.out",
+                    onComplete: () => {
+                        // 动画完成后移除初始的opacity: 0样式
+                        commentElement.style.opacity = '';
+                    }
+                }
+            );
+        });
+
+        currentIndex = nextIndex;
+
+        // 如果已经显示所有评论，禁用按钮
+        if (currentIndex >= commentsData.length) {
+            loadMoreBtn.disabled = true;
+            loadMoreBtn.textContent = "没有更多评论了";
+        }
+    }
+
+    // 创建单个评论元素
+    function createCommentElement(comment) {
+        const commentElement = document.createElement('div');
+        commentElement.className = 'comment';
+        commentElement.dataset.commentId = comment.id;
+
+        // 评论头部 - 作者信息
+        const commentHeader = document.createElement('div');
+        commentHeader.className = 'comment-header';
+
+        const avatarImg = document.createElement('img');
+        avatarImg.className = 'comment-avatar';
+        avatarImg.src = comment.avatar;
+        avatarImg.alt = comment.author;
+
+        const authorInfo = document.createElement('div');
+
+        const authorName = document.createElement('div');
+        authorName.className = 'comment-author';
+        authorName.textContent = comment.author;
+
+        const metaInfo = document.createElement('div');
+        metaInfo.className = 'comment-meta';
+
+        const dateSpan = document.createElement('span');
+        dateSpan.className = 'comment-date';
+        dateSpan.textContent = comment.date;
+
+        metaInfo.appendChild(dateSpan);
+
+        // 如果是作者，添加徽章
+        if (comment.isAuthor) {
+            const badgeSpan = document.createElement('span');
+            badgeSpan.className = 'comment-badge';
+            badgeSpan.textContent = '作者';
+            metaInfo.appendChild(badgeSpan);
+        }
+
+        authorInfo.appendChild(authorName);
+        authorInfo.appendChild(metaInfo);
+
+        commentHeader.appendChild(avatarImg);
+        commentHeader.appendChild(authorInfo);
+
+        // 评论内容
+        const contentDiv = document.createElement('div');
+        contentDiv.className = 'comment-content';
+        contentDiv.textContent = comment.content;
+
+        // 评论操作按钮
+        const actionsDiv = document.createElement('div');
+        actionsDiv.className = 'comment-actions';
+
+        // 点赞按钮
+        const likeButton = document.createElement('button');
+        likeButton.className = 'comment-action';
+        likeButton.innerHTML = `<span class="icon icon-like"></span> ${comment.likes}`;
+        likeButton.addEventListener('click', () => {
+            // 简单的点赞动画
+            gsap.to(likeButton, {
+                scale: 1.2,
+                duration: 0.2,
+                yoyo: true,
+                repeat: 1
+            });
+        });
+
+        // 回复按钮
+        const replyButton = document.createElement('button');
+        replyButton.className = 'comment-action reply-btn';
+        replyButton.innerHTML = `<span class="icon icon-reply"></span> 回复`;
+
+        // 如果有回复，添加查看回复按钮
+        if (comment.replies && comment.replies.length > 0) {
+            const viewRepliesButton = document.createElement('button');
+            viewRepliesButton.className = 'comment-action reply-btn';
+            viewRepliesButton.innerHTML = `<span class="icon icon-reply"></span> 查看回复(${comment.replies.length})`;
+            viewRepliesButton.addEventListener('click', () => toggleReplies(commentElement, comment.replies));
+            actionsDiv.appendChild(viewRepliesButton);
+        }
+
+        actionsDiv.appendChild(likeButton);
+        actionsDiv.appendChild(replyButton);
+
+        // 组装评论元素
+        commentElement.appendChild(commentHeader);
+        commentElement.appendChild(contentDiv);
+        commentElement.appendChild(actionsDiv);
+
+        return commentElement;
+    }
+
+    // 切换显示/隐藏回复
+    function toggleReplies(commentElement, replies) {
+        let repliesList = commentElement.querySelector('.replies-list');
+
+        if (!repliesList) {
+            // 创建回复列表
+            repliesList = document.createElement('div');
+            repliesList.className = 'replies-list';
+
+            // 添加每个回复
+            replies.forEach(reply => {
+                const replyElement = createCommentElement(reply);
+                replyElement.classList.add('reply');
+                repliesList.appendChild(replyElement);
+            });
+
+            commentElement.appendChild(repliesList);
+
+            // 使用GSAP动画展开回复
+            gsap.from(repliesList, {
+                height: 0,
+                opacity: 0,
+                duration: 0.4,
+                ease: "power2.out"
+            });
+        } else {
+            // 切换显示/隐藏
+            if (repliesList.classList.contains('visible')) {
+                // 隐藏回复的动画
+                gsap.to(repliesList, {
+                    height: 0,
+                    opacity: 0,
+                    duration: 0.3,
+                    ease: "power2.in",
+                    onComplete: () => {
+                        repliesList.classList.remove('visible');
+                    }
+                });
+            } else {
+                // 显示回复的动画
+                repliesList.classList.add('visible');
+                gsap.fromTo(repliesList,
+                    { height: 0, opacity: 0 },
+                    {
+                        height: 'auto',
+                        opacity: 1,
+                        duration: 0.4,
+                        ease: "power2.out"
+                    }
+                );
+            }
+        }
+    }
+
+    // 初始化
+    document.addEventListener('DOMContentLoaded', initComments);
+</script>
+</body>
+</html>

@@ -1,0 +1,943 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>精美登录页面 - 优化版</title>
+    <!-- 引入Font Awesome图标库 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- 引入GSAP动画库 -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/gsap.min.js"></script>
+    <style>
+        /* 基础样式重置 */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* 背景装饰圆圈 */
+        .bg-circle {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.2);
+            filter: blur(50px);
+            z-index: -1;
+        }
+
+        .circle-1 {
+            width: 300px;
+            height: 300px;
+            top: -50px;
+            left: -50px;
+            background: rgba(100, 149, 237, 0.3);
+        }
+
+        .circle-2 {
+            width: 400px;
+            height: 400px;
+            bottom: -100px;
+            right: -100px;
+            background: rgba(255, 182, 193, 0.3);
+        }
+
+        .circle-3 {
+            width: 200px;
+            height: 200px;
+            top: 50%;
+            right: 20%;
+            background: rgba(152, 251, 152, 0.3);
+        }
+
+        /* 登录容器 */
+        .login-container {
+            background-color: white;
+            border-radius: 16px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+            width: 420px;
+            padding: 40px;
+            transform: translateY(0);
+            opacity: 1;
+            transition: all 0.5s ease;
+        }
+
+        .login-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .login-header h1 {
+            color: #333;
+            font-size: 28px;
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+
+        /* 标签切换器 */
+        .tab-switcher {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .tab-switcher::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background-color: #f0f0f0;
+        }
+
+        .tab-btn {
+            background: none;
+            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            color: #666;
+            cursor: pointer;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .tab-btn.active {
+            color: #4361ee;
+            font-weight: 500;
+        }
+
+        .tab-btn.active::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60%;
+            height: 3px;
+            background-color: #4361ee;
+            border-radius: 3px;
+            z-index: 1;
+        }
+
+        /* 登录表单 */
+        .login-form {
+            display: none;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.5s ease;
+        }
+
+        .login-form.active {
+            display: block;
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #555;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .input-with-icon {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .input-with-icon i {
+            position: absolute;
+            left: 15px;
+            color: #999;
+            font-size: 16px;
+        }
+
+        .input-with-icon input {
+            width: 100%;
+            padding: 12px 15px 12px 45px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 15px;
+            transition: all 0.3s ease;
+        }
+
+        .input-with-icon input:focus {
+            border-color: #4361ee;
+            box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.1);
+            outline: none;
+        }
+
+        .toggle-password {
+            position: absolute;
+            right: 15px;
+            cursor: pointer;
+            color: #999;
+            transition: color 0.3s ease;
+        }
+
+        .toggle-password:hover {
+            color: #4361ee;
+        }
+
+        /* 短信验证码输入组 */
+        .sms-code-group {
+            display: flex;
+            gap: 10px;
+        }
+
+        .sms-code-group .input-with-icon {
+            flex: 1;
+        }
+
+        .send-sms-btn {
+            padding: 0 15px;
+            background-color: #f0f0f0;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            color: #666;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+        }
+
+        .send-sms-btn:hover {
+            background-color: #e0e0e0;
+        }
+
+        /* 表单选项 */
+        .form-options {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            font-size: 14px;
+        }
+
+        .remember-me {
+            display: flex;
+            align-items: center;
+            color: #666;
+            cursor: pointer;
+        }
+
+        .remember-me input {
+            margin-right: 5px;
+        }
+
+        .forgot-password {
+            color: #666;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .forgot-password:hover {
+            color: #4361ee;
+        }
+
+        /* 登录按钮 */
+        .login-btn {
+            width: 100%;
+            padding: 12px;
+            background-color: #4361ee;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 20px;
+        }
+
+        .login-btn:hover {
+            background-color: #3a56d4;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(67, 97, 238, 0.3);
+        }
+
+        /* 第三方登录 */
+        .social-login {
+            margin-top: 20px;
+        }
+
+        .divider {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+            color: #999;
+            font-size: 14px;
+        }
+
+        .divider::before, .divider::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background-color: #eee;
+        }
+
+        .divider span {
+            padding: 0 15px;
+        }
+
+        .social-icons {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        .social-icon {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background-color: #f5f5f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .social-icon i {
+            font-size: 20px;
+            color: #666;
+            transition: all 0.3s ease;
+        }
+
+        .social-icon:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .social-icon[data-platform="wechat"]:hover {
+            background-color: #07C160;
+        }
+
+        .social-icon[data-platform="qq"]:hover {
+            background-color: #12B7F5;
+        }
+
+        .social-icon[data-platform="weibo"]:hover {
+            background-color: #E6162D;
+        }
+
+        .social-icon[data-platform="github"]:hover {
+            background-color: #333;
+        }
+
+        .social-icon:hover i {
+            color: white;
+        }
+
+        /* 二维码弹窗 */
+        .qr-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 100;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .qr-modal.active {
+            display: flex;
+        }
+
+        .qr-modal-content {
+            background-color: white;
+            border-radius: 12px;
+            padding: 30px;
+            width: 320px;
+            text-align: center;
+            position: relative;
+            will-change: transform, opacity; /* 优化动画性能 */
+            transform-origin: center center;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            font-size: 24px;
+            color: #999;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+
+        .close-modal:hover {
+            color: #333;
+        }
+
+        .qr-modal-content h2 {
+            margin-bottom: 20px;
+            color: #333;
+            font-size: 22px;
+        }
+
+        /* 二维码加载动画样式 */
+        .qr-loader {
+            width: 40px;
+            height: 40px;
+            border: 3px solid rgba(67, 97, 238, 0.2);
+            border-top-color: #4361ee;
+            border-radius: 50%;
+            margin: auto;
+        }
+
+        /* 二维码占位符样式优化 */
+        .qr-code-placeholder {
+            width: 200px;
+            height: 200px;
+            margin: 0 auto 20px;
+            background-color: #f5f5f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 8px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .qr-modal-content p {
+            color: #666;
+            margin-bottom: 15px;
+        }
+
+        .qr-modal-content p span {
+            color: #4361ee;
+            font-weight: 500;
+        }
+
+        .qr-tips {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #999;
+            font-size: 13px;
+        }
+
+        .qr-tips i {
+            margin-right: 5px;
+            font-size: 14px;
+            color: #FFA500;
+        }
+
+        /* Toast消息样式 */
+        .toast-message {
+            position: fixed;
+            bottom: 50px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 4px;
+            font-size: 14px;
+            z-index: 1000;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body>
+<!-- 背景装饰元素 -->
+<div class="bg-circle circle-1"></div>
+<div class="bg-circle circle-2"></div>
+<div class="bg-circle circle-3"></div>
+
+<!-- 主登录容器 -->
+<div class="login-container">
+    <!-- 标题和切换标签 -->
+    <div class="login-header">
+        <h1>欢迎登录</h1>
+        <div class="tab-switcher">
+            <button class="tab-btn active" data-tab="password-tab">密码登录</button>
+            <button class="tab-btn" data-tab="sms-tab">短信登录</button>
+        </div>
+    </div>
+
+    <!-- 密码登录表单 -->
+    <form id="password-tab" class="login-form active">
+        <div class="form-group">
+            <label for="username">用户名/邮箱</label>
+            <div class="input-with-icon">
+                <i class="fas fa-user"></i>
+                <input type="text" id="username" placeholder="请输入用户名或邮箱" required>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="password">密码</label>
+            <div class="input-with-icon">
+                <i class="fas fa-lock"></i>
+                <input type="password" id="password" placeholder="请输入密码" required>
+                <i class="fas fa-eye toggle-password"></i>
+            </div>
+        </div>
+        <div class="form-options">
+            <label class="remember-me">
+                <input type="checkbox"> 记住我
+            </label>
+            <a href="#" class="forgot-password">忘记密码?</a>
+        </div>
+        <button type="submit" class="login-btn">登 录</button>
+    </form>
+
+    <!-- 短信登录表单 -->
+    <form id="sms-tab" class="login-form">
+        <div class="form-group">
+            <label for="phone">手机号码</label>
+            <div class="input-with-icon">
+                <i class="fas fa-mobile-alt"></i>
+                <input type="tel" id="phone" placeholder="请输入手机号码" required>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="sms-code">验证码</label>
+            <div class="sms-code-group">
+                <div class="input-with-icon">
+                    <i class="fas fa-sms"></i>
+                    <input type="text" id="sms-code" placeholder="请输入验证码" required>
+                </div>
+                <button type="button" class="send-sms-btn">获取验证码</button>
+            </div>
+        </div>
+        <button type="submit" class="login-btn">登 录</button>
+    </form>
+
+    <!-- 第三方登录 -->
+    <div class="social-login">
+        <div class="divider">
+            <span>其他登录方式</span>
+        </div>
+        <div class="social-icons">
+            <div class="social-icon" data-platform="wechat">
+                <i class="fab fa-weixin"></i>
+            </div>
+            <div class="social-icon" data-platform="qq">
+                <i class="fab fa-qq"></i>
+            </div>
+            <div class="social-icon" data-platform="weibo">
+                <i class="fab fa-weibo"></i>
+            </div>
+            <div class="social-icon" data-platform="github">
+                <i class="fab fa-github"></i>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 二维码弹窗 -->
+<div class="qr-modal">
+    <div class="qr-modal-content">
+        <span class="close-modal">&times;</span>
+        <h2>扫码登录</h2>
+        <div class="qr-code-placeholder"></div>
+        <p>请使用<span id="platform-name">微信</span>扫描二维码登录</p>
+        <div class="qr-tips">
+            <i class="fas fa-lightbulb"></i>
+            <span>二维码有效期为5分钟，请尽快扫码</span>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // 初始化GSAP动画 - 页面加载动画
+        gsap.from('.login-container', {
+            duration: 0.8,
+            y: 50,
+            opacity: 0,
+            ease: 'back.out(1.2)'
+        });
+
+        gsap.from('.bg-circle', {
+            duration: 1.5,
+            scale: 0,
+            opacity: 0,
+            stagger: 0.2,
+            ease: 'elastic.out(1, 0.5)'
+        });
+
+        // 获取DOM元素
+        const tabButtons = document.querySelectorAll('.tab-btn');
+        const loginForms = document.querySelectorAll('.login-form');
+        const togglePassword = document.querySelector('.toggle-password');
+        const sendSmsBtn = document.querySelector('.send-sms-btn');
+        const socialIcons = document.querySelectorAll('.social-icon');
+        const qrModal = document.querySelector('.qr-modal');
+        const platformName = document.getElementById('platform-name');
+
+        // 标签切换功能
+        tabButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                // 移除所有按钮的active类
+                tabButtons.forEach(btn => btn.classList.remove('active'));
+                // 给当前点击的按钮添加active类
+                this.classList.add('active');
+
+                // 获取目标标签ID
+                const targetTab = this.getAttribute('data-tab');
+
+                // 切换表单显示
+                loginForms.forEach(form => {
+                    if (form.id === targetTab) {
+                        form.classList.add('active');
+                        gsap.fromTo(form,
+                            { opacity: 0, y: 20 },
+                            { opacity: 1, y: 0, duration: 0.5, ease: 'power2.out' }
+                        );
+                    } else {
+                        form.classList.remove('active');
+                        gsap.to(form, { opacity: 0, y: 20, duration: 0.3 });
+                    }
+                });
+            });
+        });
+
+        // 密码显示/隐藏切换
+        if (togglePassword) {
+            togglePassword.addEventListener('click', function() {
+                const passwordInput = document.getElementById('password');
+                const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+                passwordInput.setAttribute('type', type);
+                this.classList.toggle('fa-eye-slash');
+                this.classList.toggle('fa-eye');
+            });
+        }
+
+        // 发送短信验证码
+        if (sendSmsBtn) {
+            sendSmsBtn.addEventListener('click', function() {
+                const phoneInput = document.getElementById('phone');
+                if (!phoneInput.value || !/^1[3-9]\d{9}$/.test(phoneInput.value)) {
+                    shakeElement(phoneInput);
+                    return;
+                }
+
+                // 禁用按钮并开始倒计时
+                let countdown = 60;
+                this.disabled = true;
+                this.textContent = `${countdown}秒后重试`;
+
+                const timer = setInterval(() => {
+                    countdown--;
+                    this.textContent = `${countdown}秒后重试`;
+
+                    if (countdown <= 0) {
+                        clearInterval(timer);
+                        this.disabled = false;
+                        this.textContent = '获取验证码';
+                    }
+                }, 1000);
+
+                // 模拟发送短信
+                setTimeout(() => {
+                    showToast('验证码已发送到您的手机');
+                }, 1500);
+            });
+        }
+
+        // 第三方登录图标点击事件
+        socialIcons.forEach(icon => {
+            icon.addEventListener('click', function() {
+                const platform = this.getAttribute('data-platform');
+                let platformText = '';
+
+                // 根据平台设置显示文本
+                switch(platform) {
+                    case 'wechat':
+                        platformText = '微信';
+                        break;
+                    case 'qq':
+                        platformText = 'QQ';
+                        break;
+                    case 'weibo':
+                        platformText = '微博';
+                        break;
+                    case 'github':
+                        platformText = 'GitHub';
+                        break;
+                    default:
+                        platformText = '第三方';
+                }
+
+                // 更新平台名称并打开二维码弹窗
+                platformName.textContent = platformText;
+                openQrModal();
+
+                // 模拟二维码加载效果
+                simulateQrCodeLoading();
+            });
+        });
+
+        // 打开二维码弹窗
+        function openQrModal() {
+            // 显示模态框
+            qrModal.style.display = 'flex';
+
+            // 使用GSAP创建更流畅的动画序列
+            const tl = gsap.timeline({
+                defaults: { ease: "power3.inOut" }
+            });
+
+            // 背景淡入
+            tl.fromTo(qrModal,
+                { opacity: 0 },
+                { opacity: 1, duration: 0.3 }
+            );
+
+            // 内容弹入
+            tl.fromTo('.qr-modal-content',
+                {
+                    opacity: 0,
+                    scale: 0.8,
+                    y: 20,
+                    rotation: -2
+                },
+                {
+                    opacity: 1,
+                    scale: 1,
+                    y: 0,
+                    rotation: 0,
+                    duration: 0.5,
+                    ease: "back.out(1.4)"
+                },
+                "-=0.2" // 与背景动画重叠0.2秒
+            );
+
+            // 二维码占位符的特殊动画
+            tl.from('.qr-code-placeholder', {
+                scale: 0.9,
+                opacity: 0,
+                duration: 0.3,
+                ease: "elastic.out(1, 0.5)"
+            }, "-=0.3");
+        }
+
+        // 关闭二维码弹窗
+        function closeQrModal() {
+            // 使用GSAP创建更流畅的退出动画序列
+            const tl = gsap.timeline({
+                onComplete: () => {
+                    // 动画完成后隐藏模态框
+                    qrModal.style.display = 'none';
+                }
+            });
+
+            // 内容弹出
+            tl.to('.qr-modal-content', {
+                opacity: 0,
+                scale: 0.9,
+                y: -20,
+                rotation: 2,
+                duration: 0.3,
+                ease: "power2.in"
+            });
+
+            // 背景淡出
+            tl.to(qrModal, {
+                opacity: 0,
+                duration: 0.2
+            }, "-=0.1"); // 与内容动画重叠0.1秒
+        }
+
+        // 模拟二维码加载效果
+        function simulateQrCodeLoading() {
+            const qrPlaceholder = document.querySelector('.qr-code-placeholder');
+
+            // 清空占位符
+            qrPlaceholder.innerHTML = '';
+
+            // 添加加载动画
+            const loader = document.createElement('div');
+            loader.className = 'qr-loader';
+            qrPlaceholder.appendChild(loader);
+
+            // 使用GSAP创建加载动画
+            gsap.to(loader, {
+                rotation: 360,
+                duration: 1.5,
+                repeat: -1,
+                ease: "linear"
+            });
+
+            // 模拟加载延迟
+            setTimeout(() => {
+                // 移除加载动画
+                qrPlaceholder.removeChild(loader);
+
+                // 添加生成的二维码（这里使用SVG模拟）
+                const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+                svg.setAttribute("viewBox", "0 0 100 100");
+                svg.style.width = "100%";
+                svg.style.height = "100%";
+
+                // 创建二维码图案（简化版）
+                for (let i = 0; i < 100; i += 10) {
+                    for (let j = 0; j < 100; j += 10) {
+                        if (Math.random() > 0.3) {
+                            const rect = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+                            rect.setAttribute("x", i);
+                            rect.setAttribute("y", j);
+                            rect.setAttribute("width", "8");
+                            rect.setAttribute("height", "8");
+                            rect.setAttribute("fill", "#333");
+                            svg.appendChild(rect);
+                        }
+                    }
+                }
+
+                // 添加定位标记
+                addQrMarker(svg, 5, 5);
+                addQrMarker(svg, 65, 5);
+                addQrMarker(svg, 5, 65);
+
+                qrPlaceholder.appendChild(svg);
+
+                // 二维码出现动画
+                gsap.from(svg, {
+                    scale: 0.5,
+                    opacity: 0,
+                    duration: 0.5,
+                    ease: "back.out(1.7)"
+                });
+            }, 1500);
+        }
+
+        // 添加二维码定位标记
+        function addQrMarker(svg, x, y) {
+            // 外框
+            const outer = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+            outer.setAttribute("x", x);
+            outer.setAttribute("y", y);
+            outer.setAttribute("width", "20");
+            outer.setAttribute("height", "20");
+            outer.setAttribute("fill", "none");
+            outer.setAttribute("stroke", "#333");
+            outer.setAttribute("stroke-width", "2");
+            svg.appendChild(outer);
+
+            // 内框
+            const inner = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+            inner.setAttribute("x", x + 5);
+            inner.setAttribute("y", y + 5);
+            inner.setAttribute("width", "10");
+            inner.setAttribute("height", "10");
+            inner.setAttribute("fill", "#333");
+            svg.appendChild(inner);
+        }
+
+        // 关闭按钮事件
+        document.querySelector('.close-modal').addEventListener('click', closeQrModal);
+
+        // 点击外部关闭事件
+        qrModal.addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeQrModal();
+            }
+        });
+
+        // 表单提交
+        const forms = document.querySelectorAll('.login-form');
+        forms.forEach(form => {
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+
+                // 模拟登录成功
+                simulateLoginSuccess();
+            });
+        });
+
+        // 模拟登录成功
+        function simulateLoginSuccess() {
+            gsap.to('.login-container', {
+                y: -50,
+                opacity: 0,
+                duration: 0.5,
+                ease: 'power2.in',
+                onComplete: () => {
+                    showToast('登录成功，正在跳转...');
+                    // 实际应用中这里会是页面跳转
+                    setTimeout(() => {
+                        gsap.fromTo('.login-container',
+                            { y: 50, opacity: 0 },
+                            { y: 0, opacity: 1, duration: 0.5, ease: 'power2.out' }
+                        );
+                    }, 2000);
+                }
+            });
+        }
+
+        // 显示Toast提示
+        function showToast(message) {
+            const toast = document.createElement('div');
+            toast.className = 'toast-message';
+            toast.textContent = message;
+            document.body.appendChild(toast);
+
+            gsap.fromTo(toast,
+                { y: 50, opacity: 0 },
+                {
+                    y: 0,
+                    opacity: 1,
+                    duration: 0.3,
+                    onComplete: () => {
+                        setTimeout(() => {
+                            gsap.to(toast, {
+                                y: -20,
+                                opacity: 0,
+                                duration: 0.3,
+                                onComplete: () => toast.remove()
+                            });
+                        }, 2000);
+                    }
+                }
+            );
+        }
+
+        // 元素抖动效果（用于表单验证错误）
+        function shakeElement(element) {
+            gsap.to(element, {
+                x: -5,
+                duration: 0.05,
+                repeat: 5,
+                yoyo: true,
+                onComplete: () => {
+                    gsap.to(element, { x: 0, duration: 0.1 });
+                }
+            });
+
+            // 添加红色边框提示
+            element.style.borderColor = '#ff4757';
+            setTimeout(() => {
+                element.style.borderColor = '#ddd';
+            }, 1000);
+        }
+    });
+</script>
+</body>
+</html>

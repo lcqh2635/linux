@@ -28,12 +28,12 @@
             box-sizing: border-box;
             font-family: 'Arial', sans-serif;
         }
-        
+
         body {
             background-color: #f5f5f5;
             padding: 20px;
         }
-        
+
         .tab-container {
             background-color: white;
             border-radius: 8px;
@@ -43,27 +43,27 @@
             margin: 0 auto;
             position: relative;
         }
-        
+
         .tabs-header {
             position: relative;
             background-color: #f8f9fa;
             display: flex;
             align-items: center;
         }
-        
+
         .tabs-scroll {
             flex: 1;
             overflow: hidden;
             position: relative;
         }
-        
+
         .tabs-wrapper {
             display: flex;
             transition: transform 0.3s ease;
             height: 42px;
             position: relative;
         }
-        
+
         .tab {
             position: relative;
             padding: 10px 20px; /* 调整padding使文字更好居中 */
@@ -81,14 +81,14 @@
             align-items: center;
             justify-content: center;
         }
-        
+
         /* 文字容器，用于实现居中效果 */
         .tab-text {
             transition: all 0.2s ease;
             transform: translateX(0);
             position: relative;
         }
-        
+
         /* 背景高亮指示器 */
         .tab-highlight {
             position: absolute;
@@ -102,17 +102,17 @@
             z-index: 0;
             transform-origin: left center;
         }
-        
+
         .tab:hover {
             background-color: #e9ecef;
         }
-        
+
         .tab.active {
             color: #1890ff;
             font-weight: bold;
             background-color: transparent;
         }
-        
+
         .close-tab {
             position: absolute;
             right: 8px;
@@ -129,36 +129,36 @@
             font-size: 12px;
             pointer-events: none;
         }
-        
+
         .tab:hover .close-tab {
             opacity: 1;
             pointer-events: auto;
         }
-        
+
         .tab:hover .tab-text {
             transform: translateX(-8px); /* 悬停时文字向左移动 */
         }
-        
+
         .close-tab:hover {
             background-color: #e9ecef;
             color: #ff4d4f;
         }
-        
+
         .tab-content {
             padding: 20px;
             min-height: 200px;
         }
-        
+
         .content {
             display: none;
             opacity: 0;
             transform: translateY(10px);
         }
-        
+
         .content.active {
             display: block;
         }
-        
+
         /* Element风格的导航按钮 */
         .nav-button {
             width: 32px;
@@ -173,29 +173,29 @@
             user-select: none;
             background-color: #f8f9fa;
         }
-        
+
         .nav-button.visible {
             display: flex;
         }
-        
+
         .nav-button:hover {
             color: #1890ff;
         }
-        
+
         .nav-button.prev {
             border-right: 1px solid #ddd;
         }
-        
+
         .nav-button.next {
             border-left: 1px solid #ddd;
         }
-        
+
         .nav-button.disabled {
             opacity: 0.3;
             cursor: not-allowed;
             color: #999;
         }
-        
+
         /* 添加按钮样式 */
         .add-tab {
             padding: 0 15px;
@@ -208,7 +208,7 @@
             background-color: #f8f9fa;
             transition: all 0.3s;
         }
-        
+
         .add-tab:hover {
             background-color: #e9ecef;
         }
@@ -313,7 +313,7 @@
                 </div>
             </div>
         </div>
-        
+
         <div class="tab-content">
             <div class="content active" id="tab1">
                 <h3>New Tab Content 1</h3>
@@ -346,15 +346,15 @@
             let wrapperWidth = tabsScroll.offsetWidth;
             let tabsWidth = tabsContainer.scrollWidth;
             let tabCount = tabs.length;
-            
+
             // 初始化高亮指示器位置
             function initHighlight() {
                 const activeTab = document.querySelector('.tab.active');
                 if (!activeTab) return;
-                
+
                 const tabRect = activeTab.getBoundingClientRect();
                 const containerRect = tabsContainer.getBoundingClientRect();
-                
+
                 gsap.set(highlight, {
                     x: tabRect.left - containerRect.left,
                     width: tabRect.width,
@@ -362,21 +362,21 @@
                     borderColor: '#91d5ff'
                 });
             }
-            
+
             // 初始化第一个内容区域的动画
-            gsap.fromTo(currentContent, 
+            gsap.fromTo(currentContent,
                 { opacity: 0, y: 10 },
                 { opacity: 1, y: 0, duration: 0.3 }
             );
-            
+
             // 初始化高亮指示器
             initHighlight();
-            
+
             // 检查是否需要显示导航按钮
             function checkNavButtons() {
                 tabsWidth = tabsContainer.scrollWidth;
                 wrapperWidth = tabsScroll.offsetWidth;
-                
+
                 if (tabsWidth > wrapperWidth) {
                     prevButton.classList.add('visible');
                     nextButton.classList.add('visible');
@@ -386,34 +386,34 @@
                     currentPosition = 0;
                     tabsContainer.style.transform = 'translateX(0)';
                 }
-                
+
                 updateNavButtons();
             }
-            
+
             // 更新导航按钮状态
             function updateNavButtons() {
                 prevButton.classList.toggle('disabled', currentPosition >= 0);
-                nextButton.classList.toggle('disabled', 
+                nextButton.classList.toggle('disabled',
                     currentPosition <= -(tabsWidth - wrapperWidth));
             }
-            
+
             // 切换标签页函数
             function switchTab(newTab) {
                 if (newTab === currentTab) return;
-                
+
                 const tabId = newTab.getAttribute('data-tab');
                 const newContent = document.getElementById(tabId);
                 const oldTab = currentTab;
-                
+
                 // 获取标签位置和尺寸
                 const newTabRect = newTab.getBoundingClientRect();
                 const containerRect = tabsContainer.getBoundingClientRect();
                 const newX = newTabRect.left - containerRect.left;
                 const newWidth = newTabRect.width;
-                
+
                 // 动画时间线
                 const tl = gsap.timeline();
-                
+
                 // 1. 淡出当前内容
                 tl.to(currentContent, {
                     opacity: 0,
@@ -424,16 +424,16 @@
                         currentContent.classList.remove('active');
                     }
                 });
-                
+
                 // 2. 切换标签活动状态和高亮动画
                 tl.add(() => {
                     oldTab.classList.remove('active');
                     newTab.classList.add('active');
                     currentTab = newTab;
-                    
+
                     newContent.classList.add('active');
                     currentContent = newContent;
-                    
+
                     // Segmented风格的高亮动画
                     // gsap.to(highlight, {
                     //     x: newX,
@@ -448,7 +448,7 @@
                     //         });
                     //     }
                     // });
-                    
+
                     // gsap.to(highlight, {
                     //     x: newX,
                     //     width: newWidth,
@@ -476,23 +476,23 @@
                     //     duration: 0.4,
                     //     ease: "sine.inOut" // 最自然的缓入缓出
                     // });
-                    
+
                     // 确保活动标签可见
                     ensureTabVisible(newTab);
                 }, "-=0.1");
-                
+
                 // 3. 淡入新内容
-                tl.fromTo(newContent, 
+                tl.fromTo(newContent,
                     { opacity: 0, y: 10 },
                     { opacity: 1, y: 0, duration: 0.3, ease: "power1.in" }
                 );
             }
-            
+
             // 确保标签可见
             function ensureTabVisible(tab) {
                 const tabRect = tab.getBoundingClientRect();
                 const wrapperRect = tabsScroll.getBoundingClientRect();
-                
+
                 if (tabRect.left < wrapperRect.left) {
                     // 标签在左侧不可见
                     const diff = wrapperRect.left - tabRect.left;
@@ -504,30 +504,30 @@
                     currentPosition -= diff;
                     tabsContainer.style.transform = `translateX(${currentPosition}px)`;
                 }
-                
+
                 updateNavButtons();
             }
-            
+
             // 导航按钮点击事件
             prevButton.addEventListener('click', function() {
                 if (this.classList.contains('disabled')) return;
-                
+
                 const moveBy = Math.min(wrapperWidth * 0.8, -currentPosition);
                 currentPosition += moveBy;
                 tabsContainer.style.transform = `translateX(${currentPosition}px)`;
                 updateNavButtons();
             });
-            
+
             nextButton.addEventListener('click', function() {
                 if (this.classList.contains('disabled')) return;
-                
+
                 const maxScroll = tabsWidth - wrapperWidth;
                 const moveBy = Math.min(wrapperWidth * 0.8, maxScroll + currentPosition);
                 currentPosition -= moveBy;
                 tabsContainer.style.transform = `translateX(${currentPosition}px)`;
                 updateNavButtons();
             });
-            
+
             // 标签点击事件
             function setupTabClick(tab) {
                 tab.addEventListener('click', function(e) {
@@ -536,7 +536,7 @@
                     switchTab(this);
                 });
             }
-            
+
             // 关闭标签事件
             function setupCloseButton(button) {
                 button.addEventListener('click', function(e) {
@@ -544,7 +544,7 @@
                     const tabId = this.getAttribute('data-tab');
                     const tabToClose = document.querySelector(`.tab[data-tab="${tabId}"]`);
                     const contentToClose = document.getElementById(tabId);
-                    
+
                     // 如果关闭的是当前激活的标签
                     if (tabToClose.classList.contains('active')) {
                         // 找到下一个可用的标签
@@ -553,11 +553,11 @@
                             switchTab(nextTab);
                         }
                     }
-                    
+
                     // 移除标签和内容
                     tabToClose.remove();
                     contentToClose.remove();
-                    
+
                     // 更新高亮指示器位置
                     setTimeout(() => {
                         initHighlight();
@@ -565,12 +565,12 @@
                     }, 0);
                 });
             }
-            
+
             // 添加新标签
             addButton.addEventListener('click', function() {
                 tabCount++;
                 const tabId = `tab${tabCount}`;
-                
+
                 // 创建新标签
                 const newTab = document.createElement('div');
                 newTab.className = 'tab';
@@ -579,7 +579,7 @@
                     <span class="tab-text">New Tab ${tabCount}</span>
                     <span class="close-tab" data-tab="${tabId}">×</span>
                 `;
-                
+
                 // 创建新内容
                 const newContent = document.createElement('div');
                 newContent.className = 'content';
@@ -588,32 +588,32 @@
                     <h3>New Tab Content ${tabCount}</h3>
                     <p>This is the content for the new tab.</p>
                 `;
-                
+
                 // 添加到DOM
                 tabsContainer.appendChild(newTab);
                 document.querySelector('.tab-content').appendChild(newContent);
-                
+
                 // 设置事件监听
                 setupTabClick(newTab);
                 setupCloseButton(newTab.querySelector('.close-tab'));
-                
+
                 // 切换到新标签
                 switchTab(newTab);
-                
+
                 // 检查是否需要显示导航按钮
                 setTimeout(checkNavButtons, 0);
             });
-            
+
             // 窗口大小改变时检查
             window.addEventListener('resize', function() {
                 checkNavButtons();
                 initHighlight();
             });
-            
+
             // 初始化现有标签和关闭按钮
             tabs.forEach(tab => setupTabClick(tab));
             closeButtons.forEach(button => setupCloseButton(button));
-            
+
             // 初始检查导航按钮
             checkNavButtons();
         });

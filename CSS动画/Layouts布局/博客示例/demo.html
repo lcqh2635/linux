@@ -1,0 +1,660 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>现代科技博客</title>
+    <style>
+        /* 基础样式重置 */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+        }
+
+        body {
+            background-color: #f8fafc;
+            color: #334155;
+            line-height: 1.6;
+        }
+
+        /* 布局容器 */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* 头部样式 */
+        header {
+            background: linear-gradient(135deg, #3b82f6, #6366f1);
+            color: white;
+            padding: 1rem 0;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+        }
+
+        .logo-icon {
+            margin-right: 10px;
+            font-size: 2rem;
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 1.5rem;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            transition: all 0.3s ease;
+        }
+
+        nav a:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+
+        /* 主要内容区域 */
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 300px;
+            gap: 2rem;
+            padding: 2rem 0;
+        }
+
+        /* 文章卡片样式 */
+        .article-card {
+            background-color: white;
+            border-radius: 0.75rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            margin-bottom: 2rem;
+            transform: translateY(20px);
+            opacity: 0;
+            transition: transform 0.6s ease, opacity 0.6s ease;
+        }
+
+        .article-card.visible {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        .article-image {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+        }
+
+        .article-content {
+            padding: 1.5rem;
+        }
+
+        .article-meta {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1rem;
+            color: #64748b;
+            font-size: 0.875rem;
+        }
+
+        .article-category {
+            background-color: #e0e7ff;
+            color: #4f46e5;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-weight: 500;
+            margin-right: 1rem;
+        }
+
+        .article-date {
+            display: flex;
+            align-items: center;
+        }
+
+        .article-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: #1e293b;
+        }
+
+        .article-excerpt {
+            color: #475569;
+            margin-bottom: 1.5rem;
+            line-height: 1.7;
+        }
+
+        .read-more {
+            display: inline-block;
+            background-color: #3b82f6;
+            color: white;
+            padding: 0.5rem 1.5rem;
+            border-radius: 0.5rem;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .read-more:hover {
+            background-color: #2563eb;
+            transform: translateY(-2px);
+        }
+
+        /* 侧边栏样式 */
+        .sidebar {
+            position: sticky;
+            top: 6rem;
+            height: fit-content;
+        }
+
+        .sidebar-widget {
+            background-color: white;
+            border-radius: 0.75rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .widget-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: #1e293b;
+            position: relative;
+            padding-bottom: 0.75rem;
+        }
+
+        .widget-title::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            width: 50px;
+            height: 3px;
+            background: linear-gradient(to right, #3b82f6, #8b5cf6);
+            border-radius: 3px;
+        }
+
+        .popular-posts li {
+            margin-bottom: 1rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .popular-posts li:last-child {
+            margin-bottom: 0;
+            padding-bottom: 0;
+            border-bottom: none;
+        }
+
+        .popular-post-link {
+            display: block;
+            color: #334155;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .popular-post-link:hover {
+            color: #3b82f6;
+        }
+
+        .popular-post-date {
+            display: block;
+            font-size: 0.75rem;
+            color: #64748b;
+            margin-top: 0.25rem;
+        }
+
+        .tags-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .tag {
+            background-color: #e2e8f0;
+            color: #334155;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.875rem;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .tag:hover {
+            background-color: #cbd5e1;
+        }
+
+        /* 页脚样式 */
+        footer {
+            background-color: #1e293b;
+            color: #e2e8f0;
+            padding: 3rem 0;
+            margin-top: 2rem;
+        }
+
+        .footer-container {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+        }
+
+        .footer-column h3 {
+            font-size: 1.25rem;
+            margin-bottom: 1.5rem;
+            color: white;
+            position: relative;
+            padding-bottom: 0.75rem;
+        }
+
+        .footer-column h3::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            width: 40px;
+            height: 3px;
+            background: linear-gradient(to right, #3b82f6, #8b5cf6);
+            border-radius: 3px;
+        }
+
+        .footer-links li {
+            margin-bottom: 0.75rem;
+        }
+
+        .footer-links a {
+            color: #cbd5e1;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-links a:hover {
+            color: white;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .social-link {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background-color: #334155;
+            border-radius: 50%;
+            color: white;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .social-link:hover {
+            background-color: #3b82f6;
+            transform: translateY(-3px);
+        }
+
+        .copyright {
+            text-align: center;
+            margin-top: 3rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid #334155;
+            color: #94a3b8;
+            font-size: 0.875rem;
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 1024px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+
+            .sidebar {
+                position: static;
+                margin-top: 2rem;
+            }
+
+            .footer-container {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header-container {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            nav ul {
+                gap: 0.5rem;
+            }
+        }
+
+        /* 动画效果 */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        .fade-in {
+            animation: fadeIn 0.6s ease forwards;
+        }
+    </style>
+</head>
+<body>
+<!-- 头部区域 -->
+<header>
+    <div class="container header-container">
+        <div class="logo">
+            <span class="logo-icon">🧠</span>
+            <span>科技前沿</span>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="#">首页</a></li>
+                <li><a href="#">技术</a></li>
+                <li><a href="#">设计</a></li>
+                <li><a href="#">人工智能</a></li>
+                <li><a href="#">关于</a></li>
+            </ul>
+        </nav>
+    </div>
+</header>
+
+<!-- 主要内容区域 -->
+<div class="container main-content">
+    <main>
+        <!-- 文章卡片1 -->
+        <article class="article-card" id="article1">
+            <img src="https://source.unsplash.com/random/800x400/?technology,ai" alt="AI技术" class="article-image">
+            <div class="article-content">
+                <div class="article-meta">
+                    <span class="article-category">人工智能</span>
+                    <span class="article-date">📅 2023年6月15日</span>
+                </div>
+                <h2 class="article-title">GPT-4时代：下一代AI如何改变我们的工作方式</h2>
+                <p class="article-excerpt">
+                    随着GPT-4的发布，人工智能技术再次迎来重大突破。本文将探讨GPT-4的核心改进、实际应用场景以及它如何重塑各行各业的工作流程...</p>
+                <a href="#" class="read-more">阅读更多</a>
+            </div>
+        </article>
+
+        <!-- 文章卡片2 -->
+        <article class="article-card" id="article2">
+            <img src="https://source.unsplash.com/random/800x400/?programming" alt="编程" class="article-image">
+            <div class="article-content">
+                <div class="article-meta">
+                    <span class="article-category">前端开发</span>
+                    <span class="article-date">📅 2023年6月10日</span>
+                </div>
+                <h2 class="article-title">2023年前端开发趋势：你需要掌握的5项新技术</h2>
+                <p class="article-excerpt">
+                    前端技术日新月异，2023年又有哪些值得关注的新趋势？从WebAssembly到边缘计算，本文将为你剖析最值得投入学习的前端技术...</p>
+                <a href="#" class="read-more">阅读更多</a>
+            </div>
+        </article>
+
+        <!-- 文章卡片3 -->
+        <article class="article-card" id="article3">
+            <img src="https://source.unsplash.com/random/800x400/?design" alt="设计" class="article-image">
+            <div class="article-content">
+                <div class="article-meta">
+                    <span class="article-category">UI设计</span>
+                    <span class="article-date">📅 2023年6月5日</span>
+                </div>
+                <h2 class="article-title">极简主义设计：如何在2023年创造更好的用户体验</h2>
+                <p class="article-excerpt">
+                    在信息过载的时代，极简主义设计比以往任何时候都更重要。本文将分享10个实用技巧，帮助你创建更清晰、更有效的用户界面...</p>
+                <a href="#" class="read-more">阅读更多</a>
+            </div>
+        </article>
+    </main>
+
+    <!-- 侧边栏 -->
+    <aside class="sidebar">
+        <!-- 热门文章 -->
+        <div class="sidebar-widget">
+            <h3 class="widget-title">热门文章</h3>
+            <ul class="popular-posts">
+                <li>
+                    <a href="#" class="popular-post-link">如何用React构建高性能应用</a>
+                    <span class="popular-post-date">2023年5月28日</span>
+                </li>
+                <li>
+                    <a href="#" class="popular-post-link">TypeScript入门完全指南</a>
+                    <span class="popular-post-date">2023年5月20日</span>
+                </li>
+                <li>
+                    <a href="#" class="popular-post-link">CSS Grid布局实战技巧</a>
+                    <span class="popular-post-date">2023年5月15日</span>
+                </li>
+                <li>
+                    <a href="#" class="popular-post-link">Node.js性能优化策略</a>
+                    <span class="popular-post-date">2023年5月10日</span>
+                </li>
+            </ul>
+        </div>
+
+        <!-- 标签云 -->
+        <div class="sidebar-widget">
+            <h3 class="widget-title">标签云</h3>
+            <div class="tags-container">
+                <a href="#" class="tag">JavaScript</a>
+                <a href="#" class="tag">React</a>
+                <a href="#" class="tag">Vue</a>
+                <a href="#" class="tag">Node.js</a>
+                <a href="#" class="tag">CSS</a>
+                <a href="#" class="tag">HTML</a>
+                <a href="#" class="tag">TypeScript</a>
+                <a href="#" class="tag">设计</a>
+                <a href="#" class="tag">AI</a>
+            </div>
+        </div>
+    </aside>
+</div>
+
+<!-- 页脚 -->
+<footer>
+    <div class="container footer-container">
+        <div class="footer-column">
+            <h3>关于我们</h3>
+            <p>
+                科技前沿是一个专注于前沿技术、设计和创新思维的博客平台，致力于为开发者、设计师和技术爱好者提供高质量的内容。</p>
+            <div class="social-links">
+                <a href="#" class="social-link">📱</a>
+                <a href="#" class="social-link">🐦</a>
+                <a href="#" class="social-link">📘</a>
+                <a href="#" class="social-link">📸</a>
+            </div>
+        </div>
+        <div class="footer-column">
+            <h3>快速链接</h3>
+            <ul class="footer-links">
+                <li><a href="#">首页</a></li>
+                <li><a href="#">技术文章</a></li>
+                <li><a href="#">设计资源</a></li>
+                <li><a href="#">关于我们</a></li>
+                <li><a href="#">联系方式</a></li>
+            </ul>
+        </div>
+        <div class="footer-column">
+            <h3>订阅我们</h3>
+            <p>订阅我们的新闻通讯，获取最新的技术文章和资源更新。</p>
+            <form class="subscribe-form">
+                <input type="email" placeholder="您的邮箱地址"
+                       style="width: 100%; padding: 0.5rem; margin-bottom: 0.5rem; border-radius: 0.25rem; border: 1px solid #334155; background-color: #1e293b; color: white;">
+                <button type="submit"
+                        style="background-color: #3b82f6; color: white; border: none; padding: 0.5rem 1rem; border-radius: 0.25rem; cursor: pointer; transition: background-color 0.3s ease;">
+                    订阅
+                </button>
+            </form>
+        </div>
+    </div>
+    <div class="container copyright">
+        <p>© 2023 科技前沿博客. 保留所有权利.</p>
+    </div>
+</footer>
+
+<!-- 引入GSAP库 -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/gsap.min.js"></script>
+
+<script>
+    // 文档加载完成后执行
+    document.addEventListener('DOMContentLoaded', function () {
+        // 初始化滚动动画观察器
+        initScrollAnimations();
+
+        // 初始化导航栏滚动效果
+        initNavScrollEffect();
+
+        // 初始化文章卡片动画
+        animateArticleCards();
+    });
+
+    /**
+     * 初始化滚动动画
+     * 使用IntersectionObserver API检测元素是否进入视口
+     */
+    function initScrollAnimations() {
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    // 当元素进入视口时添加动画类
+                    entry.target.classList.add('fade-in');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, observerOptions);
+
+        // 观察所有需要动画的元素
+        document.querySelectorAll('.article-card').forEach(card => {
+            observer.observe(card);
+        });
+    }
+
+    /**
+     * 初始化导航栏滚动效果
+     * 当页面滚动时改变导航栏样式
+     */
+    function initNavScrollEffect() {
+        const header = document.querySelector('header');
+        let lastScroll = 0;
+
+        window.addEventListener('scroll', () => {
+            const currentScroll = window.pageYOffset;
+
+            if (currentScroll <= 0) {
+                // 在页面顶部时恢复原始样式
+                header.style.boxShadow = '0 4px 6px -1px rgba(0, 0, 0, 0.1)';
+            } else if (currentScroll > lastScroll) {
+                // 向下滚动时隐藏导航栏
+                header.style.transform = 'translateY(-100%)';
+                header.style.boxShadow = 'none';
+            } else {
+                // 向上滚动时显示导航栏并添加阴影
+                header.style.transform = 'translateY(0)';
+                header.style.boxShadow = '0 4px 6px -1px rgba(0, 0, 0, 0.1)';
+            }
+
+            lastScroll = currentScroll;
+        });
+    }
+
+    /**
+     * 初始化文章卡片动画
+     * 使用GSAP创建交错的入场动画
+     */
+    function animateArticleCards() {
+        // 使用GSAP的时间线创建顺序动画
+        const tl = gsap.timeline({defaults: {ease: "power2.out"}});
+
+        // 为每张卡片添加动画
+        document.querySelectorAll('.article-card').forEach((card, index) => {
+            // 设置初始状态
+            gsap.set(card, {opacity: 0, y: 30});
+
+            // 添加到时间线，每个卡片有0.2秒的延迟
+            tl.to(card, {
+                opacity: 1,
+                y: 0,
+                duration: 0.6
+            }, index * 0.15);
+
+            // 添加悬停效果
+            card.addEventListener('mouseenter', () => {
+                gsap.to(card, {
+                    y: -5,
+                    duration: 0.3,
+                    boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)'
+                });
+            });
+
+            card.addEventListener('mouseleave', () => {
+                gsap.to(card, {
+                    y: 0,
+                    duration: 0.3,
+                    boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)'
+                });
+            });
+        });
+    }
+
+    /**
+     * 为所有链接添加平滑滚动效果
+     */
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            e.preventDefault();
+
+            const targetId = this.getAttribute('href');
+            if (targetId === '#') return;
+
+            const targetElement = document.querySelector(targetId);
+            if (targetElement) {
+                // 使用GSAP实现平滑滚动
+                gsap.to(window, {
+                    duration: 0.8,
+                    scrollTo: {
+                        y: targetElement,
+                        offsetY: 80
+                    },
+                    ease: "power2.inOut"
+                });
+            }
+        });
+    });
+</script>
+</body>
+</html>

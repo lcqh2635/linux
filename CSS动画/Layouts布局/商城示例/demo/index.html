@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>精品商城 | 优质商品选购平台</title>
+  <!-- 引入字体图标 -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <!-- GSAP 动画库 -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.10.4/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.10.4/ScrollTrigger.min.js"></script>
+  <!-- 自定义样式 -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<!-- 页面加载动画 -->
+<div class="preloader">
+  <div class="loader"></div>
+</div>
+
+<!-- 导航栏 -->
+<nav class="navbar">
+  <div class="container">
+    <a href="#" class="logo" id="logo">ShopEase</a>
+    <div class="nav-links">
+      <a href="#home">首页</a>
+      <a href="#products">商品</a>
+      <a href="#features">特色</a>
+      <a href="#testimonials">评价</a>
+      <a href="#contact">联系</a>
+      <a href="#" class="cart-icon"><i class="fas fa-shopping-cart"></i><span class="cart-count">0</span></a>
+    </div>
+    <div class="hamburger">
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
+  </div>
+</nav>
+
+<!-- 英雄区域/首页 -->
+<section class="hero" id="home">
+  <div class="container">
+    <div class="hero-content">
+      <h1 class="hero-title">发现属于你的风格</h1>
+      <p class="hero-subtitle">精选优质商品，打造完美生活</p>
+      <a href="#products" class="btn">立即选购</a>
+    </div>
+    <div class="hero-image">
+      <img src="images/hero-product.png" alt="主打商品">
+    </div>
+  </div>
+</section>
+
+<!-- 商品展示区 -->
+<section class="products" id="products">
+  <div class="section-header">
+    <h2>热门商品</h2>
+    <p>精选最受欢迎的商品</p>
+  </div>
+  <div class="product-grid">
+    <!-- 商品卡片将通过JavaScript动态生成 -->
+  </div>
+</section>
+
+<!-- 特色区域 -->
+<section class="features" id="features">
+  <div class="container">
+    <div class="feature">
+      <i class="fas fa-shipping-fast"></i>
+      <h3>快速配送</h3>
+      <p>订单24小时内发货，最快次日送达</p>
+    </div>
+    <div class="feature">
+      <i class="fas fa-undo"></i>
+      <h3>无忧退货</h3>
+      <p>30天内无理由退换货</p>
+    </div>
+    <div class="feature">
+      <i class="fas fa-lock"></i>
+      <h3>安全支付</h3>
+      <p>多种安全支付方式保障</p>
+    </div>
+  </div>
+</section>
+
+<!-- 用户评价 -->
+<section class="testimonials" id="testimonials">
+  <div class="section-header">
+    <h2>用户评价</h2>
+    <p>听听他们怎么说</p>
+  </div>
+  <div class="testimonial-slider">
+    <!-- 评价将通过JavaScript动态生成 -->
+  </div>
+</section>
+
+<!-- 联系表单 -->
+<section class="contact" id="contact">
+  <div class="container">
+    <div class="contact-info">
+      <h2>联系我们</h2>
+      <p>有任何问题或建议，请随时联系我们</p>
+      <div class="info-item">
+        <i class="fas fa-map-marker-alt"></i>
+        <span>北京市朝阳区科技园A座1001</span>
+      </div>
+      <div class="info-item">
+        <i class="fas fa-phone"></i>
+        <span>400-123-4567</span>
+      </div>
+      <div class="info-item">
+        <i class="fas fa-envelope"></i>
+        <span>contact@shopease.com</span>
+      </div>
+    </div>
+    <form class="contact-form">
+      <input type="text" placeholder="您的姓名" required>
+      <input type="email" placeholder="您的邮箱" required>
+      <textarea placeholder="您的留言" required></textarea>
+      <button type="submit" class="btn">发送消息</button>
+    </form>
+  </div>
+</section>
+
+<!-- 页脚 -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-logo">
+      <a href="#">ShopEase</a>
+      <p>优质生活，从精选开始</p>
+    </div>
+    <div class="footer-links">
+      <h3>快速链接</h3>
+      <a href="#home">首页</a>
+      <a href="#products">商品</a>
+      <a href="#features">特色</a>
+      <a href="#testimonials">评价</a>
+      <a href="#contact">联系</a>
+    </div>
+    <div class="footer-social">
+      <h3>关注我们</h3>
+      <a href="#"><i class="fab fa-weixin"></i></a>
+      <a href="#"><i class="fab fa-weibo"></i></a>
+      <a href="#"><i class="fab fa-qq"></i></a>
+      <a href="#"><i class="fab fa-tiktok"></i></a>
+    </div>
+  </div>
+  <div class="copyright">
+    <p>&copy; 2023 ShopEase. 保留所有权利.</p>
+  </div>
+</footer>
+
+<!-- 购物车侧边栏 -->
+<div class="cart-sidebar">
+  <div class="cart-header">
+    <h3>购物车</h3>
+    <button class="close-cart">&times;</button>
+  </div>
+  <div class="cart-items">
+    <!-- 购物车商品将通过JavaScript动态生成 -->
+  </div>
+  <div class="cart-footer">
+    <div class="cart-total">
+      <span>总计:</span>
+      <span class="total-price">¥0.00</span>
+    </div>
+    <button class="btn checkout-btn">去结算</button>
+  </div>
+</div>
+<div class="cart-overlay"></div>
+
+<!-- JavaScript 文件 -->
+<script src="gsap-animations.js"></script>
+<script src="main.js"></script>
+</body>
+</html>

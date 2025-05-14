@@ -1,0 +1,630 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>登录与注册 - 对向滑动效果</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/gsap.min.js"></script>
+    <style>
+        /* 基础样式重置 */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+        }
+
+        body {
+            background: #f6f5f7;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        /* 主容器 */
+        .container {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
+            position: relative;
+            overflow: hidden;
+            width: 900px;
+            max-width: 100%;
+            min-height: 600px;
+        }
+
+        /* 表单容器 */
+        .form-container {
+            position: absolute;
+            top: 0;
+            height: 100%;
+            transition: all 0.6s ease-in-out;
+        }
+
+        /* 登录表单 */
+        .sign-in-container {
+            left: 0;
+            width: 50%;
+            z-index: 2;
+        }
+
+        /* 注册表单 */
+        .sign-up-container {
+            left: 0;
+            width: 50%;
+            opacity: 0;
+            z-index: 1;
+        }
+
+        /* 右侧面板激活时的状态 */
+        .container.right-panel-active .sign-in-container {
+            transform: translateX(100%);
+        }
+
+        .container.right-panel-active .sign-up-container {
+            transform: translateX(100%);
+            opacity: 1;
+            z-index: 5;
+            animation: show 0.6s;
+        }
+
+        @keyframes show {
+            0%, 49.99% {
+                opacity: 0;
+                z-index: 1;
+            }
+            50%, 100% {
+                opacity: 1;
+                z-index: 5;
+            }
+        }
+
+        /* 覆盖层容器 */
+        .overlay-container {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            width: 50%;
+            height: 100%;
+            overflow: hidden;
+            transition: transform 0.6s ease-in-out;
+            z-index: 100;
+        }
+
+        .container.right-panel-active .overlay-container {
+            transform: translateX(-100%);
+        }
+
+        /* 覆盖层背景 */
+        .overlay {
+            background: linear-gradient(to right, #4361ee, #3a56d4);
+            background-repeat: no-repeat;
+            background-size: cover;
+            background-position: 0 0;
+            color: #FFFFFF;
+            position: relative;
+            left: -100%;
+            height: 100%;
+            width: 200%;
+            transform: translateX(0);
+            transition: transform 0.6s ease-in-out;
+        }
+
+        .container.right-panel-active .overlay {
+            transform: translateX(50%);
+        }
+
+        /* 覆盖层面板 */
+        .overlay-panel {
+            position: absolute;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            padding: 0 40px;
+            text-align: center;
+            top: 0;
+            height: 100%;
+            width: 50%;
+            transform: translateX(0);
+            transition: transform 0.6s ease-in-out;
+        }
+
+        /* 左侧覆盖层 */
+        .overlay-left {
+            transform: translateX(-20%);
+        }
+
+        .container.right-panel-active .overlay-left {
+            transform: translateX(0);
+        }
+
+        /* 右侧覆盖层 */
+        .overlay-right {
+            right: 0;
+            transform: translateX(0);
+        }
+
+        .container.right-panel-active .overlay-right {
+            transform: translateX(20%);
+        }
+
+        /* 表单样式 */
+        form {
+            background-color: #FFFFFF;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            padding: 0 50px;
+            height: 100%;
+            text-align: center;
+        }
+
+        h1 {
+            font-weight: bold;
+            margin: 0;
+            color: #333;
+        }
+
+        h2 {
+            text-align: center;
+        }
+
+        p {
+            font-size: 14px;
+            line-height: 20px;
+            letter-spacing: 0.5px;
+            margin: 20px 0 30px;
+            color: #666;
+        }
+
+        /* 输入框样式 */
+        input {
+            background-color: #eee;
+            border: none;
+            padding: 12px 15px;
+            margin: 8px 0;
+            width: 100%;
+            border-radius: 5px;
+        }
+
+        /* 按钮样式 */
+        button {
+            border-radius: 20px;
+            border: 1px solid #4361ee;
+            background-color: #4361ee;
+            color: #FFFFFF;
+            font-size: 12px;
+            font-weight: bold;
+            padding: 12px 45px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            transition: transform 80ms ease-in;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        button:active {
+            transform: scale(0.95);
+        }
+
+        button:focus {
+            outline: none;
+        }
+
+        button.ghost {
+            background-color: transparent;
+            border-color: #FFFFFF;
+        }
+
+        /* 第三方登录 */
+        .social-container {
+            margin: 20px 0;
+        }
+
+        .social-container a {
+            border: 1px solid #DDDDDD;
+            border-radius: 50%;
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0 5px;
+            height: 40px;
+            width: 40px;
+            color: #333;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .social-container a:hover {
+            background-color: #4361ee;
+            border-color: #4361ee;
+            color: white;
+        }
+
+        /* 二维码覆盖层 */
+        .qr-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 200;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+
+        .qr-overlay.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .qr-container {
+            background-color: white;
+            border-radius: 12px;
+            padding: 30px;
+            width: 320px;
+            text-align: center;
+            position: relative;
+            transform: scale(0.9);
+            opacity: 0;
+            transition: all 0.3s ease;
+        }
+
+        .qr-overlay.active .qr-container {
+            transform: scale(1);
+            opacity: 1;
+        }
+
+        .close-qr {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            font-size: 24px;
+            color: #999;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+
+        .close-qr:hover {
+            color: #333;
+        }
+
+        /* 二维码加载动画样式 */
+        .qr-loader {
+            width: 40px;
+            height: 40px;
+            border: 3px solid rgba(67, 97, 238, 0.2);
+            border-top-color: #4361ee;
+            border-radius: 50%;
+            margin: 20px auto;
+        }
+
+        /* 二维码占位符 */
+        .qr-code-placeholder {
+            width: 200px;
+            height: 200px;
+            margin: 0 auto 20px;
+            background-color: #fff;
+            border: 1px solid #eee;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .qr-tips {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #999;
+            font-size: 13px;
+        }
+
+        .qr-tips i {
+            margin-right: 5px;
+            font-size: 14px;
+            color: #FFA500;
+        }
+
+        /* Toast消息样式 */
+        .toast-message {
+            position: fixed;
+            bottom: 50px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 4px;
+            font-size: 14px;
+            z-index: 1000;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body>
+<!-- 主容器 -->
+<div class="container" id="container">
+    <!-- 注册表单 -->
+    <div class="form-container sign-up-container">
+        <form>
+            <h1>创建账户</h1>
+            <div class="social-container">
+                <a href="#" class="social" data-platform="wechat"><i class="fab fa-weixin"></i></a>
+                <a href="#" class="social" data-platform="qq"><i class="fab fa-qq"></i></a>
+                <a href="#" class="social" data-platform="github"><i class="fab fa-github"></i></a>
+            </div>
+            <span>或使用邮箱注册</span>
+            <input type="text" placeholder="用户名" required />
+            <input type="email" placeholder="邮箱" required />
+            <input type="password" placeholder="密码" required />
+            <input type="password" placeholder="确认密码" required />
+            <button>注册</button>
+        </form>
+    </div>
+
+    <!-- 登录表单 -->
+    <div class="form-container sign-in-container">
+        <form>
+            <h1>欢迎回来</h1>
+            <div class="social-container">
+                <a href="#" class="social" data-platform="wechat"><i class="fab fa-weixin"></i></a>
+                <a href="#" class="social" data-platform="qq"><i class="fab fa-qq"></i></a>
+                <a href="#" class="social" data-platform="github"><i class="fab fa-github"></i></a>
+            </div>
+            <span>或使用您的账号登录</span>
+            <input type="email" placeholder="邮箱" required />
+            <input type="password" placeholder="密码" required />
+            <a href="#">忘记密码?</a>
+            <button>登录</button>
+        </form>
+    </div>
+
+    <!-- 覆盖层 -->
+    <div class="overlay-container">
+        <div class="overlay">
+            <div class="overlay-panel overlay-left">
+                <h1>欢迎回来!</h1>
+                <p>请输入您的凭据以登录您的帐户</p>
+                <button class="ghost" id="signIn">登录</button>
+            </div>
+            <div class="overlay-panel overlay-right">
+                <h1>您好，朋友!</h1>
+                <p>填写您的个人信息，开始您的旅程</p>
+                <button class="ghost" id="signUp">注册</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 二维码覆盖层 -->
+<div class="qr-overlay">
+    <div class="qr-container">
+        <span class="close-qr">&times;</span>
+        <h2>扫码登录</h2>
+        <div class="qr-code-placeholder" id="qr-code-display"></div>
+        <p>请使用<span id="qr-platform-name">微信</span>扫描二维码登录</p>
+        <div class="qr-tips">
+            <i class="fas fa-lightbulb"></i>
+            <span>二维码有效期为5分钟，请尽快扫码</span>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // 面板切换
+        const signUpButton = document.getElementById('signUp');
+        const signInButton = document.getElementById('signIn');
+        const container = document.getElementById('container');
+        const socialLinks = document.querySelectorAll('.social');
+        const qrOverlay = document.querySelector('.qr-overlay');
+        const closeQrBtn = document.querySelector('.close-qr');
+        const qrPlatformName = document.getElementById('qr-platform-name');
+        const qrCodeDisplay = document.getElementById('qr-code-display');
+
+        // 切换注册面板
+        signUpButton.addEventListener('click', () => {
+            container.classList.add("right-panel-active");
+        });
+
+        // 切换登录面板
+        signInButton.addEventListener('click', () => {
+            container.classList.remove("right-panel-active");
+        });
+
+        // 第三方登录图标点击事件
+        socialLinks.forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                const platform = this.getAttribute('data-platform');
+                let platformText = '';
+
+                switch(platform) {
+                    case 'wechat':
+                        platformText = '微信';
+                        break;
+                    case 'qq':
+                        platformText = 'QQ';
+                        break;
+                    case 'github':
+                        platformText = 'GitHub';
+                        break;
+                    default:
+                        platformText = '第三方';
+                }
+
+                qrPlatformName.textContent = platformText;
+                openQrOverlay();
+                simulateQrCodeLoading();
+            });
+        });
+
+        // 打开二维码覆盖层
+        function openQrOverlay() {
+            qrOverlay.classList.add('active');
+            gsap.fromTo(qrOverlay,
+                { opacity: 0 },
+                { opacity: 1, duration: 0.3 }
+            );
+            gsap.fromTo('.qr-container',
+                { scale: 0.9, opacity: 0 },
+                { scale: 1, opacity: 1, duration: 0.3, ease: 'back.out(1.2)' }
+            );
+        }
+
+        // 关闭二维码覆盖层
+        function closeQrOverlay() {
+            gsap.to(qrOverlay, {
+                opacity: 0,
+                duration: 0.3,
+                onComplete: () => {
+                    qrOverlay.classList.remove('active');
+                }
+            });
+        }
+
+        // 关闭按钮事件
+        closeQrBtn.addEventListener('click', closeQrOverlay);
+
+        // 点击外部关闭
+        qrOverlay.addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeQrOverlay();
+            }
+        });
+
+        // 模拟二维码加载效果
+        function simulateQrCodeLoading() {
+            // 清空二维码显示区域
+            qrCodeDisplay.innerHTML = '';
+
+            // 添加加载动画
+            const loader = document.createElement('div');
+            loader.className = 'qr-loader';
+            qrCodeDisplay.appendChild(loader);
+
+            // 使用GSAP创建加载动画
+            gsap.to(loader, {
+                rotation: 360,
+                duration: 1.5,
+                repeat: -1,
+                ease: "linear"
+            });
+
+            // 模拟加载延迟
+            setTimeout(() => {
+                // 移除加载动画
+                qrCodeDisplay.removeChild(loader);
+
+                // 添加生成的二维码（这里使用SVG模拟）
+                const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+                svg.setAttribute("viewBox", "0 0 100 100");
+                svg.style.width = "100%";
+                svg.style.height = "100%";
+
+                // 创建二维码图案（简化版）
+                for (let i = 0; i < 100; i += 10) {
+                    for (let j = 0; j < 100; j += 10) {
+                        if (Math.random() > 0.3) {
+                            const rect = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+                            rect.setAttribute("x", i);
+                            rect.setAttribute("y", j);
+                            rect.setAttribute("width", "8");
+                            rect.setAttribute("height", "8");
+                            rect.setAttribute("fill", "#333");
+                            svg.appendChild(rect);
+                        }
+                    }
+                }
+
+                // 添加定位标记
+                addQrMarker(svg, 5, 5);
+                addQrMarker(svg, 65, 5);
+                addQrMarker(svg, 5, 65);
+
+                qrCodeDisplay.appendChild(svg);
+
+                // 二维码出现动画
+                gsap.from(svg, {
+                    scale: 0.5,
+                    opacity: 0,
+                    duration: 0.5,
+                    ease: "back.out(1.7)"
+                });
+            }, 1500);
+        }
+
+        // 添加二维码定位标记
+        function addQrMarker(svg, x, y) {
+            // 外框
+            const outer = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+            outer.setAttribute("x", x);
+            outer.setAttribute("y", y);
+            outer.setAttribute("width", "20");
+            outer.setAttribute("height", "20");
+            outer.setAttribute("fill", "none");
+            outer.setAttribute("stroke", "#333");
+            outer.setAttribute("stroke-width", "2");
+            svg.appendChild(outer);
+
+            // 内框
+            const inner = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+            inner.setAttribute("x", x + 5);
+            inner.setAttribute("y", y + 5);
+            inner.setAttribute("width", "10");
+            inner.setAttribute("height", "10");
+            inner.setAttribute("fill", "#333");
+            svg.appendChild(inner);
+        }
+
+        // 表单提交
+        const forms = document.querySelectorAll('form');
+        forms.forEach(form => {
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+                showToast('操作成功');
+            });
+        });
+
+        // 显示Toast提示
+        function showToast(message) {
+            const toast = document.createElement('div');
+            toast.className = 'toast-message';
+            toast.textContent = message;
+            document.body.appendChild(toast);
+
+            gsap.fromTo(toast,
+                { y: 50, opacity: 0 },
+                {
+                    y: 0,
+                    opacity: 1,
+                    duration: 0.3,
+                    onComplete: () => {
+                        setTimeout(() => {
+                            gsap.to(toast, {
+                                y: -20,
+                                opacity: 0,
+                                duration: 0.3,
+                                onComplete: () => toast.remove()
+                            });
+                        }, 2000);
+                    }
+                }
+            );
+        }
+    });
+</script>
+</body>
+</html>
