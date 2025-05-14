@@ -91,7 +91,7 @@ export const useUserStore = defineStore(
     persist: {
       key: 'vue3-admin-user', // 存储的key
       storage: localStorage, // 存储方式，默认sessionStorage
-      paths: ['token', 'userInfo'], // 只持久化token和userInfo
+      pick: ['token', 'userInfo'], // 只持久化token和userInfo
       // 如果需要自定义序列化/反序列化
       // serializer: {
       //   serialize: JSON.stringify,
@@ -153,7 +153,7 @@ export const useAppStore = defineStore(
     persist: {
       key: 'vue3-admin-app',
       storage: sessionStorage, // 使用sessionStorage而不是localStorage
-      paths: ['theme', 'sidebarCollapsed'] // 只持久化这两个状态
+      pick: ['theme', 'sidebarCollapsed'] // 只持久化这两个状态
     }
   }
 )
