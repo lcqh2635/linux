@@ -6,45 +6,435 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
     <link rel='stylesheet'
           href='https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&amp;display=swap'>
-    <link rel="stylesheet" href="./style.css">
+    <style>
+        /* 基础重置 */
+        * {
+            border: 0;
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
 
+        :root {
+            --hue: 223;
+            --bg: hsl(var(--hue), 10%, 90%); /* 背景色 */
+            --fg: hsl(var(--hue), 10%, 10%); /* 前景(文字)色 */
+            --primary: hsl(var(--hue), 90%, 30%); /* 主色调 */
+            --primary-hover: hsl(var(--hue), 90%, 10%); /* 主色调悬停状态 */
+            --trans-dur: 0.3s; /* 过渡持续时间 */
+            --trans-timing: cubic-bezier(0.65, 0, 0.35, 1); /* 过渡动画曲线 */
+            /* 响应式字体大小 */
+            font-size: calc(16px + (48 - 16) * (100vw - 280px) / (3840 - 280));
+        }
+
+        body,
+        button {
+            font: 1em/1.5 "Noto Sans SC", sans-serif; /* 使用支持中文的字体 */
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--fg);
+            display: flex;
+            height: 100vh;
+            padding: 1rem; /* 添加内边距防止内容贴边 */
+        }
+
+        form {
+            container: form/inline-size;
+            margin: auto;
+            padding: 1.5em;
+            width: 100%;
+            max-width: 36em;
+            /*max-width: 42em; !* 稍微增加最大宽度 *!*/
+        }
+
+        .btn {
+            background-color: var(--primary);
+            border-radius: 0.25em;
+            color: white;
+            cursor: pointer;
+            display: block;
+            padding: 0.375em 0.75em;
+            transition: background-color var(--trans-dur) var(--trans-timing), opacity var(--trans-dur) var(--trans-timing);
+            width: 100%;
+            -webkit-appearance: none;
+            appearance: none;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .btn:disabled {
+            cursor: not-allowed;
+            opacity: 0.5;
+        }
+
+        .btn:not(:disabled):hover {
+            background: hsl(var(--hue), 90%, 10%);
+        }
+
+        .btn-group {
+            display: flex;
+            justify-content: center;
+            gap: 0.75em;
+            margin-top: 1.5em;
+        }
+
+        /* 步骤指示器容器 */
+        .steps {
+            background-color: white;
+            border-radius: 1em; /* 更大的圆角 */
+            display: flex;
+            padding: 2em; /* 更大的内边距 */
+            flex-direction: column;
+            justify-content: center;
+            width: 100%;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* 添加阴影增强层次感 */
+        }
+
+        .steps__connector, .steps__step {
+            position: relative;
+        }
+
+        .steps__connector {
+            background-color: hsl(var(--hue), 10%, 80%);
+            margin-inline-start: 0.75em;
+            width: 0.125em;
+            height: 1.25em;
+            transform: translateX(-50%);
+            transition: background-color var(--trans-dur);
+        }
+
+        .steps__connector:before {
+            background-color: var(--primary);
+            content: "";
+            display: block;
+            width: 100%;
+            height: 100%;
+            transform: scale(1, 0);
+            transform-origin: 50% 0;
+            transition: background-color var(--trans-dur), transform var(--trans-dur) var(--trans-timing);
+        }
+
+        .steps__step {
+            display: flex;
+            align-items: center;
+            flex-shrink: 0;
+            z-index: 1;
+        }
+
+        .steps__step-name {
+            color: hsl(var(--hue), 10%, 50%);
+            font-size: 0.75em;
+            line-height: 2;
+            transition: color var(--trans-dur) var(--trans-timing), font-weight var(--trans-dur) var(--trans-timing);
+        }
+
+        .steps__step-number {
+            background-color: hsl(var(--hue), 10%, 80%);
+            color: white;
+            border-radius: 50%;
+            margin-inline-end: 0.5em;
+            text-align: center;
+            width: 1.5em;
+            height: 1.5em;
+            transition: background-color var(--trans-dur) var(--trans-timing), box-shadow var(--trans-dur) var(--trans-timing);
+        }
+
+        .steps__step--current .steps__step-name, .steps__step--done .steps__step-name {
+            color: hsl(var(--hue), 10%, 10%);
+            font-weight: 700;
+        }
+
+        .steps__step--current .steps__step-number, .steps__step--done .steps__step-number {
+            background-color: var(--primary);
+        }
+
+        .steps__step--current .steps__step-number, .steps__step--current .steps__step-name {
+            transition-delay: var(--trans-dur);
+        }
+
+        .steps__step--current .steps__step-number {
+            box-shadow: 0 0 0 0.125em hsla(var(--hue), 90%, 30%, 0.4);
+        }
+
+        .steps__step--done + .steps__connector:before {
+            transform: scale(1, 1);
+        }
+
+        /* Change layout depending on form width */
+        @container form (min-width: 30em) {
+            .btn {
+                width: auto;
+            }
+
+            .steps {
+                flex-direction: row;
+                align-items: center;
+                padding: 1.5em 2.25em 2.25em 2.25em;
+            }
+
+            .steps__connector {
+                margin-inline-start: 0;
+                width: 100%;
+                height: 0.125em;
+                transform: translateY(-50%);
+            }
+
+            .steps__connector:before {
+                transform: scale(0, 1);
+                transform-origin: 0 50%;
+            }
+
+            [dir=rtl] .steps__connector:before {
+                transform-origin: 100% 50%;
+            }
+
+            .steps__step-name {
+                position: absolute;
+                top: 100%;
+                left: 50%;
+                text-align: center;
+                width: 6em;
+                transform: translateX(-50%);
+            }
+
+            .steps__step-number {
+                margin-inline-end: 0;
+            }
+        }
+
+        /* Dark theme */
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --bg: hsl(var(--hue), 10%, 10%);
+                --fg: hsl(var(--hue), 10%, 90%);
+                --primary: hsl(var(--hue), 90%, 70%);
+            }
+
+            .btn {
+                color: hsl(var(--hue), 10%, 10%);
+            }
+
+            .btn:not(:disabled):hover {
+                background: hsl(var(--hue), 90%, 50%);
+            }
+
+            .steps {
+                background-color: hsl(var(--hue), 10%, 20%);
+            }
+
+            .steps__connector {
+                background-color: hsl(var(--hue), 10%, 40%);
+            }
+
+            .steps__step-name {
+                color: hsl(var(--hue), 10%, 50%);
+            }
+
+            .steps__step-number {
+                background-color: hsl(var(--hue), 10%, 40%);
+                color: hsl(var(--hue), 10%, 20%);
+            }
+
+            .steps__step--current .steps__step-name, .steps__step--done .steps__step-name {
+                color: hsl(var(--hue), 10%, 90%);
+            }
+
+            .steps__step--current .steps__step-number {
+                box-shadow: 0 0 0 0.125em hsla(var(--hue), 90%, 70%, 0.4);
+            }
+        }
+    </style>
 </head>
 <body>
-<!-- partial:index.partial.html -->
 <form>
     <div class="steps">
         <div class="steps__step" data-step="0">
             <div class="steps__step-number">1</div>
-            <div class="steps__step-name">About You</div>
+            <div class="steps__step-name">个人信息</div>
         </div>
         <div class="steps__connector"></div>
         <div class="steps__step" data-step="1">
             <div class="steps__step-number">2</div>
-            <div class="steps__step-name">About Book</div>
+            <div class="steps__step-name">书籍信息</div>
         </div>
         <div class="steps__connector"></div>
         <div class="steps__step" data-step="2">
             <div class="steps__step-number">3</div>
-            <div class="steps__step-name">Review</div>
+            <div class="steps__step-name">信息确认</div>
         </div>
         <div class="steps__connector"></div>
         <div class="steps__step" data-step="3">
             <div class="steps__step-number">4</div>
-            <div class="steps__step-name">Signing</div>
+            <div class="steps__step-name">签署协议</div>
         </div>
         <div class="steps__connector"></div>
         <div class="steps__step" data-step="4">
             <div class="steps__step-number">5</div>
-            <div class="steps__step-name">Contract</div>
+            <div class="steps__step-name">完成合同</div>
         </div>
     </div>
     <div class="btn-group">
-        <button class="btn" type="button" data-action="prev" disabled>Previous</button>
-        <button class="btn" type="button" data-action="next">Next</button>
+        <button class="btn" type="button" data-action="prev" disabled>上一步</button>
+        <button class="btn" type="button" data-action="next">下一步</button>
     </div>
 </form>
-<!-- partial -->
-<script src="./script.js"></script>
 
+<script>
+    "use strict";
+    // 页面加载完成后初始化步骤指示器
+    window.addEventListener("DOMContentLoaded", () => {
+        const steps = new StepIndicator(".steps");
+    });
+
+    /**
+     * 步骤指示器类
+     * 管理步骤的显示和导航
+     */
+    class StepIndicator {
+        /**
+         * 构造函数
+         * @param {string} el - 步骤指示器容器的CSS选择器
+         */
+        constructor(el) {
+            this.steps = 5; // 总步骤数
+            this._step = 0; // 当前步骤索引
+            this.el = document.querySelector(el); // 容器元素
+
+            // 初始化事件监听
+            this.initEventListeners();
+
+            // 显示初始步骤
+            this.displayStep(this.step);
+            this.checkExtremes();
+        }
+
+        /**
+         * 获取当前步骤
+         * @returns {number} 当前步骤索引
+         */
+        get step() {
+            return this._step;
+        }
+
+        /**
+         * 设置当前步骤
+         * @param {number} value - 要设置的步骤索引
+         */
+        set step(value) {
+            // 确保值在有效范围内
+            if (value >= 0 && value < this.steps) {
+                this.displayStep(value);
+                this._step = value;
+                this.checkExtremes();
+
+                // 触发自定义事件，通知步骤变化
+                this.dispatchStepChangeEvent();
+            }
+        }
+
+        /**
+         * 初始化事件监听器
+         */
+        initEventListeners() {
+            // 使用事件委托处理按钮点击
+            document.addEventListener("click", (e) => {
+                const button = e.target.closest("[data-action]");
+                if (!button) return;
+
+                const action = button.getAttribute("data-action");
+                if (action === "prev") {
+                    this.prev();
+                } else if (action === "next") {
+                    this.next();
+                }
+            });
+
+            // 添加键盘导航支持
+            document.addEventListener("keydown", (e) => {
+                if (e.target.tagName === "INPUT" || e.target.tagName === "TEXTAREA") return;
+
+                switch (e.key) {
+                    case "ArrowLeft":
+                        this.prev();
+                        break;
+                    case "ArrowRight":
+                        this.next();
+                        break;
+                }
+            });
+        }
+
+        /**
+         * 触发步骤变化事件
+         */
+        dispatchStepChangeEvent() {
+            const event = new CustomEvent("stepChange", {
+                detail: {
+                    step: this.step
+                }
+            });
+            this.el.dispatchEvent(event);
+        }
+
+        /**
+         * 导航到上一步
+         */
+        prev() {
+            if (this.step > 0) {
+                --this.step;
+            }
+        }
+
+        /**
+         * 导航到下一步
+         */
+        next() {
+            if (this.step < this.steps - 1) {
+                ++this.step;
+            }
+        }
+
+        /**
+         * 检查是否在第一步或最后一步，禁用相应按钮
+         */
+        checkExtremes() {
+            const prevBtnEl = document.querySelector(`[data-action="prev"]`);
+            const nextBtnEl = document.querySelector(`[data-action="next"]`);
+
+            if (prevBtnEl) {
+                prevBtnEl.disabled = this.step <= 0;
+            }
+            if (nextBtnEl) {
+                nextBtnEl.disabled = this.step >= this.steps - 1;
+            }
+        }
+
+        /**
+         * 更新步骤指示器显示
+         * @param {number} targetStep - 目标步骤索引
+         */
+        displayStep(targetStep) {
+            const currentClass = "steps__step--current";
+            const doneClass = "steps__step--done";
+
+            // 遍历所有步骤元素
+            for (let s = 0; s < this.steps; ++s) {
+                const stepEl = this.el.querySelector(`[data-step="${s}"]`);
+                if (!stepEl) continue;
+
+                // 移除所有状态类
+                stepEl.classList.remove(currentClass, doneClass);
+
+                // 根据步骤位置添加适当类
+                if (s < targetStep) {
+                    stepEl.classList.add(doneClass); // 已完成步骤
+                } else if (s === targetStep) {
+                    stepEl.classList.add(currentClass); // 当前步骤
+                }
+            }
+        }
+    }
+</script>
 </body>
 </html>

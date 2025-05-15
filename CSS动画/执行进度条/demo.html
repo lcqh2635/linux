@@ -1,12 +1,13 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-CN">
 <head>
-    <meta charset="UTF-8">
-    <title>Loading Progress</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-    <link rel='stylesheet'
-          href='https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,100..1000&amp;display=swap'>
+    <meta charset="UTF-8" />
+    <title>加载进度动画</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <!-- 引入字体 -->
+    <link rel='stylesheet' href='https://fonts.googleapis.com/css2?family=DM+Sans :opsz,wght@9..40,100..1000&amp;display=swap'>
     <style>
+        /* 基础样式 */
         * {
             border: 0;
             box-sizing: border-box;
@@ -79,15 +80,19 @@
             height: 26.25em;
         }
 
-        .loading, .loading__step, .loading__steps {
+        .loading,
+        .loading__step,
+        .loading__steps {
             width: 100%;
         }
 
-        .loading, .loading__steps {
+        .loading,
+        .loading__steps {
             margin: auto;
         }
 
-        .loading, .loading__step {
+        .loading,
+        .loading__step {
             display: flex;
         }
 
@@ -144,53 +149,56 @@
             max-width: 27em;
         }
 
-        /* Dark theme */
         @media (prefers-color-scheme: dark) {
             :root {
                 --bg: hsl(var(--hue), 10%, 10%);
                 --fg: hsl(var(--hue), 10%, 90%);
             }
-
             .loading__step-info {
                 color: var(--gray1);
             }
         }
 
-        /* Animations */
         @keyframes ellipsis-dot-1 {
             from {
                 visibility: hidden;
             }
-            25%, to {
+            25%,
+            to {
                 visibility: visible;
             }
         }
 
         @keyframes ellipsis-dot-2 {
-            from, 25% {
+            from,
+            25% {
                 visibility: hidden;
             }
-            50%, to {
+            50%,
+            to {
                 visibility: visible;
             }
         }
 
         @keyframes ellipsis-dot-3 {
-            from, 50% {
+            from,
+            50% {
                 visibility: hidden;
             }
-            75%, to {
+            75%,
+            to {
                 visibility: visible;
             }
         }
     </style>
 </head>
+
 <body>
 <div id="root"></div>
 
 <script type="module">
-    import React, {StrictMode, useEffect, useRef, useState} from "https://esm.sh/react";
-    import {createRoot} from "https://esm.sh/react-dom/client";
+    import React, { StrictMode, useEffect, useRef, useState } from 'https://esm.sh/react ';
+    import { createRoot } from 'https://esm.sh/react-dom/client ';
 
     // 创建根节点
     const root = createRoot(document.getElementById('root'));
@@ -204,7 +212,7 @@
     );
 
     // 图标组件：根据状态显示不同图标
-    function Icon({icon, color}) {
+    function Icon({ icon, color }) {
         const colorClass = color ? ` icon--${color}` : "";
         return (
             React.createElement("svg", {
@@ -213,7 +221,7 @@
                     height: "16px",
                     "aria-hidden": "true"
                 },
-                React.createElement("use", {href: `#${icon}`})
+                React.createElement("use", { href: `#${icon}` })
             )
         );
     }
@@ -229,10 +237,10 @@
         }
 
         return (
-            React.createElement("svg", {width: "0", height: "0", "aria-hidden": "true"},
+            React.createElement("svg", { width: "0", height: "0", "aria-hidden": "true" },
                 // ✔️ 已完成图标
-                React.createElement("symbol", {id: "check-circle", viewBox},
-                    React.createElement("circle", {fill: "currentcolor", cx: "8", cy: "8", r: "8"}),
+                React.createElement("symbol", { id: "check-circle", viewBox },
+                    React.createElement("circle", { fill: "currentcolor", cx: "8", cy: "8", r: "8" }),
                     React.createElement("polyline", {
                         fill: "none",
                         stroke: "var(--bg)",
@@ -244,9 +252,9 @@
                 ),
 
                 // ⚪ 等待图标
-                React.createElement("symbol", {id: "empty-circle", viewBox},
+                React.createElement("symbol", { id: "empty-circle", viewBox },
                     React.createElement("defs", null,
-                        React.createElement("rect", {id: "empty-circle-rect", x: "-1", width: "2", height: "2"})),
+                        React.createElement("rect", { id: "empty-circle-rect", x: "-1", width: "2", height: "2" })),
                     React.createElement("g", {
                         fill: "currentcolor",
                         transform: "translate(8,8)"
@@ -260,9 +268,9 @@
                 ),
 
                 // 🔄 进行中图标
-                React.createElement("symbol", {id: "half-circle", viewBox},
-                    React.createElement("clipPath", {id: "half-circle-clip"},
-                        React.createElement("rect", {x: "8", y: "0", width: "8", height: "16"})),
+                React.createElement("symbol", { id: "half-circle", viewBox },
+                    React.createElement("clipPath", { id: "half-circle-clip" },
+                        React.createElement("rect", { x: "8", y: "0", width: "8", height: "16" })),
                     React.createElement("circle", {
                         fill: "none",
                         stroke: "currentcolor",
@@ -286,74 +294,83 @@
     // 加载进度主组件
     function Loading() {
         const [step, setStep] = useState(0); // 当前步骤索引
-        const progressFrame = useRef(0); // 定时器引用
+        const progressFrame = useRef(null); // 定时器引用
+        const stepCount = useRef(5); // 总步骤数
 
         // 初始步骤数据
         const [steps, setSteps] = useState([
-            {id: 0, state: "waiting", title: "准备"},
-            {id: 1, state: "waiting", title: "下载", filesPreparedMax: 50},
-            {id: 2, state: "waiting", title: "分析", filesPreparedMax: 50},
-            {id: 3, state: "waiting", title: "创建"},
-            {id: 4, state: "waiting", title: "收尾"}
+            { id: 0, state: "waiting", title: "准备" },
+            { id: 1, state: "waiting", title: "下载", filesPreparedMax: 50 },
+            { id: 2, state: "waiting", title: "分析", filesPreparedMax: 50 },
+            { id: 3, state: "waiting", title: "创建" },
+            { id: 4, state: "waiting", title: "收尾" }
         ]);
-        const stepCount = useRef(steps.length);
-        const [stepObjects, setStepObjects] = useState(steps);
+
         // 所有步骤是否完成
         const allStepsDone = step === stepCount.current;
 
-        /**
-         * 递增文件准备或设置加载步骤的状态。
-         * @param item 加载步骤
-         */
-        function updatedItem(item) {
-            const {id, state, start, filesPrepared, filesPreparedMax} = item;
-            const updated = {id, state};
+        // 更新单个步骤的状态
+        function updateItem(item) {
+            const updated = { ...item };
 
-            if (!start) {
+            if (!updated.start) {
                 updated.start = new Date();
                 updated.state = "progress";
-                /// 如果没有文件需要准备，则直接标记为完成
-                if (!filesPreparedMax)
+
+                // 如果没有文件需要准备，则直接标记为完成
+                if (!updated.filesPreparedMax) {
+                    updated.finish = new Date();
+                    updated.state = "done";
                     return updated;
+                }
             }
+
             // 文件准备递增
-            if (filesPreparedMax) {
-                // 递增准备好的文件
-                const prepared = filesPrepared === undefined ? -1 : filesPrepared;
-                const preparedInc = 1;
-                updated.filesPrepared = Math.min(prepared + preparedInc, filesPreparedMax);
+            if (updated.filesPreparedMax !== undefined) {
+                const prepared = updated.filesPrepared ?? -1;
+                updated.filesPrepared = Math.min(prepared + 1, updated.filesPreparedMax);
             }
+
             // 判断是否完成
-            if (!filesPreparedMax || updated.filesPrepared === filesPreparedMax) {
-                // 如果没有要准备的文件或准备了所有文件，则将其标记为已完成
+            if (!updated.filesPreparedMax || updated.filesPrepared === updated.filesPreparedMax) {
                 updated.finish = new Date();
                 updated.state = "done";
             }
+
             return updated;
         }
 
+        // 异步更新进度
+        async function updateProgress(delay = 0) {
+            await new Promise(resolve => setTimeout(resolve, delay));
+
+            const current = steps[step];
+            const updated = updateItem(current);
+
+            // 更新对应步骤
+            setSteps(prev => prev.map(item => item.id === updated.id ? updated : item));
+
+            // 如果当前步骤完成，进入下一步
+            if (updated.state === "done") {
+                if (step < stepCount.current) {
+                    setStep(step + 1);
+                }
+            }
+
+            // 根据步骤类型决定延迟
+            if (step === 1 || step === 2) {
+                progressFrame.current = window.setTimeout(() => updateProgress(50), 50);
+            } else if (step < stepCount.current) {
+                progressFrame.current = window.setTimeout(() => updateProgress(1500), 1500);
+            }
+        }
+
+        // 初始化进度
         useEffect(() => {
-            const updatePromise = async (delay = 0) => await new Promise((resolve) => {
-                progressFrame.current = setTimeout(resolve, delay);
-            }).then(() => {
-                setStepObjects((prev) => prev.map((item) => {
-                    if (item.id !== step)
-                        return item;
-                    const updated = updatedItem(item);
-                    if (updated.state === "done") {
-                        clearTimeout(progressFrame.current);
-                        setStep((step) => step + 1);
-                    }
-                    return Object.assign(Object.assign({}, item), updated);
-                }));
-                // loop
-                if (step === 1 || step === 2)
-                    updatePromise(50);
-                else if (step < stepCount.current)
-                    updatePromise(1500);
-            });
-            updatePromise();
-            return () => clearTimeout(progressFrame.current);
+            updateProgress();
+            return () => {
+                if (progressFrame.current) clearTimeout(progressFrame.current);
+            };
         }, [step]);
 
         // 计算偏移距离
@@ -373,111 +390,83 @@
         }
 
         return (
-            React.createElement("div", {className: `loading${allStepsDone ? " loading--done" : ""}`},
-                React.createElement("div", {className: "loading__steps"}, stepObjects.map((s, i) => {
-                    const {state, title, start, finish, filesPrepared, filesPreparedMax} = s;
-                    const distance = calculateDistance(i);
-                    const fade = allStepsDone ? 0 : Math.abs(i - step);
+            React.createElement("div", { className: `loading${allStepsDone ? " loading--done" : ""}` },
+                React.createElement("div", { className: "loading__steps" },
+                    steps.map((s, i) => {
+                        const { state, title, start, finish, filesPrepared, filesPreparedMax } = s;
+                        const distance = calculateDistance(i);
+                        const fade = allStepsDone ? 0 : Math.abs(i - step);
 
-                    return React.createElement(LoadingStepBlock, {
-                        key: i,
-                        title: title,
-                        state: state,
-                        distance: distance,
-                        fade: fade,
-                        start: start,
-                        finish: finish,
-                        filesPrepared: filesPrepared,
-                        filesPreparedMax: filesPreparedMax
-                    });
-                }))
+                        const style = {
+                            opacity: 1 - fade * 0.225,
+                            transform: `translateY(${100 * distance}%)`
+                        };
+
+                        // 获取图标名称
+                        function getIconName(state) {
+                            switch (state) {
+                                case "waiting": return "empty-circle";
+                                case "progress": return "half-circle";
+                                case "done": return "check-circle";
+                                default: return "empty-circle";
+                            }
+                        }
+
+                        // 获取图标颜色
+                        function getIconColor(state) {
+                            switch (state) {
+                                case "waiting": return "neutral";
+                                case "progress": return "warning";
+                                case "done": return "success";
+                                default: return "neutral";
+                            }
+                        }
+
+                        // 格式化日期
+                        function formatDate(date) {
+                            return new Intl.DateTimeFormat("zh-CN", {
+                                dateStyle: "medium",
+                                timeStyle: "medium"
+                            }).format(date);
+                        }
+
+                        return (
+                            React.createElement("div", {
+                                    key: i,
+                                    className: `loading__step${state !== "waiting" ? " loading__step--in" : ""}`,
+                                    style
+                                },
+                                React.createElement(Icon, {
+                                    icon: getIconName(state),
+                                    color: getIconColor(state)
+                                }),
+                                React.createElement("div", null,
+                                    React.createElement("div", { className: "loading__step-title" }, title),
+                                    React.createElement("div", { className: "loading__step-info" },
+                                        start ? `${formatDate(start)} — ` : "",
+                                        finish ? formatDate(finish) : (state === "progress" ? React.createElement(LoadingEllipsis, null) : "")
+                                    ),
+                                    React.createElement("div", { className: "loading__step-info" },
+                                        filesPrepared !== undefined ? `${filesPrepared} of ${filesPreparedMax} 个文件已准备好` : ""
+                                    )
+                                )
+                            )
+                        );
+                    })
+                )
             )
         );
     }
 
-    function LoadingStepBlock({
-                                  state,
-                                  title = "",
-                                  distance = 0,
-                                  fade = 0,
-                                  start,
-                                  finish,
-                                  filesPrepared,
-                                  filesPreparedMax = 0
-                              }) {
-        const style = {
-            opacity: 1 - fade * 0.225,
-            transform: `translateY(${100 * distance}%)`
-        };
-
-        // 获取图标名称
-        function getIconName(state) {
-            switch (state) {
-                case "waiting":
-                    return "empty-circle";
-                case "progress":
-                    return "half-circle";
-                case "done":
-                    return "check-circle";
-                default:
-                    return "empty-circle";
-            }
-        }
-
-        // 获取图标颜色
-        function getIconColor(state) {
-            switch (state) {
-                case "waiting":
-                    return "neutral";
-                case "progress":
-                    return "warning";
-                case "done":
-                    return "success";
-                default:
-                    return "neutral";
-            }
-        }
-
-        // 格式化日期
-        function formatDate(date) {
-            return new Intl.DateTimeFormat("zh-CN", {
-                dateStyle: "medium",
-                timeStyle: "medium"
-            }).format(date);
-        }
-
+    // 省略号动画组件
+    function LoadingEllipsis() {
         return (
-            React.createElement("div", {
-                    className: `loading__step${state !== "waiting" ? " loading__step--in" : ""}`,
-                    style: style
-                },
-                React.createElement(Icon, {
-                    icon: getIconName(state),
-                    color: getIconColor(state)
-                }),
-                React.createElement("div", null,
-                    React.createElement("div", {className: "loading__step-title"}, title),
-                    React.createElement("div", {className: "loading__step-info"},
-                        start ? `${formatDate(start)} — ` : "",
-                        finish ? formatDate(finish) : (state === "progress" ? React.createElement(LoadingEllipsis, null) : "")
-                    ),
-                    React.createElement("div", {className: "loading__step-info"},
-                        filesPrepared !== undefined ? `${filesPrepared} of ${filesPreparedMax} 个文件已准备好` : ""
-                    )
-                )
+            React.createElement("div", { className: "loading__ellipsis" },
+                React.createElement("div", { className: "loading__ellipsis-dot" }, "."),
+                React.createElement("div", { className: "loading__ellipsis-dot" }, "."),
+                React.createElement("div", { className: "loading__ellipsis-dot" }, ".")
             )
-        )
-
-        // 省略号动画组件
-        function LoadingEllipsis() {
-            return (
-                React.createElement("div", {className: "loading__ellipsis"},
-                    React.createElement("div", {className: "loading__ellipsis-dot"}, "."),
-                    React.createElement("div", {className: "loading__ellipsis-dot"}, "."),
-                    React.createElement("div", {className: "loading__ellipsis-dot"}, ".")
-                )
-            );
-        }
+        );
     }
 </script>
 </body>

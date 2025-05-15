@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>立体化卡片阴影效果</title>
+    <style>
+        /* 基础样式 */
+        body {
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            background-color: #f5f7fa;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 2rem;
+        }
+
+        .container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            width: 100%;
+            max-width: 1200px;
+        }
+
+        /* 卡片基础样式 */
+        .card {
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            position: relative;
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            color: #333;
+            overflow: hidden;
+        }
+
+        .card h3 {
+            margin-top: 0;
+            color: #2d3748;
+        }
+
+        /* 方案3：Material Design风格阴影 */
+        .card-material {
+            &::before {
+                content: "";
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                border-radius: 12px;
+                box-shadow:
+                        0 8px 10px 1px rgba(0,0,0,0.14),
+                        0 3px 14px 2px rgba(0,0,0,0.12),
+                        0 5px 5px -3px rgba(0,0,0,0.2);
+                z-index: -1;
+                transition: all 0.3s ease;
+            }
+
+            /* 边缘光效 */
+            &::after {
+                content: "";
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 0;
+                height: 1px;
+                background: linear-gradient(
+                        to right,
+                        transparent,
+                        rgba(255,255,255,0.7) 20% 80%,
+                        transparent
+                );
+            }
+
+            &:hover::before {
+                box-shadow:
+                        0 12px 16px 1px rgba(0,0,0,0.2),
+                        0 5px 22px 4px rgba(0,0,0,0.15),
+                        0 7px 8px -4px rgba(0,0,0,0.25);
+            }
+        }
+
+        /* 方案4：极简立体阴影 */
+        .card-minimal {
+            box-shadow: 0 0 0 1px rgba(0,0,0,0.02);
+
+            &::before {
+                content: "";
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                border-radius: 12px;
+                box-shadow:
+                        0 2.8px 2.2px rgba(0, 0, 0, 0.008),
+                        0 6.7px 5.3px rgba(0, 0, 0, 0.012),
+                        0 12.5px 10px rgba(0, 0, 0, 0.015),
+                        0 22.3px 17.9px rgba(0, 0, 0, 0.018),
+                        0 41.8px 33.4px rgba(0, 0, 0, 0.022),
+                        0 100px 80px rgba(0, 0, 0, 0.03);
+                z-index: -1;
+                transition: all 0.3s ease;
+            }
+
+            &:hover::before {
+                box-shadow:
+                        0 2.8px 2.2px rgba(0, 0, 0, 0.01),
+                        0 6.7px 5.3px rgba(0, 0, 0, 0.015),
+                        0 12.5px 10px rgba(0, 0, 0, 0.02),
+                        0 22.3px 17.9px rgba(0, 0, 0, 0.025),
+                        0 41.8px 33.4px rgba(0, 0, 0, 0.03),
+                        0 100px 80px rgba(0, 0, 0, 0.04);
+                transform: translateY(-2px);
+            }
+        }
+
+        /* 标签样式 */
+        .card-label {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: #4f46e5;
+            color: white;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: bold;
+        }
+
+        /* 多层阴影 + 动态高度（推荐）*/
+        .card-material-elevated {
+            position: relative;
+            background: white;
+            border-radius: 12px;
+            padding: 24px;
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+
+            /* 基础阴影 */
+            box-shadow:
+                    0 2px 4px -1px rgba(0,0,0,0.1),
+                    0 4px 8px -1px rgba(0,0,0,0.08);
+
+            /* 动态阴影层（伪元素实现） */
+            &::before {
+                content: "";
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                border-radius: 12px;
+                box-shadow:
+                        0 8px 10px 1px rgba(0,0,0,0.14),
+                        0 6px 18px 2px rgba(0,0,0,0.12);
+                z-index: -1;
+                opacity: 0;
+                transition: opacity 0.3s ease;
+            }
+
+            &:hover {
+                transform: translateY(-4px);
+                &::before {
+                    opacity: 1;
+                }
+            }
+
+            /* 边缘高光 */
+            &::after {
+                content: "";
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 0;
+                height: 1px;
+                background: linear-gradient(
+                        to right,
+                        transparent,
+                        rgba(255,255,255,0.9) 15% 85%,
+                        transparent
+                );
+                border-radius: 12px 12px 0 0;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <!-- 方案3：Material Design风格 -->
+    <div class="card card-material">
+        <span class="card-label">方案3</span>
+        <h3>Material Design风格</h3>
+        <p>遵循Google Material Design阴影规范，多层精确计算的阴影。</p>
+        <p>顶部边缘有微妙的高光效果。</p>
+    </div>
+
+    <!-- 方案4：极简立体阴影 -->
+    <div class="card card-minimal">
+        <span class="card-label">方案4</span>
+        <h3>极简立体阴影</h3>
+        <p>使用非常微妙的阴影层次，几乎不可见但能增强立体感。</p>
+        <p>适合极简设计风格，悬停时效果才明显。</p>
+    </div>
+
+    <div class="card-material-elevated">
+        <h3>立体增强版</h3>
+        <p>通过动态高度变化模拟真实物理效果</p>
+    </div>
+</div>
+</body>
+</html>

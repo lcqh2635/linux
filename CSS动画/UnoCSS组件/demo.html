@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>现代化UI组件集合</title>
+    <!-- 引入Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- 引入GSAP动画库 -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/gsap.min.js"></script>
+    <style>
+        /* 自定义CSS可以在这里添加 */
+        .card {
+            perspective: 1000px;
+        }
+        .card-inner {
+            transition: transform 0.6s;
+            transform-style: preserve-3d;
+        }
+        .card.is-flipped .card-inner {
+            transform: rotateY(180deg);
+        }
+        .card-front, .card-back {
+            backface-visibility: hidden;
+        }
+        .card-back {
+            transform: rotateY(180deg);
+        }
+
+        /* 加载动画 */
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .loading-spinner {
+            animation: spin 1s linear infinite;
+        }
+
+        /* 模态框动画 */
+        .modal {
+            transition: opacity 0.3s ease, transform 0.3s ease;
+        }
+        .modal-enter {
+            opacity: 0;
+            transform: scale(0.9);
+        }
+        .modal-enter-active {
+            opacity: 1;
+            transform: scale(1);
+        }
+    </style>
+</head>
+<body class="bg-gray-100 min-h-screen">
+<!-- 动画导航栏 -->
+<nav class="bg-white shadow-lg fixed w-full top-0 z-50">
+    <div class="container mx-auto px-4">
+        <div class="flex justify-between items-center h-16">
+            <!-- 品牌logo -->
+            <div class="flex-shrink-0 flex items-center">
+                <span class="text-xl font-bold text-indigo-600">UI Kit</span>
+            </div>
+
+            <!-- 导航链接 -->
+            <div class="hidden md:block">
+                <div class="ml-10 flex items-center space-x-4">
+                    <a href="#" class="nav-link px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:text-indigo-600 hover:bg-gray-100">首页</a>
+                    <a href="#" class="nav-link px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:text-indigo-600 hover:bg-gray-100">组件</a>
+                    <a href="#" class="nav-link px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:text-indigo-600 hover:bg-gray-100">文档</a>
+                    <a href="#" class="nav-link px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:text-indigo-600 hover:bg-gray-100">关于</a>
+                </div>
+            </div>
+
+            <!-- 移动端菜单按钮 -->
+            <div class="md:hidden flex items-center">
+                <button id="mobile-menu-button" class="inline-flex items-center justify-center p-2 rounded-md text-gray-700 hover:text-indigo-600 hover:bg-gray-100 focus:outline-none">
+                    <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 移动端菜单 -->
+    <div id="mobile-menu" class="md:hidden hidden">
+        <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+            <a href="#" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-indigo-600 hover:bg-gray-100">首页</a>
+            <a href="#" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-indigo-600 hover:bg-gray-100">组件</a>
+            <a href="#" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-indigo-600 hover:bg-gray-100">文档</a>
+            <a href="#" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-indigo-600 hover:bg-gray-100">关于</a>
+        </div>
+    </div>
+</nav>
+
+<main class="pt-20 pb-10 container mx-auto px-4">
+    <h1 class="text-3xl font-bold text-gray-800 mb-8">现代化UI组件集合</h1>
+
+    <!-- 卡片翻转组件 -->
+    <section class="mb-12">
+        <h2 class="text-2xl font-semibold text-gray-700 mb-6">卡片翻转效果</h2>
+        <div class="grid md:grid-cols-3 gap-6">
+            <!-- 卡片1 -->
+            <div class="card w-full h-64 cursor-pointer" onclick="flipCard(this)">
+                <div class="card-inner relative w-full h-full">
+                    <div class="card-front absolute w-full h-full bg-white rounded-lg shadow-md p-6 flex flex-col justify-center items-center">
+                        <div class="w-16 h-16 bg-indigo-100 rounded-full flex items-center justify-center mb-4">
+                            <svg class="w-8 h-8 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                            </svg>
+                        </div>
+                        <h3 class="text-xl font-semibold text-gray-800 mb-2">前端开发</h3>
+                        <p class="text-gray-600 text-center">点击卡片查看详情</p>
+                    </div>
+                    <div class="card-back absolute w-full h-full bg-indigo-600 rounded-lg shadow-md p-6 flex flex-col justify-center items-center text-white">
+                        <h3 class="text-xl font-semibold mb-2">前端技术栈</h3>
+                        <ul class="text-center space-y-1">
+                            <li>HTML5 & CSS3</li>
+                            <li>JavaScript (ES6+)</li>
+                            <li>React/Vue.js</li>
+                            <li>Tailwind CSS</li>
+                            <li>GSAP动画</li>
+                        </ul>
+                        <button class="mt-4 px-4 py-2 bg-white text-indigo-600 rounded-md font-medium hover:bg-gray-100 transition">了解更多</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 卡片2 -->
+            <div class="card w-full h-64 cursor-pointer" onclick="flipCard(this)">
+                <div class="card-inner relative w-full h-full">
+                    <div class="card-front absolute w-full h-full bg-white rounded-lg shadow-md p-6 flex flex-col justify-center items-center">
+                        <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mb-4">
+                            <svg class="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
+                            </svg>
+                        </div>
+                        <h3 class="text-xl font-semibold text-gray-800 mb-2">UI/UX设计</h3>
+                        <p class="text-gray-600 text-center">点击卡片查看详情</p>
+                    </div>
+                    <div class="card-back absolute w-full h-full bg-green-600 rounded-lg shadow-md p-6 flex flex-col justify-center items-center text-white">
+                        <h3 class="text-xl font-semibold mb-2">设计原则</h3>
+                        <ul class="text-center space-y-1">
+                            <li>用户中心设计</li>
+                            <li>响应式布局</li>
+                            <li>无障碍访问</li>
+                            <li>微交互设计</li>
+                            <li>设计系统</li>
+                        </ul>
+                        <button class="mt-4 px-4 py-2 bg-white text-green-600 rounded-md font-medium hover:bg-gray-100 transition">了解更多</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 卡片3 -->
+            <div class="card w-full h-64 cursor-pointer" onclick="flipCard(this)">
+                <div class="card-inner relative w-full h-full">
+                    <div class="card-front absolute w-full h-full bg-white rounded-lg shadow-md p-6 flex flex-col justify-center items-center">
+                        <div class="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mb-4">
+                            <svg class="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"></path>
+                            </svg>
+                        </div>
+                        <h3 class="text-xl font-semibold text-gray-800 mb-2">移动开发</h3>
+                        <p class="text-gray-600 text-center">点击卡片查看详情</p>
+                    </div>
+                    <div class="card-back absolute w-full h-full bg-blue-600 rounded-lg shadow-md p-6 flex flex-col justify-center items-center text-white">
+                        <h3 class="text-xl font-semibold mb-2">移动技术</h3>
+                        <ul class="text-center space-y-1">
+                            <li>React Native</li>
+                            <li>Flutter</li>
+                            <li>原生iOS/Android</li>
+                            <li>PWA技术</li>
+                            <li>跨平台开发</li>
+                        </ul>
+                        <button class="mt-4 px-4 py-2 bg-white text-blue-600 rounded-md font-medium hover:bg-gray-100 transition">了解更多</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 加载动画组件 -->
+    <section class="mb-12">
+        <h2 class="text-2xl font-semibold text-gray-700 mb-6">加载动画</h2>
+        <div class="bg-white rounded-lg shadow-md p-6">
+            <div class="flex flex-col items-center">
+                <div id="loading-spinner" class="w-16 h-16 border-4 border-indigo-500 border-t-transparent rounded-full loading-spinner mb-4"></div>
+                <p class="text-gray-600 mb-4">数据加载中，请稍候...</p>
+                <div class="flex space-x-4">
+                    <button onclick="startLoading()" class="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 transition">开始加载</button>
+                    <button onclick="stopLoading()" class="px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 transition">停止加载</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 模态框组件 -->
+    <section>
+        <h2 class="text-2xl font-semibold text-gray-700 mb-6">模态框</h2>
+        <button onclick="openModal()" class="px-6 py-3 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 transition font-medium">打开模态框</button>
+
+        <!-- 模态框背景 -->
+        <div id="modal-backdrop" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden"></div>
+
+        <!-- 模态框内容 -->
+        <div id="modal" class="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white rounded-lg shadow-xl z-50 w-full max-w-md hidden">
+            <div class="p-6">
+                <div class="flex justify-between items-center mb-4">
+                    <h3 class="text-xl font-semibold text-gray-800">这是一个模态框</h3>
+                    <button onclick="closeModal()" class="text-gray-500 hover:text-gray-700">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                        </svg>
+                    </button>
+                </div>
+                <div class="mb-6">
+                    <p class="text-gray-600">这是一个使用GSAP和Tailwind CSS创建的现代化模态框。点击背景或关闭按钮可以关闭它。</p>
+                </div>
+                <div class="flex justify-end space-x-3">
+                    <button onclick="closeModal()" class="px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 transition">取消</button>
+                    <button onclick="confirmAction()" class="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 transition">确认</button>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+
+<script>
+    // 导航栏动画
+    document.addEventListener('DOMContentLoaded', function() {
+        // 移动端菜单切换
+        const mobileMenuButton = document.getElementById('mobile-menu-button');
+        const mobileMenu = document.getElementById('mobile-menu');
+
+        mobileMenuButton.addEventListener('click', function() {
+            mobileMenu.classList.toggle('hidden');
+
+            // 使用GSAP实现平滑动画
+            if (mobileMenu.classList.contains('hidden')) {
+                gsap.to(mobileMenu, {
+                    height: 0,
+                    opacity: 0,
+                    duration: 0.3,
+                    ease: "power1.inOut",
+                    onComplete: () => mobileMenu.classList.add('hidden')
+                });
+            } else {
+                mobileMenu.classList.remove('hidden');
+                gsap.from(mobileMenu, {
+                    height: 0,
+                    opacity: 0,
+                    duration: 0.3,
+                    ease: "power1.inOut"
+                });
+            }
+        });
+
+        // 导航链接悬停动画
+        const navLinks = document.querySelectorAll('.nav-link');
+        navLinks.forEach(link => {
+            link.addEventListener('mouseenter', () => {
+                gsap.to(link, {
+                    scale: 1.05,
+                    duration: 0.2
+                });
+            });
+
+            link.addEventListener('mouseleave', () => {
+                gsap.to(link, {
+                    scale: 1,
+                    duration: 0.2
+                });
+            });
+        });
+    });
+
+    // 卡片翻转功能
+    function flipCard(card) {
+        card.classList.toggle('is-flipped');
+
+        // 使用GSAP增强翻转动画
+        if (card.classList.contains('is-flipped')) {
+            gsap.fromTo(card.querySelector('.card-back'),
+                { rotationY: 90, opacity: 0 },
+                { rotationY: 0, opacity: 1, duration: 0.5, ease: "back.out(1.7)" }
+            );
+        } else {
+            gsap.fromTo(card.querySelector('.card-front'),
+                { rotationY: 90, opacity: 0 },
+                { rotationY: 0, opacity: 1, duration: 0.5, ease: "back.out(1.7)" }
+            );
+        }
+    }
+
+    // 加载动画控制
+    function startLoading() {
+        const spinner = document.getElementById('loading-spinner');
+        spinner.classList.remove('hidden');
+
+        // GSAP脉冲动画
+        gsap.to(spinner, {
+            scale: 1.2,
+            duration: 0.5,
+            yoyo: true,
+            repeat: -1,
+            ease: "sine.inOut"
+        });
+    }
+
+    function stopLoading() {
+        const spinner = document.getElementById('loading-spinner');
+
+        // 停止动画并隐藏
+        gsap.killTweensOf(spinner);
+        gsap.to(spinner, {
+            scale: 1,
+            rotation: 0,
+            duration: 0.3,
+            onComplete: () => {
+                spinner.classList.add('hidden');
+            }
+        });
+    }
+
+    // 模态框控制
+    function openModal() {
+        const backdrop = document.getElementById('modal-backdrop');
+        const modal = document.getElementById('modal');
+
+        // 显示背景和模态框
+        backdrop.classList.remove('hidden');
+        modal.classList.remove('hidden');
+
+        // GSAP动画
+        gsap.fromTo(backdrop,
+            { opacity: 0 },
+            { opacity: 1, duration: 0.3 }
+        );
+
+        gsap.fromTo(modal,
+            { opacity: 0, scale: 0.9, y: 20 },
+            { opacity: 1, scale: 1, y: 0, duration: 0.3, ease: "back.out(1.7)" }
+        );
+    }
+
+    function closeModal() {
+        const backdrop = document.getElementById('modal-backdrop');
+        const modal = document.getElementById('modal');
+
+        // GSAP动画
+        gsap.to(backdrop,
+            { opacity: 0, duration: 0.2, onComplete: () => backdrop.classList.add('hidden') }
+        );
+
+        gsap.to(modal,
+            { opacity: 0, scale: 0.9, y: 20, duration: 0.2, onComplete: () => modal.classList.add('hidden') }
+        );
+    }
+
+    function confirmAction() {
+        closeModal();
+        alert('操作已确认!');
+    }
+
+    // 点击模态框背景关闭
+    document.getElementById('modal-backdrop').addEventListener('click', closeModal);
+</script>
+</body>
+</html>
