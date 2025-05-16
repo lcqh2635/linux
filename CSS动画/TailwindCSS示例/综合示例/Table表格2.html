@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>优雅表格 - 自定义样式</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .elegant-table {
+            --primary-color: #4f46e5;
+            --hover-color: #f9fafb;
+            --border-color: #e5e7eb;
+            --text-primary: #111827;
+            --text-secondary: #6b7280;
+        }
+
+        .elegant-table {
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            border-collapse: separate;
+            border-spacing: 0;
+            width: 100%;
+        }
+
+        .elegant-table thead th {
+            position: sticky;
+            top: 0;
+            background-color: white;
+            z-index: 10;
+            box-shadow: 0 2px 2px -1px rgba(0, 0, 0, 0.05);
+        }
+
+        .elegant-table tr {
+            transition: all 0.2s ease;
+        }
+
+        .elegant-table tr:hover {
+            background-color: var(--hover-color);
+        }
+
+        .elegant-table th,
+        .elegant-table td {
+            padding: 0.75rem 1.5rem;
+            text-align: left;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .elegant-table th {
+            font-weight: 600;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            font-size: 0.75rem;
+            letter-spacing: 0.05em;
+        }
+
+        .elegant-table td {
+            color: var(--text-primary);
+            font-size: 0.875rem;
+        }
+
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .status-active {
+            background-color: #ecfdf5;
+            color: #059669;
+        }
+
+        .status-on-leave {
+            background-color: #fffbeb;
+            color: #d97706;
+        }
+
+        .status-inactive {
+            background-color: #fef2f2;
+            color: #dc2626;
+        }
+
+        .action-link {
+            color: var(--primary-color);
+            font-weight: 500;
+            margin-right: 1rem;
+            transition: color 0.2s ease;
+        }
+
+        .action-link:hover {
+            color: #4338ca;
+            text-decoration: underline;
+        }
+
+        .action-link.delete {
+            color: #ef4444;
+        }
+
+        .action-link.delete:hover {
+            color: #dc2626;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen py-12 px-4">
+<div class="max-w-7xl mx-auto">
+    <div class="bg-white rounded-lg shadow-sm overflow-hidden">
+        <div class="px-6 py-5 border-b border-gray-100">
+            <h2 class="text-2xl font-semibold text-gray-800">项目进度表</h2>
+            <div class="mt-2 flex items-center justify-between">
+                <p class="text-sm text-gray-500">当前所有项目的进展情况</p>
+                <button class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                    新增项目
+                </button>
+            </div>
+        </div>
+
+        <div class="overflow-x-auto">
+            <table class="elegant-table">
+                <thead>
+                <tr>
+                    <th>项目名称</th>
+                    <th>负责人</th>
+                    <th>开始日期</th>
+                    <th>截止日期</th>
+                    <th>进度</th>
+                    <th>状态</th>
+                    <th>操作</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td class="font-medium">官网改版</td>
+                    <td>
+                        <div class="flex items-center">
+                            <img class="w-8 h-8 rounded-full mr-3" src="https://randomuser.me/api/portraits/women/11.jpg" alt="">
+                            <span>张美丽</span>
+                        </div>
+                    </td>
+                    <td>2023-01-15</td>
+                    <td>2023-03-20</td>
+                    <td>
+                        <div class="w-full bg-gray-200 rounded-full h-2.5">
+                            <div class="bg-indigo-600 h-2.5 rounded-full" style="width: 85%"></div>
+                        </div>
+                        <span class="text-xs text-gray-500 mt-1 block">85%</span>
+                    </td>
+                    <td>
+                        <span class="status-badge status-active">进行中</span>
+                    </td>
+                    <td>
+                        <a href="#" class="action-link">详情</a>
+                        <a href="#" class="action-link delete">删除</a>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="font-medium">移动端APP开发</td>
+                    <td>
+                        <div class="flex items-center">
+                            <img class="w-8 h-8 rounded-full mr-3" src="https://randomuser.me/api/portraits/men/32.jpg" alt="">
+                            <span>王强</span>
+                        </div>
+                    </td>
+                    <td>2023-02-01</td>
+                    <td>2023-05-30</td>
+                    <td>
+                        <div class="w-full bg-gray-200 rounded-full h-2.5">
+                            <div class="bg-indigo-600 h-2.5 rounded-full" style="width: 45%"></div>
+                        </div>
+                        <span class="text-xs text-gray-500 mt-1 block">45%</span>
+                    </td>
+                    <td>
+                        <span class="status-badge status-active">进行中</span>
+                    </td>
+                    <td>
+                        <a href="#" class="action-link">详情</a>
+                        <a href="#" class="action-link delete">删除</a>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="font-medium">数据迁移</td>
+                    <td>
+                        <div class="flex items-center">
+                            <img class="w-8 h-8 rounded-full mr-3" src="https://randomuser.me/api/portraits/men/45.jpg" alt="">
+                            <span>李雷</span>
+                        </div>
+                    </td>
+                    <td>2022-12-10</td>
+                    <td>2023-01-31</td>
+                    <td>
+                        <div class="w-full bg-gray-200 rounded-full h-2.5">
+                            <div class="bg-green-500 h-2.5 rounded-full" style="width: 100%"></div>
+                        </div>
+                        <span class="text-xs text-gray-500 mt-1 block">100%</span>
+                    </td>
+                    <td>
+                        <span class="status-badge status-inactive">已完成</span>
+                    </td>
+                    <td>
+                        <a href="#" class="action-link">详情</a>
+                        <a href="#" class="action-link delete">删除</a>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="font-medium">客户管理系统</td>
+                    <td>
+                        <div class="flex items-center">
+                            <img class="w-8 h-8 rounded-full mr-3" src="https://randomuser.me/api/portraits/women/23.jpg" alt="">
+                            <span>韩梅梅</span>
+                        </div>
+                    </td>
+                    <td>2023-01-05</td>
+                    <td>2023-04-15</td>
+                    <td>
+                        <div class="w-full bg-gray-200 rounded-full h-2.5">
+                            <div class="bg-indigo-600 h-2.5 rounded-full" style="width: 65%"></div>
+                        </div>
+                        <span class="text-xs text-gray-500 mt-1 block">65%</span>
+                    </td>
+                    <td>
+                        <span class="status-badge status-on-leave">暂停中</span>
+                    </td>
+                    <td>
+                        <a href="#" class="action-link">详情</a>
+                        <a href="#" class="action-link delete">删除</a>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="px-6 py-4 border-t border-gray-100 flex items-center justify-between">
+            <div class="flex-1 flex justify-between sm:hidden">
+                <a href="#" class="relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50">
+                    上一页
+                </a>
+                <a href="#" class="ml-3 relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50">
+                    下一页
+                </a>
+            </div>
+            <div class="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
+                <div>
+                    <p class="text-sm text-gray-700">
+                        显示 <span class="font-medium">1</span> 到 <span class="font-medium">4</span> 条，共 <span class="font-medium">12</span> 条
+                    </p>
+                </div>
+                <div>
+                    <nav class="relative z-0 inline-flex rounded-md shadow-sm -space-x-px" aria-label="Pagination">
+                        <a href="#" class="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
+                            <span class="sr-only">上一页</span>
+                            <!-- Heroicon name: solid/chevron-left -->
+                            <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                                <path fill-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd" />
+                            </svg>
+                        </a>
+                        <a href="#" aria-current="page" class="z-10 bg-indigo-50 border-indigo-500 text-indigo-600 relative inline-flex items-center px-4 py-2 border text-sm font-medium">
+                            1
+                        </a>
+                        <a href="#" class="bg-white border-gray-300 text-gray-500 hover:bg-gray-50 relative inline-flex items-center px-4 py-2 border text-sm font-medium">
+                            2
+                        </a>
+                        <a href="#" class="bg-white border-gray-300 text-gray-500 hover:bg-gray-50 relative inline-flex items-center px-4 py-2 border text-sm font-medium">
+                            3
+                        </a>
+                        <a href="#" class="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
+                            <span class="sr-only">下一页</span>
+                            <!-- Heroicon name: solid/chevron-right -->
+                            <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                                <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd" />
+                            </svg>
+                        </a>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

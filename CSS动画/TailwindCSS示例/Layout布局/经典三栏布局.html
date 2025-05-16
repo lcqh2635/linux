@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>经典三栏布局</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+            box-sizing: border-box;
+        }
+
+        /* 自定义样式 */
+        .sidebar-transition {
+            transition: all 0.3s ease;
+        }
+        .content-area {
+            grid-template-columns: auto 1fr;
+        }
+        @media (max-width: 768px) {
+            .sidebar-collapse {
+                transform: translateX(-100%);
+            }
+            .sidebar-expand {
+                transform: translateX(0);
+            }
+        }
+    </style>
+</head>
+<body class="min-h-screen bg-gray-100">
+<!-- 整体布局容器 -->
+<div class="flex flex-col min-h-screen">
+    <!-- 顶部导航栏 -->
+    <header class="bg-white shadow-md">
+        <div class="px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <!-- 左侧Logo和菜单按钮 -->
+                <div class="flex items-center">
+                    <!-- 移动端菜单按钮 -->
+                    <button id="mobile-menu-button" class="md:hidden inline-flex items-center justify-center p-2 rounded-md text-gray-500 hover:text-gray-900 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500">
+                        <svg class="block h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                        </svg>
+                    </button>
+
+                    <!-- Logo -->
+                    <div class="flex-shrink-0 flex items-center">
+                        <svg class="h-8 w-auto text-indigo-600" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M11.757 2.034a1 1 0 01.638.519c.483.967.844 1.554 1.207 2.03.368.482.756.876 1.348 1.467A6.985 6.985 0 0117 11a7.002 7.002 0 01-14 0c0-1.79.684-3.583 2.05-4.95a1 1 0 011.707.707c0 1.12.07 1.973.398 2.654.18.374.461.74.945 1.067.116-1.061.328-2.354.614-3.58.225-.966.505-1.93.839-2.734.167-.403.356-.785.57-1.116.208-.322.476-.649.822-.88a1 1 0 01.812-.134zm.364 13.087A2.998 2.998 0 017 13s.879.5 2.5.5c0-1 .5-4 1.25-4.5.5 1 .786 1.293 1.371 1.879.586.585.879 1.353.879 2.121s-.293 1.536-.879 2.121z" clip-rule="evenodd" />
+                        </svg>
+                        <span class="ml-2 text-xl font-bold text-gray-900">企业系统</span>
+                    </div>
+
+                    <!-- 桌面端主导航 -->
+                    <nav class="hidden md:ml-8 md:flex md:space-x-8">
+                        <a href="#" class="border-indigo-500 text-gray-900 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">仪表盘</a>
+                        <a href="#" class="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">项目</a>
+                        <a href="#" class="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">日历</a>
+                        <a href="#" class="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">报告</a>
+                    </nav>
+                </div>
+
+                <!-- 右侧用户菜单 -->
+                <div class="hidden md:ml-4 md:flex md:items-center">
+                    <button class="bg-white p-1 rounded-full text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                        <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+                        </svg>
+                    </button>
+
+                    <!-- 用户下拉菜单 -->
+                    <div class="ml-3 relative">
+                        <div>
+                            <button class="max-w-xs bg-white flex items-center text-sm rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                                <img class="h-8 w-8 rounded-full" src="https://randomuser.me/api/portraits/men/5.jpg" alt="">
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- 主要内容区 -->
+    <div class="flex-1 flex overflow-hidden">
+        <!-- 侧边栏 - 移动端可折叠 -->
+        <aside id="sidebar" class="sidebar-transition fixed inset-y-0 left-0 z-40 w-60 bg-white shadow-md md:static md:translate-x-0 sidebar-collapse md:sidebar-expand">
+            <div class="h-full overflow-y-auto">
+                <nav class="p-5">
+                    <div class="space-y-1">
+                        <a href="#" class="flex items-center px-4 py-3 text-sm font-medium text-white bg-indigo-600 rounded-lg">
+                            <svg class="mr-3 h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" />
+                            </svg>
+                            仪表盘
+                        </a>
+                        <a href="#" class="flex items-center px-4 py-3 text-sm font-medium text-gray-700 hover:bg-gray-100 rounded-lg">
+                            <svg class="mr-3 h-5 w-5 text-gray-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                <path d="M9 6a3 3 0 11-6 0 3 3 0 016 0zM17 6a3 3 0 11-6 0 3 3 0 016 0zM12.93 17c.046-.327.07-.66.07-1a6.97 6.97 0 00-1.5-4.33A5 5 0 0119 16v1h-6.07zM6 11a5 5 0 015 5v1H1v-1a5 5 0 015-5z" />
+                            </svg>
+                            客户管理
+                        </a>
+                        <a href="#" class="flex items-center px-4 py-3 text-sm font-medium text-gray-700 hover:bg-gray-100 rounded-lg">
+                            <svg class="mr-3 h-5 w-5 text-gray-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M10 2a4 4 0 00-4 4v1H5a1 1 0 00-.994.89l-1 9A1 1 0 004 18h12a1 1 0 00.994-1.11l-1-9A1 1 0 0015 7h-1V6a4 4 0 00-4-4zm2 5V6a2 2 0 10-4 0v1h4zm-6 3a1 1 0 112 0 1 1 0 01-2 0zm7-1a1 1 0 100 2 1 1 0 000-2z" clip-rule="evenodd" />
+                            </svg>
+                            产品管理
+                        </a>
+                        <a href="#" class="flex items-center px-4 py-3 text-sm font-medium text-gray-700 hover:bg-gray-100 rounded-lg">
+                            <svg class="mr-3 h-5 w-5 text-gray-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd" />
+                            </svg>
+                            订单管理
+                        </a>
+                        <a href="#" class="flex items-center px-4 py-3 text-sm font-medium text-gray-700 hover:bg-gray-100 rounded-lg">
+                            <svg class="mr-3 h-5 w-5 text-gray-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2h-1V9z" clip-rule="evenodd" />
+                            </svg>
+                            消息中心
+                        </a>
+                    </div>
+
+                    <div class="mt-8">
+                        <h3 class="px-4 text-xs font-semibold text-gray-500 uppercase tracking-wider">设置</h3>
+                        <div class="mt-2 space-y-1">
+                            <a href="#" class="flex items-center px-4 py-3 text-sm font-medium text-gray-700 hover:bg-gray-100 rounded-lg">
+                                <svg class="mr-3 h-5 w-5 text-gray-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M11.49 3.17c-.38-1.56-2.6-1.56-2.98 0a1.532 1.532 0 01-2.286.948c-1.372-.836-2.942.734-2.106 2.106.54.886.061 2.042-.947 2.287-1.561.379-1.561 2.6 0 2.978a1.532 1.532 0 01.947 2.287c-.836 1.372.734 2.942 2.106 2.106a1.532 1.532 0 012.287.947c.379 1.561 2.6 1.561 2.978 0a1.533 1.533 0 012.287-.947c1.372.836 2.942-.734 2.106-2.106a1.533 1.533 0 01.947-2.287c1.561-.379 1.561-2.6 0-2.978a1.532 1.532 0 01-.947-2.287c.836-1.372-.734-2.942-2.106-2.106a1.532 1.532 0 01-2.287-.947zM10 13a3 3 0 100-6 3 3 0 000 6z" clip-rule="evenodd" />
+                                </svg>
+                                系统设置
+                            </a>
+                            <a href="#" class="flex items-center px-4 py-3 text-sm font-medium text-gray-700 hover:bg-gray-100 rounded-lg">
+                                <svg class="mr-3 h-5 w-5 text-gray-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-6-3a2 2 0 11-4 0 2 2 0 014 0zm-2 4a5 5 0 00-4.546 2.916A5.986 5.986 0 0010 16a5.986 5.986 0 004.546-2.084A5 5 0 0010 11z" clip-rule="evenodd" />
+                                </svg>
+                                个人中心
+                            </a>
+                        </div>
+                    </div>
+                </nav>
+            </div>
+        </aside>
+
+        <!-- 遮罩层 - 移动端侧边栏展开时显示 -->
+        <div id="overlay" class="fixed inset-0 z-30 bg-black bg-opacity-50 opacity-0 invisible transition-opacity duration-300 md:hidden"></div>
+
+        <!-- 主内容区域 -->
+        <main class="flex-1 overflow-y-auto focus:outline-none bg-gray-100">
+            <div class="p-5 sm:px-6 lg:px-5">
+                <!-- 内容标题和操作按钮 -->
+<!--                <div class="md:flex md:items-center md:justify-between mb-5">-->
+<!--                    <div class="flex-1 min-w-0">-->
+<!--                        <h1 class="text-2xl font-bold leading-7 text-gray-900 sm:text-3xl sm:truncate">仪表盘</h1>-->
+<!--                    </div>-->
+<!--                    <div class="mt-4 flex md:mt-0 md:ml-4">-->
+<!--                        <button type="button" class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">-->
+<!--                            导出-->
+<!--                        </button>-->
+<!--                        <button type="button" class="ml-3 inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">-->
+<!--                            新建-->
+<!--                        </button>-->
+<!--                    </div>-->
+<!--                </div>-->
+
+                <div class="bg-white shadow rounded-lg p-6 mb-5">
+                    <h3 class="text-lg font-medium text-gray-900 mb-4">欢迎回来</h3>
+                    <p class="text-gray-600">这里是您的主内容区域。左侧是导航菜单，您可以点击不同的菜单项切换内容。</p>
+
+                    <!-- 示例内容卡片 -->
+                    <div class="mt-8 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
+                        <div class="bg-indigo-50 p-6 rounded-lg">
+                            <div class="flex items-center">
+                                <div class="flex-shrink-0 bg-indigo-100 p-3 rounded-md">
+                                    <svg class="h-6 w-6 text-indigo-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
+                                    </svg>
+                                </div>
+                                <div class="ml-5">
+                                    <h4 class="text-lg font-medium text-gray-900">数据分析</h4>
+                                    <p class="mt-1 text-sm text-gray-500">查看最新的数据报告</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="bg-blue-50 p-6 rounded-lg">
+                            <div class="flex items-center">
+                                <div class="flex-shrink-0 bg-blue-100 p-3 rounded-md">
+                                    <svg class="h-6 w-6 text-blue-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                    </svg>
+                                </div>
+                                <div class="ml-5">
+                                    <h4 class="text-lg font-medium text-gray-900">时间管理</h4>
+                                    <p class="mt-1 text-sm text-gray-500">安排您的日程</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="bg-green-50 p-6 rounded-lg">
+                            <div class="flex items-center">
+                                <div class="flex-shrink-0 bg-green-100 p-3 rounded-md">
+                                    <svg class="h-6 w-6 text-green-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                                    </svg>
+                                </div>
+                                <div class="ml-5">
+                                    <h4 class="text-lg font-medium text-gray-900">安全中心</h4>
+                                    <p class="mt-1 text-sm text-gray-500">管理账户安全</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 统计卡片 -->
+                <div class="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4 mb-5">
+                    <div class="bg-white overflow-hidden shadow rounded-lg">
+                        <div class="px-4 py-5 sm:p-6">
+                            <div class="flex items-center">
+                                <div class="flex-shrink-0 bg-indigo-500 rounded-md p-3">
+                                    <svg class="h-6 w-6 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
+                                    </svg>
+                                </div>
+                                <div class="ml-5 w-0 flex-1">
+                                    <dl>
+                                        <dt class="text-sm font-medium text-gray-500 truncate">总销售额</dt>
+                                        <dd>
+                                            <div class="text-lg font-medium text-gray-900">¥45,678</div>
+                                        </dd>
+                                    </dl>
+                                </div>
+                            </div>
+                            <div class="mt-4">
+                                <div class="border-t border-gray-200 pt-3">
+                                    <div class="text-sm text-indigo-600 hover:text-indigo-500">
+                                        <a href="#">查看详情</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-white overflow-hidden shadow rounded-lg">
+                        <div class="px-4 py-5 sm:p-6">
+                            <div class="flex items-center">
+                                <div class="flex-shrink-0 bg-green-500 rounded-md p-3">
+                                    <svg class="h-6 w-6 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+                                    </svg>
+                                </div>
+                                <div class="ml-5 w-0 flex-1">
+                                    <dl>
+                                        <dt class="text-sm font-medium text-gray-500 truncate">新增用户</dt>
+                                        <dd>
+                                            <div class="text-lg font-medium text-gray-900">1,234</div>
+                                        </dd>
+                                    </dl>
+                                </div>
+                            </div>
+                            <div class="mt-4">
+                                <div class="border-t border-gray-200 pt-3">
+                                    <div class="text-sm text-green-600 hover:text-green-500">
+                                        <a href="#">查看详情</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-white overflow-hidden shadow rounded-lg">
+                        <div class="px-4 py-5 sm:p-6">
+                            <div class="flex items-center">
+                                <div class="flex-shrink-0 bg-yellow-500 rounded-md p-3">
+                                    <svg class="h-6 w-6 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+                                    </svg>
+                                </div>
+                                <div class="ml-5 w-0 flex-1">
+                                    <dl>
+                                        <dt class="text-sm font-medium text-gray-500 truncate">待处理订单</dt>
+                                        <dd>
+                                            <div class="text-lg font-medium text-gray-900">56</div>
+                                        </dd>
+                                    </dl>
+                                </div>
+                            </div>
+                            <div class="mt-4">
+                                <div class="border-t border-gray-200 pt-3">
+                                    <div class="text-sm text-yellow-600 hover:text-yellow-500">
+                                        <a href="#">处理订单</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-white overflow-hidden shadow rounded-lg">
+                        <div class="px-4 py-5 sm:p-6">
+                            <div class="flex items-center">
+                                <div class="flex-shrink-0 bg-red-500 rounded-md p-3">
+                                    <svg class="h-6 w-6 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                    </svg>
+                                </div>
+                                <div class="ml-5 w-0 flex-1">
+                                    <dl>
+                                        <dt class="text-sm font-medium text-gray-500 truncate">响应时间</dt>
+                                        <dd>
+                                            <div class="text-lg font-medium text-gray-900">24小时</div>
+                                        </dd>
+                                    </dl>
+                                </div>
+                            </div>
+                            <div class="mt-4">
+                                <div class="border-t border-gray-200 pt-3">
+                                    <div class="text-sm text-red-600 hover:text-red-500">
+                                        <a href="#">性能报告</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 主要内容 -->
+                <div class="grid grid-cols-1 gap-5 lg:grid-cols-3">
+                    <!-- 左侧内容 -->
+                    <div class="lg:col-span-2">
+                        <!-- 项目列表 -->
+                        <div class="bg-white shadow overflow-hidden sm:rounded-lg mb-5">
+                            <div class="px-4 py-5 sm:px-6 border-b border-gray-200">
+                                <h3 class="text-lg leading-6 font-medium text-gray-900">最近项目</h3>
+                                <p class="mt-1 text-sm text-gray-500">您最近参与的项目列表</p>
+                            </div>
+                            <div class="bg-white overflow-hidden">
+                                <ul class="divide-y divide-gray-200">
+                                    <li>
+                                        <a href="#" class="block hover:bg-gray-50">
+                                            <div class="px-4 py-4 sm:px-6">
+                                                <div class="flex items-center justify-between">
+                                                    <p class="text-sm font-medium text-indigo-600 truncate">官网改版项目</p>
+                                                    <div class="ml-2 flex-shrink-0 flex">
+                                                        <p class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">进行中</p>
+                                                    </div>
+                                                </div>
+                                                <div class="mt-2 sm:flex sm:justify-between">
+                                                    <div class="sm:flex">
+                                                        <p class="flex items-center text-sm text-gray-500">
+                                                            <svg class="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                                                <path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd" />
+                                                            </svg>
+                                                            截止: 2023-05-20
+                                                        </p>
+                                                    </div>
+                                                    <div class="mt-2 flex items-center text-sm text-gray-500 sm:mt-0">
+                                                        <svg class="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                                            <path fill-rule="evenodd" d="M6 6V5a3 3 0 013-3h2a3 3 0 013 3v1h2a2 2 0 012 2v3.57A22.952 22.952 0 0110 13a22.95 22.95 0 01-8-1.43V8a2 2 0 012-2h2zm2-1a1 1 0 011-1h2a1 1 0 011 1v1H8V5zm1 5a1 1 0 011-1h.01a1 1 0 110 2H10a1 1 0 01-1-1z" clip-rule="evenodd" />
+                                                        </svg>
+                                                        <p>
+                                                            <span class="text-gray-900 font-medium">75%</span> 完成
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </a>
+                                    </li>
+                                    <!-- 更多项目... -->
+                                </ul>
+                            </div>
+                        </div>
+
+                        <!-- 活动时间线 -->
+                        <div class="bg-white shadow overflow-hidden sm:rounded-lg">
+                            <div class="px-4 py-5 sm:px-6 border-b border-gray-200">
+                                <h3 class="text-lg leading-6 font-medium text-gray-900">最近活动</h3>
+                                <p class="mt-1 text-sm text-gray-500">系统中发生的最近事件</p>
+                            </div>
+                            <div class="px-4 py-5 sm:p-6">
+                                <div class="flow-root">
+                                    <ul class="-mb-8">
+                                        <li>
+                                            <div class="relative pb-8">
+                                                <div class="relative flex items-start space-x-3">
+                                                    <div>
+                                                        <div class="relative px-1">
+                                                            <div class="h-8 w-8 bg-indigo-100 rounded-full ring-8 ring-white flex items-center justify-center">
+                                                                <svg class="h-5 w-5 text-indigo-600" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                                                    <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-6-3a2 2 0 11-4 0 2 2 0 014 0zm-2 4a5 5 0 00-4.546 2.916A5.986 5.986 0 0010 16a5.986 5.986 0 004.546-2.084A5 5 0 0010 11z" clip-rule="evenodd" />
+                                                                </svg>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="min-w-0 flex-1 py-0">
+                                                        <div class="text-sm text-gray-500">
+                                                            <a href="#" class="font-medium text-gray-900">张美丽</a> 创建了新项目
+                                                            <span class="whitespace-nowrap">2小时前</span>
+                                                        </div>
+                                                        <p class="mt-0.5 text-sm text-gray-500">官网改版项目已启动，预计5月20日完成</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </li>
+                                        <!-- 更多活动... -->
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 右侧内容 -->
+                    <div>
+                        <!-- 团队成员 -->
+                        <div class="bg-white shadow overflow-hidden sm:rounded-lg mb-5">
+                            <div class="px-4 py-5 sm:px-6 border-b border-gray-200">
+                                <h3 class="text-lg leading-6 font-medium text-gray-900">团队成员</h3>
+                                <p class="mt-1 text-sm text-gray-500">当前在线的团队成员</p>
+                            </div>
+                            <div class="bg-white">
+                                <ul class="divide-y divide-gray-200">
+                                    <li class="py-4 px-6">
+                                        <div class="flex items-center space-x-4">
+                                            <div class="flex-shrink-0">
+                                                <img class="h-8 w-8 rounded-full" src="https://randomuser.me/api/portraits/women/11.jpg" alt="">
+                                            </div>
+                                            <div class="flex-1 min-w-0">
+                                                <p class="text-sm font-medium text-gray-900 truncate">张美丽</p>
+                                                <p class="text-sm text-gray-500 truncate">前端开发</p>
+                                            </div>
+                                            <div>
+                                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">在线</span>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <!-- 更多成员... -->
+                                </ul>
+                            </div>
+                        </div>
+
+                        <!-- 快速操作 -->
+                        <div class="bg-white shadow overflow-hidden sm:rounded-lg">
+                            <div class="px-4 py-5 sm:px-6 border-b border-gray-200">
+                                <h3 class="text-lg leading-6 font-medium text-gray-900">快速操作</h3>
+                                <p class="mt-1 text-sm text-gray-500">常用功能快捷入口</p>
+                            </div>
+                            <div class="px-4 py-5 sm:p-6">
+                                <div class="grid grid-cols-2 gap-4">
+                                    <a href="#" class="bg-gray-50 hover:bg-gray-100 rounded-lg p-4 flex flex-col items-center justify-center">
+                                        <svg class="h-8 w-8 text-indigo-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                                        </svg>
+                                        <span class="mt-2 text-sm font-medium text-gray-900">新建项目</span>
+                                    </a>
+                                    <a href="#" class="bg-gray-50 hover:bg-gray-100 rounded-lg p-4 flex flex-col items-center justify-center">
+                                        <svg class="h-8 w-8 text-blue-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7v8a2 2 0 002 2h6M8 7V5a2 2 0 012-2h4.586a1 1 0 01.707.293l4.414 4.414a1 1 0 01.293.707V15a2 2 0 01-2 2h-2M8 7H6a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2v-2" />
+                                        </svg>
+                                        <span class="mt-2 text-sm font-medium text-gray-900">生成报告</span>
+                                    </a>
+                                    <a href="#" class="bg-gray-50 hover:bg-gray-100 rounded-lg p-4 flex flex-col items-center justify-center">
+                                        <svg class="h-8 w-8 text-green-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+                                        </svg>
+                                        <span class="mt-2 text-sm font-medium text-gray-900">邀请成员</span>
+                                    </a>
+                                    <a href="#" class="bg-gray-50 hover:bg-gray-100 rounded-lg p-4 flex flex-col items-center justify-center">
+                                        <svg class="h-8 w-8 text-yellow-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                        </svg>
+                                        <span class="mt-2 text-sm font-medium text-gray-900">系统设置</span>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+</div>
+
+<script>
+    // 移动端菜单切换
+    const mobileMenuButton = document.getElementById('mobile-menu-button');
+    const sidebar = document.getElementById('sidebar');
+    const overlay = document.getElementById('overlay');
+
+    mobileMenuButton.addEventListener('click', () => {
+        const isExpanded = sidebar.classList.contains('sidebar-expand');
+
+        if (isExpanded) {
+            sidebar.classList.remove('sidebar-expand');
+            sidebar.classList.add('sidebar-collapse');
+            overlay.classList.add('opacity-0', 'invisible');
+        } else {
+            sidebar.classList.remove('sidebar-collapse');
+            sidebar.classList.add('sidebar-expand');
+            overlay.classList.remove('opacity-0', 'invisible');
+        }
+    });
+
+    overlay.addEventListener('click', () => {
+        sidebar.classList.remove('sidebar-expand');
+        sidebar.classList.add('sidebar-collapse');
+        overlay.classList.add('opacity-0', 'invisible');
+    });
+</script>
+</body>
+</html>

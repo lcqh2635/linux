@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>现代化综合性表格</title>
+    <!-- 引入Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- 引入Inter字体 -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- 自定义样式 -->
+    <style>
+        /* 基础样式设置 */
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background-color: #f8fafc; /* 浅灰色背景 */
+        }
+
+        /* 表格容器样式 */
+        .table-container {
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+            border-radius: 0.75rem; /* 12px圆角 */
+            overflow: hidden; /* 隐藏溢出内容 */
+            background-color: white;
+        }
+
+        /* 表头固定 */
+        .table-header {
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            background-color: white;
+            box-shadow: 0 2px 3px -1px rgba(0, 0, 0, 0.05);
+        }
+
+        /* 表格行悬停效果 */
+        .table-row:hover {
+            background-color: #f8fafc; /* 悬停时浅灰色背景 */
+        }
+
+        /* 状态标签基础样式 */
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px; /* 完全圆形 */
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        /* 进度条样式 */
+        .progress-bar {
+            height: 0.5rem;
+            border-radius: 0.25rem;
+            background-color: #e2e8f0; /* 进度条背景色 */
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            border-radius: 0.25rem;
+            transition: width 0.3s ease;
+        }
+    </style>
+</head>
+<body class="min-h-screen py-12 px-4 sm:px-6 lg:px-8">
+<div class="max-w-7xl mx-auto">
+    <!-- 表格标题和操作区域 -->
+    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6">
+        <div>
+            <h1 class="text-2xl font-bold text-gray-800">项目管理系统</h1>
+            <p class="mt-1 text-sm text-gray-500">所有项目的最新状态和进度</p>
+        </div>
+        <div class="mt-4 sm:mt-0 flex space-x-3">
+            <!-- 筛选按钮 -->
+            <button class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                <svg class="-ml-1 mr-2 h-5 w-5 text-gray-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M3 3a1 1 0 011-1h12a1 1 0 011 1v3a1 1 0 01-.293.707L12 11.414V15a1 1 0 01-.293.707l-2 2A1 1 0 018 17v-5.586L3.293 6.707A1 1 0 013 6V3z" clip-rule="evenodd" />
+                </svg>
+                筛选
+            </button>
+            <!-- 新增项目按钮 -->
+            <button class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                <svg class="-ml-1 mr-2 h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd" />
+                </svg>
+                新增项目
+            </button>
+        </div>
+    </div>
+
+    <!-- 表格主体 -->
+    <div class="table-container">
+        <!-- 表格顶部工具栏 -->
+        <div class="px-6 py-4 border-b border-gray-200 flex flex-col sm:flex-row justify-between items-start sm:items-center">
+            <!-- 搜索框 -->
+            <div class="relative w-full sm:w-64 mb-4 sm:mb-0">
+                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                    <svg class="h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd" />
+                    </svg>
+                </div>
+                <input type="text" class="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md leading-5 bg-white placeholder-gray-500 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" placeholder="搜索项目...">
+            </div>
+
+            <!-- 表格视图选项 -->
+            <div class="flex items-center space-x-4">
+                <span class="text-sm text-gray-500">显示：</span>
+                <select class="block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md">
+                    <option>所有项目</option>
+                    <option>进行中</option>
+                    <option>已完成</option>
+                    <option>已延期</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- 响应式表格容器 -->
+        <div class="overflow-x-auto">
+            <table class="min-w-full divide-y divide-gray-200">
+                <thead class="table-header">
+                <tr>
+                    <!-- 项目名称列 -->
+                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        <div class="flex items-center">
+                            项目名称
+                            <button type="button" class="ml-1 flex-shrink-0 text-gray-400 hover:text-gray-500">
+                                <svg class="h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+                                </svg>
+                            </button>
+                        </div>
+                    </th>
+
+                    <!-- 负责人列 -->
+                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        负责人
+                    </th>
+
+                    <!-- 截止日期列 -->
+                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        <div class="flex items-center">
+                            截止日期
+                            <button type="button" class="ml-1 flex-shrink-0 text-gray-400 hover:text-gray-500">
+                                <svg class="h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+                                </svg>
+                            </button>
+                        </div>
+                    </th>
+
+                    <!-- 优先级列 -->
+                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        优先级
+                    </th>
+
+                    <!-- 进度列 -->
+                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        进度
+                    </th>
+
+                    <!-- 状态列 -->
+                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        状态
+                    </th>
+
+                    <!-- 操作列 -->
+                    <th scope="col" class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        操作
+                    </th>
+                </tr>
+                </thead>
+
+                <tbody class="bg-white divide-y divide-gray-200">
+                <!-- 第一行数据 -->
+                <tr class="table-row transition-colors duration-150">
+                    <!-- 项目名称 -->
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        <div class="flex items-center">
+                            <div class="flex-shrink-0 h-10 w-10 rounded-md bg-indigo-100 flex items-center justify-center">
+                                <svg class="h-6 w-6 text-indigo-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+                                </svg>
+                            </div>
+                            <div class="ml-4">
+                                <div class="text-sm font-medium text-gray-900">官网改版项目</div>
+                                <div class="text-sm text-gray-500">PRJ-2023-001</div>
+                            </div>
+                        </div>
+                    </td>
+
+                    <!-- 负责人 -->
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        <div class="flex items-center">
+                            <div class="flex-shrink-0 h-9 w-9">
+                                <img class="h-9 w-9 rounded-full" src="https://randomuser.me/api/portraits/women/11.jpg" alt="">
+                            </div>
+                            <div class="ml-3">
+                                <div class="text-sm font-medium text-gray-900">张美丽</div>
+                                <div class="text-sm text-gray-500">前端开发</div>
+                            </div>
+                        </div>
+                    </td>
+
+                    <!-- 截止日期 -->
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        <div class="text-sm text-gray-900">2023-05-20</div>
+                        <div class="text-sm text-gray-500">剩余12天</div>
+                    </td>
+
+                    <!-- 优先级 -->
+                    <td class="px-6 py-4 whitespace-nowrap">
+                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">
+                                    高优先级
+                                </span>
+                    </td>
+
+                    <!-- 进度 -->
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        <div class="flex items-center">
+                            <div class="w-24 mr-3">
+                                <div class="progress-bar">
+                                    <div class="progress-fill bg-indigo-600" style="width: 75%"></div>
+                                </div>
+                            </div>
+                            <span class="text-sm font-medium text-gray-700">75%</span>
+                        </div>
+                    </td>
+
+                    <!-- 状态 -->
+                    <td class="px-6 py-4 whitespace-nowrap">
+                                <span class="status-badge bg-green-100 text-green-800">
+                                    <svg class="-ml-0.5 mr-1.5 h-2 w-2 text-green-400" fill="currentColor" viewBox="0 0 8 8">
+                                        <circle cx="4" cy="4" r="3" />
+                                    </svg>
+                                    进行中
+                                </span>
+                    </td>
+
+                    <!-- 操作 -->
+                    <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                        <button class="text-indigo-600 hover:text-indigo-900 mr-4">编辑</button>
+                        <button class="text-gray-600 hover:text-gray-900">详情</button>
+                    </td>
+                </tr>
+
+                <!-- 第二行数据 -->
+                <tr class="table-row transition-colors duration-150">
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        <div class="flex items-center">
+                            <div class="flex-shrink-0 h-10 w-10 rounded-md bg-blue-100 flex items-center justify-center">
+                                <svg class="h-6 w-6 text-blue-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z" />
+                                </svg>
+                            </div>
+                            <div class="ml-4">
+                                <div class="text-sm font-medium text-gray-900">移动端APP开发</div>
+                                <div class="text-sm text-gray-500">PRJ-2023-002</div>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        <div class="flex items-center">
+                            <div class="flex-shrink-0 h-9 w-9">
+                                <img class="h-9 w-9 rounded-full" src="https://randomuser.me/api/portraits/men/32.jpg" alt="">
+                            </div>
+                            <div class="ml-3">
+                                <div class="text-sm font-medium text-gray-900">王强</div>
+                                <div class="text-sm text-gray-500">全栈开发</div>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        <div class="text-sm text-gray-900">2023-06-15</div>
+                        <div class="text-sm text-gray-500">剩余38天</div>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800">
+                                    中优先级
+                                </span>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        <div class="flex items-center">
+                            <div class="w-24 mr-3">
+                                <div class="progress-bar">
+                                    <div class="progress-fill bg-blue-500" style="width: 30%"></div>
+                                </div>
+                            </div>
+                            <span class="text-sm font-medium text-gray-700">30%</span>
+                        </div>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                                <span class="status-badge bg-blue-100 text-blue-800">
+                                    <svg class="-ml-0.5 mr-1.5 h-2 w-2 text-blue-400" fill="currentColor" viewBox="0 0 8 8">
+                                        <circle cx="4" cy="4" r="3" />
+                                    </svg>
+                                    规划中
+                                </span>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                        <button class="text-indigo-600 hover:text-indigo-900 mr-4">编辑</button>
+                        <button class="text-gray-600 hover:text-gray-900">详情</button>
+                    </td>
+                </tr>
+
+                <!-- 第三行数据 -->
+                <tr class="table-row transition-colors duration-150">
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        <div class="flex items-center">
+                            <div class="flex-shrink-0 h-10 w-10 rounded-md bg-green-100 flex items-center justify-center">
+                                <svg class="h-6 w-6 text-green-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                                </svg>
+                            </div>
+                            <div class="ml-4">
+                                <div class="text-sm font-medium text-gray-900">数据安全升级</div>
+                                <div class="text-sm text-gray-500">PRJ-2023-003</div>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        <div class="flex items-center">
+                            <div class="flex-shrink-0 h-9 w-9">
+                                <img class="h-9 w-9 rounded-full" src="https://randomuser.me/api/portraits/men/45.jpg" alt="">
+                            </div>
+                            <div class="ml-3">
+                                <div class="text-sm font-medium text-gray-900">李雷</div>
+                                <div class="text-sm text-gray-500">后端开发</div>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        <div class="text-sm text-gray-900">2023-04-30</div>
+                        <div class="text-sm text-red-500">已延期7天</div>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">
+                                    高优先级
+                                </span>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        <div class="flex items-center">
+                            <div class="w-24 mr-3">
+                                <div class="progress-bar">
+                                    <div class="progress-fill bg-green-500" style="width: 90%"></div>
+                                </div>
+                            </div>
+                            <span class="text-sm font-medium text-gray-700">90%</span>
+                        </div>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                                <span class="status-badge bg-yellow-100 text-yellow-800">
+                                    <svg class="-ml-0.5 mr-1.5 h-2 w-2 text-yellow-400" fill="currentColor" viewBox="0 0 8 8">
+                                        <circle cx="4" cy="4" r="3" />
+                                    </svg>
+                                    测试中
+                                </span>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                        <button class="text-indigo-600 hover:text-indigo-900 mr-4">编辑</button>
+                        <button class="text-gray-600 hover:text-gray-900">详情</button>
+                    </td>
+                </tr>
+
+                <!-- 第四行数据 -->
+                <tr class="table-row transition-colors duration-150">
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        <div class="flex items-center">
+                            <div class="flex-shrink-0 h-10 w-10 rounded-md bg-purple-100 flex items-center justify-center">
+                                <svg class="h-6 w-6 text-purple-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                                </svg>
+                            </div>
+                            <div class="ml-4">
+                                <div class="text-sm font-medium text-gray-900">客户管理系统</div>
+                                <div class="text-sm text-gray-500">PRJ-2023-004</div>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        <div class="flex items-center">
+                            <div class="flex-shrink-0 h-9 w-9">
+                                <img class="h-9 w-9 rounded-full" src="https://randomuser.me/api/portraits/women/23.jpg" alt="">
+                            </div>
+                            <div class="ml-3">
+                                <div class="text-sm font-medium text-gray-900">韩梅梅</div>
+                                <div class="text-sm text-gray-500">产品经理</div>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        <div class="text-sm text-gray-900">2023-07-10</div>
+                        <div class="text-sm text-gray-500">剩余63天</div>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-gray-100 text-gray-800">
+                                    低优先级
+                                </span>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        <div class="flex items-center">
+                            <div class="w-24 mr-3">
+                                <div class="progress-bar">
+                                    <div class="progress-fill bg-purple-500" style="width: 15%"></div>
+                                </div>
+                            </div>
+                            <span class="text-sm font-medium text-gray-700">15%</span>
+                        </div>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                                <span class="status-badge bg-gray-100 text-gray-800">
+                                    <svg class="-ml-0.5 mr-1.5 h-2 w-2 text-gray-400" fill="currentColor" viewBox="0 0 8 8">
+                                        <circle cx="4" cy="4" r="3" />
+                                    </svg>
+                                    待开始
+                                </span>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                        <button class="text-indigo-600 hover:text-indigo-900 mr-4">编辑</button>
+                        <button class="text-gray-600 hover:text-gray-900">详情</button>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- 表格底部 - 分页和统计信息 -->
+        <div class="bg-white px-6 py-4 border-t border-gray-200 flex items-center justify-between">
+            <!-- 移动端分页 -->
+            <div class="flex-1 flex justify-between sm:hidden">
+                <a href="#" class="relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50">
+                    上一页
+                </a>
+                <a href="#" class="ml-3 relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50">
+                    下一页
+                </a>
+            </div>
+
+            <!-- 桌面端分页 -->
+            <div class="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
+                <!-- 统计信息 -->
+                <div>
+                    <p class="text-sm text-gray-700">
+                        显示 <span class="font-medium">1</span> 到 <span class="font-medium">4</span> 条，共 <span class="font-medium">24</span> 条
+                    </p>
+                </div>
+
+                <!-- 分页导航 -->
+                <div>
+                    <nav class="relative z-0 inline-flex rounded-md shadow-sm -space-x-px" aria-label="Pagination">
+                        <!-- 上一页按钮 -->
+                        <a href="#" class="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
+                            <span class="sr-only">上一页</span>
+                            <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                                <path fill-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd" />
+                            </svg>
+                        </a>
+
+                        <!-- 页码 -->
+                        <a href="#" aria-current="page" class="z-10 bg-indigo-50 border-indigo-500 text-indigo-600 relative inline-flex items-center px-4 py-2 border text-sm font-medium">
+                            1
+                        </a>
+                        <a href="#" class="bg-white border-gray-300 text-gray-500 hover:bg-gray-50 relative inline-flex items-center px-4 py-2 border text-sm font-medium">
+                            2
+                        </a>
+                        <a href="#" class="bg-white border-gray-300 text-gray-500 hover:bg-gray-50 relative inline-flex items-center px-4 py-2 border text-sm font-medium">
+                            3
+                        </a>
+                        <span class="relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-700">
+                                ...
+                            </span>
+                        <a href="#" class="bg-white border-gray-300 text-gray-500 hover:bg-gray-50 relative inline-flex items-center px-4 py-2 border text-sm font-medium">
+                            8
+                        </a>
+
+                        <!-- 下一页按钮 -->
+                        <a href="#" class="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
+                            <span class="sr-only">下一页</span>
+                            <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                                <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd" />
+                            </svg>
+                        </a>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
