@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>单页应用布局</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* 页面切换动画 */
+        .page-enter-active, .page-leave-active {
+            transition: opacity 0.3s, transform 0.3s;
+        }
+        .page-enter-from, .page-leave-to {
+            opacity: 0;
+            transform: translateY(10px);
+        }
+
+        /* 导航栏下划线动画 */
+        .nav-link {
+            position: relative;
+        }
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background-color: #4f46e5;
+            transition: width 0.3s ease;
+        }
+        .nav-link:hover::after, .nav-link.active::after {
+            width: 100%;
+        }
+
+        /* 自定义滚动条 */
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #c1c1c1;
+            border-radius: 3px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: #a8a8a8;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen">
+<!-- 单页应用容器 -->
+<div id="app" class="flex flex-col min-h-screen">
+    <!-- 顶部导航栏 -->
+    <header class="bg-white shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <!-- Logo和主导航 -->
+                <div class="flex items-center">
+                    <!-- Logo -->
+                    <div class="flex-shrink-0 flex items-center">
+                        <svg class="h-8 w-auto text-indigo-600" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M11.757 2.034a1 1 0 01.638.519c.483.967.844 1.554 1.207 2.03.368.482.756.876 1.348 1.467A6.985 6.985 0 0117 11a7.002 7.002 0 01-14 0c0-1.79.684-3.583 2.05-4.95a1 1 0 011.707.707c0 1.12.07 1.973.398 2.654.18.374.461.74.945 1.067.116-1.061.328-2.354.614-3.58.225-.966.505-1.93.839-2.734.167-.403.356-.785.57-1.116.208-.322.476-.649.822-.88a1 1 0 01.812-.134zm.364 13.087A2.998 2.998 0 017 13s.879.5 2.5.5c0-1 .5-4 1.25-4.5.5 1 .786 1.293 1.371 1.879.586.585.879 1.353.879 2.121s-.293 1.536-.879 2.121z" clip-rule="evenodd" />
+                        </svg>
+                        <span class="ml-2 text-xl font-bold text-gray-900">SPA应用</span>
+                    </div>
+
+                    <!-- 桌面端主导航 -->
+                    <nav class="hidden md:ml-10 md:flex md:space-x-8">
+                        <a href="#home" class="nav-link active text-gray-900 inline-flex items-center px-1 pt-1 text-sm font-medium">首页</a>
+                        <a href="#about" class="nav-link text-gray-500 hover:text-gray-700 inline-flex items-center px-1 pt-1 text-sm font-medium">关于</a>
+                        <a href="#services" class="nav-link text-gray-500 hover:text-gray-700 inline-flex items-center px-1 pt-1 text-sm font-medium">服务</a>
+                        <a href="#portfolio" class="nav-link text-gray-500 hover:text-gray-700 inline-flex items-center px-1 pt-1 text-sm font-medium">作品</a>
+                        <a href="#contact" class="nav-link text-gray-500 hover:text-gray-700 inline-flex items-center px-1 pt-1 text-sm font-medium">联系</a>
+                    </nav>
+                </div>
+
+                <!-- 右侧用户区域 -->
+                <div class="hidden md:ml-4 md:flex md:items-center">
+                    <button class="bg-white p-1 rounded-full text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                        <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+                        </svg>
+                    </button>
+
+                    <!-- 用户下拉菜单 -->
+                    <div class="ml-3 relative">
+                        <div>
+                            <button class="max-w-xs bg-white flex items-center text-sm rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                                <img class="h-8 w-8 rounded-full" src="https://randomuser.me/api/portraits/women/11.jpg" alt="">
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 移动端菜单按钮 -->
+                <div class="-mr-2 flex items-center md:hidden">
+                    <button id="mobile-menu-button" class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500">
+                        <svg class="block h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 移动端菜单 -->
+        <div id="mobile-menu" class="hidden md:hidden">
+            <div class="pt-2 pb-3 space-y-1">
+                <a href="#home" class="bg-indigo-50 border-indigo-500 text-indigo-700 block pl-3 pr-4 py-2 border-l-4 text-base font-medium">首页</a>
+                <a href="#about" class="border-transparent text-gray-600 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-800 block pl-3 pr-4 py-2 border-l-4 text-base font-medium">关于</a>
+                <a href="#services" class="border-transparent text-gray-600 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-800 block pl-3 pr-4 py-2 border-l-4 text-base font-medium">服务</a>
+                <a href="#portfolio" class="border-transparent text-gray-600 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-800 block pl-3 pr-4 py-2 border-l-4 text-base font-medium">作品</a>
+                <a href="#contact" class="border-transparent text-gray-600 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-800 block pl-3 pr-4 py-2 border-l-4 text-base font-medium">联系</a>
+            </div>
+            <div class="pt-4 pb-3 border-t border-gray-200">
+                <div class="flex items-center px-4">
+                    <div class="flex-shrink-0">
+                        <img class="h-10 w-10 rounded-full" src="https://randomuser.me/api/portraits/women/11.jpg" alt="">
+                    </div>
+                    <div class="ml-3">
+                        <div class="text-base font-medium text-gray-800">张美丽</div>
+                        <div class="text-sm font-medium text-gray-500">zhang@example.com</div>
+                    </div>
+                </div>
+                <div class="mt-3 space-y-1">
+                    <a href="#" class="block px-4 py-2 text-base font-medium text-gray-500 hover:text-gray-800 hover:bg-gray-100">个人中心</a>
+                    <a href="#" class="block px-4 py-2 text-base font-medium text-gray-500 hover:text-gray-800 hover:bg-gray-100">设置</a>
+                    <a href="#" class="block px-4 py-2 text-base font-medium text-gray-500 hover:text-gray-800 hover:bg-gray-100">退出登录</a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- 主内容区域 -->
+    <main class="flex-1">
+        <!-- 首页 -->
+        <div id="home-page" class="page">
+            <!-- 英雄区域 -->
+            <div class="bg-white">
+                <div class="max-w-7xl mx-auto py-16 px-4 sm:py-24 sm:px-6 lg:px-8">
+                    <div class="text-center">
+                        <h1 class="text-4xl font-extrabold tracking-tight text-gray-900 sm:text-5xl md:text-6xl">
+                            <span class="block">构建现代化</span>
+                            <span class="block text-indigo-600">单页应用程序</span>
+                        </h1>
+                        <p class="mt-3 max-w-md mx-auto text-base text-gray-500 sm:text-lg md:mt-5 md:text-xl md:max-w-3xl">
+                            使用最新技术栈构建高性能、响应式的单页应用，提供无缝用户体验。
+                        </p>
+                        <div class="mt-5 max-w-md mx-auto sm:flex sm:justify-center md:mt-8">
+                            <div class="rounded-md shadow">
+                                <a href="#contact" class="w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 md:py-4 md:text-lg md:px-10">
+                                    联系我们
+                                </a>
+                            </div>
+                            <div class="mt-3 rounded-md shadow sm:mt-0 sm:ml-3">
+                                <a href="#about" class="w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-indigo-600 bg-white hover:bg-gray-50 md:py-4 md:text-lg md:px-10">
+                                    了解更多
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 特性展示 -->
+            <div class="py-12 bg-gray-50">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div class="lg:text-center">
+                        <h2 class="text-base text-indigo-600 font-semibold tracking-wide uppercase">特性</h2>
+                        <p class="mt-2 text-3xl leading-8 font-extrabold tracking-tight text-gray-900 sm:text-4xl">
+                            更好的开发体验
+                        </p>
+                        <p class="mt-4 max-w-2xl text-xl text-gray-500 lg:mx-auto">
+                            我们的SPA解决方案提供了一系列强大的特性，帮助您快速构建现代化应用。
+                        </p>
+                    </div>
+
+                    <div class="mt-10">
+                        <div class="space-y-10 md:space-y-0 md:grid md:grid-cols-2 md:gap-x-8 md:gap-y-10">
+                            <div class="relative">
+                                <div class="absolute flex items-center justify-center h-12 w-12 rounded-md bg-indigo-500 text-white">
+                                    <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                                    </svg>
+                                </div>
+                                <p class="ml-16 text-lg leading-6 font-medium text-gray-900">极速加载</p>
+                                <p class="mt-2 ml-16 text-base text-gray-500">
+                                    通过异步加载和代码分割技术，实现应用的快速加载和响应。
+                                </p>
+                            </div>
+
+                            <div class="relative">
+                                <div class="absolute flex items-center justify-center h-12 w-12 rounded-md bg-indigo-500 text-white">
+                                    <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 15a4 4 0 004 4h9a5 5 0 10-.1-9.999 5.002 5.002 0 10-9.78 2.096A4.001 4.001 0 003 15z" />
+                                    </svg>
+                                </div>
+                                <p class="ml-16 text-lg leading-6 font-medium text-gray-900">响应式设计</p>
+                                <p class="mt-2 ml-16 text-base text-gray-500">
+                                    完美适配各种设备屏幕，从手机到桌面电脑都能提供最佳体验。
+                                </p>
+                            </div>
+
+                            <div class="relative">
+                                <div class="absolute flex items-center justify-center h-12 w-12 rounded-md bg-indigo-500 text-white">
+                                    <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                                    </svg>
+                                </div>
+                                <p class="ml-16 text-lg leading-6 font-medium text-gray-900">安全可靠</p>
+                                <p class="mt-2 ml-16 text-base text-gray-500">
+                                    内置多种安全机制，保护您的应用免受常见网络攻击。
+                                </p>
+                            </div>
+
+                            <div class="relative">
+                                <div class="absolute flex items-center justify-center h-12 w-12 rounded-md bg-indigo-500 text-white">
+                                    <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 5a1 1 0 011-1h14a1 1 0 011 1v2a1 1 0 01-1 1H5a1 1 0 01-1-1V5zM4 13a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H5a1 1 0 01-1-1v-6zM16 13a1 1 0 011-1h2a1 1 0 011 1v6a1 1 0 01-1 1h-2a1 1 0 01-1-1v-6z" />
+                                    </svg>
+                                </div>
+                                <p class="ml-16 text-lg leading-6 font-medium text-gray-900">SEO友好</p>
+                                <p class="mt-2 ml-16 text-base text-gray-500">
+                                    支持服务器端渲染(SSR)和预渲染，确保搜索引擎能够正确索引您的内容。
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 关于页面 -->
+        <div id="about-page" class="page hidden">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+                <div class="lg:text-center">
+                    <h2 class="text-base text-indigo-600 font-semibold tracking-wide uppercase">关于我们</h2>
+                    <p class="mt-2 text-3xl leading-8 font-extrabold tracking-tight text-gray-900 sm:text-4xl">
+                        我们的故事
+                    </p>
+                </div>
+
+                <div class="mt-10">
+                    <div class="prose prose-indigo mx-auto">
+                        <p>
+                            我们是一家专注于单页应用开发的技术公司，成立于2015年。我们的团队由一群充满激情的前端工程师组成，致力于为客户提供最优质的单页应用解决方案。
+                        </p>
+                        <p>
+                            在过去几年中，我们已经为超过100家企业开发了高性能的单页应用，涵盖了电子商务、社交媒体、企业管理系统等多个领域。
+                        </p>
+                        <h3>我们的使命</h3>
+                        <p>
+                            我们的使命是通过技术创新，帮助客户构建卓越的数字产品，提升用户体验，创造商业价值。
+                        </p>
+                        <h3>我们的价值观</h3>
+                        <ul>
+                            <li>客户至上 - 我们始终将客户需求放在首位</li>
+                            <li>追求卓越 - 我们不断追求技术和设计上的卓越</li>
+                            <li>团队合作 - 我们相信团队合作的力量</li>
+                            <li>持续学习 - 我们鼓励团队成员不断学习和成长</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 服务页面 -->
+        <div id="services-page" class="page hidden">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+                <div class="lg:text-center">
+                    <h2 class="text-base text-indigo-600 font-semibold tracking-wide uppercase">我们的服务</h2>
+                    <p class="mt-2 text-3xl leading-8 font-extrabold tracking-tight text-gray-900 sm:text-4xl">
+                        我们提供的专业服务
+                    </p>
+                </div>
+
+                <div class="mt-12 grid gap-8 lg:grid-cols-3">
+                    <div class="bg-white p-6 rounded-lg shadow-md">
+                        <div class="flex items-center justify-center h-12 w-12 rounded-md bg-indigo-500 text-white">
+                            <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                            </svg>
+                        </div>
+                        <h3 class="mt-5 text-lg leading-6 font-medium text-gray-900">SPA开发</h3>
+                        <p class="mt-2 text-base text-gray-500">
+                            使用React、Vue或Angular等现代前端框架，为您开发高性能的单页应用。
+                        </p>
+                    </div>
+
+                    <div class="bg-white p-6 rounded-lg shadow-md">
+                        <div class="flex items-center justify-center h-12 w-12 rounded-md bg-indigo-500 text-white">
+                            <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z" />
+                            </svg>
+                        </div>
+                        <h3 class="mt-5 text-lg leading-6 font-medium text-gray-900">移动应用</h3>
+                        <p class="mt-2 text-base text-gray-500">
+                            使用React Native或Flutter开发跨平台移动应用，一次开发，多平台运行。
+                        </p>
+                    </div>
+
+                    <div class="bg-white p-6 rounded-lg shadow-md">
+                        <div class="flex items-center justify-center h-12 w-12 rounded-md bg-indigo-500 text-white">
+                            <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z" />
+                            </svg>
+                        </div>
+                        <h3 class="mt-5 text-lg leading-6 font-medium text-gray-900">API开发</h3>
+                        <p class="mt-2 text-base text-gray-500">
+                            为您的单页应用开发高性能的后端API，支持RESTful或GraphQL协议。
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 作品页面 -->
+        <div id="portfolio-page" class="page hidden">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+                <div class="lg:text-center">
+                    <h2 class="text-base text-indigo-600 font-semibold tracking-wide uppercase">作品展示</h2>
+                    <p class="mt-2 text-3xl leading-8 font-extrabold tracking-tight text-gray-900 sm:text-4xl">
+                        我们的精选案例
+                    </p>
+                </div>
+
+                <div class="mt-12 grid gap-8 lg:grid-cols-2">
+                    <div class="bg-white overflow-hidden shadow rounded-lg">
+                        <div class="px-4 py-5 sm:p-6">
+                            <h3 class="text-lg leading-6 font-medium text-gray-900">电子商务平台</h3>
+                            <p class="mt-1 text-sm text-gray-500">为知名品牌开发的现代化电商平台</p>
+                            <div class="mt-4">
+                                <p class="text-sm text-gray-600">
+                                    我们为一家国际品牌开发了基于React的单页电商应用，实现了秒级加载和流畅的购物体验，转化率提升了35%。
+                                </p>
+                            </div>
+                            <div class="mt-6">
+                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">React</span>
+                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">Node.js</span>
+                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-purple-100 text-purple-800">GraphQL</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-white overflow-hidden shadow rounded-lg">
+                        <div class="px-4 py-5 sm:p-6">
+                            <h3 class="text-lg leading-6 font-medium text-gray-900">企业管理系统</h3>
+                            <p class="mt-1 text-sm text-gray-500">为大型企业定制的内部管理系统</p>
+                            <div class="mt-4">
+                                <p class="text-sm text-gray-600">
+                                    我们使用Vue.js和TypeScript开发了一套企业级管理系统，优化了内部工作流程，提高了员工效率达40%。
+                                </p>
+                            </div>
+                            <div class="mt-6">
+                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">Vue.js</span>
+                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">TypeScript</span>
+                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">Java</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 联系页面 -->
+        <div id="contact-page" class="page hidden bg-gray-50">
+            <div class="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:py-16 lg:px-8">
+                <div class="lg:text-center">
+                    <h2 class="text-base text-indigo-600 font-semibold tracking-wide uppercase">联系我们</h2>
+                    <p class="mt-2 text-3xl leading-8 font-extrabold tracking-tight text-gray-900 sm:text-4xl">
+                        让我们开始合作吧
+                    </p>
+                </div>
+
+                <div class="mt-8 lg:mt-12">
+                    <div class="bg-white shadow overflow-hidden sm:rounded-lg">
+                        <div class="px-4 py-5 sm:p-6">
+                            <div class="grid grid-cols-1 gap-8 lg:grid-cols-2">
+                                <div>
+                                    <h3 class="text-lg leading-6 font-medium text-gray-900">联系方式</h3>
+                                    <div class="mt-4">
+                                        <p class="text-sm text-gray-500">
+                                            如果您有任何问题或合作意向，请随时联系我们。
+                                        </p>
+                                        <div class="mt-6">
+                                            <div class="flex items-start">
+                                                <div class="flex-shrink-0">
+                                                    <svg class="h-6 w-6 text-gray-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                                                    </svg>
+                                                </div>
+                                                <div class="ml-3">
+                                                    <p class="text-sm font-medium text-gray-900">电子邮箱</p>
+                                                    <p class="text-sm text-gray-500">contact@example.com</p>
+                                                </div>
+                                            </div>
+                                            <div class="mt-3 flex items-start">
+                                                <div class="flex-shrink-0">
+                                                    <svg class="h-6 w-6 text-gray-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+                                                    </svg>
+                                                </div>
+                                                <div class="ml-3">
+                                                    <p class="text-sm font-medium text-gray-900">联系电话</p>
+                                                    <p class="text-sm text-gray-500">+86 10 1234 5678</p>
+                                                </div>
+                                            </div>
+                                            <div class="mt-3 flex items-start">
+                                                <div class="flex-shrink-0">
+                                                    <svg class="h-6 w-6 text-gray-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                                                    </svg>
+                                                </div>
+                                                <div class="ml-3">
+                                                    <p class="text-sm font-medium text-gray-900">办公地址</p>
+                                                    <p class="text-sm text-gray-500">北京市朝阳区建国路88号SOHO现代城</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <h3 class="text-lg leading-6 font-medium text-gray-900">发送消息</h3>
+                                    <form class="mt-4 space-y-4">
+                                        <div>
+                                            <label for="name" class="block text-sm font-medium text-gray-700">姓名</label>
+                                            <input type="text" id="name" name="name" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
+                                        </div>
+                                        <div>
+                                            <label for="email" class="block text-sm font-medium text-gray-700">邮箱</label>
+                                            <input type="email" id="email" name="email" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
+                                        </div>
+                                        <div>
+                                            <label for="message" class="block text-sm font-medium text-gray-700">消息</label>
+                                            <textarea id="message" name="message" rows="3" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"></textarea>
+                                        </div>
+                                        <div>
+                                            <button type="submit" class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                                                发送消息
+                                            </button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- 页脚 -->
+    <footer class="bg-white">
+        <div class="max-w-7xl mx-auto py-12 px-4 overflow-hidden sm:px-6 lg:px-8">
+            <nav class="-mx-5 -my-2 flex flex-wrap justify-center" aria-label="Footer">
+                <div class="px-5 py-2">
+                    <a href="#home" class="text-base text-gray-500 hover:text-gray-900">首页</a>
+                </div>
+                <div class="px-5 py-2">
+                    <a href="#about" class="text-base text-gray-500 hover:text-gray-900">关于</a>
+                </div>
+                <div class="px-5 py-2">
+                    <a href="#services" class="text-base text-gray-500 hover:text-gray-900">服务</a>
+                </div>
+                <div class="px-5 py-2">
+                    <a href="#portfolio" class="text-base text-gray-500 hover:text-gray-900">作品</a>
+                </div>
+                <div class="px-5 py-2">
+                    <a href="#contact" class="text-base text-gray-500 hover:text-gray-900">联系</a>
+                </div>
+                <div class="px-5 py-2">
+                    <a href="#" class="text-base text-gray-500 hover:text-gray-900">隐私政策</a>
+                </div>
+            </nav>
+            <p class="mt-8 text-center text-base text-gray-400">
+                &copy; 2023 SPA应用. 保留所有权利.
+            </p>
+        </div>
+    </footer>
+</div>
+
+<script>
+    // 简单的SPA路由功能
+    document.addEventListener('DOMContentLoaded', function() {
+        // 移动端菜单切换
+        const mobileMenuButton = document.getElementById('mobile-menu-button');
+        const mobileMenu = document.getElementById('mobile-menu');
+
+        mobileMenuButton.addEventListener('click', function() {
+            mobileMenu.classList.toggle('hidden');
+        });
+
+        // 导航链接点击处理
+        const navLinks = document.querySelectorAll('a[href^="#"]');
+        navLinks.forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href').substring(1);
+
+                // 隐藏所有页面
+                document.querySelectorAll('.page').forEach(page => {
+                    page.classList.add('hidden');
+                });
+
+                // 显示目标页面
+                document.getElementById(`${targetId}-page`).classList.remove('hidden');
+
+                // 更新导航激活状态
+                navLinks.forEach(navLink => {
+                    navLink.classList.remove('active', 'text-gray-900');
+                    navLink.classList.add('text-gray-500');
+                });
+
+                // 如果是主导航链接，更新激活状态
+                if (this.classList.contains('nav-link')) {
+                    this.classList.remove('text-gray-500');
+                    this.classList.add('text-gray-900', 'active');
+                }
+
+                // 如果是移动端菜单，点击后关闭菜单
+                if (mobileMenu && !mobileMenu.classList.contains('hidden')) {
+                    mobileMenu.classList.add('hidden');
+                }
+
+                // 滚动到顶部
+                window.scrollTo(0, 0);
+            });
+        });
+    });
+</script>
+</body>
+</html>

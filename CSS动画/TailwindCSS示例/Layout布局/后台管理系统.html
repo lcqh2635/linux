@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>后台管理系统</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* 自定义滚动条 */
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 10px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #c1c1c1;
+            border-radius: 10px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: #a8a8a8;
+        }
+
+        /* 侧边栏动画 */
+        .sidebar-transition {
+            transition: all 0.3s ease;
+        }
+
+        /* 图表卡片悬停效果 */
+        .chart-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+        }
+
+        /* 表格行悬停效果 */
+        .table-row:hover {
+            background-color: #f9fafb;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 h-screen overflow-hidden">
+<!-- 后台管理布局 -->
+<div class="flex h-full">
+    <!-- 侧边栏 -->
+    <div class="sidebar-transition flex flex-col w-64 bg-gray-800 text-white">
+        <!-- 侧边栏头部 -->
+        <div class="flex items-center justify-between h-14 px-4 border-b border-gray-700">
+            <div class="flex items-center">
+                <svg class="h-8 w-auto text-indigo-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M11.757 2.034a1 1 0 01.638.519c.483.967.844 1.554 1.207 2.03.368.482.756.876 1.348 1.467A6.985 6.985 0 0117 11a7.002 7.002 0 01-14 0c0-1.79.684-3.583 2.05-4.95a1 1 0 011.707.707c0 1.12.07 1.973.398 2.654.18.374.461.74.945 1.067.116-1.061.328-2.354.614-3.58.225-.966.505-1.93.839-2.734.167-.403.356-.785.57-1.116.208-.322.476-.649.822-.88a1 1 0 01.812-.134zm.364 13.087A2.998 2.998 0 017 13s.879.5 2.5.5c0-1 .5-4 1.25-4.5.5 1 .786 1.293 1.371 1.879.586.585.879 1.353.879 2.121s-.293 1.536-.879 2.121z" clip-rule="evenodd" />
+                </svg>
+                <span class="ml-2 text-xl font-bold">管理后台</span>
+            </div>
+            <button class="md:hidden text-gray-400 hover:text-white focus:outline-none">
+                <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+            </button>
+        </div>
+
+        <!-- 侧边栏内容 -->
+        <div class="flex-1 overflow-y-auto custom-scrollbar">
+            <nav class="px-2 py-4">
+                <!-- 主导航 -->
+                <div>
+                    <h3 class="px-3 text-xs font-semibold text-gray-400 uppercase tracking-wider">主导航</h3>
+                    <div class="mt-2 space-y-1">
+                        <a href="#" class="flex items-center px-3 py-2 text-sm font-medium rounded-md text-white bg-gray-900">
+                            <svg class="mr-3 h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" />
+                            </svg>
+                            仪表盘
+                        </a>
+                        <a href="#" class="flex items-center px-3 py-2 text-sm font-medium rounded-md text-gray-300 hover:text-white hover:bg-gray-700">
+                            <svg class="mr-3 h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                <path d="M9 6a3 3 0 11-6 0 3 3 0 016 0zM17 6a3 3 0 11-6 0 3 3 0 016 0zM12.93 17c.046-.327.07-.66.07-1a6.97 6.97 0 00-1.5-4.33A5 5 0 0119 16v1h-6.07zM6 11a5 5 0 015 5v1H1v-1a5 5 0 015-5z" />
+                            </svg>
+                            用户管理
+                        </a>
+                        <a href="#" class="flex items-center px-3 py-2 text-sm font-medium rounded-md text-gray-300 hover:text-white hover:bg-gray-700">
+                            <svg class="mr-3 h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M10 2a4 4 0 00-4 4v1H5a1 1 0 00-.994.89l-1 9A1 1 0 004 18h12a1 1 0 00.994-1.11l-1-9A1 1 0 0015 7h-1V6a4 4 0 00-4-4zm2 5V6a2 2 0 10-4 0v1h4zm-6 3a1 1 0 112 0 1 1 0 01-2 0zm7-1a1 1 0 100 2 1 1 0 000-2z" clip-rule="evenodd" />
+                            </svg>
+                            产品管理
+                        </a>
+                        <a href="#" class="flex items-center px-3 py-2 text-sm font-medium rounded-md text-gray-300 hover:text-white hover:bg-gray-700">
+                            <svg class="mr-3 h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd" />
+                            </svg>
+                            订单管理
+                        </a>
+                    </div>
+                </div>
+
+                <!-- 系统设置 -->
+                <div class="mt-8">
+                    <h3 class="px-3 text-xs font-semibold text-gray-400 uppercase tracking-wider">系统设置</h3>
+                    <div class="mt-2 space-y-1">
+                        <a href="#" class="flex items-center px-3 py-2 text-sm font-medium rounded-md text-gray-300 hover:text-white hover:bg-gray-700">
+                            <svg class="mr-3 h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M11.49 3.17c-.38-1.56-2.6-1.56-2.98 0a1.532 1.532 0 01-2.286.948c-1.372-.836-2.942.734-2.106 2.106.54.886.061 2.042-.947 2.287-1.561.379-1.561 2.6 0 2.978a1.532 1.532 0 01.947 2.287c-.836 1.372.734 2.942 2.106 2.106a1.532 1.532 0 012.287.947c.379 1.561 2.6 1.561 2.978 0a1.533 1.533 0 012.287-.947c1.372.836 2.942-.734 2.106-2.106a1.533 1.533 0 01.947-2.287c1.561-.379 1.561-2.6 0-2.978a1.532 1.532 0 01-.947-2.287c.836-1.372-.734-2.942-2.106-2.106a1.532 1.532 0 01-2.287-.947zM10 13a3 3 0 100-6 3 3 0 000 6z" clip-rule="evenodd" />
+                            </svg>
+                            系统设置
+                        </a>
+                        <a href="#" class="flex items-center px-3 py-2 text-sm font-medium rounded-md text-gray-300 hover:text-white hover:bg-gray-700">
+                            <svg class="mr-3 h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-6-3a2 2 0 11-4 0 2 2 0 014 0zm-2 4a5 5 0 00-4.546 2.916A5.986 5.986 0 0010 16a5.986 5.986 0 004.546-2.084A5 5 0 0010 11z" clip-rule="evenodd" />
+                            </svg>
+                            个人中心
+                        </a>
+                        <a href="#" class="flex items-center px-3 py-2 text-sm font-medium rounded-md text-gray-300 hover:text-white hover:bg-gray-700">
+                            <svg class="mr-3 h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clip-rule="evenodd" />
+                            </svg>
+                            数据备份
+                        </a>
+                    </div>
+                </div>
+            </nav>
+        </div>
+
+        <!-- 侧边栏底部用户信息 -->
+        <div class="flex-shrink-0 flex p-4 border-t border-gray-700">
+            <div class="flex items-center">
+                <div>
+                    <img class="inline-block h-9 w-9 rounded-full" src="https://randomuser.me/api/portraits/women/11.jpg" alt="">
+                </div>
+                <div class="ml-3">
+                    <p class="text-sm font-medium text-white">张美丽</p>
+                    <p class="text-xs font-medium text-gray-400">管理员</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 主内容区 -->
+    <div class="flex-1 flex flex-col overflow-hidden">
+        <!-- 顶部导航栏 -->
+        <header class="bg-white shadow-md">
+            <div class="flex items-center justify-between px-4 py-3 sm:px-6">
+                <!-- 面包屑导航 -->
+                <div class="flex items-center">
+                    <h1 class="text-lg font-medium text-gray-900">仪表盘</h1>
+                    <nav class="ml-4 flex" aria-label="Breadcrumb">
+                        <ol class="flex items-center space-x-2">
+                            <li>
+                                <div class="flex items-center">
+                                    <a href="#" class="text-sm font-medium text-gray-500 hover:text-gray-700">首页</a>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="flex items-center">
+                                    <svg class="flex-shrink-0 h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                        <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd" />
+                                    </svg>
+                                    <a href="#" aria-current="page" class="ml-2 text-sm font-medium text-gray-500 hover:text-gray-700">仪表盘</a>
+                                </div>
+                            </li>
+                        </ol>
+                    </nav>
+                </div>
+
+                <!-- 右侧工具栏 -->
+                <div class="flex items-center space-x-4">
+                    <button class="p-1 rounded-full text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                        <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+                        </svg>
+                    </button>
+
+                    <div class="relative">
+                        <button class="flex items-center text-sm rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                            <img class="h-8 w-8 rounded-full" src="https://randomuser.me/api/portraits/women/11.jpg" alt="">
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- 主内容 -->
+        <main class="flex-1 overflow-y-auto custom-scrollbar bg-gray-50 p-4 sm:p-6">
+            <!-- 统计卡片 -->
+            <div class="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
+                <div class="bg-white overflow-hidden shadow rounded-lg">
+                    <div class="px-4 py-5 sm:p-6">
+                        <div class="flex items-center">
+                            <div class="flex-shrink-0 bg-indigo-500 rounded-md p-3">
+                                <svg class="h-6 w-6 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
+                                </svg>
+                            </div>
+                            <div class="ml-5 w-0 flex-1">
+                                <dl>
+                                    <dt class="text-sm font-medium text-gray-500 truncate">总销售额</dt>
+                                    <dd>
+                                        <div class="text-lg font-medium text-gray-900">¥45,678</div>
+                                    </dd>
+                                </dl>
+                            </div>
+                        </div>
+                        <div class="mt-4">
+                            <div class="border-t border-gray-200 pt-3 flex items-center justify-between">
+                                <div class="text-sm text-gray-500">
+                                    <span class="font-medium text-green-600">+12.5%</span> 同比上月
+                                </div>
+                                <div class="text-sm">
+                                    <a href="#" class="font-medium text-indigo-600 hover:text-indigo-500">查看详情</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white overflow-hidden shadow rounded-lg">
+                    <div class="px-4 py-5 sm:p-6">
+                        <div class="flex items-center">
+                            <div class="flex-shrink-0 bg-green-500 rounded-md p-3">
+                                <svg class="h-6 w-6 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+                                </svg>
+                            </div>
+                            <div class="ml-5 w-0 flex-1">
+                                <dl>
+                                    <dt class="text-sm font-medium text-gray-500 truncate">新增用户</dt>
+                                    <dd>
+                                        <div class="text-lg font-medium text-gray-900">1,234</div>
+                                    </dd>
+                                </dl>
+                            </div>
+                        </div>
+                        <div class="mt-4">
+                            <div class="border-t border-gray-200 pt-3 flex items-center justify-between">
+                                <div class="text-sm text-gray-500">
+                                    <span class="font-medium text-green-600">+8.2%</span> 同比上月
+                                </div>
+                                <div class="text-sm">
+                                    <a href="#" class="font-medium text-indigo-600 hover:text-indigo-500">查看详情</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white overflow-hidden shadow rounded-lg">
+                    <div class="px-4 py-5 sm:p-6">
+                        <div class="flex items-center">
+                            <div class="flex-shrink-0 bg-yellow-500 rounded-md p-3">
+                                <svg class="h-6 w-6 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+                                </svg>
+                            </div>
+                            <div class="ml-5 w-0 flex-1">
+                                <dl>
+                                    <dt class="text-sm font-medium text-gray-500 truncate">待处理订单</dt>
+                                    <dd>
+                                        <div class="text-lg font-medium text-gray-900">56</div>
+                                    </dd>
+                                </dl>
+                            </div>
+                        </div>
+                        <div class="mt-4">
+                            <div class="border-t border-gray-200 pt-3 flex items-center justify-between">
+                                <div class="text-sm text-gray-500">
+                                    <span class="font-medium text-red-600">-3.4%</span> 同比上月
+                                </div>
+                                <div class="text-sm">
+                                    <a href="#" class="font-medium text-indigo-600 hover:text-indigo-500">处理订单</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white overflow-hidden shadow rounded-lg">
+                    <div class="px-4 py-5 sm:p-6">
+                        <div class="flex items-center">
+                            <div class="flex-shrink-0 bg-red-500 rounded-md p-3">
+                                <svg class="h-6 w-6 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                </svg>
+                            </div>
+                            <div class="ml-5 w-0 flex-1">
+                                <dl>
+                                    <dt class="text-sm font-medium text-gray-500 truncate">响应时间</dt>
+                                    <dd>
+                                        <div class="text-lg font-medium text-gray-900">24小时</div>
+                                    </dd>
+                                </dl>
+                            </div>
+                        </div>
+                        <div class="mt-4">
+                            <div class="border-t border-gray-200 pt-3 flex items-center justify-between">
+                                <div class="text-sm text-gray-500">
+                                    <span class="font-medium text-green-600">+2.1%</span> 同比上月
+                                </div>
+                                <div class="text-sm">
+                                    <a href="#" class="font-medium text-indigo-600 hover:text-indigo-500">性能报告</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 图表区域 -->
+            <div class="mt-8 grid grid-cols-1 gap-8 lg:grid-cols-2">
+                <!-- 销售趋势图 -->
+                <div class="chart-card bg-white shadow rounded-lg overflow-hidden transition-all duration-300">
+                    <div class="px-4 py-5 sm:px-6 border-b border-gray-200">
+                        <h3 class="text-lg leading-6 font-medium text-gray-900">销售趋势</h3>
+                        <p class="mt-1 text-sm text-gray-500">过去12个月的销售数据</p>
+                    </div>
+                    <div class="p-6">
+                        <!-- 这里放置图表，实际项目中可以使用Chart.js等库 -->
+                        <div class="h-64 bg-gray-100 rounded flex items-center justify-center text-gray-400">
+                            销售趋势图表区域
+                        </div>
+                        <div class="mt-6 flex items-center justify-between">
+                            <div class="flex items-center">
+                                <span class="inline-block h-3 w-3 rounded-full bg-indigo-500"></span>
+                                <span class="ml-2 text-sm font-medium text-gray-500">线上销售</span>
+                            </div>
+                            <div class="flex items-center">
+                                <span class="inline-block h-3 w-3 rounded-full bg-gray-300"></span>
+                                <span class="ml-2 text-sm font-medium text-gray-500">线下销售</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 用户增长图 -->
+                <div class="chart-card bg-white shadow rounded-lg overflow-hidden transition-all duration-300">
+                    <div class="px-4 py-5 sm:px-6 border-b border-gray-200">
+                        <h3 class="text-lg leading-6 font-medium text-gray-900">用户增长</h3>
+                        <p class="mt-1 text-sm text-gray-500">过去30天的新增用户</p>
+                    </div>
+                    <div class="p-6">
+                        <!-- 这里放置图表 -->
+                        <div class="h-64 bg-gray-100 rounded flex items-center justify-center text-gray-400">
+                            用户增长图表区域
+                        </div>
+                        <div class="mt-6 flex items-center justify-between">
+                            <div class="flex items-center">
+                                <span class="inline-block h-3 w-3 rounded-full bg-green-500"></span>
+                                <span class="ml-2 text-sm font-medium text-gray-500">新增用户</span>
+                            </div>
+                            <div class="flex items-center">
+                                <span class="inline-block h-3 w-3 rounded-full bg-purple-500"></span>
+                                <span class="ml-2 text-sm font-medium text-gray-500">活跃用户</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 最近订单 -->
+            <div class="mt-8">
+                <div class="bg-white shadow rounded-lg overflow-hidden">
+                    <div class="px-4 py-5 sm:px-6 border-b border-gray-200 flex items-center justify-between">
+                        <h3 class="text-lg leading-6 font-medium text-gray-900">最近订单</h3>
+                        <a href="#" class="text-sm font-medium text-indigo-600 hover:text-indigo-500">查看全部</a>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="min-w-full divide-y divide-gray-200">
+                            <thead class="bg-gray-50">
+                            <tr>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">订单号</th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">客户</th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">日期</th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">金额</th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">状态</th>
+                                <th scope="col" class="relative px-6 py-3">
+                                    <span class="sr-only">操作</span>
+                                </th>
+                            </tr>
+                            </thead>
+                            <tbody class="bg-white divide-y divide-gray-200">
+                            <tr class="table-row transition-colors duration-150">
+                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">#ORD-2023-001</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">张三</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">2023-05-01</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">¥1,234.00</td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">已完成</span>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                                    <a href="#" class="text-indigo-600 hover:text-indigo-900">查看</a>
+                                </td>
+                            </tr>
+                            <!-- 更多订单行... -->
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="bg-white px-4 py-3 flex items-center justify-between border-t border-gray-200 sm:px-6">
+                        <div class="flex-1 flex justify-between sm:hidden">
+                            <a href="#" class="relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50">上一页</a>
+                            <a href="#" class="ml-3 relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50">下一页</a>
+                        </div>
+                        <div class="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
+                            <div>
+                                <p class="text-sm text-gray-700">
+                                    显示 <span class="font-medium">1</span> 到 <span class="font-medium">5</span> 条，共 <span class="font-medium">24</span> 条
+                                </p>
+                            </div>
+                            <div>
+                                <nav class="relative z-0 inline-flex shadow-sm -space-x-px" aria-label="Pagination">
+                                    <a href="#" class="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
+                                        <span class="sr-only">上一页</span>
+                                        <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                                            <path fill-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd" />
+                                        </svg>
+                                    </a>
+                                    <a href="#" aria-current="page" class="z-10 bg-indigo-50 border-indigo-500 text-indigo-600 relative inline-flex items-center px-4 py-2 border text-sm font-medium">1</a>
+                                    <a href="#" class="bg-white border-gray-300 text-gray-500 hover:bg-gray-50 relative inline-flex items-center px-4 py-2 border text-sm font-medium">2</a>
+                                    <a href="#" class="bg-white border-gray-300 text-gray-500 hover:bg-gray-50 relative inline-flex items-center px-4 py-2 border text-sm font-medium">3</a>
+                                    <span class="relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-700">...</span>
+                                    <a href="#" class="bg-white border-gray-300 text-gray-500 hover:bg-gray-50 relative inline-flex items-center px-4 py-2 border text-sm font-medium">8</a>
+                                    <a href="#" class="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
+                                        <span class="sr-only">下一页</span>
+                                        <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                                            <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd" />
+                                        </svg>
+                                    </a>
+                                </nav>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+</div>
+</body>
+</html>

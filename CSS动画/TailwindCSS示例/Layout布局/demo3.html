@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tailwind 经典布局</title>
+    <!-- 引入 Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 text-gray-800">
+<!-- 整体布局容器 -->
+<div class="flex flex-col min-h-screen">
+    <!-- 固定头部区域 -->
+    <header class="bg-white shadow-md fixed top-0 left-0 right-0 z-10">
+        <div class="container mx-auto px-4 py-3 flex items-center justify-between">
+            <!-- 网站Logo/标题 -->
+            <div class="flex items-center space-x-2">
+                <svg class="w-8 h-8 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
+                    <path d="M10 12a2 2 0 100-4 2 2 0 000 4z"></path>
+                    <path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd"></path>
+                </svg>
+                <h1 class="text-xl font-semibold">网站标题</h1>
+            </div>
+
+            <!-- 导航菜单 - 桌面端 -->
+            <nav class="hidden md:flex space-x-6">
+                <a href="#" class="hover:text-blue-600 transition">首页</a>
+                <a href="#" class="hover:text-blue-600 transition">产品</a>
+                <a href="#" class="hover:text-blue-600 transition">服务</a>
+                <a href="#" class="hover:text-blue-600 transition">关于我们</a>
+                <a href="#" class="hover:text-blue-600 transition">联系我们</a>
+            </nav>
+
+            <!-- 移动端菜单按钮 -->
+            <button id="mobile-menu-button" class="md:hidden text-gray-500 hover:text-gray-700 focus:outline-none">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                </svg>
+            </button>
+        </div>
+
+        <!-- 移动端菜单 (默认隐藏) -->
+        <div id="mobile-menu" class="hidden md:hidden bg-white border-t">
+            <div class="container mx-auto px-4 py-2 flex flex-col space-y-2">
+                <a href="#" class="block py-2 hover:text-blue-600 transition">首页</a>
+                <a href="#" class="block py-2 hover:text-blue-600 transition">产品</a>
+                <a href="#" class="block py-2 hover:text-blue-600 transition">服务</a>
+                <a href="#" class="block py-2 hover:text-blue-600 transition">关于我们</a>
+                <a href="#" class="block py-2 hover:text-blue-600 transition">联系我们</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- 主要内容区域 (使用 padding-top 为固定头部留出空间) -->
+    <div class="flex flex-1 pt-16">
+        <!-- 主内容区域 -->
+        <main class="flex-1 p-5">
+            <div class="bg-white rounded-lg shadow-md p-5">
+                <!-- 面包屑导航 -->
+                <div class="flex items-center text-sm text-gray-500 mb-6">
+                    <a href="#" class="hover:text-blue-600">首页</a>
+                    <span class="mx-2">/</span>
+                    <span class="text-gray-700">仪表盘</span>
+                </div>
+
+                <!-- 页面标题 -->
+                <h1 class="text-2xl font-bold text-gray-800 mb-6">仪表盘</h1>
+
+                <!-- 内容卡片网格 -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                    <div class="bg-blue-50 rounded-lg p-6 border border-blue-100">
+                        <h3 class="text-gray-500 text-sm font-medium mb-2">总用户数</h3>
+                        <p class="text-2xl font-bold text-blue-600">1,248</p>
+                        <p class="text-green-600 text-sm mt-2">↑ 12% 上月</p>
+                    </div>
+                    <div class="bg-green-50 rounded-lg p-6 border border-green-100">
+                        <h3 class="text-gray-500 text-sm font-medium mb-2">总订单</h3>
+                        <p class="text-2xl font-bold text-green-600">568</p>
+                        <p class="text-green-600 text-sm mt-2">↑ 8% 上月</p>
+                    </div>
+                    <div class="bg-yellow-50 rounded-lg p-6 border border-yellow-100">
+                        <h3 class="text-gray-500 text-sm font-medium mb-2">总收入</h3>
+                        <p class="text-2xl font-bold text-yellow-600">¥28,760</p>
+                        <p class="text-green-600 text-sm mt-2">↑ 5% 上月</p>
+                    </div>
+                    <div class="bg-purple-50 rounded-lg p-6 border border-purple-100">
+                        <h3 class="text-gray-500 text-sm font-medium mb-2">转化率</h3>
+                        <p class="text-2xl font-bold text-purple-600">3.2%</p>
+                        <p class="text-red-600 text-sm mt-2">↓ 0.5% 上月</p>
+                    </div>
+                </div>
+
+                <!-- 主要内容 -->
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                    <div class="lg:col-span-2 bg-white border rounded-lg p-6">
+                        <h2 class="text-lg font-semibold mb-4">最近活动</h2>
+                        <div class="space-y-4">
+                            <div class="flex items-start">
+                                <div class="bg-blue-100 p-2 rounded-full mr-3">
+                                    <svg class="w-5 h-5 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
+                                        <path d="M8 9a3 3 0 100-6 3 3 0 000 6zM8 11a6 6 0 016 6H2a6 6 0 016-6z"></path>
+                                    </svg>
+                                </div>
+                                <div>
+                                    <p class="font-medium">新用户注册</p>
+                                    <p class="text-sm text-gray-500">用户 "张三" 刚刚注册了账号</p>
+                                    <p class="text-xs text-gray-400 mt-1">10分钟前</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start">
+                                <div class="bg-green-100 p-2 rounded-full mr-3">
+                                    <svg class="w-5 h-5 text-green-600" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"></path>
+                                    </svg>
+                                </div>
+                                <div>
+                                    <p class="font-medium">新订单创建</p>
+                                    <p class="text-sm text-gray-500">订单 #12345 已创建，金额 ¥256.00</p>
+                                    <p class="text-xs text-gray-400 mt-1">25分钟前</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start">
+                                <div class="bg-purple-100 p-2 rounded-full mr-3">
+                                    <svg class="w-5 h-5 text-purple-600" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2h-1V9z" clip-rule="evenodd"></path>
+                                    </svg>
+                                </div>
+                                <div>
+                                    <p class="font-medium">系统通知</p>
+                                    <p class="text-sm text-gray-500">系统将在今晚12点进行维护，预计耗时2小时</p>
+                                    <p class="text-xs text-gray-400 mt-1">1小时前</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-white border rounded-lg p-6">
+                        <h2 class="text-lg font-semibold mb-4">快捷操作</h2>
+                        <div class="space-y-3">
+                            <button class="w-full flex items-center justify-between px-4 py-3 bg-gray-50 hover:bg-gray-100 rounded-lg transition">
+                                <span>添加新用户</span>
+                                <svg class="w-5 h-5 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd"></path>
+                                </svg>
+                            </button>
+                            <button class="w-full flex items-center justify-between px-4 py-3 bg-gray-50 hover:bg-gray-100 rounded-lg transition">
+                                <span>创建新订单</span>
+                                <svg class="w-5 h-5 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd"></path>
+                                </svg>
+                            </button>
+                            <button class="w-full flex items-center justify-between px-4 py-3 bg-gray-50 hover:bg-gray-100 rounded-lg transition">
+                                <span>查看报表</span>
+                                <svg class="w-5 h-5 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
+                                    <path d="M2 10a8 8 0 018-8v8h8a8 8 0 11-16 0z"></path>
+                                    <path d="M12 2.252A8.014 8.014 0 0117.748 8H12V2.252z"></path>
+                                </svg>
+                            </button>
+                            <button class="w-full flex items-center justify-between px-4 py-3 bg-gray-50 hover:bg-gray-100 rounded-lg transition">
+                                <span>系统设置</span>
+                                <svg class="w-5 h-5 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M11.49 3.17c-.38-1.56-2.6-1.56-2.98 0a1.532 1.532 0 01-2.286.948c-1.372-.836-2.942.734-2.106 2.106.54.886.061 2.042-.947 2.287-1.561.379-1.561 2.6 0 2.978a1.532 1.532 0 01.947 2.287c-.836 1.372.734 2.942 2.106 2.106a1.532 1.532 0 012.287.947c.379 1.561 2.6 1.561 2.978 0a1.533 1.533 0 012.287-.947c1.372.836 2.942-.734 2.106-2.106a1.533 1.533 0 01.947-2.287c1.561-.379 1.561-2.6 0-2.978a1.532 1.532 0 01-.947-2.287c.836-1.372-.734-2.942-2.106-2.106a1.532 1.532 0 01-2.287-.947zM10 13a3 3 0 100-6 3 3 0 000 6z" clip-rule="evenodd"></path>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+</div>
+
+<script>
+    // 移动端菜单切换
+    document.getElementById('mobile-menu-button').addEventListener('click', function() {
+        const menu = document.getElementById('mobile-menu');
+        menu.classList.toggle('hidden');
+    });
+
+    // 移动端侧边栏切换函数
+    function toggleMobileSidebar() {
+        const sidebar = document.getElementById('mobile-sidebar');
+        sidebar.classList.toggle('hidden');
+    }
+</script>
+</body>
+</html>
