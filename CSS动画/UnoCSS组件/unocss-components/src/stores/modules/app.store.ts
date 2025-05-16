@@ -39,7 +39,7 @@ export const useAppStore = defineStore(
         persist: {
             key: 'vue3-admin-app',
             storage: sessionStorage, // 使用sessionStorage而不是localStorage
-            paths: ['theme', 'sidebarCollapsed'] // 只持久化这两个状态
+            pick: ['theme', 'sidebarCollapsed'] // 只持久化这两个状态
         }
     }
 )
