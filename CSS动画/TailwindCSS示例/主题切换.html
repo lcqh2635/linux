@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="zh-CN" class="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tailwind 明暗主题切换</title>
+    <!-- 引入 Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- 配置 Tailwind 的暗色模式为类切换方式 -->
+    <script>
+        tailwind.config = {
+            darkMode: 'class', // 使用类切换模式而不是媒体查询
+            theme: {
+                extend: {
+                    colors: {
+                        primary: {
+                            light: '#3b82f6', // 明亮主题主色
+                            dark: '#1d4ed8'   // 暗色主题主色
+                        }
+                    },
+                    transitionProperty: {
+                        'colors': 'background-color, border-color, color, fill, stroke',
+                    },
+                    transitionDuration: {
+                        'slow': '800ms',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* 确保所有颜色相关属性都有平滑过渡 */
+        body, body * {
+            transition-property: background-color, border-color, color, fill, stroke;
+            transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+            transition-duration: 800ms;
+        }
+
+        /* 禁用某些不需要过渡的元素 */
+        .no-transition, .no-transition * {
+            transition: none !important;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 text-gray-900 dark:bg-gray-900 dark:text-gray-100 min-h-screen transition-colors duration-slow">
+<div class="container mx-auto px-4 py-8">
+    <header class="flex justify-between items-center mb-8">
+        <h1 class="text-3xl font-bold text-primary-light dark:text-primary-dark">主题切换演示</h1>
+
+        <!-- 主题切换按钮 - 添加 no-transition 类防止图标闪烁 -->
+        <button id="themeToggle" class="no-transition p-2 rounded-full bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600">
+            <svg id="sunIcon" class="w-6 h-6 text-yellow-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+            </svg>
+            <svg id="moonIcon" class="w-6 h-6 text-blue-400 hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+            </svg>
+        </button>
+    </header>
+
+    <main class="space-y-6">
+        <section class="p-6 rounded-lg bg-white dark:bg-gray-800 shadow transition-colors duration-slow">
+            <h2 class="text-xl font-semibold mb-4 text-primary-light dark:text-primary-dark">关于主题切换</h2>
+            <p class="text-gray-700 dark:text-gray-300">
+                现在主题切换有平滑的过渡效果了！背景色和文字颜色会缓慢变化，而不是突然闪烁。
+            </p>
+        </section>
+
+        <section class="p-6 rounded-lg bg-white dark:bg-gray-800 shadow transition-colors duration-slow">
+            <h2 class="text-xl font-semibold mb-4 text-primary-light dark:text-primary-dark">过渡效果优化</h2>
+            <ul class="list-disc pl-5 space-y-2 text-gray-700 dark:text-gray-300">
+                <li>延长过渡时间至600毫秒</li>
+                <li>应用了平滑的缓动函数</li>
+                <li>确保所有颜色属性都有过渡</li>
+                <li>排除了不需要过渡的元素(如图标)</li>
+            </ul>
+        </section>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div class="p-6 rounded-lg bg-white dark:bg-gray-800 shadow transition-colors duration-slow">
+                <h3 class="font-medium mb-3 text-primary-light dark:text-primary-dark">卡片标题</h3>
+                <p class="text-gray-700 dark:text-gray-300">注意观察背景和文字颜色的缓慢变化过程。</p>
+            </div>
+            <div class="p-6 rounded-lg bg-white dark:bg-gray-800 shadow transition-colors duration-slow">
+                <h3 class="font-medium mb-3 text-primary-light dark:text-primary-dark">过渡原理</h3>
+                <p class="text-gray-700 dark:text-gray-300">我们为所有颜色相关属性添加了过渡，并延长了过渡时间。</p>
+            </div>
+        </div>
+    </main>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // 获取DOM元素
+        const html = document.documentElement;
+        const themeToggle = document.getElementById('themeToggle');
+        const sunIcon = document.getElementById('sunIcon');
+        const moonIcon = document.getElementById('moonIcon');
+
+        // 从 localStorage 获取保存的主题偏好
+        const savedTheme = localStorage.getItem('theme');
+
+        // 检查系统偏好设置
+        const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+        // 初始化主题
+        function initTheme() {
+            // 临时添加类禁用过渡
+            html.classList.add('no-transition');
+
+            // 如果用户有保存的偏好，使用保存的
+            if (savedTheme) {
+                html.classList.toggle('dark', savedTheme === 'dark');
+            }
+            // 否则使用系统偏好
+            else if (systemPrefersDark) {
+                html.classList.add('dark');
+                localStorage.setItem('theme', 'dark');
+            }
+
+            // 更新图标显示
+            updateIcons();
+
+            // 强制重排，确保过渡效果生效
+            void html.offsetWidth;
+
+            // 移除no-transition类，恢复过渡
+            html.classList.remove('no-transition');
+        }
+
+        // 切换主题
+        function toggleTheme() {
+            html.classList.toggle('dark');
+            const isDark = html.classList.contains('dark');
+            localStorage.setItem('theme', isDark ? 'dark' : 'light');
+            updateIcons();
+        }
+
+        // 更新太阳/月亮图标显示
+        function updateIcons() {
+            const isDark = html.classList.contains('dark');
+            sunIcon.classList.toggle('hidden', isDark);
+            moonIcon.classList.toggle('hidden', !isDark);
+        }
+
+        // 初始化主题
+        initTheme();
+
+        // 监听主题切换按钮点击
+        themeToggle.addEventListener('click', toggleTheme);
+
+        // 监听系统主题变化
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => {
+            // 只有当用户没有保存偏好时才响应系统变化
+            if (!savedTheme) {
+                html.classList.toggle('dark', e.matches);
+                updateIcons();
+            }
+        });
+    });
+</script>
+</body>
+</html>

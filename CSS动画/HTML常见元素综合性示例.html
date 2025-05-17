@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<!-- 文档类型声明，HTML5标准 -->
+<html lang="zh-CN">
+<!-- 根元素，lang属性指定文档语言 -->
+
+<head>
+    <!-- 头部区域，包含元数据和资源链接 -->
+    <meta charset="UTF-8">
+    <!-- 字符编码声明，推荐使用UTF-8 -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- 视口设置，响应式设计必备 -->
+    <meta name="description" content="一个综合性HTML示例页面">
+    <!-- 页面描述，对SEO很重要 -->
+    <meta name="keywords" content="HTML,示例,教程">
+    <!-- 页面关键词 -->
+    <meta name="author" content="作者姓名">
+    <!-- 作者信息 -->
+    <title>综合性HTML示例</title>
+    <!-- 页面标题，显示在浏览器标签页上 -->
+<!--    <link rel="shortcut icon" type="image/x-icon" sizes="32x32" href="favicon.ico">-->
+    <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+    <!-- 网站图标 -->
+<!--    <link rel="stylesheet" href="styles.css">-->
+    <!-- 外部CSS样式表 -->
+    <style>
+        /* 内部CSS样式 */
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+        }
+        header {
+            background-color: #f4f4f4;
+            padding: 20px;
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+<!-- 页面可见内容区域 -->
+
+<!-- 语义化结构标签 -->
+<header>
+    <!-- 页眉区域 -->
+    <h1>欢迎来到我的网站</h1>
+    <!-- 主标题 -->
+    <nav>
+        <!-- 导航区域 -->
+        <ul>
+            <li><a href="#home">首页</a></li>
+            <li><a href="#about">关于</a></li>
+            <li><a href="#contact">联系</a></li>
+        </ul>
+    </nav>
+</header>
+
+<main>
+    <!-- 页面主要内容区域 -->
+    <article>
+        <!-- 独立的文章内容 -->
+        <h2>HTML5新特性</h2>
+        <!-- 二级标题 -->
+        <p>HTML5引入了许多新的语义化元素和API，使Web开发更加强大。</p>
+        <!-- 段落 -->
+
+        <section>
+            <!-- 内容章节 -->
+            <h3>语义化标签</h3>
+            <p>如<code>&lt;header&gt;</code>、<code>&lt;footer&gt;</code>、<code>&lt;article&gt;</code>等标签使文档结构更清晰。</p>
+            <!-- code标签表示代码 -->
+
+            <pre>
+                    <!-- 预格式化文本 -->
+                    <code>
+&lt;section&gt;
+    &lt;h2&gt;章节标题&lt;/h2&gt;
+    &lt;p&gt;章节内容&lt;/p&gt;
+&lt;/section&gt;
+                    </code>
+                </pre>
+        </section>
+
+        <section>
+            <h3>多媒体支持</h3>
+            <p>HTML5原生支持音频和视频播放：</p>
+
+            <audio controls>
+                <!-- 音频播放器 -->
+                <source src="audio.mp3" type="audio/mpeg">
+                您的浏览器不支持音频元素
+            </audio>
+
+            <video width="320" height="240" controls>
+                <!-- 视频播放器 -->
+                <source src="movie.mp4" type="video/mp4">
+                您的浏览器不支持视频元素
+            </video>
+        </section>
+    </article>
+
+    <aside>
+        <!-- 侧边栏内容 -->
+        <h3>相关链接</h3>
+        <ul>
+            <li><a href="https://developer.mozilla.org">MDN Web文档</a></li>
+            <li><a href="https://www.w3schools.com">W3Schools</a></li>
+        </ul>
+    </aside>
+
+    <!-- 表格示例 -->
+    <section>
+        <h2>数据表格</h2>
+        <table border="1">
+            <!-- 表格 -->
+            <caption>用户信息表</caption>
+            <!-- 表格标题 -->
+            <thead>
+            <!-- 表头 -->
+            <tr>
+                <th>姓名</th>
+                <th>年龄</th>
+                <th>城市</th>
+            </tr>
+            </thead>
+            <tbody>
+            <!-- 表格主体 -->
+            <tr>
+                <td>张三</td>
+                <td>25</td>
+                <td>北京</td>
+            </tr>
+            <tr>
+                <td>李四</td>
+                <td>30</td>
+                <td>上海</td>
+            </tr>
+            </tbody>
+            <tfoot>
+            <!-- 表尾 -->
+            <tr>
+                <td colspan="3">共2条记录</td>
+            </tr>
+            </tfoot>
+        </table>
+    </section>
+
+    <!-- 表单示例 -->
+    <section>
+        <h2>联系我们</h2>
+        <form action="/submit" method="POST">
+            <!-- 表单 -->
+            <fieldset>
+                <!-- 表单分组 -->
+                <legend>个人信息</legend>
+                <!-- 分组标题 -->
+
+                <label for="name">姓名:</label>
+                <input type="text" id="name" name="name" required placeholder="请输入您的姓名">
+                <!-- 文本输入框，required表示必填 -->
+
+                <label for="email">邮箱:</label>
+                <input type="email" id="email" name="email" required placeholder="example@domain.com">
+                <!-- 邮箱输入，带验证 -->
+
+                <label for="phone">电话:</label>
+                <input type="tel" id="phone" name="phone" pattern="[0-9]{11}" placeholder="11位手机号">
+                <!-- 电话输入，带正则验证 -->
+            </fieldset>
+
+            <fieldset>
+                <legend>其他信息</legend>
+
+                <label for="gender">性别:</label>
+                <select id="gender" name="gender">
+                    <!-- 下拉选择框 -->
+                    <option value="">请选择</option>
+                    <option value="male">男</option>
+                    <option value="female">女</option>
+                </select>
+
+                <label>兴趣爱好:</label>
+                <div>
+                    <input type="checkbox" id="sports" name="interest" value="sports">
+                    <label for="sports">运动</label>
+
+                    <input type="checkbox" id="music" name="interest" value="music">
+                    <label for="music">音乐</label>
+
+                    <input type="checkbox" id="reading" name="interest" value="reading">
+                    <label for="reading">阅读</label>
+                </div>
+
+                <label>订阅通知:</label>
+                <div>
+                    <input type="radio" id="subscribe-yes" name="subscribe" value="yes">
+                    <label for="subscribe-yes">是</label>
+
+                    <input type="radio" id="subscribe-no" name="subscribe" value="no" checked>
+                    <label for="subscribe-no">否</label>
+                </div>
+
+                <label for="message">留言:</label>
+                <textarea id="message" name="message" rows="4" placeholder="请输入您的留言..."></textarea>
+                <!-- 多行文本输入 -->
+
+                <label for="file">上传文件:</label>
+                <input type="file" id="file" name="file">
+                <!-- 文件上传 -->
+            </fieldset>
+
+            <button type="submit">提交</button>
+            <!-- 提交按钮 -->
+            <button type="reset">重置</button>
+            <!-- 重置按钮 -->
+        </form>
+    </section>
+</main>
+
+<footer>
+    <!-- 页脚区域 -->
+    <p>&copy; 2023 我的网站. 保留所有权利.</p>
+    <!-- 版权信息 -->
+    <address>
+        <!-- 联系信息 -->
+        联系方式: <a href="mailto:contact@example.com">contact@example.com</a>
+    </address>
+</footer>
+
+<!-- JavaScript -->
+<script>
+    // 简单的JavaScript示例
+    document.addEventListener('DOMContentLoaded', function() {
+        console.log('页面加载完成');
+    });
+</script>
+<noscript>
+    <!-- 当JavaScript禁用时显示 -->
+    <p>您的浏览器禁用了JavaScript，某些功能可能无法使用。</p>
+</noscript>
+</body>
+</html>
