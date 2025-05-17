@@ -242,6 +242,39 @@ export default defineConfig(({command, mode}) => {
             __APP_VERSION__: JSON.stringify(env.APP_VERSION),
         },
 
+        // ========== 构建配置 ==========
+        build: {
+            target: "esnext", // 构建目标（现代浏览器）
+            outDir: "dist",   // 输出目录
+            assetsDir: "assets", // 静态资源目录
+            emptyOutDir: true, // 构建前清空输出目录
+            sourcemap: mode !== "production", // 非生产环境生成sourcemap
+            minify: mode === "production" ? "terser" : false, // 生产环境压缩
+            terserOptions: {
+                compress: {
+                    drop_console: true, // 移除所有 console
+                    drop_debugger: true // 移除 debugger
+                },
+                format: {
+                    comments: false // 移除所有注释
+                }
+            },
+            cssCodeSplit: true, // CSS代码分割
+            rollupOptions: {
+                output: {
+                    manualChunks: { // 手动代码分割
+                        vue: ["vue", "vue-router", "pinia"],
+                        element: ["element-plus"],
+                        vendor: ["lodash", "axios"]
+                    },
+                    chunkFileNames: "js/[name]-[hash].js", // 分块文件名格式
+                    assetFileNames: "assets/[ext]/[name]-[hash][extname]" // 资源文件名格式
+                }
+            },
+            reportCompressedSize: false // 禁用gzip大小报告（提升构建速度）
+        },
+
+        // ========== 测试配置 ==========
         // vitest 单元测试配置，参考官方文档 https://cn.vitest.dev/
         // vitest 一个原生支持 Vite 的测试框架。非常快速 并且非常容易上手。
         // 官方文档 https://cn.vitest.dev/
@@ -251,20 +284,6 @@ export default defineConfig(({command, mode}) => {
             testTimeout: 30_000,
             name: "unit",
             exclude: [...defaultExclude, "**/svelte-scoped/**", "**/test-dom/**"],
-        },
-
-        // 构建配置
-        build: {
-            // 构建时的目标环境
-            target: "esnext",
-            // 构建输出目录
-            outDir: "dist",
-            // 静态资源目录
-            assetsDir: "assets",
-            // 构建时清空目标目录
-            emptyOutDir: true,
-            // 构建后是否生成 source map 文件
-            sourcemap: false,
         },
 
         // 日志级别，默认为 info
