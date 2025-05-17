@@ -1,10 +1,12 @@
 import { createApp } from 'vue'
 import App from '@/App.vue'
-import '@assets/styles/index.scss'
+import '@assets/styles/main.scss'
 import '@unocss/reset/tailwind.css'
 import router from "@/router";
 import pinia from "@/stores";
 import {i18n} from "@/locales";
+// UnoCSS样式
+import 'virtual:uno.css'
 
 const app = createApp(App)
 

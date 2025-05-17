@@ -1,1 +1,31 @@
 # SEO 配置
+
+# 适用于所有搜索引擎爬虫的通用规则
+User-agent: *
+# 禁止爬取以下目录
+Disallow: /admin/          # 后台管理系统
+Disallow: /user/           # 用户个人数据
+Disallow: /api/            # API接口
+Disallow: /test/           # 测试页面
+Disallow: /tmp/            # 临时文件
+# 允许爬取其他所有内容
+Allow: /
+
+# 专门针对Google爬虫的规则
+User-agent: Googlebot
+# 允许爬取图片
+Allow: /*.jpg$
+Allow: /*.png$
+Allow: /*.gif$
+# 禁止爬取PDF文件
+Disallow: /*.pdf$
+
+# 专门针对百度爬虫的规则
+User-agent: Baiduspider
+# 禁止爬取某些特定页面
+Disallow: /search/
+Disallow: /login/
+
+# 网站地图位置
+Sitemap: https://www.yourdomain.com/sitemap.xml
+Sitemap: https://www.yourdomain.com/sitemap-image.xml
