@@ -1,10 +1,79 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tailwind CSS Filter 示例</title>
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
+<body class="bg-gray-100 p-8">
+<!-- === 1. filter 示例：图片滤镜 === -->
+<div class="mb-12">
+    <h2 class="text-xl font-bold mb-4">1. filter 效果（作用于元素本身）</h2>
+    <div class="flex gap-6">
+        <!-- 原图 -->
+        <div class="text-center">
+            <p class="mb-2">原图</p>
+            <img
+                    src="https://picsum.photos/300/200"
+                    class="w-64 h-48 object-cover rounded-lg"
+            >
+        </div>
 
+        <!-- 模糊 + 灰度 -->
+        <div class="text-center">
+            <p class="mb-2">模糊 + 灰度</p>
+            <img
+                    src="https://picsum.photos/300/200"
+                    class="w-64 h-48 object-cover rounded-lg filter blur-sm grayscale"
+            >
+        </div>
+
+        <!-- 高对比度 + 色相旋转 -->
+        <div class="text-center">
+            <p class="mb-2">高对比度 + 色相旋转</p>
+            <img
+                    src="https://picsum.photos/300/200"
+                    class="w-64 h-48 object-cover rounded-lg filter contrast-150 hue-rotate-60"
+            >
+        </div>
+    </div>
+</div>
+
+<!-- === 2. backdrop-filter 示例：毛玻璃模态框 === -->
+<div class="relative h-64 bg-[url('https://picsum.photos/800/400')] bg-cover rounded-lg overflow-hidden">
+    <h2 class="text-xl font-bold mb-4 p-4 text-white">2. backdrop-filter 效果（作用于背景区域）</h2>
+
+    <!-- 普通半透明遮罩 -->
+    <div class="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center">
+        <p class="text-white">普通半透明遮罩（无毛玻璃效果）</p>
+    </div>
+
+    <!-- 毛玻璃遮罩 -->
+    <div class="absolute inset-0 flex items-center justify-center">
+        <div class="bg-white bg-opacity-20 p-6 rounded-lg backdrop-filter backdrop-blur-lg">
+            <p class="text-white font-bold text-lg">毛玻璃模态框（backdrop-blur-lg）</p>
+            <button class="mt-2 px-4 py-2 bg-white bg-opacity-30 rounded-md text-white">
+                确认操作
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- === 3. 组合使用示例 === -->
+<div class="mt-12 p-6 bg-indigo-900 rounded-lg">
+    <h2 class="text-xl font-bold mb-4 text-white">3. filter + backdrop-filter 组合使用</h2>
+    <div class="flex gap-4">
+        <!-- 元素滤镜 + 背景滤镜 -->
+        <div class="filter brightness-110 backdrop-filter backdrop-blur-sm bg-white bg-opacity-10 p-4 rounded-lg">
+            <p class="text-white">元素更亮 + 背景轻微模糊</p>
+        </div>
+
+        <!-- 复杂效果 -->
+        <div class="filter drop-shadow-lg backdrop-filter backdrop-contrast-75 bg-white bg-opacity-20 p-4 rounded-lg">
+            <p class="text-white">投影 + 背景对比度降低</p>
+        </div>
+    </div>
+</div>
 </body>
 </html>
