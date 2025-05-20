@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>毛玻璃明暗主题切换</title>
+    <style>
+        /* 基础样式重置 */
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            transition: background-color 0.5s ease, color 0.5s ease;
+        }
+
+        /* 亮色主题毛玻璃样式 */
+        .light-glass {
+            background-color: rgba(255, 255, 255, 0.3);
+            backdrop-filter: blur(30px);
+            -webkit-backdrop-filter: blur(30px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: rgba(142, 142, 142, 0.19) 0 6px 15px 0;
+            -webkit-box-shadow: rgba(142, 142, 142, 0.19) 0 6px 15px 0;
+            border-radius: 12px;
+            -webkit-border-radius: 12px;
+            color: rgba(0, 0, 0, 0.8);
+            transition: all 0.5s ease;
+        }
+
+        /* 暗色主题毛玻璃样式 */
+        .dark-glass {
+            background-color: rgba(89, 89, 89, 0.3);
+            backdrop-filter: blur(30px);
+            -webkit-backdrop-filter: blur(30px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: rgba(14, 14, 14, 0.19) 0 6px 15px 0;
+            -webkit-box-shadow: rgba(14, 14, 14, 0.19) 0 6px 15px 0;
+            border-radius: 12px;
+            -webkit-border-radius: 12px;
+            color: rgba(255, 255, 255, 0.8);
+            transition: all 0.5s ease;
+        }
+
+        /* 主题切换按钮样式 */
+        .theme-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+
+        /* 亮色主题下的页面背景 */
+        .light-theme {
+            background-color: #f0f2f5;
+            color: #333;
+        }
+
+        /* 暗色主题下的页面背景 */
+        .dark-theme {
+            background-color: #121212;
+            color: #f0f0f0;
+        }
+
+        /* 内容容器样式 */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 80px 20px;
+        }
+
+        /* 卡片布局 */
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 40px;
+        }
+
+        /* 单个卡片样式 */
+        .card {
+            padding: 30px;
+            min-height: 200px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        /* 标题样式 */
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+
+        /* 段落文本样式 */
+        p {
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+    </style>
+</head>
+<body class="light-theme">
+<!-- 主题切换按钮 -->
+<div id="themeToggle" class="theme-toggle light-glass">
+    <svg id="sunIcon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="5"></circle>
+        <line x1="12" y1="1" x2="12" y2="3"></line>
+        <line x1="12" y1="21" x2="12" y2="23"></line>
+        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+        <line x1="1" y1="12" x2="3" y2="12"></line>
+        <line x1="21" y1="12" x2="23" y2="12"></line>
+        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+    <svg id="moonIcon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display: none;">
+        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+    </svg>
+</div>
+
+<!-- 主要内容区域 -->
+<div class="container">
+    <h1 class="light-glass card">毛玻璃明暗主题切换示例</h1>
+    <p class="light-glass card">这是一个展示如何使用CSS实现毛玻璃效果并在明暗主题间切换的示例。</p>
+
+    <div class="card-grid">
+        <div class="light-glass card">
+            <h2>亮色主题特点</h2>
+            <p>背景透明度较高，文字颜色较深，适合日间或明亮环境下使用。</p>
+        </div>
+
+        <div class="light-glass card">
+            <h2>暗色主题特点</h2>
+            <p>背景颜色较深，文字颜色较浅，适合夜间或暗光环境下使用。</p>
+        </div>
+
+        <div class="light-glass card">
+            <h2>主题切换</h2>
+            <p>点击右上角的太阳/月亮图标可以在明暗主题间切换。</p>
+        </div>
+    </div>
+</div>
+
+<script>
+    // 获取DOM元素
+    const themeToggle = document.getElementById('themeToggle');
+    const sunIcon = document.getElementById('sunIcon');
+    const moonIcon = document.getElementById('moonIcon');
+    const body = document.body;
+    const cards = document.querySelectorAll('.card');
+
+    // 检查本地存储中的主题偏好
+    const currentTheme = localStorage.getItem('theme') || 'light';
+    if (currentTheme === 'dark') {
+        enableDarkTheme();
+    }
+
+    // 主题切换函数
+    function toggleTheme() {
+        if (body.classList.contains('dark-theme')) {
+            enableLightTheme();
+        } else {
+            enableDarkTheme();
+        }
+    }
+
+    // 启用亮色主题
+    function enableLightTheme() {
+        body.classList.remove('dark-theme');
+        body.classList.add('light-theme');
+        themeToggle.classList.remove('dark-glass');
+        themeToggle.classList.add('light-glass');
+
+        // 切换所有卡片的类
+        cards.forEach(card => {
+            card.classList.remove('dark-glass');
+            card.classList.add('light-glass');
+        });
+
+        // 切换图标显示
+        sunIcon.style.display = 'block';
+        moonIcon.style.display = 'none';
+
+        // 保存主题偏好
+        localStorage.setItem('theme', 'light');
+    }
+
+    // 启用暗色主题
+    function enableDarkTheme() {
+        body.classList.remove('light-theme');
+        body.classList.add('dark-theme');
+        themeToggle.classList.remove('light-glass');
+        themeToggle.classList.add('dark-glass');
+
+        // 切换所有卡片的类
+        cards.forEach(card => {
+            card.classList.remove('light-glass');
+            card.classList.add('dark-glass');
+        });
+
+        // 切换图标显示
+        sunIcon.style.display = 'none';
+        moonIcon.style.display = 'block';
+
+        // 保存主题偏好
+        localStorage.setItem('theme', 'dark');
+    }
+
+    // 添加点击事件监听
+    themeToggle.addEventListener('click', toggleTheme);
+</script>
+</body>
+</html>

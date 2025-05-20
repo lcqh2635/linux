@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>增强毛玻璃效果示例</title>
+    <style>
+        /* 基础样式重置 */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            min-height: 100vh;
+            /* 添加复杂背景图片 - 这是增强毛玻璃效果的关键 */
+            background-image:
+                    linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)),
+                    url('https://images.unsplash.com/photo-1506744038136-46273834b3fb?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            transition: all 0.5s ease;
+        }
+
+        /* 暗色主题下的背景 */
+        body.dark-theme {
+            background-image:
+                    linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
+                    url('https://images.unsplash.com/photo-1506744038136-46273834b3fb?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80');
+        }
+
+        /* 增强版毛玻璃效果 */
+        .glass {
+            background: rgba(255, 255, 255, 0.3);
+            backdrop-filter: blur(30px) saturate(180%);
+            -webkit-backdrop-filter: blur(30px) saturate(180%);
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
+            transition: all 0.5s ease;
+        }
+
+        /* 亮色主题毛玻璃 */
+        .light-glass {
+            background: rgba(255, 255, 255, 0.25);
+            color: rgba(0, 0, 0, 0.8);
+        }
+
+        /* 暗色主题毛玻璃 */
+        .dark-glass {
+            background: rgba(0, 0, 0, 0.25);
+            color: rgba(255, 255, 255, 0.9);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+        }
+
+        /* 主题切换按钮 */
+        .theme-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+
+        /* 内容容器 */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 100px 20px;
+        }
+
+        /* 卡片布局 */
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin-top: 50px;
+        }
+
+        /* 单个卡片 */
+        .card {
+            padding: 30px;
+            min-height: 250px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        /* 标题样式 */
+        h1 {
+            font-size: 2.8rem;
+            margin-bottom: 20px;
+            font-weight: 600;
+            line-height: 1.3;
+        }
+
+        h2 {
+            font-size: 1.8rem;
+            margin-bottom: 15px;
+            font-weight: 500;
+        }
+
+        /* 文本样式 */
+        p {
+            line-height: 1.7;
+            margin-bottom: 15px;
+            font-size: 1.1rem;
+        }
+
+        /* 主标题卡片 */
+        .header-card {
+            grid-column: 1 / -1;
+            padding: 40px;
+        }
+    </style>
+</head>
+<body class="light-theme">
+<!-- 主题切换按钮 -->
+<div id="themeToggle" class="theme-toggle glass light-glass">
+    <svg id="sunIcon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="5"></circle>
+        <line x1="12" y1="1" x2="12" y2="3"></line>
+        <line x1="12" y1="21" x2="12" y2="23"></line>
+        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+        <line x1="1" y1="12" x2="3" y2="12"></line>
+        <line x1="21" y1="12" x2="23" y2="12"></line>
+        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+    <svg id="moonIcon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display: none;">
+        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+    </svg>
+</div>
+
+<!-- 主要内容区域 -->
+<div class="container">
+    <div class="glass light-glass header-card">
+        <h1>增强毛玻璃效果展示</h1>
+        <p>通过复杂背景图片和优化的毛玻璃参数，使效果更加明显和美观</p>
+    </div>
+
+    <div class="card-grid">
+        <div class="glass light-glass card">
+            <h2>背景选择</h2>
+            <p>使用高分辨率、细节丰富的图片作为背景，能大幅增强毛玻璃效果的可见度。风景、城市景观或复杂纹理效果最佳。</p>
+        </div>
+
+        <div class="glass light-glass card">
+            <h2>参数优化</h2>
+            <p>调整背景透明度(0.15-0.25)、模糊程度(15-25px)和饱和度(150-200%)，找到最佳平衡点。</p>
+        </div>
+
+        <div class="glass light-glass card">
+            <h2>边框与阴影</h2>
+            <p>添加微妙的半透明边框和阴影可以增强立体感，使毛玻璃元素从背景中更好地分离出来。</p>
+        </div>
+    </div>
+</div>
+
+<script>
+    // 获取DOM元素
+    const themeToggle = document.getElementById('themeToggle');
+    const sunIcon = document.getElementById('sunIcon');
+    const moonIcon = document.getElementById('moonIcon');
+    const body = document.body;
+    const glassElements = document.querySelectorAll('.glass');
+
+    // 检查本地存储中的主题偏好
+    const currentTheme = localStorage.getItem('theme') || 'light';
+    if (currentTheme === 'dark') {
+        enableDarkTheme();
+    }
+
+    // 主题切换函数
+    function toggleTheme() {
+        if (body.classList.contains('dark-theme')) {
+            enableLightTheme();
+        } else {
+            enableDarkTheme();
+        }
+    }
+
+    // 启用亮色主题
+    function enableLightTheme() {
+        body.classList.remove('dark-theme');
+        body.classList.add('light-theme');
+
+        // 切换所有毛玻璃元素的类
+        glassElements.forEach(element => {
+            element.classList.remove('dark-glass');
+            element.classList.add('light-glass');
+        });
+
+        // 切换图标显示
+        sunIcon.style.display = 'block';
+        moonIcon.style.display = 'none';
+
+        // 保存主题偏好
+        localStorage.setItem('theme', 'light');
+    }
+
+    // 启用暗色主题
+    function enableDarkTheme() {
+        body.classList.remove('light-theme');
+        body.classList.add('dark-theme');
+
+        // 切换所有毛玻璃元素的类
+        glassElements.forEach(element => {
+            element.classList.remove('light-glass');
+            element.classList.add('dark-glass');
+        });
+
+        // 切换图标显示
+        sunIcon.style.display = 'none';
+        moonIcon.style.display = 'block';
+
+        // 保存主题偏好
+        localStorage.setItem('theme', 'dark');
+    }
+
+    // 添加点击事件监听
+    themeToggle.addEventListener('click', toggleTheme);
+</script>
+</body>
+</html>
