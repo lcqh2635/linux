@@ -162,6 +162,9 @@ flatpak install -y flathub org.gnome.gitlab.somas.Apostrophe
 | **HandBrake**  | 视频转码工具   | `sudo dnf install handbrake`                 | 支持 GPU 加速 |
 
 ```
+sudo dnf install qemu
+sudo dnf install @virtualization virt-manager libvirt
+sudo systemctl enable --now libvirtd
 
 ```
 
