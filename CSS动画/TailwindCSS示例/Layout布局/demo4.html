@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>固定头部布局 + GSAP动画</title>
+    <!-- 引入 Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- 引入 GSAP -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <style>
+        /* 自定义CSS补充Tailwind */
+        body {
+            /* 防止滚动条出现时页面跳动 */
+            overflow-y: scroll;
+        }
+
+        /* 页面内容容器 - 为固定头部留出空间 */
+        .content-container {
+            padding-top: 4rem; /* 与头部高度一致 */
+            min-height: 100vh;
+        }
+
+        /* 过渡动画初始状态 */
+        .page-section {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+<!-- 固定头部 -->
+<header class="fixed top-0 left-0 right-0 bg-white shadow-md z-50 transition-all duration-300">
+    <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+        <!-- 网站Logo -->
+        <div class="flex items-center">
+            <svg class="w-8 h-8 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd"></path>
+            </svg>
+            <span class="ml-2 text-xl font-bold text-gray-800">动画网站</span>
+        </div>
+
+        <!-- 导航菜单 -->
+        <nav class="hidden md:flex space-x-8">
+            <a href="#" class="nav-link text-gray-600 hover:text-blue-600 transition-colors" data-section="home">首页</a>
+            <a href="#" class="nav-link text-gray-600 hover:text-blue-600 transition-colors" data-section="about">关于</a>
+            <a href="#" class="nav-link text-gray-600 hover:text-blue-600 transition-colors" data-section="services">服务</a>
+            <a href="#" class="nav-link text-gray-600 hover:text-blue-600 transition-colors" data-section="contact">联系</a>
+        </nav>
+
+        <!-- 移动端菜单按钮 -->
+        <button class="md:hidden text-gray-600 focus:outline-none" id="mobile-menu-button">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+            </svg>
+        </button>
+    </div>
+
+    <!-- 移动端菜单 (默认隐藏) -->
+    <div class="md:hidden bg-white hidden" id="mobile-menu">
+        <div class="container mx-auto px-4 py-2 flex flex-col space-y-3">
+            <a href="#" class="nav-link py-2 text-gray-600 hover:text-blue-600 transition-colors" data-section="home">首页</a>
+            <a href="#" class="nav-link py-2 text-gray-600 hover:text-blue-600 transition-colors" data-section="about">关于</a>
+            <a href="#" class="nav-link py-2 text-gray-600 hover:text-blue-600 transition-colors" data-section="services">服务</a>
+            <a href="#" class="nav-link py-2 text-gray-600 hover:text-blue-600 transition-colors" data-section="contact">联系</a>
+        </div>
+    </div>
+</header>
+
+<!-- 页面内容容器 -->
+<main class="content-container">
+    <!-- 首页部分 -->
+    <section id="home" class="page-section py-20 bg-gradient-to-r from-blue-50 to-purple-50">
+        <div class="container mx-auto px-4">
+            <div class="max-w-2xl mx-auto text-center">
+                <h1 class="text-4xl md:text-5xl font-bold text-gray-800 mb-6">欢迎来到我们的网站</h1>
+                <p class="text-xl text-gray-600 mb-8">这是一个使用GSAP实现流畅过渡动画的布局示例</p>
+                <button class="px-8 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors shadow-lg transform hover:scale-105 transition-transform">
+                    了解更多
+                </button>
+            </div>
+
+            <div class="bg-white rounded-lg shadow-md p-5 mt-10">
+                <!-- 面包屑导航 -->
+                <div class="flex items-center text-sm text-gray-500 mb-6">
+                    <a href="#" class="hover:text-blue-600">首页</a>
+                    <span class="mx-2">/</span>
+                    <span class="text-gray-700">仪表盘</span>
+                </div>
+
+                <!-- 页面标题 -->
+                <h1 class="text-2xl font-bold text-gray-800 mb-6">仪表盘</h1>
+
+                <!-- 内容卡片网格 -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                    <div class="bg-blue-50 rounded-lg p-6 border border-blue-100">
+                        <h3 class="text-gray-500 text-sm font-medium mb-2">总用户数</h3>
+                        <p class="text-2xl font-bold text-blue-600">1,248</p>
+                        <p class="text-green-600 text-sm mt-2">↑ 12% 上月</p>
+                    </div>
+                    <div class="bg-green-50 rounded-lg p-6 border border-green-100">
+                        <h3 class="text-gray-500 text-sm font-medium mb-2">总订单</h3>
+                        <p class="text-2xl font-bold text-green-600">568</p>
+                        <p class="text-green-600 text-sm mt-2">↑ 8% 上月</p>
+                    </div>
+                    <div class="bg-yellow-50 rounded-lg p-6 border border-yellow-100">
+                        <h3 class="text-gray-500 text-sm font-medium mb-2">总收入</h3>
+                        <p class="text-2xl font-bold text-yellow-600">¥28,760</p>
+                        <p class="text-green-600 text-sm mt-2">↑ 5% 上月</p>
+                    </div>
+                    <div class="bg-purple-50 rounded-lg p-6 border border-purple-100">
+                        <h3 class="text-gray-500 text-sm font-medium mb-2">转化率</h3>
+                        <p class="text-2xl font-bold text-purple-600">3.2%</p>
+                        <p class="text-red-600 text-sm mt-2">↓ 0.5% 上月</p>
+                    </div>
+                </div>
+
+                <!-- 主要内容 -->
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                    <div class="lg:col-span-2 bg-white border rounded-lg p-6">
+                        <h2 class="text-lg font-semibold mb-4">最近活动</h2>
+                        <div class="space-y-4">
+                            <div class="flex items-start">
+                                <div class="bg-blue-100 p-2 rounded-full mr-3">
+                                    <svg class="w-5 h-5 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
+                                        <path d="M8 9a3 3 0 100-6 3 3 0 000 6zM8 11a6 6 0 016 6H2a6 6 0 016-6z"></path>
+                                    </svg>
+                                </div>
+                                <div>
+                                    <p class="font-medium">新用户注册</p>
+                                    <p class="text-sm text-gray-500">用户 "张三" 刚刚注册了账号</p>
+                                    <p class="text-xs text-gray-400 mt-1">10分钟前</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start">
+                                <div class="bg-green-100 p-2 rounded-full mr-3">
+                                    <svg class="w-5 h-5 text-green-600" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"></path>
+                                    </svg>
+                                </div>
+                                <div>
+                                    <p class="font-medium">新订单创建</p>
+                                    <p class="text-sm text-gray-500">订单 #12345 已创建，金额 ¥256.00</p>
+                                    <p class="text-xs text-gray-400 mt-1">25分钟前</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start">
+                                <div class="bg-purple-100 p-2 rounded-full mr-3">
+                                    <svg class="w-5 h-5 text-purple-600" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2h-1V9z" clip-rule="evenodd"></path>
+                                    </svg>
+                                </div>
+                                <div>
+                                    <p class="font-medium">系统通知</p>
+                                    <p class="text-sm text-gray-500">系统将在今晚12点进行维护，预计耗时2小时</p>
+                                    <p class="text-xs text-gray-400 mt-1">1小时前</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-white border rounded-lg p-6">
+                        <h2 class="text-lg font-semibold mb-4">快捷操作</h2>
+                        <div class="space-y-3">
+                            <button class="w-full flex items-center justify-between px-4 py-3 bg-gray-50 hover:bg-gray-100 rounded-lg transition">
+                                <span>添加新用户</span>
+                                <svg class="w-5 h-5 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd"></path>
+                                </svg>
+                            </button>
+                            <button class="w-full flex items-center justify-between px-4 py-3 bg-gray-50 hover:bg-gray-100 rounded-lg transition">
+                                <span>创建新订单</span>
+                                <svg class="w-5 h-5 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd"></path>
+                                </svg>
+                            </button>
+                            <button class="w-full flex items-center justify-between px-4 py-3 bg-gray-50 hover:bg-gray-100 rounded-lg transition">
+                                <span>查看报表</span>
+                                <svg class="w-5 h-5 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
+                                    <path d="M2 10a8 8 0 018-8v8h8a8 8 0 11-16 0z"></path>
+                                    <path d="M12 2.252A8.014 8.014 0 0117.748 8H12V2.252z"></path>
+                                </svg>
+                            </button>
+                            <button class="w-full flex items-center justify-between px-4 py-3 bg-gray-50 hover:bg-gray-100 rounded-lg transition">
+                                <span>系统设置</span>
+                                <svg class="w-5 h-5 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M11.49 3.17c-.38-1.56-2.6-1.56-2.98 0a1.532 1.532 0 01-2.286.948c-1.372-.836-2.942.734-2.106 2.106.54.886.061 2.042-.947 2.287-1.561.379-1.561 2.6 0 2.978a1.532 1.532 0 01.947 2.287c-.836 1.372.734 2.942 2.106 2.106a1.532 1.532 0 012.287.947c.379 1.561 2.6 1.561 2.978 0a1.533 1.533 0 012.287-.947c1.372.836 2.942-.734 2.106-2.106a1.533 1.533 0 01.947-2.287c1.561-.379 1.561-2.6 0-2.978a1.532 1.532 0 01-.947-2.287c.836-1.372-.734-2.942-2.106-2.106a1.532 1.532 0 01-2.287-.947zM10 13a3 3 0 100-6 3 3 0 000 6z" clip-rule="evenodd"></path>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 关于部分 -->
+    <section id="about" class="page-section py-20 bg-white hidden">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl font-bold text-center text-gray-800 mb-12">关于我们</h2>
+            <div class="grid md:grid-cols-2 gap-12 items-center">
+                <div>
+                    <h3 class="text-2xl font-semibold text-gray-800 mb-4">我们的故事</h3>
+                    <p class="text-gray-600 mb-6">成立于2010年，我们一直致力于为客户提供最优质的服务和产品。我们的团队由行业专家组成，拥有丰富的经验和专业知识。</p>
+                    <p class="text-gray-600">我们相信创新和卓越，不断推动行业边界，为客户创造真正的价值。</p>
+                </div>
+                <div class="bg-gray-100 rounded-lg overflow-hidden">
+                    <img src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80" alt="团队照片" class="w-full h-auto object-cover">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 服务部分 -->
+    <section id="services" class="page-section py-20 bg-gray-50 hidden">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl font-bold text-center text-gray-800 mb-12">我们的服务</h2>
+            <div class="grid md:grid-cols-3 gap-8">
+                <!-- 服务项1 -->
+                <div class="bg-white p-8 rounded-lg shadow-md hover:shadow-lg transition-shadow">
+                    <div class="text-blue-600 mb-4">
+                        <svg class="w-10 h-10" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.82 1.573l-7 10A1 1 0 018 18v-5H4a1 1 0 01-.82-1.573l7-10a1 1 0 011.12-.38z" clip-rule="evenodd"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-semibold text-gray-800 mb-3">网页设计</h3>
+                    <p class="text-gray-600">专业的响应式网页设计，确保您的网站在所有设备上都能完美展现。</p>
+                </div>
+
+                <!-- 服务项2 -->
+                <div class="bg-white p-8 rounded-lg shadow-md hover:shadow-lg transition-shadow">
+                    <div class="text-blue-600 mb-4">
+                        <svg class="w-10 h-10" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M12.316 3.051a1 1 0 01.633 1.265l-4 12a1 1 0 11-1.898-.632l4-12a1 1 0 011.265-.633zM5.707 6.293a1 1 0 010 1.414L3.414 10l2.293 2.293a1 1 0 11-1.414 1.414l-3-3a1 1 0 010-1.414l3-3a1 1 0 011.414 0zm8.586 0a1 1 0 011.414 0l3 3a1 1 0 010 1.414l-3 3a1 1 0 11-1.414-1.414L16.586 10l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-semibold text-gray-800 mb-3">前端开发</h3>
+                    <p class="text-gray-600">使用最新技术栈构建高性能、交互丰富的前端应用。</p>
+                </div>
+
+                <!-- 服务项3 -->
+                <div class="bg-white p-8 rounded-lg shadow-md hover:shadow-lg transition-shadow">
+                    <div class="text-blue-600 mb-4">
+                        <svg class="w-10 h-10" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M2 5a2 2 0 012-2h7a2 2 0 012 2v4a2 2 0 01-2 2H9l-3 3v-3H4a2 2 0 01-2-2V5z"></path>
+                            <path d="M15 7v2a4 4 0 01-4 4H9.828l-1.766 1.767c.28.149.599.233.938.233h2l3 3v-3h2a2 2 0 002-2V9a2 2 0 00-2-2h-1z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-semibold text-gray-800 mb-3">技术支持</h3>
+                    <p class="text-gray-600">全面的技术支持和维护服务，确保您的系统稳定运行。</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 联系部分 -->
+    <section id="contact" class="page-section py-20 bg-white hidden">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl font-bold text-center text-gray-800 mb-12">联系我们</h2>
+            <div class="max-w-2xl mx-auto bg-gray-50 rounded-lg shadow-md p-8">
+                <form>
+                    <div class="mb-6">
+                        <label for="name" class="block text-gray-700 mb-2">姓名</label>
+                        <input type="text" id="name" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    </div>
+                    <div class="mb-6">
+                        <label for="email" class="block text-gray-700 mb-2">邮箱</label>
+                        <input type="email" id="email" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    </div>
+                    <div class="mb-6">
+                        <label for="message" class="block text-gray-700 mb-2">留言</label>
+                        <textarea id="message" rows="4" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea>
+                    </div>
+                    <button type="submit" class="w-full py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
+                        发送消息
+                    </button>
+                </form>
+            </div>
+        </div>
+    </section>
+</main>
+
+<script>
+    // 等待DOM完全加载
+    document.addEventListener('DOMContentLoaded', function() {
+        // 初始化 - 显示首页部分并添加动画
+        showSection('home');
+
+        // 为所有导航链接添加点击事件
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                const sectionId = this.getAttribute('data-section');
+
+                // 隐藏移动菜单（如果可见）
+                document.getElementById('mobile-menu').classList.add('hidden');
+
+                // 显示对应部分
+                showSection(sectionId);
+            });
+        });
+
+        // 移动菜单按钮点击事件
+        document.getElementById('mobile-menu-button').addEventListener('click', function() {
+            const mobileMenu = document.getElementById('mobile-menu');
+            mobileMenu.classList.toggle('hidden');
+
+            // 使用GSAP实现平滑的展开/收起动画
+            if (mobileMenu.classList.contains('hidden')) {
+                gsap.to(mobileMenu, {
+                    height: 0,
+                    duration: 0.3,
+                    ease: "power2.inOut",
+                    onComplete: () => mobileMenu.classList.add('hidden')
+                });
+            } else {
+                mobileMenu.classList.remove('hidden');
+                gsap.from(mobileMenu, {
+                    height: 0,
+                    duration: 0.3,
+                    ease: "power2.inOut"
+                });
+            }
+        });
+
+        // 滚动时头部效果
+        let lastScroll = 0;
+        const header = document.querySelector('header');
+
+        window.addEventListener('scroll', function() {
+            const currentScroll = window.pageYOffset;
+
+            // 向下滚动时隐藏头部
+            if (currentScroll > lastScroll && currentScroll > 100) {
+                gsap.to(header, {
+                    y: -80, // 头部高度
+                    duration: 0.3,
+                    ease: "power2.out"
+                });
+            }
+            // 向上滚动或接近顶部时显示头部
+            else if (currentScroll < lastScroll || currentScroll < 100) {
+                gsap.to(header, {
+                    y: 0,
+                    duration: 0.3,
+                    ease: "power2.out"
+                });
+            }
+
+            lastScroll = currentScroll;
+        });
+    });
+
+    /**
+     * 显示指定部分并添加动画
+     * @param {string} sectionId 要显示的部分ID
+     */
+    function showSection(sectionId) {
+        // 隐藏所有部分
+        document.querySelectorAll('.page-section').forEach(section => {
+            section.classList.add('hidden');
+        });
+
+        // 显示目标部分
+        const targetSection = document.getElementById(sectionId);
+        targetSection.classList.remove('hidden');
+
+        // 使用GSAP实现进入动画
+        gsap.fromTo(targetSection,
+            { opacity: 0, y: 20 }, // 初始状态
+            {
+                opacity: 1,
+                y: 0,
+                duration: 0.8,
+                ease: "power3.out",
+                // 对内部元素添加交错动画
+                onStart: () => {
+                    gsap.from(targetSection.querySelectorAll('h1, h2, h3, p, button, img, div'), {
+                        opacity: 0,
+                        y: 20,
+                        duration: 0.6,
+                        stagger: 0.1,
+                        ease: "power2.out",
+                        delay: 0.2
+                    });
+                }
+            }
+        );
+
+        // 滚动到顶部（因为头部是固定的）
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+        });
+    }
+</script>
+</body>
+</html>
