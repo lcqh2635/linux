@@ -67,6 +67,12 @@ Coverflow Alt-Tab
 User Avatar In Quick Settings
 # 数值设置为 5
 Status Area Horizontal Spacing
+No overview at start-up
+Show Desktop Button
+Impatience
+App menu is back
+IBus Tweaker
+# 右键点击 panel 上的输入法，点击“首选项”，将“候选词排列方向”改为竖直
 
 
 # 优质推荐 Gnome 扩展
