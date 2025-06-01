@@ -4,6 +4,10 @@
 echo "开始系统..."
 sudo dnf update -y && sudo dnf upgrade -y
 
+# gnome-extensions list
+# dnf search gnome-shell-extension*
+# dnf list gnome-shell-extension*
+
 Logo Menu
 Alphabetical App Grid
 # 用户比装 Gnome 扩展
@@ -28,7 +32,7 @@ IBus Tweaker
 Add to Desktop
 Bluetooth Quick Connect
 Clipboard Indicator
-Compiz windows effect
+# Compiz windows effect
 Compiz alike magic lamp effect
 Desktop Cube
 # Open Bar
@@ -81,40 +85,6 @@ glib-compile-schemas ~/.local/share/glib-2.0/schemas/
 
 
 # 系统外观主题和Gnome扩展插件优化
-# 在 Github 发现一个好项目 adw-gtk3	https://github.com/lassekongo83/adw-gtk3
-sudo dnf install -y adw-gtk3-theme la-capitaine-cursor-theme
-# 系统外观优化
-gsettings set org.gnome.desktop.interface color-scheme 'default'
-gsettings set org.gnome.desktop.interface cursor-theme 'capitaine-cursors'
-gsettings set org.gnome.desktop.interface icon-theme 'Adwaita'
-gsettings set org.gnome.shell.extensions.user-theme name 'Adwaita'
-gsettings set org.gnome.desktop.interface gtk-theme 'adw-gtk3'
-# dash-to-dock 扩展优化
-gsettings set org.gnome.shell.extensions.dash-to-dock hot-keys false
-gsettings set org.gnome.shell.extensions.dash-to-dock click-action 'minimize'
-gsettings set org.gnome.shell.extensions.dash-to-dock scroll-action 'cycle-windows'
-gsettings set org.gnome.shell.extensions.dash-to-dock custom-theme-shrink true
-gsettings set org.gnome.shell.extensions.dash-to-dock running-indicator-style 'DASHES'
-gsettings set org.gnome.shell.extensions.dash-to-dock running-indicator-dominant-color true
-# blur-my-shell 扩展优化
-gsettings set org.gnome.shell.extensions.blur-my-shell.panel force-light-text true
-gsettings set org.gnome.shell.extensions.blur-my-shell.panel style-panel 1
-gsettings set org.gnome.shell.extensions.blur-my-shell.hidetopbar compatibility true
-gsettings set org.gnome.shell.extensions.blur-my-shell.appfolder style-dialogs 2
-gsettings set org.gnome.shell.extensions.blur-my-shell.dash-to-dock style-dash-to-dock 1
-gsettings set org.gnome.shell.extensions.blur-my-shell.applications blur true
-gsettings set org.gnome.shell.extensions.blur-my-shell.applications dynamic-opacity false
-gsettings set org.gnome.shell.extensions.blur-my-shell.applications whitelist ['org.gnome.Settings', 'org.gnome.Software', 'org.gnome.TextEditor', 'org.gnome.SystemMonitor', 'org.gnome.tweaks', 'org.gnome.Extensions', 'org.gnome.Shell.Extensions', 'com.mattjakeman.ExtensionManager', 'org.gnome.Builder', 'org.gnome.Loupe', 'org.gnome.gitlab.somas.Apostrophe', 'io.github.alainm23.planify', 'com.github.tchx84.Flatseal', 'io.github.flattool.Warehouse']
-gsettings set org.gnome.shell.extensions.blur-my-shell.coverflow-alt-tab blur false
-# just-perfection 扩展优化
-gsettings set org.gnome.shell.extensions.just-perfection accessibility-menu false
-gsettings set org.gnome.shell.extensions.just-perfection world-clock false
-gsettings set org.gnome.shell.extensions.just-perfection weather false
-gsettings set org.gnome.shell.extensions.just-perfection events-button false
-gsettings set org.gnome.shell.extensions.just-perfection window-demands-attention-focus true
-gsettings set org.gnome.shell.extensions.just-perfection startup-status 0
-
-
 # 自定义快捷键优化，Super-管理窗口、Alt-管理工作区
 gsettings set org.gnome.desktop.wm.keybindings switch-to-workspace-last "['<Alt>End']"
 gsettings set org.gnome.desktop.wm.keybindings switch-to-workspace-left "['<Alt>Left']"
@@ -146,6 +116,58 @@ gsettings set org.gnome.settings-daemon.plugins.media-keys next "['F8']"
 gsettings set org.gnome.settings-daemon.plugins.media-keys play "['F9']"
 gsettings set org.gnome.settings-daemon.plugins.media-keys previous "['F10']"
 
+
+gsettings list-recursively org.gnome.shell.extensions.workspace-indicator
+
+gsettings list-recursively org.gnome.shell.extensions.auto-move-windows
+gsettings set org.gnome.shell.extensions.auto-move-windows application-list "['com.github.gmg137.netease-cloud-music-gtk.desktop:1', 'jetbrains-idea-1e43afa8-7b74-4314-97e3-6dc2fcd19338.desktop:2']"
+
+# Gtk4 Desktop Icons NG
+gsettings list-recursively org.gnome.shell.extensions.gtk4-ding
+# Rounded Window Corners Reborn
+gsettings list-recursively org.gnome.shell.extensions.rounded-window-corners-reborn
+
+# Status Area Horizontal Spacing
+gsettings set org.gnome.shell.extensions.status-area-horizontal-spacing hpadding 5
+
+# Quick Settings Tweaks
+# 控制 GNOME 顶部面板快捷设置菜单（Quick Settings）的弹出样式和动画效果
+# 启用或禁用 覆盖式菜单样式（即快捷设置面板以独立浮层形式弹出，而非传统的下拉样式）。
+gsettings set org.gnome.shell.extensions.quick-settings-tweaks overlay-menu-enabled true
+# 控制菜单弹出/关闭的 动画时长（毫秒）推荐 200-500（值越大动画越慢）。
+gsettings set org.gnome.shell.extensions.quick-settings-tweaks overlay-menu-animate-duration 500
+gsettings set org.gnome.shell.extensions.quick-settings-tweaks menu-animation-enabled true
+gsettings set org.gnome.shell.extensions.quick-settings-tweaks menu-animation-close-duration 500
+gsettings set org.gnome.shell.extensions.quick-settings-tweaks menu-animation-open-duration 500
+
+# Coverflow Alt-Tab
+# 递归列出某个 Schema 的键值
+gsettings list-recursively org.gnome.shell.extensions.coverflowalttab
+gsettings set org.gnome.shell.extensions.coverflowalttab animation-time 0.5
+gsettings set org.gnome.shell.extensions.coverflowalttab easing-function 'ease-in-out-sine'
+gsettings set org.gnome.shell.extensions.coverflowalttab preview-to-monitor-ratio 0.75
+# 恢复默认设置
+gsettings reset-recursively org.gnome.shell.extensions.coverflowalttab
+
+# Night Theme Switcher
+# 递归列出某个 Schema 的键值
+gsettings list-recursively org.gnome.shell.extensions.nightthemeswitcher.commands
+gsettings set org.gnome.shell.extensions.nightthemeswitcher.commands enabled true
+gsettings set org.gnome.shell.extensions.nightthemeswitcher.commands sunrise "gsettings set org.gnome.desktop.interface color-scheme 'default'\ngsettings set org.gnome.desktop.interface cursor-theme 'capitaine-cursors'\ngsettings set org.gnome.desktop.interface icon-theme 'WhiteSur-light'\ngsettings set org.gnome.shell.extensions.user-theme name 'WhiteSur-Light'\ngsettings set org.gnome.desktop.interface gtk-theme 'adw-gtk3'\ngsettings set org.gnome.desktop.wm.preferences theme 'WhiteSur-Light'"
+gsettings set org.gnome.shell.extensions.nightthemeswitcher.commands sunset "gsettings set org.gnome.desktop.interface color-scheme 'prefer-dark'\ngsettings set org.gnome.desktop.interface cursor-theme 'capitaine-cursors-light'\ngsettings set org.gnome.desktop.interface icon-theme 'WhiteSur-dark'\ngsettings set org.gnome.shell.extensions.user-theme name 'WhiteSur-Dark'\ngsettings set org.gnome.desktop.interface gtk-theme 'adw-gtk3-dark'\ngsettings set org.gnome.desktop.wm.preferences theme 'WhiteSur-Dark'"
+
+
+# Hide Top Bar
+# 列出所有已安装的 Schema
+gsettings list-schemas
+# 递归列出某个 Schema 的键值
+gsettings list-recursively org.gnome.shell.extensions.hidetopbar
+# 设置鼠标触发灵敏度（true/false）
+gsettings set org.gnome.shell.extensions.hidetopbar mouse-sensitive true
+gsettings set org.gnome.shell.extensions.hidetopbar animation-time-autohide 0.5
+gsettings set org.gnome.shell.extensions.hidetopbar animation-time-overview 0.5
+# 恢复默认设置
+gsettings reset-recursively org.gnome.shell.extensions.hidetopbar
 
 
 # 清理无用的包和缓存

@@ -41,7 +41,7 @@ gnome-shell-extension-no-overview \
 gnome-shell-extension-netspeed
 
 # 启用已安装的扩展
-gnome-extensions list
+# gnome-extensions list
 echo "启用已安装的扩展..."
 gnome-extensions enable user-theme@gnome-shell-extensions.gcampax.github.com
 gnome-extensions enable dash-to-dock@micxgx.gmail.com
@@ -88,6 +88,11 @@ gsettings set org.gnome.shell.extensions.just-perfection weather false
 gsettings set org.gnome.shell.extensions.just-perfection events-button false
 gsettings set org.gnome.shell.extensions.just-perfection window-demands-attention-focus true
 gsettings set org.gnome.shell.extensions.just-perfection startup-status 0
+
+# auto-move-windows
+echo "正在配置auto-move-windows..."
+# gsettings list-recursively org.gnome.shell.extensions.auto-move-windows
+gsettings set org.gnome.shell.extensions.auto-move-windows application-list "['com.github.gmg137.netease-cloud-music-gtk.desktop:1', 'jetbrains-idea-1e43afa8-7b74-4314-97e3-6dc2fcd19338.desktop:2']"
 
 # 进入到下载目录
 cd ~/下载
