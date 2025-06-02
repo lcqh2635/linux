@@ -152,10 +152,6 @@ gsettings set org.gnome.settings-daemon.plugins.media-keys play "['F9']"
 gsettings set org.gnome.settings-daemon.plugins.media-keys previous "['F10']"
 
 
-gsettings list-recursively org.gnome.shell.extensions.workspace-indicator
-
-gsettings list-recursively org.gnome.shell.extensions.auto-move-windows
-gsettings set org.gnome.shell.extensions.auto-move-windows application-list "['com.github.gmg137.netease-cloud-music-gtk.desktop:1', 'jetbrains-idea-1e43afa8-7b74-4314-97e3-6dc2fcd19338.desktop:2']"
 
 # Gtk4 Desktop Icons NG
 gsettings list-recursively org.gnome.shell.extensions.gtk4-ding
@@ -177,19 +173,28 @@ gsettings set org.gnome.shell.extensions.quick-settings-tweaks menu-animation-op
 
 # Coverflow Alt-Tab
 # 递归列出某个 Schema 的键值
-gsettings list-recursively org.gnome.shell.extensions.coverflowalttab
+# gsettings list-recursively org.gnome.shell.extensions.coverflowalttab
+# gsettings set org.gnome.shell.extensions.coverflowalttab switcher-looping-method 'Flip Stack'
+gsettings set org.gnome.shell.extensions.coverflowalttab switcher-looping-method 'Carousel'
 gsettings set org.gnome.shell.extensions.coverflowalttab animation-time 0.5
-gsettings set org.gnome.shell.extensions.coverflowalttab easing-function 'ease-in-out-sine'
+# gsettings get org.gnome.shell.extensions.coverflowalttab easing-function
+# gsettings set org.gnome.shell.extensions.coverflowalttab easing-function 'ease-out-quad'
+# gsettings set org.gnome.shell.extensions.coverflowalttab easing-function 'ease-out-cubic'
+# gsettings set org.gnome.shell.extensions.coverflowalttab easing-function 'ease-out-quart'
+gsettings set org.gnome.shell.extensions.coverflowalttab easing-function 'ease-out-quint'
+# gsettings set org.gnome.shell.extensions.coverflowalttab easing-function 'ease-out-sine'
 gsettings set org.gnome.shell.extensions.coverflowalttab preview-to-monitor-ratio 0.75
+# gsettings get org.gnome.shell.extensions.coverflowalttab preview-to-monitor-ratio
+# gsettings reset org.gnome.shell.extensions.coverflowalttab preview-to-monitor-ratio
 # 恢复默认设置
 gsettings reset-recursively org.gnome.shell.extensions.coverflowalttab
 
 # Night Theme Switcher
 # 递归列出某个 Schema 的键值
-gsettings list-recursively org.gnome.shell.extensions.nightthemeswitcher.commands
+# gsettings list-recursively org.gnome.shell.extensions.nightthemeswitcher.commands
 gsettings set org.gnome.shell.extensions.nightthemeswitcher.commands enabled true
-gsettings set org.gnome.shell.extensions.nightthemeswitcher.commands sunrise "gsettings set org.gnome.desktop.interface color-scheme 'default'\ngsettings set org.gnome.desktop.interface cursor-theme 'capitaine-cursors'\ngsettings set org.gnome.desktop.interface icon-theme 'WhiteSur-light'\ngsettings set org.gnome.shell.extensions.user-theme name 'WhiteSur-Light'\ngsettings set org.gnome.desktop.interface gtk-theme 'adw-gtk3'\ngsettings set org.gnome.desktop.wm.preferences theme 'WhiteSur-Light'"
-gsettings set org.gnome.shell.extensions.nightthemeswitcher.commands sunset "gsettings set org.gnome.desktop.interface color-scheme 'prefer-dark'\ngsettings set org.gnome.desktop.interface cursor-theme 'capitaine-cursors-light'\ngsettings set org.gnome.desktop.interface icon-theme 'WhiteSur-dark'\ngsettings set org.gnome.shell.extensions.user-theme name 'WhiteSur-Dark'\ngsettings set org.gnome.desktop.interface gtk-theme 'adw-gtk3-dark'\ngsettings set org.gnome.desktop.wm.preferences theme 'WhiteSur-Dark'"
+gsettings set org.gnome.shell.extensions.nightthemeswitcher.commands sunrise "gsettings set org.gnome.desktop.interface color-scheme 'default'\ngsettings set org.gnome.desktop.interface cursor-theme 'capitaine-cursors'\ngsettings set org.gnome.desktop.interface icon-theme 'WhiteSur-light'\ngsettings set org.gnome.shell.extensions.user-theme name 'WhiteSur-Light'\ngsettings set org.gnome.desktop.interface gtk-theme 'WhiteSur-Light'\ngsettings set org.gnome.desktop.wm.preferences theme 'WhiteSur-Light'"
+gsettings set org.gnome.shell.extensions.nightthemeswitcher.commands sunset "gsettings set org.gnome.desktop.interface color-scheme 'prefer-dark'\ngsettings set org.gnome.desktop.interface cursor-theme 'capitaine-cursors'\ngsettings set org.gnome.desktop.interface icon-theme 'WhiteSur-dark'\ngsettings set org.gnome.shell.extensions.user-theme name 'WhiteSur-Dark'\ngsettings set org.gnome.desktop.interface gtk-theme 'WhiteSur-Dark'\ngsettings set org.gnome.desktop.wm.preferences theme 'WhiteSur-Dark'"
 
 
 # Hide Top Bar

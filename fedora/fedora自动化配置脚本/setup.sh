@@ -18,6 +18,38 @@ gsettings set org.gnome.mutter center-new-windows true
 # 设置电量百分比
 gsettings set org.gnome.desktop.interface show-battery-percentage true
 
+# 系统外观主题和Gnome扩展插件优化
+# 自定义快捷键优化，Super-管理窗口、Alt-管理工作区
+gsettings set org.gnome.desktop.wm.keybindings switch-to-workspace-last "['<Alt>End']"
+gsettings set org.gnome.desktop.wm.keybindings switch-to-workspace-left "['<Alt>Left']"
+gsettings set org.gnome.desktop.wm.keybindings switch-to-workspace-right "['<Alt>Right']"
+gsettings set org.gnome.desktop.wm.keybindings switch-to-workspace-1 "['<Alt>1']"
+gsettings set org.gnome.desktop.wm.keybindings switch-to-workspace-2 "['<Alt>2']"
+gsettings set org.gnome.desktop.wm.keybindings switch-to-workspace-3 "['<Alt>3']"
+# 当前工作区内的窗口切换
+gsettings set org.gnome.desktop.wm.keybindings switch-windows "['<Super>T']"
+# 窗口在工作区移动
+gsettings set org.gnome.desktop.wm.keybindings move-to-workspace-last "['<Alt><Super>End']"
+gsettings set org.gnome.desktop.wm.keybindings move-to-workspace-left "['<Alt><Super>Left']"
+gsettings set org.gnome.desktop.wm.keybindings move-to-workspace-right "['<Alt><Super>Right']"
+gsettings set org.gnome.desktop.wm.keybindings move-to-workspace-1 "['<Alt><Super>1']"
+gsettings set org.gnome.desktop.wm.keybindings move-to-workspace-2 "['<Alt><Super>2']"
+gsettings set org.gnome.desktop.wm.keybindings move-to-workspace-3 "['<Alt><Super>3']"
+# 隐藏/显示当前工作区的所有窗口
+gsettings set org.gnome.desktop.wm.keybindings show-desktop "['<Alt><Super>h']"
+# 键盘 F 功能键
+# gsettings list-recursively org.gnome.settings-daemon.plugins.media-keys
+# 媒体声音控制
+gsettings set org.gnome.settings-daemon.plugins.media-keys mic-mute "['F2']"
+gsettings set org.gnome.settings-daemon.plugins.media-keys volume-down "['F3']"
+gsettings set org.gnome.settings-daemon.plugins.media-keys volume-up "['F4']"
+# 弹出 U 盘
+gsettings set org.gnome.settings-daemon.plugins.media-keys eject "['F5']"
+# 播放器控制
+gsettings set org.gnome.settings-daemon.plugins.media-keys next "['F8']"
+gsettings set org.gnome.settings-daemon.plugins.media-keys play "['F9']"
+gsettings set org.gnome.settings-daemon.plugins.media-keys previous "['F10']"
+
 ## 1. 系统基础配置 ==============================================
 # 安装插件
 sudo dnf install -y dnf-plugins-core
@@ -131,7 +163,6 @@ sudo dnf install -y \
     evolution \
     gnome-tweaks \
     gnome-extensions-app \
-    google-chrome-stable \
     libreoffice-langpack-zh-Hans
 # evolution配置qq邮箱授权码： embwnsuwkdjrebge
 

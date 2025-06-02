@@ -22,8 +22,16 @@ echo "正在安装图形界面优化工具..."
 sudo dnf install -y gnome-tweaks gnome-extensions-app
 flatpak install -y flathub com.mattjakeman.ExtensionManager
 
-# 安装常用GNOME扩展
 # dnf list gnome-shell-extension*
+# 卸载自带无用 Gnome 扩展插件
+echo "卸载自带无用 Gnome 扩展插件..."
+sudo dnf remove -y \
+gnome-shell-extension-apps-menu \
+gnome-shell-extension-places-menu \
+gnome-shell-extension-window-list \
+gnome-shell-extension-launch-new-instance
+
+# 安装常用GNOME扩展
 echo "正在安装常用GNOME扩展..."
 sudo dnf install -y \
 gnome-shell-extension-user-theme \
@@ -32,13 +40,14 @@ gnome-shell-extension-blur-my-shell \
 gnome-shell-extension-just-perfection \
 gnome-shell-extension-drive-menu \
 gnome-shell-extension-appindicator \
-gnome-shell-extension-forge \
 gnome-shell-extension-caffeine \
 gnome-shell-extension-gsconnect \
 gnome-shell-extension-workspace-indicator \
 gnome-shell-extension-auto-move-windows \
 gnome-shell-extension-no-overview \
-gnome-shell-extension-netspeed
+gnome-shell-extension-light-style \
+gnome-shell-extension-system-monitor \
+gnome-shell-extension-forge
 
 # 启用已安装的扩展
 # gnome-extensions list
@@ -54,8 +63,16 @@ gnome-extensions enable gsconnect@andyholmes.github.io
 gnome-extensions enable workspace-indicator@gnome-shell-extensions.gcampax.github.com
 gnome-extensions enable auto-move-windows@gnome-shell-extensions.gcampax.github.com
 gnome-extensions enable no-overview@fthx
-gnome-extensions enable netspeed@hedayaty.gmail.com
+gnome-extensions enable light-style@gnome-shell-extensions.gcampax.github.com
+gnome-extensions enable system-monitor@gnome-shell-extensions.gcampax.github.com
+# gnome-extensions enable forge@jmmaranan.com
 
+# 列出所有已安装的 Schema
+# gsettings list-schemas
+# 递归列出某个 Schema 的键值（例如 org.gnome.shell.extensions.dash-to-dock）
+# gsettings list-recursively org.gnome.shell.extensions.dash-to-dock
+# 恢复默认设置
+# gsettings reset-recursively org.gnome.shell.extensions.dash-to-dock
 # 配置 Dash to Dock (自定义Dock栏)
 echo "正在配置Dash to Dock..."
 gsettings set org.gnome.shell.extensions.dash-to-dock dock-position 'BOTTOM'
@@ -94,7 +111,7 @@ gsettings set org.gnome.desktop.wm.preferences workspace-names "['主工作区',
 # auto-move-windows
 echo "正在配置auto-move-windows..."
 # gsettings list-recursively org.gnome.shell.extensions.auto-move-windows
-gsettings set org.gnome.shell.extensions.auto-move-windows application-list "['org.gnome.Settings.desktop:1', 'org.gnome.Nautilus.desktop:1', 'org.gnome.Software.desktop:1', 'org.gnome.TextEditor.desktop:1', 'org.gnome.SystemMonitor.desktop:1', 'org.gnome.tweaks.desktop:1', 'org.gnome.Shell.Extensions.desktop:1', 'com.mattjakeman.ExtensionManager.desktop:1', 'org.gnome.Loupe.desktop:1', 'yelp.desktop:1', 'org.gnome.DiskUtility.desktop:1', 'org.gnome.baobab.desktop:1', 'org.gnome.Tour.desktop:1', 'org.gnome.Maps.desktop:1', 'org.gnome.Firmware.desktop:1', 'org.gnome.Calculator.desktop:1', 'org.freedesktop.MalcontentControl.desktop:1', 'org.gnome.Contacts.desktop:1', 'org.gnome.Calendar.desktop:1', 'org.gnome.Totem.desktop:1', 'org.gnome.Weather.desktop:1', 'org.gnome.Evince.desktop:1', 'org.gnome.Snapshot.desktop:1', 'org.gnome.clocks.desktop:1', 'io.missioncenter.MissionCenter.desktop:1', 'org.gnome.Characters.desktop:1', 'org.gnome.font-viewer.desktop:1', 'com.github.tchx84.Flatseal.desktop:1', 'ca.desrt.dconf-editor.desktop:1', 'de.haeckerfelix.Fragments.desktop:1', 'io.github.realmazharhussain.GdmSettings.desktop:1', 'it.mijorus.gearlever.desktop:1', 'gnome-system-monitor-kde.desktop:1', 'io.gitlab.adhami3310.Impression.desktop:1', 'io.github.nokse22.inspector.desktop:1', 'com.obsproject.Studio.desktop:1', 'page.tesk.Refine.desktop:1', 'org.fedoraproject.MediaWriter.desktop:1', 'net.nokyan.Resources.desktop:1', 'org.gnome.Evolution.desktop:1', 'io.github.vikdevelop.SaveDesktop.desktop:1', 'org.gnome.World.PikaBackup.desktop:1', 'timeshift-gtk.desktop:1', 'jetbrains-toolbox.desktop:2', 'jetbrains-idea-1e43afa8-7b74-4314-97e3-6dc2fcd19338.desktop:2', 'jetbrains-datagrip-6221d402-4768-423c-8755-982ae877905f.desktop:2', 'me.iepure.devtoolbox.desktop:2', 'switchhosts.desktop:2', 'com.github.marhkb.Pods.desktop:2', 'io.podman_desktop.PodmanDesktop.desktop:2', 'tabby.desktop:2', 'com.visualstudio.code.desktop:2', 're.sonny.Playhouse.desktop:2', 'org.gnome.Builder.desktop:2', 'com.qq.QQ.desktop:3', 'com.tencent.WeChat.desktop:3', 'org.mozilla.firefox.desktop:3', 'com.microsoft.Edge.desktop:3', 'com.google.Chrome.desktop:3', 'com.github.gmg137.netease-cloud-music-gtk.desktop:3', 'io.github.qier222.YesPlayMusic.desktop:3', 'com.github.neithern.g4music.desktop:3', 'cn.feishu.Feishu.desktop:3', 'libreoffice-startcenter.desktop:3', 'libreoffice-calc.desktop:3', 'libreoffice-impress.desktop:3', 'libreoffice-writer.desktop:3', 'io.typora.Typora.desktop:3', 'md.obsidian.Obsidian.desktop:3']"
+gsettings set org.gnome.shell.extensions.auto-move-windows application-list "['org.gnome.Settings.desktop:1', 'org.gnome.Software.desktop:1', 'org.gnome.TextEditor.desktop:1', 'org.gnome.SystemMonitor.desktop:1', 'org.gnome.tweaks.desktop:1', 'org.gnome.Shell.Extensions.desktop:1', 'com.mattjakeman.ExtensionManager.desktop:1', 'org.gnome.Loupe.desktop:1', 'yelp.desktop:1', 'org.gnome.DiskUtility.desktop:1', 'org.gnome.baobab.desktop:1', 'org.gnome.Tour.desktop:1', 'org.gnome.Maps.desktop:1', 'org.gnome.Firmware.desktop:1', 'org.gnome.Calculator.desktop:1', 'org.freedesktop.MalcontentControl.desktop:1', 'org.gnome.Contacts.desktop:1', 'org.gnome.Calendar.desktop:1', 'org.gnome.Totem.desktop:1', 'org.gnome.Weather.desktop:1', 'org.gnome.Evince.desktop:1', 'org.gnome.Snapshot.desktop:1', 'org.gnome.clocks.desktop:1', 'io.missioncenter.MissionCenter.desktop:1', 'org.gnome.Characters.desktop:1', 'org.gnome.font-viewer.desktop:1', 'com.github.tchx84.Flatseal.desktop:1', 'ca.desrt.dconf-editor.desktop:1', 'de.haeckerfelix.Fragments.desktop:1', 'io.github.realmazharhussain.GdmSettings.desktop:1', 'it.mijorus.gearlever.desktop:1', 'gnome-system-monitor-kde.desktop:1', 'io.gitlab.adhami3310.Impression.desktop:1', 'io.github.nokse22.inspector.desktop:1', 'com.obsproject.Studio.desktop:1', 'page.tesk.Refine.desktop:1', 'org.fedoraproject.MediaWriter.desktop:1', 'net.nokyan.Resources.desktop:1', 'org.gnome.Evolution.desktop:1', 'io.github.vikdevelop.SaveDesktop.desktop:1', 'org.gnome.World.PikaBackup.desktop:1', 'timeshift-gtk.desktop:1', 'jetbrains-toolbox.desktop:2', 'jetbrains-idea-1e43afa8-7b74-4314-97e3-6dc2fcd19338.desktop:2', 'jetbrains-datagrip-6221d402-4768-423c-8755-982ae877905f.desktop:2', 'me.iepure.devtoolbox.desktop:2', 'switchhosts.desktop:2', 'com.github.marhkb.Pods.desktop:2', 'io.podman_desktop.PodmanDesktop.desktop:2', 'tabby.desktop:2', 'com.visualstudio.code.desktop:2', 're.sonny.Playhouse.desktop:2', 'org.gnome.Builder.desktop:2', 'com.qq.QQ.desktop:3', 'com.tencent.WeChat.desktop:3', 'org.mozilla.firefox.desktop:3', 'com.microsoft.Edge.desktop:3', 'com.google.Chrome.desktop:3', 'com.github.gmg137.netease-cloud-music-gtk.desktop:3', 'io.github.qier222.YesPlayMusic.desktop:3', 'com.github.neithern.g4music.desktop:3', 'cn.feishu.Feishu.desktop:3', 'libreoffice-startcenter.desktop:3', 'libreoffice-calc.desktop:3', 'libreoffice-impress.desktop:3', 'libreoffice-writer.desktop:3', 'io.typora.Typora.desktop:3', 'md.obsidian.Obsidian.desktop:3']"
 
 # 进入到下载目录
 cd ~/下载
