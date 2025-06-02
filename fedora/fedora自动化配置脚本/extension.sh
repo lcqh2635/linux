@@ -26,11 +26,12 @@ User Avatar In Quick Settings
 Status Area Horizontal Spacing
 No overview at start-up
 Show Desktop Button
-Impatience
+# 在 Just Perfection 的定制菜单中有调整动画的选项，不用额外添加 Impatience 这个扩展插件
+# Impatience
 App menu is back
 IBus Tweaker
 # 右键点击 panel 上的输入法，点击“首选项”，将“候选词排列方向”改为竖直
-
+Gnome 4x UI Improvements
 
 # 优质推荐 Gnome 扩展
 Add to Desktop
@@ -76,6 +77,7 @@ ddterm
 Astra Monitor
 Applications Overview Tooltip
 Hide Universal Access
+
 
 nautilus ~/.local/share/gnome-shell/extensions
 sudo dnf install -y just gettext
@@ -183,7 +185,7 @@ gsettings set org.gnome.shell.extensions.coverflowalttab animation-time 0.5
 # gsettings set org.gnome.shell.extensions.coverflowalttab easing-function 'ease-out-quart'
 gsettings set org.gnome.shell.extensions.coverflowalttab easing-function 'ease-out-quint'
 # gsettings set org.gnome.shell.extensions.coverflowalttab easing-function 'ease-out-sine'
-gsettings set org.gnome.shell.extensions.coverflowalttab preview-to-monitor-ratio 0.75
+# gsettings set org.gnome.shell.extensions.coverflowalttab preview-to-monitor-ratio 0.75
 # gsettings get org.gnome.shell.extensions.coverflowalttab preview-to-monitor-ratio
 # gsettings reset org.gnome.shell.extensions.coverflowalttab preview-to-monitor-ratio
 # 恢复默认设置
@@ -196,6 +198,20 @@ gsettings set org.gnome.shell.extensions.nightthemeswitcher.commands enabled tru
 gsettings set org.gnome.shell.extensions.nightthemeswitcher.commands sunrise "gsettings set org.gnome.desktop.interface color-scheme 'default'\ngsettings set org.gnome.desktop.interface cursor-theme 'capitaine-cursors'\ngsettings set org.gnome.desktop.interface icon-theme 'WhiteSur-light'\ngsettings set org.gnome.shell.extensions.user-theme name 'WhiteSur-Light'\ngsettings set org.gnome.desktop.interface gtk-theme 'WhiteSur-Light'\ngsettings set org.gnome.desktop.wm.preferences theme 'WhiteSur-Light'"
 gsettings set org.gnome.shell.extensions.nightthemeswitcher.commands sunset "gsettings set org.gnome.desktop.interface color-scheme 'prefer-dark'\ngsettings set org.gnome.desktop.interface cursor-theme 'capitaine-cursors'\ngsettings set org.gnome.desktop.interface icon-theme 'WhiteSur-dark'\ngsettings set org.gnome.shell.extensions.user-theme name 'WhiteSur-Dark'\ngsettings set org.gnome.desktop.interface gtk-theme 'WhiteSur-Dark'\ngsettings set org.gnome.desktop.wm.preferences theme 'WhiteSur-Dark'"
 
+
+gsettings set org.gnome.desktop.interface color-scheme 'default'
+gsettings set org.gnome.desktop.interface cursor-theme 'capitaine-cursors'
+gsettings set org.gnome.desktop.interface icon-theme 'WhiteSur-light'
+gsettings set org.gnome.shell.extensions.user-theme name 'WhiteSur-Light'
+gsettings set org.gnome.desktop.interface gtk-theme 'WhiteSur-Light'
+gsettings set org.gnome.desktop.wm.preferences theme 'WhiteSur-Light'
+
+gsettings set org.gnome.desktop.interface color-scheme 'prefer-dark'
+gsettings set org.gnome.desktop.interface cursor-theme 'capitaine-cursors'
+gsettings set org.gnome.desktop.interface icon-theme 'WhiteSur-dark'
+gsettings set org.gnome.shell.extensions.user-theme name 'WhiteSur-Dark'
+gsettings set org.gnome.desktop.interface gtk-theme 'WhiteSur-Dark'
+gsettings set org.gnome.desktop.wm.preferences theme 'WhiteSur-Dark'
 
 # Hide Top Bar
 # 列出所有已安装的 Schema
