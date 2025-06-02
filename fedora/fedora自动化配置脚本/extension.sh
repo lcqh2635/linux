@@ -4,7 +4,11 @@
 echo "开始系统..."
 sudo dnf update -y && sudo dnf upgrade -y
 
+# https://gnome.pages.gitlab.gnome.org/gnome-browser-integration/pages/installation-guide.html
+dnf install gnome-browser-connector
+
 # gnome-extensions list
+# gnome-extensions install
 # dnf search gnome-shell-extension*
 # dnf list gnome-shell-extension*
 
@@ -57,6 +61,7 @@ Top Bar Organizer
 Quick Settings Audio Panel
 Fedora Linux Update Indicator
 Window Gestures
+# Weather O'Clock
 VirtualBox applet
 # https://github.com/Sominemo/Fildem-Gnome-45
 App menu is back
@@ -68,11 +73,35 @@ Color Picker
 Show Desktop Button
 Bluetooth Battery Meter
 ddterm
-Weather O'Clock
 Astra Monitor
 Applications Overview Tooltip
 Hide Universal Access
 
+nautilus ~/.local/share/gnome-shell/extensions
+sudo dnf install -y just gettext
+# gnome-extensions list
+# 通过源码安装的Gnome扩展插件需要重新登陆才有效
+# Hide Top Bar
+git clone https://gitcode.com/gh_mirrors/hi/hidetopbar.git --depth=1
+cd hidetopbar
+make
+gnome-extensions install ./hidetopbar.zip
+
+# Rounded Window Corners Reborn
+git clone https://gitcode.com/gh_mirrors/rou/rounded-window-corners.git --depth=1
+cd rounded-window-corners
+just install
+
+# Rounded Corners
+git clone https://github.com/lennart-k/gnome-rounded-corners.git --depth=1
+cd gnome-rounded-corners
+make
+gnome-extensions install ./hidetopbar.zip
+gnome-extensions enable hidetopbar@mathieu.bidon.ca
+
+
+gnome-extensions enable hidetopbar@mathieu.bidon.ca
+gnome-extensions enable rounded-window-corners@fxgn
 
 # 解决用户 Gnome 扩展无法使用 gsettings 的问题
 for EXT_DIR in ~/.local/share/gnome-shell/extensions/*/; do

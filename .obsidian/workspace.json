@@ -11,14 +11,14 @@
             "id": "d505fa1d93e2e9bb",
             "type": "leaf",
             "state": {
-              "type": "markdown",
+              "type": "split-diff-view",
               "state": {
-                "file": "fedora/5、Fedora 安装常用软件.md",
-                "mode": "source",
-                "source": false
+                "aFile": "fedora/fedora自动化配置脚本/beautify.sh",
+                "bFile": "fedora/fedora自动化配置脚本/beautify.sh",
+                "aRef": ""
               },
-              "icon": "lucide-file",
-              "title": "5、Fedora 安装常用软件"
+              "icon": "diff",
+              "title": "Diff: beautify.sh"
             }
           }
         ]
@@ -179,6 +179,7 @@
   },
   "active": "d505fa1d93e2e9bb",
   "lastOpenFiles": [
+    "fedora/5、Fedora 安装常用软件.md",
     "fedora/1、Fedora 初次安装后配置加速镜像.md",
     "CSS动画/项目常用依赖的命令列表.md~",
     "CSS动画/UnoCSS组件/unocss-components/plugins/consoleArt.ts~",
@@ -214,7 +215,6 @@
     "CSS动画/UnoCSS组件/unocss-components/node_modules/@intlify/vue-i18n-extensions/node_modules/vue-i18n/node_modules/@intlify/core-base/README.md",
     "CSS动画/UnoCSS组件/unocss-components/node_modules/@unocss/vite/node_modules/chokidar/node_modules/readdirp/README.md",
     "CSS动画/UnoCSS组件/unocss-components/node_modules/@unocss/cli/node_modules/chokidar/node_modules/readdirp/README.md",
-    "CSS动画/UnoCSS组件/unocss-components/node_modules/@nuxt/kit/node_modules/unimport/node_modules/unplugin/README.md",
     "CSS动画/UnoCSS组件/unocss-components/node_modules/@vitest/ui/dist/client/favicon.svg",
     "CSS动画/UnoCSS组件/unocss-components/node_modules/@vitest/ui/dist/client/bg.png",
     "CSS动画/UnoCSS组件/unocss-components/node_modules/@unocss/inspector/dist/client/favicon.svg",
