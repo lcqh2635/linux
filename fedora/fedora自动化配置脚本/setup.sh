@@ -113,8 +113,8 @@ sudo dnf install -y libva-utils vulkan-tools		# 提供 vainfo 命令的包
 # 网站国内可用 DNS 测试 ping https://ping.chinaz.com/www.youtube.com
 echo "
 # GitHub Start
-20.27.177.113    github.com
-185.199.108.133    raw.githubusercontent.com
+20.205.243.166    github.com
+185.199.109.133    raw.githubusercontent.com
 103.200.30.143    archive.org
 # GitHub End
 " | sudo tee -a /etc/hosts

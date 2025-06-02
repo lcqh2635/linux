@@ -49,6 +49,7 @@ IBus Tweaker
 Night Theme Switcher
 Notification Banner Reloaded
 Quick Settings Tweaks
+Media Controls
 Search Light
 SettingsCenter
 Top Bar Organizer
@@ -66,6 +67,11 @@ Custom Command Toggle
 Color Picker
 Show Desktop Button
 Bluetooth Battery Meter
+ddterm
+Weather O'Clock
+Astra Monitor
+Applications Overview Tooltip
+Hide Universal Access
 
 
 # 解决用户 Gnome 扩展无法使用 gsettings 的问题

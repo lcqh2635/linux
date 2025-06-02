@@ -27,8 +27,7 @@ sudo apt install gnome-tweaks gnome-software gnome-shell-extension-manager chrom
 sudo yay -Sy gnome-shell-extension-manager chrome-gnome-shell
 echo "==========开始安装flatpak相关软件=========="
 # 安装并配置 flatpak
-sudo apt install flatpak gnome-software-plugin-flatpak gnome-software-plugin-snap -y
-sudo yay -Sy flatpak gnome-software-plugin-flatpak
+sudo apt install -y flatpak gnome-software-plugin-flatpak gnome-software-plugin-snap
 # flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
 flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
 # 配置 flatpak 上海交大下载加速镜像仓库

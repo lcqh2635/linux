@@ -55,11 +55,13 @@ flatpak install flathub io.github.prateekmedia.appimagepool
 flatpak install flathub org.dupot.easyflatpak
 flatpak install flathub io.github.swordpuffin.wardrobe
 flatpak install flathub com.apifox.Apifox
+sudo flatpak install -y flathub cn.apipost.apipost
 flatpak install flathub com.github.KRTirtho.Spotube
 flatpak install flathub com.jeffser.Alpaca
 flatpak install flathub io.missioncenter.MissionCenter
 flatpak install flathub org.flameshot.Flameshot
 flatpak install flathub com.dingtalk.DingTalk
+flatpak install flathub cn.feishu.Feishu
 
 
 https://github.com/quick123official/quick_redis_blog/releases
@@ -89,9 +91,9 @@ ca.desrt.dconf-editor
 flatpak list --app
 flatpak list --user  # 查看用户级安装的应用
 flatpak list --system  # 查看系统级安装的应用
-flatpak search  org.gtk.Gtk3theme
 
-org.gtk.Gtk3theme.Adwaita-dark
+flatpak search org.gtk.Gtk3theme
+flatpak list org.gtk.Gtk3theme
 sudo flatpak install -y flathub \
 org.gtk.Gtk3theme.Adwaita-dark \
 org.gtk.Gtk3theme.Mojave-light \
@@ -100,7 +102,6 @@ org.gtk.Gtk3theme.adw-gtk3-dark
 
 
 sudo dnf install -y tabby-terminal
-
 # 游戏
 flatpak install flathub com.valvesoftware.Steam -y
 flatpak install flathub io.github.Foldex.AdwSteamGtk -y
