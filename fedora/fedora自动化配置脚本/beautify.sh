@@ -86,15 +86,38 @@ gsettings set org.gnome.shell.extensions.dash-to-dock running-indicator-dominant
 
 # 配置 Blur My Shell (透明模糊效果)
 echo "正在配置Blur My Shell..."
+# gsettings list-recursively org.gnome.shell.extensions.blur-my-shell.applications
 # 恢复默认设置 gsettings reset-recursively org.gnome.shell.extensions.blur-my-shell
 gsettings set org.gnome.shell.extensions.blur-my-shell.panel force-light-text true
 gsettings set org.gnome.shell.extensions.blur-my-shell.panel style-panel 1
 gsettings set org.gnome.shell.extensions.blur-my-shell.hidetopbar compatibility true
 gsettings set org.gnome.shell.extensions.blur-my-shell.appfolder style-dialogs 2
 gsettings set org.gnome.shell.extensions.blur-my-shell.dash-to-dock style-dash-to-dock 1
+# 启用应用程序窗口模糊
 gsettings set org.gnome.shell.extensions.blur-my-shell.applications blur true
+# 启用自定义设置（必须为true才能生效）
+gsettings set org.gnome.shell.extensions.blur-my-shell.applications customize true
+# 颜色叠加（RGBA，此处为透明黑色，增强暗色模式对比度）
+# gsettings reset org.gnome.shell.extensions.blur-my-shell.applications color
+gsettings set org.gnome.shell.extensions.blur-my-shell.applications color "(0.05, 0.05, 0.05, 0.1)"
+# 噪点强度（0.3=轻微颗粒感，模拟真实磨砂玻璃）
+gsettings set org.gnome.shell.extensions.blur-my-shell.applications noise-amount 0.3
+# 噪点明度（0.1=低对比噪点，自然不刺眼）
+gsettings set org.gnome.shell.extensions.blur-my-shell.applications noise-lightness 0.1
+# 模糊强度（50=中等模糊，过高会显脏）
+gsettings set org.gnome.shell.extensions.blur-my-shell.applications sigma 50
+# 亮度微调（1.0=原始亮度，建议保持）
+gsettings set org.gnome.shell.extensions.blur-my-shell.applications brightness 1.0
+# 基础透明度（220/255≈86%，平衡通透与朦胧感）
+gsettings set org.gnome.shell.extensions.blur-my-shell.applications opacity 220
+# 禁用动态透明度（避免窗口切换时效果闪烁）
 gsettings set org.gnome.shell.extensions.blur-my-shell.applications dynamic-opacity false
-gsettings set org.gnome.shell.extensions.blur-my-shell.applications whitelist "['org.gnome.Nautilus', 'org.gnome.Settings', 'org.gnome.Software', 'org.gnome.TextEditor', 'org.gnome.Ptyxis', 'org.gnome.SystemMonitor', 'org.gnome.tweaks', 'org.gnome.Extensions', 'org.gnome.Shell.Extensions', 'com.mattjakeman.ExtensionManager', 'com.github.tchx84.Flatseal']"
+# 禁用在Overview（超级键视图）中模糊（避免卡顿）
+gsettings set org.gnome.shell.extensions.blur-my-shell.applications blur-on-overview false
+# 不强制所有应用模糊（避免兼容性问题）
+gsettings set org.gnome.shell.extensions.blur-my-shell.applications enable-all false
+# 应用毛玻璃效果的应用列表
+gsettings set org.gnome.shell.extensions.blur-my-shell.applications whitelist "['org.gnome.Nautilus', 'org.gnome.Settings', 'org.gnome.Software', 'org.gnome.TextEditor', 'org.gnome.Ptyxis', 'org.gnome.SystemMonitor', 'org.gnome.tweaks', 'org.gnome.Extensions', 'org.gnome.Shell.Extensions', 'com.mattjakeman.ExtensionManager', 'com.github.tchx84.Flatseal', 'io.github.flattool.Warehouse', 'com.gitee.gmg137.NeteaseCloudMusicGtk4', 'yesplaymusic', 'obsidian', 'Typora', 'Google-chrome', 'Microsoft-edge', 'tabby', 'org.gnome.Builder', 'io.missioncenter.MissionCenter', 'com.github.neithern.g4music', 'com.github.amezin.ddterm', 'me.iepure.devtoolbox', 'org.gnome.Calendar', 're.sonny.Playhouse', 'de.haeckerfelix.Fragments', 'it.mijorus.gearlever', 'io.github.realmazharhussain.GdmSettings', 'Bitwarden', 'net.nokyan.Resources', 'Steam++', 'io.github.vikdevelop.SaveDesktop', 'io.gitlab.adhami3310.Impression']"
 gsettings set org.gnome.shell.extensions.blur-my-shell.coverflow-alt-tab blur false
 
 # Just Perfection（微调 GNOME Shell 的细节，隐藏冗余元素、调整动画速度等）
