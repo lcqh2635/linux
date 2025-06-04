@@ -205,6 +205,10 @@ gsettings set org.gnome.desktop.interface icon-theme 'WhiteSur-light'
 gsettings set org.gnome.shell.extensions.user-theme name 'WhiteSur-Light'
 gsettings set org.gnome.desktop.interface gtk-theme 'WhiteSur-Light'
 gsettings set org.gnome.desktop.wm.preferences theme 'WhiteSur-Light'
+gsettings set org.gnome.shell.extensions.blur-my-shell.panel style-panel 1
+gsettings set org.gnome.shell.extensions.blur-my-shell.appfolder style-dialogs 2
+gsettings set org.gnome.shell.extensions.dash-to-dock background-color 'rgb(153,193,241)'
+gsettings set org.gnome.shell.extensions.blur-my-shell.dash-to-dock style-dash-to-dock 1
 
 gsettings set org.gnome.desktop.interface color-scheme 'prefer-dark'
 gsettings set org.gnome.desktop.interface cursor-theme 'capitaine-cursors'
@@ -212,6 +216,15 @@ gsettings set org.gnome.desktop.interface icon-theme 'WhiteSur-dark'
 gsettings set org.gnome.shell.extensions.user-theme name 'WhiteSur-Dark'
 gsettings set org.gnome.desktop.interface gtk-theme 'WhiteSur-Dark'
 gsettings set org.gnome.desktop.wm.preferences theme 'WhiteSur-Dark'
+gsettings set org.gnome.shell.extensions.blur-my-shell.panel style-panel 2
+gsettings set org.gnome.shell.extensions.blur-my-shell.appfolder style-dialogs 3
+gsettings set org.gnome.shell.extensions.dash-to-dock background-color 'rgb(26,95,180)'
+gsettings set org.gnome.shell.extensions.blur-my-shell.dash-to-dock style-dash-to-dock 2
+
+
+
+
+
 
 # Hide Top Bar
 # 列出所有已安装的 Schema

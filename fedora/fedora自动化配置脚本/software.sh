@@ -96,11 +96,10 @@ flatpak search org.gtk.Gtk3theme
 flatpak list org.gtk.Gtk3theme
 sudo flatpak install -y flathub \
 org.gtk.Gtk3theme.Adwaita-dark \
-org.gtk.Gtk3theme.Mojave-light \
 org.gtk.Gtk3theme.adw-gtk3 \
 org.gtk.Gtk3theme.adw-gtk3-dark
 
-
+# https://packagecloud.io/eugeny/tabby/install#bash-rpm
 sudo dnf install -y tabby-terminal
 # 游戏
 flatpak install flathub com.valvesoftware.Steam -y

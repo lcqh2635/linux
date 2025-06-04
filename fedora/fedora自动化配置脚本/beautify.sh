@@ -16,6 +16,29 @@ gsettings set org.gnome.desktop.interface show-battery-percentage true
 echo "开始更新系统并升级所有已安装的包..."
 sudo dnf update -y && sudo dnf upgrade -y
 
+# 安装字体
+echo "正在安装额外字体..."
+sudo dnf install -y \
+adobe-source-han-sans-cn-fonts \
+adobe-source-han-serif-cn-fonts \
+jetbrains-mono-fonts
+# 设置系统字体
+gsettings set org.gnome.desktop.interface font-name '思源黑体 CN Medium 12'
+gsettings set org.gnome.desktop.interface document-font-name '思源宋体 CN Medium 12'
+gsettings set org.gnome.desktop.interface monospace-font-name 'JetBrains Mono Medium 12'
+gsettings set org.gnome.desktop.wm.preferences titlebar-font '思源黑体 CN Bold 12'
+gsettings set org.gnome.desktop.interface font-antialiasing 'rgba'
+gsettings set org.gnome.desktop.interface font-hinting 'slight'
+
+# 安装 ubuntu 的声音主题
+# dnf list *-sound-theme
+sudo dnf install -y yaru-sound-theme
+gsettings set org.gnome.desktop.sound theme-name 'Yaru'
+# 系统级目录（所有用户生效）	ls /usr/share/sounds/gnome/default/alerts
+# /usr/share/sounds/gnome/default/alerts/
+# 用户级目录（仅当前用户生效）	ls ~/.local/share/sounds/
+# ~/.local/share/sounds/
+
 # 安装必要依赖
 echo "正在安装图形界面优化工具..."
 # 图形界面工具: gnome-tweaks, gnome-extensions-app
@@ -83,15 +106,39 @@ gsettings set org.gnome.shell.extensions.dash-to-dock scroll-action 'cycle-windo
 gsettings set org.gnome.shell.extensions.dash-to-dock custom-theme-shrink true
 gsettings set org.gnome.shell.extensions.dash-to-dock running-indicator-style 'DASHES'
 gsettings set org.gnome.shell.extensions.dash-to-dock running-indicator-dominant-color true
+# gsettings get org.gnome.shell.extensions.dash-to-dock background-color
+gsettings set org.gnome.shell.extensions.dash-to-dock background-color 'rgb(153,193,241)'
+gsettings set org.gnome.shell.extensions.dash-to-dock transparency-mode 'FIXED'
+gsettings set org.gnome.shell.extensions.dash-to-dock background-opacity 0.2
+
+# 默认主题色/强调色，蓝色
+# gsettings set org.gnome.shell.extensions.dash-to-dock background-color 'rgb(153,193,241)'
+# gsettings set org.gnome.shell.extensions.dash-to-dock background-color 'rgb(26,95,180)'
+# 绿色
+# gsettings set org.gnome.shell.extensions.dash-to-dock background-color 'rgb(143,240,164)'
+# gsettings set org.gnome.shell.extensions.dash-to-dock background-color 'rgb(38,162,105)'
+# 紫色
+# gsettings set org.gnome.shell.extensions.dash-to-dock background-color 'rgb(220,138,221)'
+# gsettings set org.gnome.shell.extensions.dash-to-dock background-color 'rgb(97,53,131)'
+# 白色
+# gsettings set org.gnome.shell.extensions.dash-to-dock background-color 'rgb(255,255,255)'
+# gsettings set org.gnome.shell.extensions.dash-to-dock background-color 'rgb(154,153,150)'
+
 
 # 配置 Blur My Shell (透明模糊效果)
 echo "正在配置Blur My Shell..."
+# gsettings list-recursively org.gnome.shell.extensions.blur-my-shell.panel
 # gsettings list-recursively org.gnome.shell.extensions.blur-my-shell.applications
 # 恢复默认设置 gsettings reset-recursively org.gnome.shell.extensions.blur-my-shell
+# 设置自定义模糊效果
+# gsettings get org.gnome.shell.extensions.blur-my-shell pipelines
+gsettings set org.gnome.shell.extensions.blur-my-shell pipelines "{'pipeline_default': {'name': <'Default'>, 'effects': <[<{'type': <'native_static_gaussian_blur'>, 'id': <'effect_96853877854398'>, 'params': <@a{sv} {}>}>]>}, 'pipeline_panel': {'name': <'blur panel'>, 'effects': <[<{'type': <'native_static_gaussian_blur'>, 'id': <'effect_75271904090067'>, 'params': <{'unscaled_radius': <100>, 'brightness': <1>}>}>]>}, 'pipeline_dock': {'name': <'blur dock'>, 'effects': <[<{'type': <'native_static_gaussian_blur'>, 'id': <'effect_05617311186362'>, 'params': <{'unscaled_radius': <100>, 'brightness': <1>}>}>, <{'type': <'corner'>, 'id': <'effect_78081442948590'>, 'params': <{'radius': <24>}>}>]>}}"
+gsettings set org.gnome.shell.extensions.blur-my-shell.panel pipeline 'pipeline_panel'
 gsettings set org.gnome.shell.extensions.blur-my-shell.panel force-light-text true
 gsettings set org.gnome.shell.extensions.blur-my-shell.panel style-panel 1
 gsettings set org.gnome.shell.extensions.blur-my-shell.hidetopbar compatibility true
 gsettings set org.gnome.shell.extensions.blur-my-shell.appfolder style-dialogs 2
+gsettings set org.gnome.shell.extensions.blur-my-shell.dash-to-dock pipeline 'pipeline_dock'
 gsettings set org.gnome.shell.extensions.blur-my-shell.dash-to-dock style-dash-to-dock 1
 # 启用应用程序窗口模糊
 gsettings set org.gnome.shell.extensions.blur-my-shell.applications blur true
@@ -117,7 +164,7 @@ gsettings set org.gnome.shell.extensions.blur-my-shell.applications blur-on-over
 # 不强制所有应用模糊（避免兼容性问题）
 gsettings set org.gnome.shell.extensions.blur-my-shell.applications enable-all false
 # 应用毛玻璃效果的应用列表
-gsettings set org.gnome.shell.extensions.blur-my-shell.applications whitelist "['org.gnome.Nautilus', 'org.gnome.Settings', 'org.gnome.Software', 'org.gnome.TextEditor', 'org.gnome.Ptyxis', 'org.gnome.SystemMonitor', 'org.gnome.tweaks', 'org.gnome.Extensions', 'org.gnome.Shell.Extensions', 'com.mattjakeman.ExtensionManager', 'com.github.tchx84.Flatseal', 'io.github.flattool.Warehouse', 'com.gitee.gmg137.NeteaseCloudMusicGtk4', 'yesplaymusic', 'obsidian', 'Typora', 'Google-chrome', 'Microsoft-edge', 'tabby', 'org.gnome.Builder', 'io.missioncenter.MissionCenter', 'com.github.neithern.g4music', 'com.github.amezin.ddterm', 'me.iepure.devtoolbox', 'org.gnome.Calendar', 're.sonny.Playhouse', 'de.haeckerfelix.Fragments', 'it.mijorus.gearlever', 'io.github.realmazharhussain.GdmSettings', 'Bitwarden', 'net.nokyan.Resources', 'Steam++', 'io.github.vikdevelop.SaveDesktop', 'io.gitlab.adhami3310.Impression']"
+gsettings set org.gnome.shell.extensions.blur-my-shell.applications whitelist "['org.gnome.Nautilus', 'org.gnome.Settings', 'org.gnome.Software', 'org.gnome.TextEditor', 'org.gnome.Ptyxis', 'org.gnome.SystemMonitor', 'org.gnome.tweaks', 'org.gnome.Extensions', 'org.gnome.Shell.Extensions', 'com.mattjakeman.ExtensionManager', 'com.github.tchx84.Flatseal', 'io.github.flattool.Warehouse', 'com.gitee.gmg137.NeteaseCloudMusicGtk4', 'yesplaymusic', 'Typora', 'Google-chrome', 'Microsoft-edge', 'tabby', 'org.gnome.Builder', 'io.missioncenter.MissionCenter', 'com.github.neithern.g4music', 'com.github.amezin.ddterm', 'me.iepure.devtoolbox', 'org.gnome.Calendar', 're.sonny.Playhouse', 'de.haeckerfelix.Fragments', 'it.mijorus.gearlever', 'io.github.realmazharhussain.GdmSettings', 'Bitwarden', 'net.nokyan.Resources', 'Steam++', 'io.github.vikdevelop.SaveDesktop', 'io.gitlab.adhami3310.Impression']"
 gsettings set org.gnome.shell.extensions.blur-my-shell.coverflow-alt-tab blur false
 
 # Just Perfection（微调 GNOME Shell 的细节，隐藏冗余元素、调整动画速度等）
@@ -268,20 +315,6 @@ gsettings set org.gnome.shell.extensions.user-theme name 'WhiteSur-Light'
 # 设置GTK主题
 gsettings set org.gnome.desktop.interface gtk-theme 'WhiteSur-Light'
 gsettings set org.gnome.desktop.wm.preferences theme 'WhiteSur-Light'
-
-# 安装字体
-echo "正在安装额外字体..."
-sudo dnf install -y \
-adobe-source-han-sans-cn-fonts \
-adobe-source-han-serif-cn-fonts \
-jetbrains-mono-fonts
-# 设置系统字体
-gsettings set org.gnome.desktop.interface font-name '思源黑体 CN Medium 12'
-gsettings set org.gnome.desktop.interface document-font-name '思源宋体 CN Medium 12'
-gsettings set org.gnome.desktop.interface monospace-font-name 'JetBrains Mono Medium 12'
-gsettings set org.gnome.desktop.wm.preferences titlebar-font '思源黑体 CN Bold 12'
-gsettings set org.gnome.desktop.interface font-antialiasing 'rgba'
-gsettings set org.gnome.desktop.interface font-hinting 'slight'
 
 # 清理临时文件
 echo "正在清理临时文件..."
