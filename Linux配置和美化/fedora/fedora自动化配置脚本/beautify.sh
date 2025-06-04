@@ -192,8 +192,12 @@ gsettings set org.gnome.shell.extensions.auto-move-windows application-list "['o
 # 进入到下载目录
 cd ~/下载
 git clone https://gitee.com/llf2635/linux.git --depth=1
+cp -v ~/下载/linux/壁纸/* ~/.local/share/backgrounds/
+cp -v ~/文档/linux/壁纸/* ~/.local/share/backgrounds/
 
 # 免费壁纸网站 https://haowallpaper.com/homeView
+# ls ~/.local/share/backgrounds
+# ls /usr/share/backgrounds
 # 安装 WhiteSur 壁纸
 echo "准备开始安装WhiteSur-wallpapers壁纸..."
 if [ ! -d "WhiteSur-wallpapers" ]; then
@@ -210,8 +214,6 @@ if [ ! -d "WhiteSur-wallpapers" ]; then
     cd ..
     rm -rf WhiteSur-wallpapers
 fi
-# ls ~/.local/share/backgrounds
-# ls /usr/share/backgrounds
 
 # 安装 WhiteSur 光标主题
 echo "准备开始安装WhiteSur-cursors光标主题..."
