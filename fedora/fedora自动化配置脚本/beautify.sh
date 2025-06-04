@@ -192,6 +192,7 @@ gsettings set org.gnome.shell.extensions.auto-move-windows application-list "['o
 # 进入到下载目录
 cd ~/下载
 
+# 免费壁纸网站 https://haowallpaper.com/homeView
 # 安装 WhiteSur 壁纸
 echo "准备开始安装WhiteSur-wallpapers壁纸..."
 if [ ! -d "WhiteSur-wallpapers" ]; then
