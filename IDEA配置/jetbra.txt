@@ -17,8 +17,10 @@ sudo bash install.sh
 
 2024.2及以上的版本，初次安装之后会选择所在区域，如果选择了 China Mainland(中国大陆)，后续使用激活码之后，会反复弹窗，这里选择未指定区域，不要选择中国大陆，原因是新版本会拦截.cn的域名，致使激活许可被吊销，所以千万注意不要选择大陆，不然会导致激活后也无法使用
 
+# IDEA 虚拟机配置文件存放位置
+cat ~/.config/JetBrains/IntelliJIdea*/idea64.vmoptions
 
-
+echo "
 -Xms1g
 -Xmx5g
 -XX:ReservedCodeCacheSize=512m
@@ -38,10 +40,10 @@ sudo bash install.sh
 -Drecreate.x11.input.method=true
 -XX:ErrorFile=$USER_HOME/java_error_in_idea_%p.log
 -XX:HeapDumpPath=$USER_HOME/java_error_in_idea.hprof
-
 --add-opens=java.base/jdk.internal.org.objectweb.asm=ALL-UNNAMED
 --add-opens=java.base/jdk.internal.org.objectweb.asm.tree=ALL-UNNAMED
 -javaagent:/home/lcqh/.jetbra/ja-netfilter.jar=jetbrains
+" | sudo tee -a ~/.config/JetBrains/IntelliJIdea*/idea64.vmoptions
 
 
 -Xms1g
@@ -74,44 +76,30 @@ sudo bash install.sh
 --add-opens=java.base/jdk.internal.org.objectweb.asm=ALL-UNNAMED
 --add-opens=java.base/jdk.internal.org.objectweb.asm.tree=ALL-UNNAMED
 -javaagent:/home/lcqh/.jetbra/ja-netfilter.jar=jetbrains
--Dide.managed.by.toolbox=/home/lcqh/.local/share/JetBrains/Toolbox/bin/jetbrains-toolbox
--Dtoolbox.notification.token=1f0b06ee-8c9a-45d6-a870-88a664c38d6f
--Dtoolbox.notification.portFile=/home/lcqh/.cache/JetBrains/Toolbox/ports/9971c690-3c2e-4e7d-bdae-0c9ba46b9f74.port
-
-
-
 
 
 ZGC（Z Garbage Collector）是一个专门为现代服务器设计的垃圾收集器，旨在提供低延迟的垃圾收集，适合那些对响应时间要求较高的应用程序。ZGC 有许多可以调整的参数，以满足不同应用程序的需求。以下是一些常用的 ZGC 调优参数：
-
 1. **基础参数**：
     - `-XX:+UnlockExperimentalVMOptions`：解锁实验性选项，ZGC 默认是实验性功能，此选项是必需的。
     - `-XX:+UseZGC`：启用 ZGC。
-
 2. **堆大小相关**：
     - `-XX:InitialHeapSize=<size>`：设置初始堆大小。
     - `-XX:MaxHeapSize=<size>`：设置最大堆大小。
     - `-XX:MinHeapSize=<size>`：设置最小堆大小，从 JDK 15 开始可用。
-
 3. **并发预清理**：
     - `-XX:ConcGCThreads=<n>`：设置并发 GC 线程数，默认是 CPU 核心数的一半。
     - `-XX:ParallelGCThreads=<n>`：设置并行 GC 线程数，默认是 CPU 核心数。
-
 4. **垃圾收集暂停时间**：
     - `-XX:MaxPauseMillis=<n>`：设置最大的垃圾收集暂停时间，单位是毫秒。这是 ZGC 的主要卖点之一，可以帮助控制应用程序的最大暂停时间。
     - `-XX:InitiatingHeapOccupancyPercent=<n>`：当堆的使用率达到该百分比时，触发垃圾收集。默认值是 45%，可以根据应用的具体需求调整。
-
 5. **内存映射相关**：
     - `-XX:RegionSize=<size>`：设置每个区域的大小，默认为 2MB。区域大小的选择会影响内存布局和垃圾收集效率。
     - `-XX:NumRegions=<n>`：设置堆中区域的数量，通常不需要手动设置。
-
 6. **垃圾收集日志记录**：
     - `-XX:ZGCLog=filename`：设置 ZGC 日志的输出文件名。
     - `-XX:+PrintGCDateStamps` 和 `-XX:+PrintGCDetails`：这些选项可以帮助你更好地理解 GC 的行为。
-
 7. **其他选项**：
     - `-XX:ZHeapWasteFactor=<factor>`：设置堆的预留因子，用于预留未使用的内存区域以减少内存碎片，通常设置为 1 到 2 之间的值。
     - `-XX:ZPageFillAheadThreshold=<n>`：设置当页面中的空闲空间小于给定阈值时，提前填充页面。
     - `-XX:ZPageSize=<size>`：设置 ZGC 页面大小，这是从 JDK 15 开始引入的选项。
-
 请注意，这些参数的设置应根据应用程序的具体需求和运行环境来调整。在调整 ZGC 的参数时，可以参考官方文档以及通过监控工具来观察调整后的效果。调整垃圾收集器参数的目标是为了获得更好的应用性能和更低的延迟。

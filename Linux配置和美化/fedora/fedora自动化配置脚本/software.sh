@@ -131,6 +131,35 @@ fi
 
 # 下载 jetbrains-toolbox
 https://www.jetbrains.com/zh-cn/toolbox-app/download/download-thanks.html?platform=linux
+
+# IDEA 虚拟机配置文件存放位置
+cat ~/.config/JetBrains/IntelliJIdea*/idea64.vmoptions
+
+echo "
+-Xms1g
+-Xmx5g
+-XX:ReservedCodeCacheSize=512m
+-XX:+IgnoreUnrecognizedVMOptions
+-XX:+UnlockExperimentalVMOptions
+-XX:+UseZGC
+-XX:SoftRefLRUPolicyMSPerMB=50
+-XX:CICompilerCount=2
+-XX:+HeapDumpOnOutOfMemoryError
+-XX:-OmitStackTraceInFastThrow
+-ea
+-Dsun.io.useCanonCaches=false
+-Djdk.http.auth.tunneling.disabledSchemes=""
+-Djdk.attach.allowAttachSelf=true
+-Djdk.module.illegalAccess.silent=true
+-Dkotlinx.coroutines.debug=off
+-Drecreate.x11.input.method=true
+-XX:ErrorFile=$USER_HOME/java_error_in_idea_%p.log
+-XX:HeapDumpPath=$USER_HOME/java_error_in_idea.hprof
+--add-opens=java.base/jdk.internal.org.objectweb.asm=ALL-UNNAMED
+--add-opens=java.base/jdk.internal.org.objectweb.asm.tree=ALL-UNNAMED
+-javaagent:/home/lcqh/.jetbra/ja-netfilter.jar=jetbrains
+" | sudo tee -a ~/.config/JetBrains/IntelliJIdea*/idea64.vmoptions
+
 https://github.com/Eugeny/tabby/releases/download/v1.0.223/tabby-1.0.223-linux-x64.rpm
 # https://gitcode.com/gh_mirrors/ta/tabby
 # 参考 https://packagecloud.io/eugeny/tabby/install#bash-rpm
