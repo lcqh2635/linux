@@ -11,12 +11,12 @@
 # fi
 
 # gsettings 修改的是当前用户的 GNOME 配置，必须由 桌面用户（而非 root）执行。如果脚本通过 sudo 运行，命令会被忽略。
-# 设置窗口按钮位置 (右)
-gsettings set org.gnome.desktop.wm.preferences button-layout 'appmenu:minimize,maximize,close'
 # 设置新窗口居中显示
 gsettings set org.gnome.mutter center-new-windows true
 # 设置电量百分比
 gsettings set org.gnome.desktop.interface show-battery-percentage true
+# 设置窗口按钮位置 (右)
+gsettings set org.gnome.desktop.wm.preferences button-layout 'appmenu:minimize,maximize,close'
 
 # 系统外观主题和Gnome扩展插件优化
 # 自定义快捷键优化，Super-管理窗口、Alt-管理工作区

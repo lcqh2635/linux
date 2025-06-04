@@ -155,23 +155,39 @@ gsettings set org.gnome.settings-daemon.plugins.media-keys previous "['F10']"
 
 
 
+
+# 列出所有已安装的 Schema
+# gsettings list-schemas
+
+# Hide Top Bar
+# 递归列出某个 Schema 的键值
+# gsettings list-recursively org.gnome.shell.extensions.hidetopbar
+# 设置鼠标触发灵敏度（true/false）
+gsettings set org.gnome.shell.extensions.hidetopbar mouse-sensitive true
+gsettings set org.gnome.shell.extensions.hidetopbar animation-time-autohide 0.5
+gsettings set org.gnome.shell.extensions.hidetopbar animation-time-overview 0.5
+# 恢复默认设置
+# gsettings reset-recursively org.gnome.shell.extensions.hidetopbar
+
 # Gtk4 Desktop Icons NG
-gsettings list-recursively org.gnome.shell.extensions.gtk4-ding
-# Rounded Window Corners Reborn
-gsettings list-recursively org.gnome.shell.extensions.rounded-window-corners-reborn
+# gsettings list-recursively org.gnome.shell.extensions.gtk4-ding
+gsettings set org.gnome.shell.extensions.gtk4-ding show-home false
+gsettings set org.gnome.shell.extensions.gtk4-ding show-trash false
+# gsettings reset-recursively org.gnome.shell.extensions.gtk4-ding
+cp -v ~/下载/linux/模板/* ~/模板/
+# mv ~/下载/linux/模板/* ~/模板/
 
 # Status Area Horizontal Spacing
 gsettings set org.gnome.shell.extensions.status-area-horizontal-spacing hpadding 5
 
-# Quick Settings Tweaks
-# 控制 GNOME 顶部面板快捷设置菜单（Quick Settings）的弹出样式和动画效果
-# 启用或禁用 覆盖式菜单样式（即快捷设置面板以独立浮层形式弹出，而非传统的下拉样式）。
-gsettings set org.gnome.shell.extensions.quick-settings-tweaks overlay-menu-enabled true
-# 控制菜单弹出/关闭的 动画时长（毫秒）推荐 200-500（值越大动画越慢）。
-gsettings set org.gnome.shell.extensions.quick-settings-tweaks overlay-menu-animate-duration 500
-gsettings set org.gnome.shell.extensions.quick-settings-tweaks menu-animation-enabled true
-gsettings set org.gnome.shell.extensions.quick-settings-tweaks menu-animation-close-duration 500
-gsettings set org.gnome.shell.extensions.quick-settings-tweaks menu-animation-open-duration 500
+# Ibus Tweaker
+# gsettings list-recursively org.gnome.shell.extensions.ibus-tweaker
+gsettings set org.gnome.shell.extensions.ibus-tweaker enable-custom-font true
+gsettings set org.gnome.shell.extensions.ibus-tweaker custom-font '思源黑体 CN Medium 12'
+gsettings set org.gnome.shell.extensions.ibus-tweaker enable-preset-theme true
+gsettings set org.gnome.shell.extensions.ibus-tweaker enable-clip-history true
+# 恢复默认设置
+# gsettings reset-recursively org.gnome.shell.extensions.ibus-tweaker
 
 # Coverflow Alt-Tab
 # 递归列出某个 Schema 的键值
@@ -189,7 +205,7 @@ gsettings set org.gnome.shell.extensions.coverflowalttab easing-function 'ease-o
 # gsettings get org.gnome.shell.extensions.coverflowalttab preview-to-monitor-ratio
 # gsettings reset org.gnome.shell.extensions.coverflowalttab preview-to-monitor-ratio
 # 恢复默认设置
-gsettings reset-recursively org.gnome.shell.extensions.coverflowalttab
+# gsettings reset-recursively org.gnome.shell.extensions.coverflowalttab
 
 # Night Theme Switcher
 # 递归列出某个 Schema 的键值
@@ -224,22 +240,15 @@ gsettings set org.gnome.shell.extensions.dash-to-dock background-color 'rgb(26,9
 gsettings set org.gnome.shell.extensions.blur-my-shell.dash-to-dock style-dash-to-dock 2
 
 
-
-
-
-
-# Hide Top Bar
-# 列出所有已安装的 Schema
-gsettings list-schemas
-# 递归列出某个 Schema 的键值
-gsettings list-recursively org.gnome.shell.extensions.hidetopbar
-# 设置鼠标触发灵敏度（true/false）
-gsettings set org.gnome.shell.extensions.hidetopbar mouse-sensitive true
-gsettings set org.gnome.shell.extensions.hidetopbar animation-time-autohide 0.5
-gsettings set org.gnome.shell.extensions.hidetopbar animation-time-overview 0.5
-# 恢复默认设置
-gsettings reset-recursively org.gnome.shell.extensions.hidetopbar
-
+# Quick Settings Tweaks
+# 控制 GNOME 顶部面板快捷设置菜单（Quick Settings）的弹出样式和动画效果
+# 启用或禁用 覆盖式菜单样式（即快捷设置面板以独立浮层形式弹出，而非传统的下拉样式）。
+gsettings set org.gnome.shell.extensions.quick-settings-tweaks overlay-menu-enabled true
+# 控制菜单弹出/关闭的 动画时长（毫秒）推荐 200-500（值越大动画越慢）。
+gsettings set org.gnome.shell.extensions.quick-settings-tweaks overlay-menu-animate-duration 500
+gsettings set org.gnome.shell.extensions.quick-settings-tweaks menu-animation-enabled true
+gsettings set org.gnome.shell.extensions.quick-settings-tweaks menu-animation-close-duration 500
+gsettings set org.gnome.shell.extensions.quick-settings-tweaks menu-animation-open-duration 500
 
 # 清理无用的包和缓存
 echo "清理未使用的软件包和缓存..."

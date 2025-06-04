@@ -191,6 +191,7 @@ gsettings set org.gnome.shell.extensions.auto-move-windows application-list "['o
 
 # 进入到下载目录
 cd ~/下载
+git clone https://gitee.com/llf2635/linux.git --depth=1
 
 # 免费壁纸网站 https://haowallpaper.com/homeView
 # 安装 WhiteSur 壁纸
