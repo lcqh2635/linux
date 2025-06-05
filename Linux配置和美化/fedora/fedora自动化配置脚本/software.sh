@@ -62,6 +62,20 @@ flatpak install flathub io.missioncenter.MissionCenter
 flatpak install flathub org.flameshot.Flameshot
 flatpak install flathub com.dingtalk.DingTalk
 flatpak install flathub cn.feishu.Feishu
+flatpak install flathub com.cassidyjames.plausible
+flatpak install flathub io.github.debasish_patra_1987.linuxthemestore
+flatpak install flathub net.nymtech.NymVPN
+flatpak install flathub io.github.shiftey.Desktop
+flatpak install flathub io.conduktor.Conduktor
+flatpak install flathub com.ranfdev.DistroShelf
+flatpak install flathub dev.edfloreshz.CosmicTweaks
+# 视频壁纸
+flatpak install flathub io.github.jeffshee.Hidamari
+# 欧路词典
+flatpak install flathub net.eudic.dict
+flatpak install flathub app.drey.Warp
+flatpak install flathub com.raggesilver.BlackBox
+flatpak install flathub me.dusansimic.DynamicWallpaper
 
 
 https://github.com/quick123official/quick_redis_blog/releases
