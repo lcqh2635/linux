@@ -213,6 +213,31 @@ echo 'export RUSTUP_UPDATE_ROOT=https://mirrors.tuna.tsinghua.edu.cn/rustup/rust
 echo 'export RUSTUP_DIST_SERVER=https://mirrors.tuna.tsinghua.edu.cn/rustup' >> ~/.bash_profile
 echo "安装rust..."
 sudo dnf install -y rust cargo
+# 配置 Cargo 加速镜像仓库
+echo '
+[source.crates-io]
+replace-with = 'ustc'  # 可选：ustc、tuna、sjtu、aliyun、rsproxy
+
+# 中国科学技术大学镜像
+[source.ustc]
+registry = "https://mirrors.ustc.edu.cn/crates.io-index"
+
+# 清华大学镜像
+[source.tuna]
+registry = "https://mirrors.tuna.tsinghua.edu.cn/git/crates.io-index.git"
+
+# 上海交通大学镜像
+[source.sjtu]
+registry = "https://mirrors.sjtug.sjtu.edu.cn/git/crates.io-index"
+
+# 阿里云镜像
+[source.aliyun]
+registry = "sparse+https://mirrors.aliyun.com/crates.io-index/"
+
+# Rust官方中文社区镜像（仅限中国）
+[source.rsproxy]
+registry = "https://rsproxy.cn/crates.io-index"
+' >> ~/.cargo/config.toml
 # 验证安装
 echo 你刚安装的 rust 版本号为：$(rustc --version)
 echo 你刚安装的 cargo 版本号为：$(cargo --version)
@@ -228,8 +253,12 @@ echo 你刚安装的 cargo 版本号为：$(cargo --version)
 # sdk install mvnd
 # sdk install gradle
 
-# 安装 JDK（示例：安装 Temurin JDK 17）
+# 安装 JDK（示例：安装 Temurin JDK 17）https://docs.fedoraproject.org/en-US/quick-docs/installing-java/
 sudo dnf install -y java-21-openjdk java-latest-openjdk
+# dnf list java-*-openjdk
+# 在 Java 版本之间切换
+# sudo alternatives --config java
+# nautilus admin:/usr/lib/jvm
 sudo dnf install -y maven gradle
 echo 你刚安装的 java 版本号为：$(java --version)
 echo 你刚安装的 mvn 版本号为：$(mvn --version)

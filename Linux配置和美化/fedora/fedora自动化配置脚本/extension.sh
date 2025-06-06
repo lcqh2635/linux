@@ -293,3 +293,5 @@ sudo dnf autoremove -y
 sudo dnf clean all
 
 echo "系统配置成功完成!"
+
+git clone https://github.com/michaelfan0310/deep-library.git --depth=1

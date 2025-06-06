@@ -76,6 +76,11 @@ flatpak install flathub net.eudic.dict
 flatpak install flathub app.drey.Warp
 flatpak install flathub com.raggesilver.BlackBox
 flatpak install flathub me.dusansimic.DynamicWallpaper
+flatpak install flathub com.github.d4nj1.tlpui
+flatpak install flathub ca.desrt.dconf-editor
+flatpak install flathub org.wezfurlong.wezterm
+# 漫画
+flatpak install flathub info.febvre.Komikku
 
 
 https://github.com/quick123official/quick_redis_blog/releases
