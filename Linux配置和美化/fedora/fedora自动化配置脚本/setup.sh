@@ -212,11 +212,17 @@ registry = "https://registry.npmmirror.com/"
 echo 'export RUSTUP_UPDATE_ROOT=https://mirrors.tuna.tsinghua.edu.cn/rustup/rustup' >> ~/.bash_profile
 echo 'export RUSTUP_DIST_SERVER=https://mirrors.tuna.tsinghua.edu.cn/rustup' >> ~/.bash_profile
 echo "安装rust..."
-sudo dnf install -y rust cargo
-# 配置 Cargo 加速镜像仓库
-echo '
+# 安装 rustup
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+# 加载环境变量
+source $HOME/.cargo/env
+rustup update
+# rustup self uninstall
+#  配置 Cargo 国内加速镜像源
+mkdir -p ~/.cargo && cat >> ~/.cargo/config.toml << 'EOF'
+# 配置 Cargo 国内加速镜像源，可选：ustc、tuna、sjtu、aliyun、rsproxy
 [source.crates-io]
-replace-with = 'ustc'  # 可选：ustc、tuna、sjtu、aliyun、rsproxy
+replace-with = 'ustc'
 
 # 中国科学技术大学镜像
 [source.ustc]
@@ -231,13 +237,15 @@ registry = "https://mirrors.tuna.tsinghua.edu.cn/git/crates.io-index.git"
 registry = "https://mirrors.sjtug.sjtu.edu.cn/git/crates.io-index"
 
 # 阿里云镜像
+# 使用稀疏协议（sparse）减少元数据下载量，大幅加速
 [source.aliyun]
 registry = "sparse+https://mirrors.aliyun.com/crates.io-index/"
 
 # Rust官方中文社区镜像（仅限中国）
 [source.rsproxy]
 registry = "https://rsproxy.cn/crates.io-index"
-' >> ~/.cargo/config.toml
+EOF
+
 # 验证安装
 echo 你刚安装的 rust 版本号为：$(rustc --version)
 echo 你刚安装的 cargo 版本号为：$(cargo --version)
@@ -324,3 +332,5 @@ echo "1. 重启系统使所有更改生效"
 echo "2. 使用GNOME Tweaks进一步自定义桌面"
 echo "3. 检查系统设置中的区域和语言选项"
 echo "==================================================="
+
+# sudo dnf install -y zsh zsh-syntax-highlighting zsh-autosuggestions

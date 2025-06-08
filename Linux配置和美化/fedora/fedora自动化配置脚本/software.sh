@@ -105,8 +105,20 @@ org.libreoffice.LibreOffice \
 com.protonvpn.www \
 com.rustdesk.RustDesk
 
+# https://flathub.org/zh-Hans/apps/search?q=jetbrains
+flatpak install flathub com.jetbrains.IntelliJ-IDEA-Ultimate
+flatpak install flathub com.jetbrains.WebStorm
+flatpak install flathub com.jetbrains.RustRover
+flatpak install flathub com.jetbrains.GoLand
+flatpak install flathub com.jetbrains.PyCharm-Professional
+flatpak install flathub com.jetbrains.DataGrip
+
 cn.apipost.apipost
 ca.desrt.dconf-editor
+
+
+
+
 flatpak list --app
 flatpak list --user  # 查看用户级安装的应用
 flatpak list --system  # 查看系统级安装的应用
