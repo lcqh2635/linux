@@ -115,10 +115,11 @@ mozilla-ublock-origin
 
 # 安装必要的多媒体编解码器以支持高效的视频解码	about:support
 # dnf list gstreamer1-plugin*
-sudo dnf install -y gstreamer1-plugins-{bad-\*,good-\*,base} \
-               gstreamer1-libav \
-               gstreamer1-plugin-openh264 \
-               gstreamer1-plugins-bad-freeworld
+sudo dnf install -y \
+gstreamer1-plugins-{bad-\*,good-\*,base} \
+gstreamer1-libav \
+gstreamer1-plugin-openh264 \
+gstreamer1-plugins-bad-freeworld
 # FFmpeg-Free 是 Fedora 默认提供的一个受限版本，仅包含开源且无专利限制的编解码器。
 # FFmpeg 是一个功能强大的多媒体处理工具集，支持视频、音频的编码、解码、转码、流媒体传输等功能。
 # 它支持广泛的编解码器（如 H.264、HEVC、AAC 等），包括一些专利保护的编解码器。 
@@ -289,6 +290,36 @@ echo 你刚安装的 podman 版本号为：$(podman --version)
 # systemctl start podman
 # Rootless 用户级 socket
 # systemctl --user enable --now podman.socket
+
+# 安装 PostgreSQL
+# 参考fedora官方文档 https://docs.fedoraproject.org/zh_CN/quick-docs/postgresql/
+sudo dnf install -y postgresql-server postgresql-contrib
+# 初始化数据库
+sudo postgresql-setup --initdb
+# 启动服务并设置开机自启
+sudo systemctl enable --now postgresql
+# systemctl status postgresql
+# psql --version
+# 默认 postgres 管理员密码为空，此处设置为 postgres
+sudo -u postgres psql -c "ALTER USER postgres WITH PASSWORD 'postgres';"
+# PostgreSQL 配置文件
+# sudo cat /var/lib/pgsql/data/postgresql.conf
+# 使用 sed 修改 postgresql.conf
+sudo sed -i "s/^#listen_addresses = 'localhost'/listen_addresses = '*'/g" /var/lib/pgsql/data/postgresql.conf
+sudo sh -c "echo 'host    all             all             0.0.0.0/0               md5' >> /var/lib/pgsql/data/pg_hba.conf"
+sudo sed -i 's/^host    all             all             127\.0\.0\.1\/32            ident$/host    all             all             127.0.0.1\/32            md5/' /var/lib/pgsql/data/pg_hba.conf
+# nautilus admin:/var/lib/pgsql/data/pg_hba.conf
+# 重启 PostgreSQL 生效
+sudo systemctl restart postgresql
+# firewall-cmd --zone=public --list-ports
+sudo firewall-cmd --add-port=5432/tcp --permanent
+sudo firewall-cmd --reload
+
+# 使用默认的 postgres 用户，登录 PostgreSQL 控制台
+sudo -u postgres psql
+CREATE DATABASE testdb;
+CREATE USER lcqh WITH PASSWORD '479368';
+GRANT ALL PRIVILEGES ON DATABASE testdb TO lcqh;
 
 # 安装VirtualBox
 echo "安装VirtualBox..."

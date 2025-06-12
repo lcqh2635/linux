@@ -196,6 +196,7 @@ cp -v ~/下载/linux/壁纸/* ~/.local/share/backgrounds/
 cp -v ~/文档/linux/壁纸/* ~/.local/share/backgrounds/
 
 # 免费壁纸网站 https://haowallpaper.com/homeView
+# https://bz.zzzmh.cn/index
 # ls ~/.local/share/backgrounds
 # ls /usr/share/backgrounds
 # 安装 WhiteSur 壁纸
@@ -250,6 +251,7 @@ sudo dnf install -y adw-gtk3-theme
 # https://discussion.fedoraproject.org/t/qt-app-theme-in-gnome/102649
 # https://pkgs.org/search/?q=QGnomePlatform
 # https://pkgs.org/search/?q=Qadwaitadecorations
+# dnf list qadwaitadecorations*
 sudo dnf install -y \
 qgnomeplatform-qt5 \
 qgnomeplatform-qt6 \
