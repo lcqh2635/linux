@@ -29,9 +29,10 @@ Show Desktop Button
 # 在 Just Perfection 的定制菜单中有调整动画的选项，不用额外添加 Impatience 这个扩展插件
 # Impatience
 App menu is back
-IBus Tweaker
 # 右键点击 panel 上的输入法，点击“首选项”，将“候选词排列方向”改为竖直
-Gnome 4x UI Improvements
+IBus Tweaker
+Top Bar Organizer
+
 
 # 优质推荐 Gnome 扩展
 Add to Desktop
@@ -71,6 +72,7 @@ Custom Window Controls
 # https://github.com/icedman/custom-window-controls
 Custom Command Toggle
 Color Picker
+Desktop Widgets
 Show Desktop Button
 Bluetooth Battery Meter
 ddterm

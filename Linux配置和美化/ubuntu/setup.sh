@@ -15,9 +15,14 @@ apt install -y software-properties-common
 
 # 2. 安装常用工具
 echo "2. 安装常用工具..."
-apt install -y vim git curl wget htop net-tools tree unzip zip \
-    gnupg2 ca-certificates lsb-release ubuntu-restricted-extras \
-    ffmpeg neofetch
+apt install -y \
+vim git curl wget htop net-tools tree unzip zip \
+gnupg2 ca-certificates lsb-release ubuntu-restricted-extras \
+ffmpeg neofetch
+
+# 安装 ptyxis 作为系统默认终端模拟器
+sudo apt install -y ptyxis
+
 
 # 3. 配置时区
 echo "3. 配置时区为亚洲/上海..."
@@ -25,10 +30,14 @@ timedatectl set-timezone Asia/Shanghai
 
 # 4. 配置中文环境支持
 echo "4. 配置中文环境支持..."
+# apt list language-pack-zh-hans
 apt install -y language-pack-zh-hans
 update-locale LANG=zh_CN.UTF-8 LC_MESSAGES=POSIX
 
+
 # 5. 配置APT镜像源（使用清华源）
+点击并打开 “软件和更新” 将下载自的内容设置为 “位于中国的服务器”
+
 echo "5. 配置APT镜像源为清华源..."
 SOURCES_LIST="/etc/apt/sources.list"
 if [ -f "$SOURCES_LIST" ]; then
@@ -90,14 +99,36 @@ sudo sed -i "s@http://.*security.ubuntu.com@http://mirrors.huaweicloud.com@g" /e
 
 echo "==========开始安装gnome相关软件=========="
 # 下载系统基础工具，安装GNOME插件和扩展
-apt search gnome-shell-extension*
+# apt list gnome-shell-extension*
 sudo apt install -y \
 gnome-tweaks gnome-software \
-gnome-shell-extension-prefs \
-gnome-shell-extension-manager
+gnome-shell-extension-manager \
+gnome-shell-extension-user-theme \
+gnome-shell-extension-alphabetical-grid \
+gnome-shell-extension-appindicator \
+gnome-shell-extension-auto-move-windows \
+gnome-shell-extension-drive-menu \
+gnome-shell-extension-gsconnect
 
-gnome-shell-extensions/noble
-gnome-shell-extension-gsconnect/noble
+
+
+gnome-shell-extension-dashtodock
+git clone https://github.com/micheleg/dash-to-dock.git
+make -C dash-to-dock install
+
+git clone https://github.com/aunetx/blur-my-shell
+cd blur-my-shell
+make install
+
+gnome-shell-extension-autohidetopbar
+git clone https://gitlab.gnome.org/tuxor1337/hidetopbar.git
+cd hidetopbar
+make
+gnome-extensions install ./hidetopbar.zip
+
+
+
+
 
 echo "==========开始安装flatpak相关软件=========="
 # 安装并配置 flatpak
@@ -108,6 +139,19 @@ flatpak remote-add --if-not-exists flathub https://mirrors.ustc.edu.cn/flathub
 flatpak remote-modify flathub --url=https://mirror.sjtu.edu.cn/flathub
 # 卸载 snap软件商店和默认snap火狐浏览器
 sudo snap remove snap-store firefox
+
+
+# Fedora默认安装了Flatpak，只要配置Flatpak加速镜像即可
+echo "开始配置Flatpak加速镜像..."
+# 添加 Flathub 官方仓库
+flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
+# 修改 Flathub 仓库地址为国内镜像
+# 1、上海交大 Flatpak 镜像源 https://mirrors.sjtug.sjtu.edu.cn/docs/flathub
+# sudo flatpak remote-modify flathub --url=https://mirror.sjtu.edu.cn/flathub
+# 2、中科大 Flatpak 镜像源（处于测试阶段） https://mirrors.ustc.edu.cn/help/flathub.html
+# sudo flatpak remote-modify flathub --url=https://mirrors.ustc.edu.cn/flathub
+
+
 
 
 sudo add-apt-repository ppa:papirus/papirus

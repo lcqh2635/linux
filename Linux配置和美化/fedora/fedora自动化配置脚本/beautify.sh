@@ -30,6 +30,11 @@ gsettings set org.gnome.desktop.wm.preferences titlebar-font '思源黑体 CN Bo
 gsettings set org.gnome.desktop.interface font-antialiasing 'rgba'
 gsettings set org.gnome.desktop.interface font-hinting 'slight'
 
+# gsettings reset org.gnome.desktop.interface font-name
+# gsettings reset org.gnome.desktop.interface document-font-name
+# gsettings reset org.gnome.desktop.interface monospace-font-name
+# gsettings reset org.gnome.desktop.wm.preferences titlebar-font
+
 # 安装 ubuntu 的声音主题
 # dnf list *-sound-theme
 sudo dnf install -y yaru-sound-theme
@@ -109,7 +114,7 @@ gsettings set org.gnome.shell.extensions.dash-to-dock running-indicator-dominant
 # gsettings get org.gnome.shell.extensions.dash-to-dock background-color
 gsettings set org.gnome.shell.extensions.dash-to-dock background-color 'rgb(153,193,241)'
 gsettings set org.gnome.shell.extensions.dash-to-dock transparency-mode 'FIXED'
-gsettings set org.gnome.shell.extensions.dash-to-dock background-opacity 0.2
+gsettings set org.gnome.shell.extensions.dash-to-dock background-opacity 0.3
 
 # 默认主题色/强调色，蓝色
 # gsettings set org.gnome.shell.extensions.dash-to-dock background-color 'rgb(153,193,241)'
@@ -132,7 +137,7 @@ echo "正在配置Blur My Shell..."
 # 恢复默认设置 gsettings reset-recursively org.gnome.shell.extensions.blur-my-shell
 # 设置自定义模糊效果
 # gsettings get org.gnome.shell.extensions.blur-my-shell pipelines
-gsettings set org.gnome.shell.extensions.blur-my-shell pipelines "{'pipeline_default': {'name': <'Default'>, 'effects': <[<{'type': <'native_static_gaussian_blur'>, 'id': <'effect_96853877854398'>, 'params': <@a{sv} {}>}>]>}, 'pipeline_panel': {'name': <'blur panel'>, 'effects': <[<{'type': <'native_static_gaussian_blur'>, 'id': <'effect_75271904090067'>, 'params': <{'unscaled_radius': <100>, 'brightness': <1>}>}>, <{'type': <'color'>, 'id': <'effect_36769853581304'>, 'params': <{'color': <(0.43016666173934937, 0.75861907005310059, 0.88999998569488525, 0.2)>}>}>]>}, 'pipeline_dock': {'name': <'blur dock'>, 'effects': <[<{'type': <'native_static_gaussian_blur'>, 'id': <'effect_05617311186362'>, 'params': <{'unscaled_radius': <100>, 'brightness': <1>}>}>, <{'type': <'corner'>, 'id': <'effect_78081442948590'>, 'params': <{'radius': <24>}>}>]>}}"
+gsettings set org.gnome.shell.extensions.blur-my-shell pipelines "{'pipeline_default': {'name': <'Default'>, 'effects': <[<{'type': <'native_static_gaussian_blur'>, 'id': <'effect_96853877854398'>, 'params': <@a{sv} {}>}>]>}, 'pipeline_panel': {'name': <'blur panel'>, 'effects': <[<{'type': <'native_static_gaussian_blur'>, 'id': <'effect_75271904090067'>, 'params': <{'unscaled_radius': <100>, 'brightness': <1>}>}>, <{'type': <'color'>, 'id': <'effect_36769853581304'>, 'params': <{'color': <(0.4, 0.7, 0.9, 0.3)>}>}>]>}, 'pipeline_dock': {'name': <'blur dock'>, 'effects': <[<{'type': <'native_static_gaussian_blur'>, 'id': <'effect_05617311186362'>, 'params': <{'unscaled_radius': <100>, 'brightness': <1>}>}>, <{'type': <'corner'>, 'id': <'effect_78081442948590'>, 'params': <{'radius': <20>}>}>]>}}"
 gsettings set org.gnome.shell.extensions.blur-my-shell.panel pipeline 'pipeline_panel'
 gsettings set org.gnome.shell.extensions.blur-my-shell.panel force-light-text true
 gsettings set org.gnome.shell.extensions.blur-my-shell.panel style-panel 1
@@ -191,9 +196,10 @@ gsettings set org.gnome.shell.extensions.auto-move-windows application-list "['o
 
 # 进入到下载目录
 cd ~/下载
-git clone https://gitee.com/llf2635/linux.git --depth=1
-cp -v ~/下载/linux/壁纸/* ~/.local/share/backgrounds/
-cp -v ~/文档/linux/壁纸/* ~/.local/share/backgrounds/
+# git clone https://gitee.com/llf2635/linux.git --depth=1
+git clone https://gitee.com/llf2635/linux-wallpapers.git --depth=1
+cp -v ~/下载/linux-wallpapers/Gnome/* ~/.local/share/backgrounds/
+# flatpak install flathub me.dusansimic.DynamicWallpaper
 
 # 免费壁纸网站 https://haowallpaper.com/homeView
 # https://bz.zzzmh.cn/index
@@ -211,7 +217,8 @@ if [ ! -d "WhiteSur-wallpapers" ]; then
     # 安装随时间变化的动态壁纸
     sudo ./install-gnome-backgrounds.sh
     # gsettings set org.gnome.desktop.background picture-uri 'file:///usr/share/backgrounds/WhiteSur/WhiteSur-timed.xml'
-    gsettings set org.gnome.desktop.background picture-uri 'file:///usr/share/backgrounds/Ventura/Ventura-timed.xml'
+    # gsettings set org.gnome.desktop.background picture-uri 'file:///usr/share/backgrounds/Ventura/Ventura-timed.xml'
+    gsettings get org.gnome.desktop.background picture-uri 'file:///home/lcqh/.local/share/backgrounds/wallpaper-10.jpg'
     cd ..
     rm -rf WhiteSur-wallpapers
 fi
@@ -263,19 +270,22 @@ if [ ! -d "WhiteSur-gtk-theme" ]; then   # 检查目录是否存在
     # git clone https://github.com/vinceliuice/WhiteSur-gtk-theme.git --depth=1
     git clone https://gitcode.com/gh_mirrors/wh/WhiteSur-gtk-theme.git --depth=1
     cd WhiteSur-gtk-theme
+    # 卸载 ./install.sh -r
     # 安装 GTK 主题
     ./install.sh
-    # ./install.sh -l --shell -i fedora --round
-    ./install.sh -l -c light --shell -i fedora --round
+    # ./install.sh -l
+    ./install.sh -l -c light
     # 安装 Firefox 主题
     firefox & sleep 1 && pkill firefox	# 初始化 firefox 配置
     ./tweaks.sh -f flat
-    # 安装 GDM 主题
-    # 修改文件权限
-    # chmod 644 /home/lcqh/.local/share/backgrounds/Ventura-light.jpg
-    sudo ./tweaks.sh -g -b '/home/lcqh/.local/share/backgrounds/Ventura-light.jpg'
+    # 安装 GDM 主题，可通过下面的软件自定义调节
+    # flatpak install flathub io.github.realmazharhussain.GdmSettings
+    # sudo ./tweaks.sh -g -b '/home/lcqh/.local/share/backgrounds/Ventura-light.jpg'
+    sudo ./tweaks.sh -g -b '/home/lcqh/.local/share/backgrounds/wallpaper-1.jpg'
     # 将 WhiteSur 主题包连接到 Flatpak 仓库，可以解决部分应用无法使用 WhiteSur 主题问题，例如：Chrome、Edge
-    sudo ./tweaks.sh -F
+    sudo flatpak override --filesystem=xdg-config/gtk-3.0 && sudo flatpak override --filesystem=xdg-config/gtk-4.0
+    ./tweaks.sh -F
+    # flatpak list --app
     # 修复 Dash to Dock 主题的问题  ./tweaks.sh -d -r
     # ./tweaks.sh -d
     cd ..

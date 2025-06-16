@@ -81,6 +81,8 @@ flatpak install flathub ca.desrt.dconf-editor
 flatpak install flathub org.wezfurlong.wezterm
 # 漫画
 flatpak install flathub info.febvre.Komikku
+flatpak install flathub com.geekbench.Geekbench6
+flatpak install flathub org.wezfurlong.wezterm
 
 
 https://github.com/quick123official/quick_redis_blog/releases
@@ -205,9 +207,11 @@ curl -sSL https://steampp.net/Install/Linux.sh | INSTALL_DIR="$HOME/.watt-toolki
 sudo dnf install -y alien rpm-build
 # 将 .deb 转换为 .rpm
 sudo alien -r --scripts Apipost_linux_x64_8.1.14.deb  # 保留安装脚本（-r 生成 RPM，--scripts 保留脚本）
-sudo alien --to-rpm Apipost_linux_x64_8.1.14.deb
+sudo alien -r --scripts ting_en.deb
+sudo alien --to-rpm --scripts *.deb
 # 安装生成的 .rpm 文件
 sudo dnf install package-version.Apipost_linux_x64_8.1.14.rpm
+sudo yum localinstall package.rpm
 
 # libadwaita-demos
 # https://ftp5.gwdg.de/pub/linux/archlinux/extra/os/x86_64/libadwaita-demos-1:1.7.4-1-x86_64.pkg.tar.zst
@@ -284,3 +288,8 @@ flatpak install flathub org.fedoraproject.MediaWriter -y
 # 创建图像或编辑照片
 flatpak install flathub org.gimp.GIMP -y
 flatpak install flathub com.wps.Office -y
+
+# Conky 桌面小组件
+# Conky 轻量级、高度可定制的桌面监视工具，可显示系统信息（CPU、内存、网络等）、天气、日历、笔记等。
+# Conky 主题 https://www.gnome-look.org/u/closebox73x
+sudo dnf install -y conky

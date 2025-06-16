@@ -96,13 +96,14 @@ echo "系统更新、升级完成..."
 
 # Fedora默认安装了Flatpak，只要配置Flatpak加速镜像即可
 echo "开始配置Flatpak加速镜像..."
+# flatpak remotes --show-details
 # 添加 Flathub 官方仓库
-sudo flatpak remote-add --if-not-exists flathub https://mirrors.ustc.edu.cn/flathub
+flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
 # 修改 Flathub 仓库地址为国内镜像
 # 1、上海交大 Flatpak 镜像源 https://mirrors.sjtug.sjtu.edu.cn/docs/flathub
 # sudo flatpak remote-modify flathub --url=https://mirror.sjtu.edu.cn/flathub
 # 2、中科大 Flatpak 镜像源（处于测试阶段） https://mirrors.ustc.edu.cn/help/flathub.html
-# sudo flatpak remote-modify flathub --url=https://mirrors.ustc.edu.cn/flathub
+sudo flatpak remote-modify flathub --url=https://mirrors.ustc.edu.cn/flathub
 
 # 安装多媒体编解码器
 echo "安装多媒体编解码器..."
@@ -314,12 +315,14 @@ sudo systemctl restart postgresql
 # firewall-cmd --zone=public --list-ports
 sudo firewall-cmd --add-port=5432/tcp --permanent
 sudo firewall-cmd --reload
-
 # 使用默认的 postgres 用户，登录 PostgreSQL 控制台
 sudo -u postgres psql
 CREATE DATABASE testdb;
 CREATE USER lcqh WITH PASSWORD '479368';
 GRANT ALL PRIVILEGES ON DATABASE testdb TO lcqh;
+# 示例（连接刚创建的 testdb）：
+psql -U lcqh -d testdb -W
+
 
 # 安装VirtualBox
 echo "安装VirtualBox..."
