@@ -34,12 +34,14 @@ IBus Tweaker
 Top Bar Organizer
 
 
+
 # 优质推荐 Gnome 扩展
 Add to Desktop
 Bluetooth Quick Connect
 Clipboard Indicator
 # Compiz windows effect
 Compiz alike magic lamp effect
+ddterm
 Desktop Cube
 # Open Bar
 # Dash2Dock Animated
@@ -63,6 +65,7 @@ Top Bar Organizer
 Quick Settings Audio Panel
 Fedora Linux Update Indicator
 Window Gestures
+Show Desktop Button
 # Weather O'Clock
 VirtualBox applet
 # https://github.com/Sominemo/Fildem-Gnome-45
@@ -73,9 +76,7 @@ Custom Window Controls
 Custom Command Toggle
 Color Picker
 Desktop Widgets
-Show Desktop Button
 Bluetooth Battery Meter
-ddterm
 Astra Monitor
 Applications Overview Tooltip
 Hide Universal Access
@@ -278,6 +279,26 @@ gsettings set org.gnome.shell.extensions.blur-my-shell.panel style-panel 2
 gsettings set org.gnome.shell.extensions.blur-my-shell.appfolder style-dialogs 3
 gsettings set org.gnome.shell.extensions.dash-to-dock background-color 'rgb(26,95,180)'
 gsettings set org.gnome.shell.extensions.blur-my-shell.dash-to-dock style-dash-to-dock 2
+
+# Search Light
+# gsettings list-recursively org.gnome.shell.extensions.search-light
+gsettings set org.gnome.shell.extensions.search-light shortcut-search "['<Super>q']"
+# gsettings set org.gnome.shell.extensions.search-light show-panel-icon true
+gsettings set org.gnome.shell.extensions.search-light border-radius 2
+gsettings set org.gnome.shell.extensions.search-light animation-speed 200.0
+gsettings set org.gnome.shell.extensions.search-light background-color (0.0, 0.0, 0.0, 0.25)
+gsettings set org.gnome.shell.extensions.search-light blur-brightness 0.6
+gsettings set org.gnome.shell.extensions.search-light blur-sigma 50.0
+gsettings set org.gnome.shell.extensions.search-light blur-background true
+# gsettings set org.gnome.shell.extensions.search-light background-color (1.0, 1.0, 1.0, 0.25)
+# gsettings reset-recursively org.gnome.shell.extensions.search-light
+
+
+# Top Bar Organizer
+# gsettings list-recursively org.gnome.shell.extensions.top-bar-organizer
+gsettings set org.gnome.shell.extensions.top-bar-organizer right-box-order "['netspeed@alynx.one', 'appindicator-kstatusnotifieritem-monit1', 'system-monitor@gnome-shell-extensions.gcampax.github.com', 'workspace-indicator', '/org/gnome/Shell/Extensions/GSConnect/Device/f4357e1331e54396bb61fa530c6fb0db', 'drive-menu', 'FedoraUpdateIndicator', 'ddterm', 'Show Desktop Button Indicator', 'clipboardIndicator', 'screenRecording', 'screenSharing', 'dwellClick', 'a11y', 'keyboard', 'quickSettings']"
+
+
 
 # Quick Settings Tweaks
 # 控制 GNOME 顶部面板快捷设置菜单（Quick Settings）的弹出样式和动画效果
