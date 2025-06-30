@@ -84,7 +84,7 @@ flatpak install flathub org.wezfurlong.wezterm
 flatpak install flathub info.febvre.Komikku
 flatpak install flathub com.geekbench.Geekbench6
 flatpak install flathub org.wezfurlong.wezterm
-
+flatpak install flathub io.github.lo2dev.Echo
 
 https://github.com/quick123official/quick_redis_blog/releases
 https://www.appimagehub.com/p/2292484
@@ -210,6 +210,8 @@ sudo dnf install -y alien rpm-build
 sudo alien -r --scripts Apipost_linux_x64_8.1.14.deb  # 保留安装脚本（-r 生成 RPM，--scripts 保留脚本）
 sudo alien -r --scripts ting_en.deb
 sudo alien --to-rpm --scripts *.deb
+sudo alien -r  -c -v Apipost_linux_x64_8.1.14.deb
+
 # 安装生成的 .rpm 文件
 sudo dnf install package-version.Apipost_linux_x64_8.1.14.rpm
 sudo yum localinstall package.rpm
@@ -243,6 +245,10 @@ flatpak install flathub io.github.Fndroid.clash_for_windows -y
 flatpak install flathub net.lutris.Lutris -y
 flatpak install flathub com.valvesoftware.Steam -y
 flatpak install flathub io.github.Foldex.AdwSteamGtk -y
+flatpak install flathub com.vysp3r.ProtonPlus -y
+flatpak install flathub com.heroicgameslauncher.hgl -y
+# 游戏启动器
+flatpak install flathub page.kramo.Cartridges -y
 # 与AI模型聊天
 flatpak install flathub com.jeffser.Alpaca -y
 # 查看有关系统的信息
@@ -294,3 +300,7 @@ flatpak install flathub com.wps.Office -y
 # Conky 轻量级、高度可定制的桌面监视工具，可显示系统信息（CPU、内存、网络等）、天气、日历、笔记等。
 # Conky 主题 https://www.gnome-look.org/u/closebox73x
 sudo dnf install -y conky
+
+sudo dnf install -y steam 
+sudo dnf install steam lutris
+

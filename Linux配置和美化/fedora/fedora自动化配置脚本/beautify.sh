@@ -205,6 +205,7 @@ cp -v ~/下载/linux-wallpapers/Gnome/* ~/.local/share/backgrounds/
 # https://bz.zzzmh.cn/index
 # ls ~/.local/share/backgrounds
 # ls /usr/share/backgrounds
+# nautilus admin:/usr/share/backgrounds
 # 安装 WhiteSur 壁纸
 echo "准备开始安装WhiteSur-wallpapers壁纸..."
 if [ ! -d "WhiteSur-wallpapers" ]; then
@@ -319,13 +320,12 @@ sudo flatpak override --filesystem=/usr/share/icons:ro
 # flatpak override --user --show
 # flatpak override --user --reset
 
-
 # 应用主题设置
 echo "正在应用主题设置..."
 # 设置光标主题
 gsettings set org.gnome.desktop.interface cursor-theme 'capitaine-cursors'
 # 设置图标主题
-gsettings set org.gnome.desktop.interface icon-theme 'WhiteSur'
+gsettings set org.gnome.desktop.interface icon-theme 'WhiteSur-light'
 # 设置Shell主题
 gsettings set org.gnome.shell.extensions.user-theme name 'WhiteSur-Light'
 # 设置GTK主题
