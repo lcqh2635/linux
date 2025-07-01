@@ -282,30 +282,31 @@ gsettings set org.gnome.shell.extensions.rounded-window-corners-reborn unfocused
 # gsettings get org.gnome.shell.extensions.nightthemeswitcher.commands sunrise
 # gsettings get org.gnome.shell.extensions.nightthemeswitcher.commands sunset
 gsettings set org.gnome.shell.extensions.nightthemeswitcher.commands enabled true
+# 透明版本
 gsettings set org.gnome.shell.extensions.nightthemeswitcher.commands sunrise "gsettings set org.gnome.desktop.interface color-scheme 'default'\ngsettings set org.gnome.desktop.interface cursor-theme 'capitaine-cursors'\ngsettings set org.gnome.desktop.interface icon-theme 'WhiteSur-light'\ngsettings set org.gnome.shell.extensions.user-theme name 'WhiteSur-Light'\ngsettings set org.gnome.desktop.interface gtk-theme 'WhiteSur-Light'\ngsettings set org.gnome.desktop.wm.preferences theme 'WhiteSur-Light'\ngsettings set org.gnome.shell.extensions.blur-my-shell.panel style-panel 1\ngsettings set org.gnome.shell.extensions.blur-my-shell.appfolder style-dialogs 2\ngsettings set org.gnome.shell.extensions.dash-to-dock background-color 'rgb(153,193,241)'\ngsettings set org.gnome.shell.extensions.blur-my-shell.dash-to-dock style-dash-to-dock 1"
-gsettings set org.gnome.shell.extensions.nightthemeswitcher.commands sunset "gsettings set org.gnome.desktop.interface color-scheme 'prefer-dark'\ngsettings set org.gnome.desktop.interface cursor-theme 'capitaine-cursors'\ngsettings set org.gnome.desktop.interface icon-theme 'WhiteSur-dark'\ngsettings set org.gnome.shell.extensions.user-theme name 'WhiteSur-Dark'\ngsettings set org.gnome.desktop.interface gtk-theme 'WhiteSur-Dark'\ngsettings set org.gnome.desktop.wm.preferences theme 'WhiteSur-Dark'\ngsettings set org.gnome.shell.extensions.blur-my-shell.panel style-panel 2\ngsettings set org.gnome.shell.extensions.blur-my-shell.appfolder style-dialogs 3\ngsettings set org.gnome.shell.extensions.dash-to-dock background-color 'rgb(26,95,180)'\ngsettings set org.gnome.shell.extensions.blur-my-shell.dash-to-dock style-dash-to-dock 2"
+gsettings set org.gnome.shell.extensions.nightthemeswitcher.commands sunset "gsettings set org.gnome.desktop.interface color-scheme 'prefer-dark'\ngsettings set org.gnome.desktop.interface cursor-theme 'capitaine-cursors-light'\ngsettings set org.gnome.desktop.interface icon-theme 'WhiteSur-dark'\ngsettings set org.gnome.shell.extensions.user-theme name 'WhiteSur-Dark'\ngsettings set org.gnome.desktop.interface gtk-theme 'WhiteSur-Dark'\ngsettings set org.gnome.desktop.wm.preferences theme 'WhiteSur-Dark'\ngsettings set org.gnome.shell.extensions.blur-my-shell.panel style-panel 2\ngsettings set org.gnome.shell.extensions.blur-my-shell.appfolder style-dialogs 3\ngsettings set org.gnome.shell.extensions.dash-to-dock background-color 'rgb(26,95,180)'\ngsettings set org.gnome.shell.extensions.blur-my-shell.dash-to-dock style-dash-to-dock 2"
 
 # 不透明版本
 gsettings set org.gnome.shell.extensions.nightthemeswitcher.commands sunrise "gsettings set org.gnome.desktop.interface color-scheme 'default'\ngsettings set org.gnome.desktop.interface cursor-theme 'capitaine-cursors'\ngsettings set org.gnome.desktop.interface icon-theme 'WhiteSur-light'\ngsettings set org.gnome.shell.extensions.user-theme name 'WhiteSur-Light-solid'\ngsettings set org.gnome.desktop.interface gtk-theme 'WhiteSur-Light-solid'\ngsettings set org.gnome.desktop.wm.preferences theme 'WhiteSur-Light-solid'\ngsettings set org.gnome.shell.extensions.blur-my-shell.panel style-panel 1\ngsettings set org.gnome.shell.extensions.blur-my-shell.appfolder style-dialogs 2\ngsettings set org.gnome.shell.extensions.dash-to-dock background-color 'rgb(153,193,241)'\ngsettings set org.gnome.shell.extensions.blur-my-shell.dash-to-dock style-dash-to-dock 1"
-gsettings set org.gnome.shell.extensions.nightthemeswitcher.commands sunset "gsettings set org.gnome.desktop.interface color-scheme 'prefer-dark'\ngsettings set org.gnome.desktop.interface cursor-theme 'capitaine-cursors'\ngsettings set org.gnome.desktop.interface icon-theme 'WhiteSur-dark'\ngsettings set org.gnome.shell.extensions.user-theme name 'WhiteSur-Dark-solid'\ngsettings set org.gnome.desktop.interface gtk-theme 'WhiteSur-Dark-solid'\ngsettings set org.gnome.desktop.wm.preferences theme 'WhiteSur-Dark-solid'\ngsettings set org.gnome.shell.extensions.blur-my-shell.panel style-panel 2\ngsettings set org.gnome.shell.extensions.blur-my-shell.appfolder style-dialogs 3\ngsettings set org.gnome.shell.extensions.dash-to-dock background-color 'rgb(26,95,180)'\ngsettings set org.gnome.shell.extensions.blur-my-shell.dash-to-dock style-dash-to-dock 2"
+gsettings set org.gnome.shell.extensions.nightthemeswitcher.commands sunset "gsettings set org.gnome.desktop.interface color-scheme 'prefer-dark'\ngsettings set org.gnome.desktop.interface cursor-theme 'capitaine-cursors-light'\ngsettings set org.gnome.desktop.interface icon-theme 'WhiteSur-dark'\ngsettings set org.gnome.shell.extensions.user-theme name 'WhiteSur-Dark-solid'\ngsettings set org.gnome.desktop.interface gtk-theme 'WhiteSur-Dark-solid'\ngsettings set org.gnome.desktop.wm.preferences theme 'WhiteSur-Dark-solid'\ngsettings set org.gnome.shell.extensions.blur-my-shell.panel style-panel 2\ngsettings set org.gnome.shell.extensions.blur-my-shell.appfolder style-dialogs 3\ngsettings set org.gnome.shell.extensions.dash-to-dock background-color 'rgb(26,95,180)'\ngsettings set org.gnome.shell.extensions.blur-my-shell.dash-to-dock style-dash-to-dock 2"
 
 gsettings set org.gnome.desktop.interface color-scheme 'default'
 gsettings set org.gnome.desktop.interface cursor-theme 'capitaine-cursors'
 gsettings set org.gnome.desktop.interface icon-theme 'WhiteSur-light'
-gsettings set org.gnome.shell.extensions.user-theme name 'WhiteSur-Light'
-gsettings set org.gnome.desktop.interface gtk-theme 'WhiteSur-Light'
-gsettings set org.gnome.desktop.wm.preferences theme 'WhiteSur-Light'
+gsettings set org.gnome.shell.extensions.user-theme name 'WhiteSur-Light-solid'
+gsettings set org.gnome.desktop.interface gtk-theme 'WhiteSur-Light-solid'
+gsettings set org.gnome.desktop.wm.preferences theme 'WhiteSur-Light-solid'
 gsettings set org.gnome.shell.extensions.blur-my-shell.panel style-panel 1
 gsettings set org.gnome.shell.extensions.blur-my-shell.appfolder style-dialogs 2
 gsettings set org.gnome.shell.extensions.dash-to-dock background-color 'rgb(153,193,241)'
 gsettings set org.gnome.shell.extensions.blur-my-shell.dash-to-dock style-dash-to-dock 1
 
 gsettings set org.gnome.desktop.interface color-scheme 'prefer-dark'
-gsettings set org.gnome.desktop.interface cursor-theme 'capitaine-cursors'
+gsettings set org.gnome.desktop.interface cursor-theme 'capitaine-cursors-light'
 gsettings set org.gnome.desktop.interface icon-theme 'WhiteSur-dark'
-gsettings set org.gnome.shell.extensions.user-theme name 'WhiteSur-Dark'
-gsettings set org.gnome.desktop.interface gtk-theme 'WhiteSur-Dark'
-gsettings set org.gnome.desktop.wm.preferences theme 'WhiteSur-Dark'
+gsettings set org.gnome.shell.extensions.user-theme name 'WhiteSur-Dark-solid'
+gsettings set org.gnome.desktop.interface gtk-theme 'WhiteSur-Dark-solid'
+gsettings set org.gnome.desktop.wm.preferences theme 'WhiteSur-Dark-solid'
 gsettings set org.gnome.shell.extensions.blur-my-shell.panel style-panel 2
 gsettings set org.gnome.shell.extensions.blur-my-shell.appfolder style-dialogs 3
 gsettings set org.gnome.shell.extensions.dash-to-dock background-color 'rgb(26,95,180)'
