@@ -237,45 +237,6 @@ gsettings set org.gnome.shell.extensions.coverflowalttab easing-function 'ease-o
 # 恢复默认设置
 # gsettings reset-recursively org.gnome.shell.extensions.coverflowalttab
 
-# Rounded Window Corners Reborn
-# gsettings list-recursively org.gnome.shell.extensions.rounded-window-corners-reborn
-# 禁用黑名单（所有窗口均应用圆角）
-gsettings set org.gnome.shell.extensions.rounded-window-corners-reborn blacklist "@as []"
-# 跳过Libadwaita/Libhandy应用（避免与GTK4应用冲突）
-gsettings set org.gnome.shell.extensions.rounded-window-corners-reborn skip-libadwaita-app true
-gsettings set org.gnome.shell.extensions.rounded-window-corners-reborn skip-libhandy-app true
-# 全局圆角设置（核心参数）
-gsettings set org.gnome.shell.extensions.rounded-window-corners-reborn global-rounded-corner-settings "{
-  'padding': {'left': 1, 'right': 1, 'top': 1, 'bottom': 1},
-  'keepRoundedCorners': {'maximized': true, 'fullscreen': false},  # 最大化时保留圆角，全屏时禁用
-  'borderRadius': 12,            # 圆角半径（像素），推荐8-16
-  'smoothing': 0.2,              # 边缘平滑度（0.0-1.0）
-  'borderColor': (0.3, 0.3, 0.3, 0.6),  # 半透明灰色边框（RGBA）
-  'enabled': true
-}"
-
-gsettings set org.gnome.shell.extensions.rounded-window-corners-reborn global-rounded-corner-settings "{'padding': <{'left': uint32 1, 'right': 1, 'top': 1, 'bottom': 1}>, 'keepRoundedCorners': <{'maximized': true, 'fullscreen': false}>, 'borderRadius': <uint32 12>, 'smoothing': <0.5>, 'borderColor': <(0.5, 0.5, 0.5, 1.0)>, 'enabled': <true>}"
-
-# 聚焦窗口阴影效果（增强层次感）
-gsettings set org.gnome.shell.extensions.rounded-window-corners-reborn focused-shadow "{
-  'horizontalOffset': 0,
-  'verticalOffset': 4,           # 阴影垂直偏移（模拟光源从上向下）
-  'blurOffset': 24,              # 模糊半径（值越大越柔和）
-  'spreadRadius': 2,             # 阴影扩散范围
-  'opacity': 50                  # 透明度（0-100）
-}"
-gsettings set org.gnome.shell.extensions.rounded-window-corners-reborn focused-shadow "{'horizontalOffset': 0, 'verticalOffset': 4, 'blurOffset': 28, 'spreadRadius': 4, 'opacity': 60}"
-# 非聚焦窗口阴影（更 subtle 的效果）
-gsettings set org.gnome.shell.extensions.rounded-window-corners-reborn unfocused-shadow "{
-  'horizontalOffset': 0,
-  'verticalOffset': 2,
-  'blurOffset': 12,
-  'spreadRadius': -1,            # 负值减少阴影存在感
-  'opacity': 30
-}"
-gsettings set org.gnome.shell.extensions.rounded-window-corners-reborn unfocused-shadow "{'horizontalOffset': 0, 'verticalOffset': 2, 'blurOffset': 12, 'spreadRadius': -1, 'opacity': 65}"
-# gsettings reset-recursively org.gnome.shell.extensions.rounded-window-corners-reborn
-
 # Night Theme Switcher
 # 递归列出某个 Schema 的键值
 # gsettings list-recursively org.gnome.shell.extensions.nightthemeswitcher.commands
@@ -325,12 +286,49 @@ gsettings set org.gnome.shell.extensions.search-light blur-background true
 # gsettings set org.gnome.shell.extensions.search-light background-color (1.0, 1.0, 1.0, 0.25)
 # gsettings reset-recursively org.gnome.shell.extensions.search-light
 
-
 # Top Bar Organizer
 # gsettings list-recursively org.gnome.shell.extensions.top-bar-organizer
 gsettings set org.gnome.shell.extensions.top-bar-organizer right-box-order "['netspeed@alynx.one', 'appindicator-kstatusnotifieritem-monit1', 'system-monitor@gnome-shell-extensions.gcampax.github.com', 'workspace-indicator', '/org/gnome/Shell/Extensions/GSConnect/Device/f4357e1331e54396bb61fa530c6fb0db', 'drive-menu', 'FedoraUpdateIndicator', 'ddterm', 'Show Desktop Button Indicator', 'clipboardIndicator', 'screenRecording', 'screenSharing', 'dwellClick', 'a11y', 'keyboard', 'quickSettings']"
 
 
+# Rounded Window Corners Reborn
+# gsettings list-recursively org.gnome.shell.extensions.rounded-window-corners-reborn
+# 禁用黑名单（所有窗口均应用圆角）
+gsettings set org.gnome.shell.extensions.rounded-window-corners-reborn blacklist "@as []"
+# 跳过Libadwaita/Libhandy应用（避免与GTK4应用冲突）
+gsettings set org.gnome.shell.extensions.rounded-window-corners-reborn skip-libadwaita-app true
+gsettings set org.gnome.shell.extensions.rounded-window-corners-reborn skip-libhandy-app true
+# 全局圆角设置（核心参数）
+gsettings set org.gnome.shell.extensions.rounded-window-corners-reborn global-rounded-corner-settings "{
+  'padding': {'left': 1, 'right': 1, 'top': 1, 'bottom': 1},
+  'keepRoundedCorners': {'maximized': true, 'fullscreen': false},  # 最大化时保留圆角，全屏时禁用
+  'borderRadius': 12,            # 圆角半径（像素），推荐8-16
+  'smoothing': 0.2,              # 边缘平滑度（0.0-1.0）
+  'borderColor': (0.3, 0.3, 0.3, 0.6),  # 半透明灰色边框（RGBA）
+  'enabled': true
+}"
+
+gsettings set org.gnome.shell.extensions.rounded-window-corners-reborn global-rounded-corner-settings "{'padding': <{'left': uint32 1, 'right': 1, 'top': 1, 'bottom': 1}>, 'keepRoundedCorners': <{'maximized': true, 'fullscreen': false}>, 'borderRadius': <uint32 12>, 'smoothing': <0.5>, 'borderColor': <(0.5, 0.5, 0.5, 1.0)>, 'enabled': <true>}"
+
+# 聚焦窗口阴影效果（增强层次感）
+gsettings set org.gnome.shell.extensions.rounded-window-corners-reborn focused-shadow "{
+  'horizontalOffset': 0,
+  'verticalOffset': 4,           # 阴影垂直偏移（模拟光源从上向下）
+  'blurOffset': 24,              # 模糊半径（值越大越柔和）
+  'spreadRadius': 2,             # 阴影扩散范围
+  'opacity': 50                  # 透明度（0-100）
+}"
+gsettings set org.gnome.shell.extensions.rounded-window-corners-reborn focused-shadow "{'horizontalOffset': 0, 'verticalOffset': 4, 'blurOffset': 28, 'spreadRadius': 4, 'opacity': 60}"
+# 非聚焦窗口阴影（更 subtle 的效果）
+gsettings set org.gnome.shell.extensions.rounded-window-corners-reborn unfocused-shadow "{
+  'horizontalOffset': 0,
+  'verticalOffset': 2,
+  'blurOffset': 12,
+  'spreadRadius': -1,            # 负值减少阴影存在感
+  'opacity': 30
+}"
+gsettings set org.gnome.shell.extensions.rounded-window-corners-reborn unfocused-shadow "{'horizontalOffset': 0, 'verticalOffset': 2, 'blurOffset': 12, 'spreadRadius': -1, 'opacity': 65}"
+# gsettings reset-recursively org.gnome.shell.extensions.rounded-window-corners-reborn
 
 # Quick Settings Tweaks
 # 控制 GNOME 顶部面板快捷设置菜单（Quick Settings）的弹出样式和动画效果

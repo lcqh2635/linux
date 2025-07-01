@@ -33,6 +33,7 @@ it.mijorus.gearlever \
 md.obsidian.Obsidian \
 me.iepure.devtoolbox \
 net.nokyan.Resources \
+io.missioncenter.MissionCenter \
 org.gnome.Builder \
 org.gnome.Firmware \
 org.gnome.Gtranslator \
@@ -44,37 +45,65 @@ org.gnome.gitlab.somas.Apostrophe \
 org.gnome.seahorse.Application \
 io.github.nokse22.inspector \
 com.usebottles.bottles \
-page.tesk.Refine
+page.tesk.Refine \
+com.qq.QQ \
+com.tencent.WeChat \
+com.tencent.wemeet \
+com.dingtalk.DingTalk \
+cn.feishu.Feishu \
+com.baidu.NetDisk \
+com.microsoft.Edge \
+com.google.Chrome \
+com.protonvpn.www \
+com.rustdesk.RustDesk \
+org.dupot.easyflatpak \
+me.dusansimic.DynamicWallpaper \
+com.github.d4nj1.tlpui \
+app.drey.Warp \
+org.videolan.VLC \
+com.valvesoftware.Steam \
+io.github.Foldex.AdwSteamGtk \
+net.lutris.Lutris \
+com.vysp3r.ProtonPlus \
+com.heroicgameslauncher.hgl \
+page.kramo.Cartridges \
+io.github.debasish_patra_1987.linuxthemestore
 
 
-flatpak install flathub org.gnome.Polari
+
 flatpak install flathub app.drey.Damask
 flatpak install flathub page.codeberg.libre_menu_editor.LibreMenuEditor
 flatpak install flathub io.gitlab.gwendalj.package-transporter
 # https://www.appimagehub.com
 flatpak install flathub io.github.prateekmedia.appimagepool
 flatpak install flathub org.dupot.easyflatpak
-flatpak install flathub io.github.swordpuffin.wardrobe
 flatpak install flathub com.apifox.Apifox
 sudo flatpak install -y flathub cn.apipost.apipost
-flatpak install flathub com.github.KRTirtho.Spotube
 flatpak install flathub com.jeffser.Alpaca
+# 任务中心
 flatpak install flathub io.missioncenter.MissionCenter
+# 火焰截图
 flatpak install flathub org.flameshot.Flameshot
+# 钉钉
 flatpak install flathub com.dingtalk.DingTalk
+# 飞书
 flatpak install flathub cn.feishu.Feishu
+# 适用于 Plausible Analytics 的混合原生 + Web 应用程序，这是一款轻量级的开源网站分析工具。Tally 将 Plausible Web 应用程序封装在本机 UI 中，从而更好地与桌面作系统集成。
 flatpak install flathub com.cassidyjames.plausible
+# 浏览、预览和安装桌面主题
 flatpak install flathub io.github.debasish_patra_1987.linuxthemestore
 flatpak install flathub net.nymtech.NymVPN
-flatpak install flathub io.github.shiftey.Desktop
+# 适用于 Apache Kafka 的美观且功能齐全的桌面客户端
 flatpak install flathub io.conduktor.Conduktor
+# 用于管理 Distrobox 容器的图形界面
 flatpak install flathub com.ranfdev.DistroShelf
-flatpak install flathub dev.edfloreshz.CosmicTweaks
 # 视频壁纸
 flatpak install flathub io.github.jeffshee.Hidamari
 # 欧路词典
 flatpak install flathub net.eudic.dict
+# 快捷、安全的文件传输工具
 flatpak install flathub app.drey.Warp
+# 一个漂亮的 GTK 4 终端，Black Box 是 GNOME 的原生终端模拟器，提供了极好的主题选项。
 flatpak install flathub com.raggesilver.BlackBox
 flatpak install flathub me.dusansimic.DynamicWallpaper
 flatpak install flathub com.github.maoschanz.DynamicWallpaperEditor
@@ -84,30 +113,14 @@ flatpak install flathub org.wezfurlong.wezterm
 # 漫画
 flatpak install flathub info.febvre.Komikku
 flatpak install flathub com.geekbench.Geekbench6
-flatpak install flathub org.wezfurlong.wezterm
+# Ping 网站
 flatpak install flathub io.github.lo2dev.Echo
+flatpak install flathub io.github.qier222.YesPlayMusic
+flatpak install flathub com.visualstudio.code
+flatpak install flathub org.libreoffice.LibreOffice
 
 https://github.com/quick123official/quick_redis_blog/releases
 https://www.appimagehub.com/p/2292484
-
-
-# 工作娱乐
-flatpak install -y flathub \
-com.qq.QQ \
-com.tencent.WeChat \
-com.tencent.wemeet \
-io.github.qier222.YesPlayMusic \
-com.baidu.NetDisk \
-com.spotify.Client \
-com.discordapp.Discord \
-com.usebottles.bottles \
-com.microsoft.Edge \
-com.google.Chrome \
-com.obsproject.Studio \
-com.visualstudio.code \
-org.libreoffice.LibreOffice \
-com.protonvpn.www \
-com.rustdesk.RustDesk
 
 # https://flathub.org/zh-Hans/apps/search?q=jetbrains
 flatpak install flathub com.jetbrains.IntelliJ-IDEA-Ultimate
@@ -245,10 +258,13 @@ flatpak install flathub io.github.Fndroid.clash_for_windows -y
 # Lutris 可帮您安装和运行大多数平台上几乎所有时代的电子游戏。通过对现有的模拟器、兼容层、第三方游戏引擎等进行整合利用，Lutris 可为您提供一个统一的界面来启动您的所有游戏。
 flatpak install flathub net.lutris.Lutris -y
 flatpak install flathub com.valvesoftware.Steam -y
+# 给予 Steam 以 Adwaita 级待遇，让 Steam 看起来属于您的电脑。这款应用会为您安装并更新 Adwaita-for-Steam 皮肤。
 flatpak install flathub io.github.Foldex.AdwSteamGtk -y
+# 现代兼容性工具管理器
 flatpak install flathub com.vysp3r.ProtonPlus -y
+# Heroic 是一个开源游戏启动器。目前支持使用 Legendary 启动 Epic 游戏商城中的游戏， 使用我们自定义的 gogdl 实现启动 GOG 游戏，以及使用 Nile 启动 Amazon 游戏。
 flatpak install flathub com.heroicgameslauncher.hgl -y
-# 游戏启动器
+# Cartridges 是一个简单的游戏启动器，适用于您的所有游戏。它支持从Steam、Lutris、Heroic等游戏平台导入游戏且无需登录。您可以排序和隐藏游戏，也可以从SteamGridDB下载封面。
 flatpak install flathub page.kramo.Cartridges -y
 # 与AI模型聊天
 flatpak install flathub com.jeffser.Alpaca -y
