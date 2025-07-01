@@ -70,11 +70,8 @@ gnome-shell-extension-drive-menu \
 gnome-shell-extension-appindicator \
 gnome-shell-extension-caffeine \
 gnome-shell-extension-gsconnect \
-gnome-shell-extension-workspace-indicator \
 gnome-shell-extension-auto-move-windows \
 gnome-shell-extension-no-overview \
-gnome-shell-extension-light-style \
-gnome-shell-extension-system-monitor \
 gnome-shell-extension-forge
 
 # 启用已安装的扩展

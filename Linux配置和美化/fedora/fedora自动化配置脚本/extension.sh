@@ -12,26 +12,49 @@ dnf install gnome-browser-connector
 # dnf search gnome-shell-extension*
 # dnf list gnome-shell-extension*
 
-Logo Menu
+
+Add to Desktop
 Alphabetical App Grid
-# 用户比装 Gnome 扩展
-Hide Top Bar
+Applications Overview Tooltip
+App menu is back
+Bluetooth Battery Meter
+Bluetooth Quick Connect
+Clipboard Indicator
+# Compiz alike magic lamp effect
+Coverflow Alt-Tab
+ddterm
 # 修复 Hide Top Bar 闪跳 BUG
 Disable unredirect
-Rounded Corners
-Rounded Window Corners Reborn
-Coverflow Alt-Tab
-User Avatar In Quick Settings
-# 数值设置为 5
-Status Area Horizontal Spacing
-No overview at start-up
-Show Desktop Button
-# 在 Just Perfection 的定制菜单中有调整动画的选项，不用额外添加 Impatience 这个扩展插件
-# Impatience
-App menu is back
+Fedora Linux Update Indicator
+Gtk4 Desktop Icons NG (DING)
+# 用户比装 Gnome 扩展
+Hide Top Bar
 # 右键点击 panel 上的输入法，点击“首选项”，将“候选词排列方向”改为竖直
 IBus Tweaker
+# Logo Menu
+Impatience
+# 安装 Lunar Calendar 农历 扩展插件需要如下内容
+#https://gitlab.gnome.org/Nei/ChineseCalendar/-/archive/20250205/ChineseCalendar-20250205.tar.gz
+# tar -xzvf ChineseCalendar-20250205.tar.gz
+# cd ChineseCalendar-20250205
+# ./install.sh
+Lunar Calendar 农历
+Net Speed
+Night Theme Switcher
+Notification Banner Reloaded
+# Quick Settings Tweaks
+Rounded Corners
+Rounded Window Corners Reborn
+Search Light
+Show Desktop Button
+# 数值设置为 5
+Status Area Horizontal Spacing
 Top Bar Organizer
+User Avatar In Quick Settings
+Weather Clock
+Window Gestures
+
+
 
 
 

@@ -25,6 +25,7 @@ io.github.alainm23.planify \
 io.github.flattool.Warehouse \
 io.github.realmazharhussain.GdmSettings \
 io.github.seadve.Kooha \
+com.obsproject.Studio \
 io.github.vikdevelop.SaveDesktop \
 io.gitlab.adhami3310.Impression \
 io.typora.Typora \
@@ -301,6 +302,6 @@ flatpak install flathub com.wps.Office -y
 # Conky 主题 https://www.gnome-look.org/u/closebox73x
 sudo dnf install -y conky
 
-sudo dnf install -y steam 
-sudo dnf install steam lutris
+
+# https://docs.fedoraproject.org/zh_CN/gaming/proton/
 
