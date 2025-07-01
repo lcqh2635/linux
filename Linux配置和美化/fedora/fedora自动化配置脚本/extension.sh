@@ -12,7 +12,6 @@ dnf install gnome-browser-connector
 # dnf search gnome-shell-extension*
 # dnf list gnome-shell-extension*
 
-
 Add to Desktop
 Alphabetical App Grid
 Applications Overview Tooltip
@@ -43,16 +42,21 @@ Net Speed
 Night Theme Switcher
 Notification Banner Reloaded
 # Quick Settings Tweaks
+Privacy Quick Settings
+Proxy Switcher
 Rounded Corners
 Rounded Window Corners Reborn
 Search Light
+SettingsCenter
 Show Desktop Button
 # 数值设置为 5
 Status Area Horizontal Spacing
 Top Bar Organizer
 User Avatar In Quick Settings
 Weather Clock
+Wifi QR Code
 Window Gestures
+
 
 
 
