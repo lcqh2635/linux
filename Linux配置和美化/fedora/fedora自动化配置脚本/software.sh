@@ -67,6 +67,7 @@ net.lutris.Lutris \
 com.vysp3r.ProtonPlus \
 com.heroicgameslauncher.hgl \
 page.kramo.Cartridges \
+com.apifox.Apifox \
 io.github.debasish_patra_1987.linuxthemestore
 
 
