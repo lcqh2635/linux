@@ -41,7 +41,6 @@ org.gnome.World.PikaBackup \
 org.gnome.gitlab.somas.Apostrophe \
 re.sonny.Playhouse \
 re.sonny.Workbench \
-org.gnome.gitlab.somas.Apostrophe \
 org.gnome.seahorse.Application \
 io.github.nokse22.inspector \
 com.usebottles.bottles \
@@ -67,10 +66,21 @@ net.lutris.Lutris \
 com.vysp3r.ProtonPlus \
 com.heroicgameslauncher.hgl \
 page.kramo.Cartridges \
-com.apifox.Apifox \
 net.eudic.dict \
 io.github.debasish_patra_1987.linuxthemestore
 
+
+flatpak install -y flathub \
+com.apifox.Apifox \
+com.jetbrains.IntelliJ-IDEA-Ultimate \
+com.jetbrains.DataGrip
+
+flatpak install flathub com.jetbrains.IntelliJ-IDEA-Ultimate
+flatpak install flathub com.jetbrains.WebStorm
+flatpak install flathub com.jetbrains.RustRover
+flatpak install flathub com.jetbrains.GoLand
+flatpak install flathub com.jetbrains.PyCharm-Professional
+flatpak install flathub com.jetbrains.DataGrip
 # 注意：要在另一个驱动器上添加游戏库，首先需要授予应用程序访问它的权限：
 # flatpak override --user --filesystem=/path/to/your/Steam/Library com.valvesoftware.Steam
 
