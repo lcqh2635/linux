@@ -64,7 +64,7 @@ max_parallel_downloads=10
 # cat /etc/dnf/dnf.conf
 
 # 测试下载速度
-# time sudo dnf install -y neofetch
+# time sudo dnf install -y fastfetch
 
 # 清华 Fedora 镜像源 https://mirrors.tuna.tsinghua.edu.cn/help/fedora/
 # 配置dnf以加快软件下载速度（启用最快的镜像）
@@ -264,7 +264,8 @@ echo 你刚安装的 cargo 版本号为：$(cargo --version)
 # sdk install gradle
 
 # 安装 JDK（示例：安装 Temurin JDK 17）https://docs.fedoraproject.org/en-US/quick-docs/installing-java/
-sudo dnf install -y java-21-openjdk java-latest-openjdk
+sudo dnf install -y java-latest-openjdk
+# sudo dnf install -y java-21-openjdk
 # dnf list java-*-openjdk
 # 在 Java 版本之间切换
 # sudo alternatives --config java

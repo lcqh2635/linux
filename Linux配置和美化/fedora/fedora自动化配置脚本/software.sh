@@ -68,9 +68,19 @@ com.vysp3r.ProtonPlus \
 com.heroicgameslauncher.hgl \
 page.kramo.Cartridges \
 com.apifox.Apifox \
+net.eudic.dict \
 io.github.debasish_patra_1987.linuxthemestore
 
+# 注意：要在另一个驱动器上添加游戏库，首先需要授予应用程序访问它的权限：
+flatpak override --user --filesystem=/path/to/your/Steam/Library com.valvesoftware.Steam
 
+
+# 翻墙工具，加速下载地址	https://ghproxylist.com/
+https://github.com/clash-verge-rev/clash-verge-rev/releases/download/v2.3.1/Clash.Verge-2.3.1-1.x86_64.rpm
+# Clash免费节点	https://www.freeclashnode.com/
+# https://node.freeclashnode.com/uploads/2025/07/2-20250702.yaml
+# https://node.freeclashnode.com/uploads/2025/07/1-20250701.yaml
+# https://node.clashvergerev.cc/uploads/2025/07/0-20250701.yaml
 
 flatpak install flathub app.drey.Damask
 flatpak install flathub page.codeberg.libre_menu_editor.LibreMenuEditor
@@ -93,7 +103,6 @@ flatpak install flathub cn.feishu.Feishu
 flatpak install flathub com.cassidyjames.plausible
 # 浏览、预览和安装桌面主题
 flatpak install flathub io.github.debasish_patra_1987.linuxthemestore
-flatpak install flathub net.nymtech.NymVPN
 # 适用于 Apache Kafka 的美观且功能齐全的桌面客户端
 flatpak install flathub io.conduktor.Conduktor
 # 用于管理 Distrobox 容器的图形界面
