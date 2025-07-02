@@ -72,10 +72,11 @@ net.eudic.dict \
 io.github.debasish_patra_1987.linuxthemestore
 
 # 注意：要在另一个驱动器上添加游戏库，首先需要授予应用程序访问它的权限：
-flatpak override --user --filesystem=/path/to/your/Steam/Library com.valvesoftware.Steam
+# flatpak override --user --filesystem=/path/to/your/Steam/Library com.valvesoftware.Steam
 
 
-# 翻墙工具，加速下载地址	https://ghproxylist.com/
+# Clash Verge 翻墙工具，加速下载地址	https://ghproxylist.com/
+# 使用教程	https://clashmetacn.com/257.html
 https://github.com/clash-verge-rev/clash-verge-rev/releases/download/v2.3.1/Clash.Verge-2.3.1-1.x86_64.rpm
 # Clash免费节点	https://www.freeclashnode.com/
 # https://node.freeclashnode.com/uploads/2025/07/2-20250702.yaml
