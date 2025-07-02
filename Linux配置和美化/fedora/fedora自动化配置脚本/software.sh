@@ -82,6 +82,9 @@ https://github.com/clash-verge-rev/clash-verge-rev/releases/download/v2.3.1/Clas
 # https://node.freeclashnode.com/uploads/2025/07/2-20250702.yaml
 # https://node.freeclashnode.com/uploads/2025/07/1-20250701.yaml
 # https://node.clashvergerev.cc/uploads/2025/07/0-20250701.yaml
+# Clash Meta for Android 使用教程	https://clashmetaforandroid.com/tutorial/
+# Clash Meta for Android 下载地址	https://clashmetaforandroid.com/
+
 
 flatpak install flathub app.drey.Damask
 flatpak install flathub page.codeberg.libre_menu_editor.LibreMenuEditor
