@@ -73,7 +73,12 @@ io.github.debasish_patra_1987.linuxthemestore
 flatpak install -y flathub \
 com.apifox.Apifox \
 com.jetbrains.IntelliJ-IDEA-Ultimate \
+com.jetbrains.PyCharm-Professional \
+com.jetbrains.WebStorm \
+com.jetbrains.RustRover \
+com.jetbrains.GoLand \
 com.jetbrains.DataGrip
+
 
 flatpak install flathub com.jetbrains.IntelliJ-IDEA-Ultimate
 flatpak install flathub com.jetbrains.WebStorm
@@ -107,7 +112,7 @@ flatpak install flathub io.gitlab.gwendalj.package-transporter
 flatpak install flathub io.github.prateekmedia.appimagepool
 flatpak install flathub org.dupot.easyflatpak
 flatpak install flathub com.apifox.Apifox
-sudo flatpak install -y flathub cn.apipost.apipost
+flatpak install -y flathub cn.apipost.apipost
 flatpak install flathub com.jeffser.Alpaca
 # 任务中心
 flatpak install flathub io.missioncenter.MissionCenter
