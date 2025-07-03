@@ -81,6 +81,10 @@ flatpak install flathub com.jetbrains.RustRover
 flatpak install flathub com.jetbrains.GoLand
 flatpak install flathub com.jetbrains.PyCharm-Professional
 flatpak install flathub com.jetbrains.DataGrip
+# 用于 UX/UI 的免费图形设计工具
+flatpak install flathub com.icons8.Lunacy
+# 简单的 UML 和 SysML 建模工具
+flatpak install flathub org.gaphor.Gaphor
 # 注意：要在另一个驱动器上添加游戏库，首先需要授予应用程序访问它的权限：
 # flatpak override --user --filesystem=/path/to/your/Steam/Library com.valvesoftware.Steam
 
@@ -314,6 +318,10 @@ flatpak install flathub info.febvre.Komikku -y
 flatpak install flathub io.github.fabrialberio.pinapp -y
 # 自定义应用程序图标
 flatpak install flathub page.codeberg.libre_menu_editor.LibreMenuEditor -y
+# 将网站作为桌面应用安装，使其显示在独立的窗口中，与安装的任何浏览器分开。
+flatpak install flathub net.codelogistics.webapps
+# 该项目是 Firefox 的一个独立分支，主要目标是隐私安全和用户自由。它是 LibreFox 的社区运营继承者。
+flatpak install flathub io.gitlab.librewolf-community
 # 屏幕录制，替代 OBS
 flatpak install flathub io.github.seadve.Kooha -y
 flatpak install -y flathub com.obsproject.Studio
