@@ -106,7 +106,6 @@ Astra Monitor
 Applications Overview Tooltip
 Hide Universal Access
 Customize Clock on Lock Screen
-Window Centering
 
 
 nautilus ~/.local/share/gnome-shell/extensions

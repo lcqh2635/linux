@@ -1,5 +1,5 @@
 {
   "cssTheme": "Garden Gnome (Adwaita, GTK)",
-  "nativeMenus": true,
+  "nativeMenus": false,
   "accentColor": ""
 }

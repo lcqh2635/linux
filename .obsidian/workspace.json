@@ -163,7 +163,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 330.5
+    "width": 424.5
   },
   "left-ribbon": {
     "hiddenItems": {
@@ -177,7 +177,7 @@
       "table-editor-obsidian:Advanced Tables Toolbar": false
     }
   },
-  "active": "746e66e10ef8f587",
+  "active": "d505fa1d93e2e9bb",
   "lastOpenFiles": [
     "新建Markdown文档.md",
     "Untitled.md",
