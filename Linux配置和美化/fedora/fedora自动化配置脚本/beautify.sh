@@ -11,6 +11,12 @@ gsettings set org.gnome.desktop.wm.preferences button-layout 'appmenu:minimize,m
 gsettings set org.gnome.mutter center-new-windows true
 # 设置电量百分比
 gsettings set org.gnome.desktop.interface show-battery-percentage true
+# 显示星期几
+gsettings set org.gnome.desktop.interface clock-show-weekday true
+# 显示秒
+gsettings set org.gnome.desktop.interface clock-show-seconds true
+# gsettings list-recursively org.gnome.desktop.interface
+# gsettings list-recursively org.gnome.desktop.wm.preferences
 
 # 更新系统并升级所有已安装的包
 echo "开始更新系统并升级所有已安装的包..."
@@ -319,15 +325,11 @@ sudo flatpak override --filesystem=/usr/share/icons:ro
 
 # 应用主题设置
 echo "正在应用主题设置..."
-# 设置光标主题
 gsettings set org.gnome.desktop.interface cursor-theme 'capitaine-cursors'
-# 设置图标主题
 gsettings set org.gnome.desktop.interface icon-theme 'WhiteSur-light'
-# 设置Shell主题
-gsettings set org.gnome.shell.extensions.user-theme name 'WhiteSur-Light'
-# 设置GTK主题
-gsettings set org.gnome.desktop.interface gtk-theme 'WhiteSur-Light'
-gsettings set org.gnome.desktop.wm.preferences theme 'WhiteSur-Light'
+gsettings set org.gnome.shell.extensions.user-theme name 'WhiteSur-Light-solid'
+gsettings set org.gnome.desktop.interface gtk-theme 'WhiteSur-Light-solid'
+gsettings set org.gnome.desktop.wm.preferences theme 'WhiteSur-Light-solid'
 
 # 清理临时文件
 echo "正在清理临时文件..."
