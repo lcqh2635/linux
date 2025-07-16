@@ -27,6 +27,46 @@ gsettings set org.gnome.desktop.interface clock-show-weekday true
 # gsettings set org.gnome.desktop.interface clock-show-seconds true
 # 设置窗口按钮位置 (右)
 gsettings set org.gnome.desktop.wm.preferences button-layout 'appmenu:minimize,maximize,close'
+# 设置 Background Logo 扩展插件
+# gsettings list-recursively org.fedorahosted.background-logo-extension
+gsettings set org.fedorahosted.background-logo-extension logo-size 9.0
+gsettings set org.fedorahosted.background-logo-extension logo-always-visible true
+# 恢复默认设置
+# gsettings reset-recursively org.fedorahosted.background-logo-extension
+
+
+# 系统外观主题和Gnome扩展插件优化
+# 自定义快捷键优化，Super-管理窗口、Alt-管理工作区
+gsettings set org.gnome.desktop.wm.keybindings switch-to-workspace-last "['<Alt>End']"
+gsettings set org.gnome.desktop.wm.keybindings switch-to-workspace-left "['<Alt>Left']"
+gsettings set org.gnome.desktop.wm.keybindings switch-to-workspace-right "['<Alt>Right']"
+gsettings set org.gnome.desktop.wm.keybindings switch-to-workspace-1 "['<Alt>1']"
+gsettings set org.gnome.desktop.wm.keybindings switch-to-workspace-2 "['<Alt>2']"
+gsettings set org.gnome.desktop.wm.keybindings switch-to-workspace-3 "['<Alt>3']"
+# 当前工作区内的窗口切换
+gsettings set org.gnome.desktop.wm.keybindings switch-windows "['<Super>T']"
+# 窗口在工作区移动
+gsettings set org.gnome.desktop.wm.keybindings move-to-workspace-last "['<Alt><Super>End']"
+gsettings set org.gnome.desktop.wm.keybindings move-to-workspace-left "['<Alt><Super>Left']"
+gsettings set org.gnome.desktop.wm.keybindings move-to-workspace-right "['<Alt><Super>Right']"
+gsettings set org.gnome.desktop.wm.keybindings move-to-workspace-1 "['<Alt><Super>1']"
+gsettings set org.gnome.desktop.wm.keybindings move-to-workspace-2 "['<Alt><Super>2']"
+gsettings set org.gnome.desktop.wm.keybindings move-to-workspace-3 "['<Alt><Super>3']"
+# 隐藏/显示当前工作区的所有窗口
+gsettings set org.gnome.desktop.wm.keybindings show-desktop "['<Alt><Super>h']"
+# 键盘 F 功能键
+# gsettings list-recursively org.gnome.settings-daemon.plugins.media-keys
+# 媒体声音控制
+gsettings set org.gnome.settings-daemon.plugins.media-keys mic-mute "['F2']"
+gsettings set org.gnome.settings-daemon.plugins.media-keys volume-down "['F3']"
+gsettings set org.gnome.settings-daemon.plugins.media-keys volume-up "['F4']"
+# 弹出 U 盘
+gsettings set org.gnome.settings-daemon.plugins.media-keys eject "['F5']"
+# 播放器控制
+gsettings set org.gnome.settings-daemon.plugins.media-keys next "['F8']"
+gsettings set org.gnome.settings-daemon.plugins.media-keys play "['F9']"
+gsettings set org.gnome.settings-daemon.plugins.media-keys previous "['F10']"
+
 
 
 ## 1. 系统基础配置 ==============================================

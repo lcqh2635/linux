@@ -197,8 +197,10 @@ gsettings set org.gnome.shell.extensions.auto-move-windows application-list "['o
 
 cd ~/文档
 git clone https://gitee.com/llf2635/linux.git --depth=1
+cp -v ~/文档/linux/模板/* ~/模板/
 cp -v ~/文档/linux/壁纸/* ~/.local/share/backgrounds/
 gsettings set org.gnome.desktop.background picture-uri 'file:///home/lcqh/.local/share/backgrounds/wallpaper-1.jpg'
+
 
 # 进入到下载目录
 cd ~/图片

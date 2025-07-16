@@ -12,12 +12,12 @@ dnf install gnome-browser-connector
 # dnf search gnome-shell-extension*
 # dnf list gnome-shell-extension*
 
+# 比装用户扩展插件
 Add to Desktop
 Alphabetical App Grid
 Applications Overview Tooltip
 App menu is back
 Bluetooth Battery Meter
-Bluetooth Quick Connect
 Clipboard Indicator
 # Compiz alike magic lamp effect
 Coverflow Alt-Tab
@@ -40,9 +40,8 @@ Impatience
 Lunar Calendar 农历
 Net Speed
 Night Theme Switcher
-# Quick Settings Tweaks
 Privacy Quick Settings
-Proxy Switcher
+Quick Settings Tweaks
 Rounded Corners
 Rounded Window Corners Reborn
 Search Light
@@ -53,86 +52,8 @@ Status Area Horizontal Spacing
 Top Bar Organizer
 User Avatar In Quick Settings
 Weather Clock
-Wifi QR Code
 Window Gestures
 
-
-
-
-
-
-# 优质推荐 Gnome 扩展
-Add to Desktop
-Bluetooth Quick Connect
-Clipboard Indicator
-# Compiz windows effect
-Compiz alike magic lamp effect
-ddterm
-Desktop Cube
-# Open Bar
-# Dash2Dock Animated
-# Extension List
-Gtk4 Desktop Icons NG (DING)
-# 安装 Lunar Calendar 农历 扩展插件需要如下内容
-#https://gitlab.gnome.org/Nei/ChineseCalendar/-/archive/20250205/ChineseCalendar-20250205.tar.gz
-# tar -xzvf ChineseCalendar-20250205.tar.gz
-# cd ChineseCalendar-20250205
-# ./install.sh
-Lunar Calendar 农历
-IBus Tweaker
-Night Theme Switcher
-Quick Settings Tweaks
-Media Controls
-Search Light
-SettingsCenter
-Top Bar Organizer
-# Tray Icons: Reloaded
-Quick Settings Audio Panel
-Fedora Linux Update Indicator
-Window Gestures
-Show Desktop Button
-# Weather O'Clock
-VirtualBox applet
-# https://github.com/Sominemo/Fildem-Gnome-45
-App menu is back
-Custom Window Controls
-# https://extensions.gnome.org/extension/6300/custom-window-controls/
-# https://github.com/icedman/custom-window-controls
-Custom Command Toggle
-Color Picker
-Desktop Widgets
-Bluetooth Battery Meter
-Astra Monitor
-Applications Overview Tooltip
-Hide Universal Access
-Customize Clock on Lock Screen
-
-
-nautilus ~/.local/share/gnome-shell/extensions
-sudo dnf install -y just gettext
-# gnome-extensions list
-# 通过源码安装的Gnome扩展插件需要重新登陆才有效
-# Hide Top Bar
-git clone https://gitcode.com/gh_mirrors/hi/hidetopbar.git --depth=1
-cd hidetopbar
-make
-gnome-extensions install ./hidetopbar.zip
-
-# Rounded Window Corners Reborn
-git clone https://gitcode.com/gh_mirrors/rou/rounded-window-corners.git --depth=1
-cd rounded-window-corners
-just install
-
-# Rounded Corners
-git clone https://github.com/lennart-k/gnome-rounded-corners.git --depth=1
-cd gnome-rounded-corners
-make
-gnome-extensions install ./hidetopbar.zip
-gnome-extensions enable hidetopbar@mathieu.bidon.ca
-
-
-gnome-extensions enable hidetopbar@mathieu.bidon.ca
-gnome-extensions enable rounded-window-corners@fxgn
 
 # 解决用户 Gnome 扩展无法使用 gsettings 的问题
 for EXT_DIR in ~/.local/share/gnome-shell/extensions/*/; do
@@ -148,42 +69,6 @@ for EXT_DIR in ~/.local/share/gnome-shell/extensions/*/; do
 done
 
 glib-compile-schemas ~/.local/share/glib-2.0/schemas/
-
-
-# 系统外观主题和Gnome扩展插件优化
-# 自定义快捷键优化，Super-管理窗口、Alt-管理工作区
-gsettings set org.gnome.desktop.wm.keybindings switch-to-workspace-last "['<Alt>End']"
-gsettings set org.gnome.desktop.wm.keybindings switch-to-workspace-left "['<Alt>Left']"
-gsettings set org.gnome.desktop.wm.keybindings switch-to-workspace-right "['<Alt>Right']"
-gsettings set org.gnome.desktop.wm.keybindings switch-to-workspace-1 "['<Alt>1']"
-gsettings set org.gnome.desktop.wm.keybindings switch-to-workspace-2 "['<Alt>2']"
-gsettings set org.gnome.desktop.wm.keybindings switch-to-workspace-3 "['<Alt>3']"
-# 当前工作区内的窗口切换
-gsettings set org.gnome.desktop.wm.keybindings switch-windows "['<Super>T']"
-# 窗口在工作区移动
-gsettings set org.gnome.desktop.wm.keybindings move-to-workspace-last "['<Alt><Super>End']"
-gsettings set org.gnome.desktop.wm.keybindings move-to-workspace-left "['<Alt><Super>Left']"
-gsettings set org.gnome.desktop.wm.keybindings move-to-workspace-right "['<Alt><Super>Right']"
-gsettings set org.gnome.desktop.wm.keybindings move-to-workspace-1 "['<Alt><Super>1']"
-gsettings set org.gnome.desktop.wm.keybindings move-to-workspace-2 "['<Alt><Super>2']"
-gsettings set org.gnome.desktop.wm.keybindings move-to-workspace-3 "['<Alt><Super>3']"
-# 隐藏/显示当前工作区的所有窗口
-gsettings set org.gnome.desktop.wm.keybindings show-desktop "['<Alt><Super>h']"
-# 键盘 F 功能键
-# gsettings list-recursively org.gnome.settings-daemon.plugins.media-keys
-# 媒体声音控制
-gsettings set org.gnome.settings-daemon.plugins.media-keys mic-mute "['F2']"
-gsettings set org.gnome.settings-daemon.plugins.media-keys volume-down "['F3']"
-gsettings set org.gnome.settings-daemon.plugins.media-keys volume-up "['F4']"
-# 弹出 U 盘
-gsettings set org.gnome.settings-daemon.plugins.media-keys eject "['F5']"
-# 播放器控制
-gsettings set org.gnome.settings-daemon.plugins.media-keys next "['F8']"
-gsettings set org.gnome.settings-daemon.plugins.media-keys play "['F9']"
-gsettings set org.gnome.settings-daemon.plugins.media-keys previous "['F10']"
-
-
-
 
 # 列出所有已安装的 Schema
 # gsettings list-schemas
@@ -203,8 +88,7 @@ gsettings set org.gnome.shell.extensions.hidetopbar animation-time-overview 0.5
 gsettings set org.gnome.shell.extensions.gtk4-ding show-home false
 gsettings set org.gnome.shell.extensions.gtk4-ding show-trash false
 # gsettings reset-recursively org.gnome.shell.extensions.gtk4-ding
-cp -v ~/下载/linux/模板/* ~/模板/
-# mv ~/下载/linux/模板/* ~/模板/
+
 
 # Status Area Horizontal Spacing
 gsettings set org.gnome.shell.extensions.status-area-horizontal-spacing hpadding 5
@@ -321,3 +205,79 @@ echo "系统配置成功完成!"
 
 # 知名禁书
 # git clone https://github.com/michaelfan0310/deep-library.git --depth=1
+
+
+
+
+# 优质推荐 Gnome 扩展
+Add to Desktop
+Bluetooth Quick Connect
+Clipboard Indicator
+# Compiz windows effect
+Compiz alike magic lamp effect
+ddterm
+Desktop Cube
+# Open Bar
+# Dash2Dock Animated
+# Extension List
+Gtk4 Desktop Icons NG (DING)
+# 安装 Lunar Calendar 农历 扩展插件需要如下内容
+#https://gitlab.gnome.org/Nei/ChineseCalendar/-/archive/20250205/ChineseCalendar-20250205.tar.gz
+# tar -xzvf ChineseCalendar-20250205.tar.gz
+# cd ChineseCalendar-20250205
+# ./install.sh
+Lunar Calendar 农历
+IBus Tweaker
+Night Theme Switcher
+Quick Settings Tweaks
+Media Controls
+Search Light
+SettingsCenter
+Top Bar Organizer
+# Tray Icons: Reloaded
+Quick Settings Audio Panel
+Fedora Linux Update Indicator
+Window Gestures
+Show Desktop Button
+# Weather O'Clock
+VirtualBox applet
+# https://github.com/Sominemo/Fildem-Gnome-45
+App menu is back
+Custom Window Controls
+# https://extensions.gnome.org/extension/6300/custom-window-controls/
+# https://github.com/icedman/custom-window-controls
+Custom Command Toggle
+Color Picker
+Desktop Widgets
+Bluetooth Battery Meter
+Astra Monitor
+Applications Overview Tooltip
+Hide Universal Access
+Customize Clock on Lock Screen
+
+
+nautilus ~/.local/share/gnome-shell/extensions
+sudo dnf install -y just gettext
+# gnome-extensions list
+# 通过源码安装的Gnome扩展插件需要重新登陆才有效
+# Hide Top Bar
+git clone https://gitcode.com/gh_mirrors/hi/hidetopbar.git --depth=1
+cd hidetopbar
+make
+gnome-extensions install ./hidetopbar.zip
+
+# Rounded Window Corners Reborn
+git clone https://gitcode.com/gh_mirrors/rou/rounded-window-corners.git --depth=1
+cd rounded-window-corners
+just install
+
+# Rounded Corners
+git clone https://github.com/lennart-k/gnome-rounded-corners.git --depth=1
+cd gnome-rounded-corners
+make
+gnome-extensions install ./hidetopbar.zip
+gnome-extensions enable hidetopbar@mathieu.bidon.ca
+
+
+gnome-extensions enable hidetopbar@mathieu.bidon.ca
+gnome-extensions enable rounded-window-corners@fxgn
