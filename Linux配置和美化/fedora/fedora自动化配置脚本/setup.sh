@@ -169,7 +169,9 @@ sudo dnf swap -y mesa-vdpau-drivers mesa-vdpau-drivers-freeworld --allowerasing
 sudo dnf swap -y mesa-vulkan-drivers mesa-vulkan-drivers-freeworld --allowerasing
 # 安装 VA-API 和 VDPAU 驱动，一般默认已安装
 # dnf list mesa*		# 查看 Mesa 驱动程序 freeworld 和原始驱动程序
-sudo dnf install -y libva-utils vulkan-tools		# 提供 vainfo 命令的包
+# 提供 vainfo 命令的包
+sudo dnf install -y libva-utils vulkan-tools
+# vainfo
 # vainfo | grep -E 'H264|H265'
 # vulkaninfo | grep "GPU"
 
@@ -226,15 +228,19 @@ npm config set registry https://registry.npmmirror.com
 # 安装 Bun
 sudo npm install -g bun
 echo 你刚安装的 bun 版本号为：$(bun --version)
-# 将 bunfig.toml 作为隐藏文件添加到用户主目录
+# 将 bunfig.toml 作为隐藏文件添加到用户主目录 https://www.bunjs.cn/docs/runtime/bunfig
 echo '[install]
 # 使用阿里云加速仓库，仓库地址可从阿里云官方获取，地址为 https://developer.aliyun.com/mirror/
 registry = "https://registry.npmmirror.com/"
 ' >> ~/.bunfig.toml
 
-# 安装 Rust
-echo 'export RUSTUP_UPDATE_ROOT=https://mirrors.tuna.tsinghua.edu.cn/rustup/rustup' >> ~/.bash_profile
-echo 'export RUSTUP_DIST_SERVER=https://mirrors.tuna.tsinghua.edu.cn/rustup' >> ~/.bash_profile
+# 配置 Rust Toolchain 反向代理 https://mirrors.ustc.edu.cn/help/rust-static.html
+# 使用 rustup 前，先设置环境变量 RUSTUP_DIST_SERVER （用于更新 toolchain）：
+echo 'export RUSTUP_DIST_SERVER=https://mirrors.ustc.edu.cn/rust-static' >> ~/.bash_profile
+# 以及 RUSTUP_UPDATE_ROOT （用于更新 rustup）：
+echo 'export RUSTUP_UPDATE_ROOT=https://mirrors.ustc.edu.cn/rust-static/rustup' >> ~/.bash_profile
+cat  ~/.bash_profile
+
 echo "安装rust..."
 # 安装 rustup
 curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
@@ -242,33 +248,35 @@ curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 source $HOME/.cargo/env
 rustup update
 # rustup self uninstall
+
 #  配置 Cargo 国内加速镜像源
+# 配置 Rust Crates Registry 源 https://mirrors.ustc.edu.cn/help/crates.io-index.html
+# 如果正在使用 cargo 1.68 及以上版本，在 $HOME/.cargo/config.toml 中添加如下内容即可：
 mkdir -p ~/.cargo && cat >> ~/.cargo/config.toml << 'EOF'
 # 配置 Cargo 国内加速镜像源，可选：ustc、tuna、sjtu、aliyun、rsproxy
 [source.crates-io]
 replace-with = 'ustc'
 
-# 中国科学技术大学镜像
+# 中国科学技术大学镜像 https://mirrors.ustc.edu.cn/help/crates.io-index.html
 [source.ustc]
-registry = "https://mirrors.ustc.edu.cn/crates.io-index"
+registry = "sparse+https://mirrors.ustc.edu.cn/crates.io-index/"
 
-# 清华大学镜像
-[source.tuna]
-registry = "https://mirrors.tuna.tsinghua.edu.cn/git/crates.io-index.git"
+[registries.ustc]
+index = "sparse+https://mirrors.ustc.edu.cn/crates.io-index/"
 
-# 上海交通大学镜像
-[source.sjtu]
-registry = "https://mirrors.sjtug.sjtu.edu.cn/git/crates.io-index"
 
 # 阿里云镜像
 # 使用稀疏协议（sparse）减少元数据下载量，大幅加速
 [source.aliyun]
 registry = "sparse+https://mirrors.aliyun.com/crates.io-index/"
 
-# Rust官方中文社区镜像（仅限中国）
-[source.rsproxy]
-registry = "https://rsproxy.cn/crates.io-index"
+[registries.aliyun]
+index = "sparse+https://mirrors.aliyun.com/crates.io-index/"
 EOF
+
+
+
+
 
 # 验证安装
 echo 你刚安装的 rust 版本号为：$(rustc --version)
@@ -286,7 +294,10 @@ echo 你刚安装的 cargo 版本号为：$(cargo --version)
 # sdk install gradle
 
 # 安装 JDK（示例：安装 Temurin JDK 17）https://docs.fedoraproject.org/en-US/quick-docs/installing-java/
-sudo dnf install -y java-latest-openjdk
+# java-21-openjdk 包含完整的OpenJDK，包括图形化组件（如AWT、Swing、JavaFX等依赖的库）
+# sudo dnf install -y java-latest-openjdk-headless
+# 仅包含无图形界面的运行时环境（无AWT/Swing的图形依赖）fedora 默认安装这个
+sudo dnf install -y java-21-openjdk-headless
 # sudo dnf install -y java-21-openjdk
 # dnf list java-*-openjdk
 # 在 Java 版本之间切换
