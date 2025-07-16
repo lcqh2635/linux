@@ -197,14 +197,13 @@ gsettings set org.gnome.shell.extensions.auto-move-windows application-list "['o
 
 cd ~/文档
 git clone https://gitee.com/llf2635/linux.git --depth=1
-cp -v ~/文档/linux/壁纸/wallpaper.jpg ~/.local/share/backgrounds/
-gsettings set org.gnome.desktop.background picture-uri 'file:///home/lcqh/.local/share/backgrounds/wallpaper.jpg'
+cp -v ~/文档/linux/壁纸/* ~/.local/share/backgrounds/
+gsettings set org.gnome.desktop.background picture-uri 'file:///home/lcqh/.local/share/backgrounds/wallpaper-1.jpg'
 
 # 进入到下载目录
 cd ~/图片
 # git clone https://gitee.com/llf2635/linux.git --depth=1
 git clone https://gitee.com/llf2635/linux-wallpapers.git --depth=1
-cp -v ~/下载/linux-wallpapers/Gnome/* ~/.local/share/backgrounds/
 # flatpak install flathub me.dusansimic.DynamicWallpaper
 
 # 免费壁纸网站 https://haowallpaper.com/homeView
@@ -212,23 +211,6 @@ cp -v ~/下载/linux-wallpapers/Gnome/* ~/.local/share/backgrounds/
 # ls ~/.local/share/backgrounds
 # ls /usr/share/backgrounds
 # nautilus admin:/usr/share/backgrounds
-# 安装 WhiteSur 壁纸
-echo "准备开始安装WhiteSur-wallpapers壁纸..."
-if [ ! -d "WhiteSur-wallpapers" ]; then
-    echo "正在安装WhiteSur壁纸..."
-    # git clone https://github.com/vinceliuice/WhiteSur-wallpapers.git --depth=1
-    git clone https://gitcode.com/gh_mirrors/wh/WhiteSur-wallpapers.git --depth=1
-    cd WhiteSur-wallpapers
-    # 安装静态壁纸
-    # ./install-wallpapers.sh
-    # 安装随时间变化的动态壁纸
-    sudo ./install-gnome-backgrounds.sh
-    # gsettings set org.gnome.desktop.background picture-uri 'file:///usr/share/backgrounds/WhiteSur/WhiteSur-timed.xml'
-    # gsettings set org.gnome.desktop.background picture-uri 'file:///usr/share/backgrounds/Ventura/Ventura-timed.xml'
-    gsettings set org.gnome.desktop.background picture-uri 'file:///home/lcqh/.local/share/backgrounds/wallpaper-10.jpg'
-    cd ..
-    rm -rf WhiteSur-wallpapers
-fi
 
 # 安装 capitaine 光标主题
 echo "准备开始安装WhiteSur-cursors光标主题..."
@@ -247,7 +229,7 @@ if [ ! -d "WhiteSur-icon-theme" ]; then
     rm -rf WhiteSur-icon-theme
 fi
 
-# 下载并安装主题
+# 下载并安装主题 https://github.com/vinceliuice/WhiteSur-gtk-theme
 echo "准备开始安装WhiteSur-gtk-theme应用主题..."
 sudo dnf install -y adw-gtk3-theme
 # https://github.com/FedoraQt
@@ -268,25 +250,29 @@ if [ ! -d "WhiteSur-gtk-theme" ]; then   # 检查目录是否存在
     git clone https://gitcode.com/gh_mirrors/wh/WhiteSur-gtk-theme.git --depth=1
     cd WhiteSur-gtk-theme
     # 卸载 ./install.sh -r
-    # 安装 GTK 主题
-    ./install.sh
+    # 安装 GTK 主题，设置主题不透明度变体。默认为所有变体
+    ./install.sh -o solid -l --shell -i fedora --round
+    # 修复 libadwaita（不完美）https://github.com/vinceliuice/WhiteSur-gtk-theme?tab=readme-ov-file#fix-for-libadwaita-not-perfect
     # ./install.sh -l
-    ./install.sh -l -c light
+    # ./install.sh -l -c light
+    # 设置 'WhiteSur' GDM/Flatpak 主题不透明度变体。默认值为 'normal'
+    ./tweaks.sh -o solid
     # 安装 Firefox 主题
     firefox & sleep 1 && pkill firefox	# 初始化 firefox 配置
-    ./tweaks.sh -o solid
     ./tweaks.sh -f flat 
     # 安装 GDM 主题，可通过下面的软件自定义调节
     # flatpak install flathub io.github.realmazharhussain.GdmSettings
-    # sudo ./tweaks.sh -g -b '/home/lcqh/.local/share/backgrounds/Ventura-light.jpg'
-    sudo ./tweaks.sh -g -b '/home/lcqh/.local/share/backgrounds/wallpaper-1.jpg'
+    # 设置 GDM 面板的“活动”图标 默认值为“标准”，此处设置为 fedora
+    sudo ./tweaks.sh -g -i fedora -b '/home/lcqh/.local/share/backgrounds/wallpaper-1.jpg'
+    # 不要使 'WhiteSur' GDM 主题背景图像变暗 
+    # sudo ./tweaks.sh -g -nd -b '/home/lcqh/.local/share/backgrounds/wallpaper-1.jpg'
     # 不要模糊自定义背景
-    sudo ./tweaks.sh -g -nb -b "/home/lcqh/.local/share/backgrounds/wallpaper-1.jpg"
+    # sudo ./tweaks.sh -g -nb -b "/home/lcqh/.local/share/backgrounds/wallpaper-1.jpg"
     # 将 WhiteSur 主题包连接到 Flatpak 仓库，可以解决部分应用无法使用 WhiteSur 主题问题，例如：Chrome、Edge
     sudo flatpak override --filesystem=xdg-config/gtk-3.0 && sudo flatpak override --filesystem=xdg-config/gtk-4.0
-    ./tweaks.sh -F
+    ./tweaks.sh -F -o solid
     # flatpak list --app
-    # 修复 Dash to Dock 主题的问题  ./tweaks.sh -d -r
+    # 不推荐、修复 Dash to Dock 主题的问题  ./tweaks.sh -d -r
     # ./tweaks.sh -d
     cd ..
     rm -rf WhiteSur-gtk-theme
@@ -329,7 +315,7 @@ gsettings set org.gnome.desktop.wm.preferences theme 'WhiteSur-Light-solid'
 
 # 清理临时文件
 echo "正在清理临时文件..."
-dnf clean all
+sudo dnf clean all && sudo dnf autoremove
 
 echo "主题美化完成！请注销或重启系统以查看全部更改效果。"
 echo "您可以使用GNOME Tweaks工具进一步自定义外观。"
