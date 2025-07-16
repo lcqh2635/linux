@@ -5,8 +5,6 @@
 # 使用方法：chmod +x beautify.sh && ./beautify.sh
 
 # gsettings 修改的是当前用户的 GNOME 配置，必须由 桌面用户（而非 root）执行。如果脚本通过 sudo 运行，命令会被忽略。
-# 设置窗口按钮位置 (右)
-gsettings set org.gnome.desktop.wm.preferences button-layout 'appmenu:minimize,maximize,close'
 # 设置新窗口居中显示
 gsettings set org.gnome.mutter center-new-windows true
 # 设置电量百分比
@@ -14,7 +12,9 @@ gsettings set org.gnome.desktop.interface show-battery-percentage true
 # 显示星期几
 gsettings set org.gnome.desktop.interface clock-show-weekday true
 # 显示秒
-gsettings set org.gnome.desktop.interface clock-show-seconds true
+# gsettings set org.gnome.desktop.interface clock-show-seconds true
+# 设置窗口按钮位置 (右)
+gsettings set org.gnome.desktop.wm.preferences button-layout 'appmenu:minimize,maximize,close'
 # gsettings list-recursively org.gnome.desktop.interface
 # gsettings list-recursively org.gnome.desktop.wm.preferences
 
@@ -91,11 +91,8 @@ gnome-extensions enable drive-menu@gnome-shell-extensions.gcampax.github.com
 gnome-extensions enable appindicatorsupport@rgcjonas.gmail.com
 gnome-extensions enable caffeine@patapon.info
 gnome-extensions enable gsconnect@andyholmes.github.io
-gnome-extensions enable workspace-indicator@gnome-shell-extensions.gcampax.github.com
 gnome-extensions enable auto-move-windows@gnome-shell-extensions.gcampax.github.com
 gnome-extensions enable no-overview@fthx
-gnome-extensions enable light-style@gnome-shell-extensions.gcampax.github.com
-gnome-extensions enable system-monitor@gnome-shell-extensions.gcampax.github.com
 # gnome-extensions enable forge@jmmaranan.com
 
 # 列出所有已安装的 Schema
@@ -114,7 +111,7 @@ gsettings set org.gnome.shell.extensions.dash-to-dock scroll-action 'cycle-windo
 gsettings set org.gnome.shell.extensions.dash-to-dock custom-theme-shrink true
 gsettings set org.gnome.shell.extensions.dash-to-dock running-indicator-style 'DASHES'
 gsettings set org.gnome.shell.extensions.dash-to-dock running-indicator-dominant-color true
-# gsettings get org.gnome.shell.extensions.dash-to-dock background-color
+gsettings set org.gnome.shell.extensions.dash-to-dock custom-background-color true
 gsettings set org.gnome.shell.extensions.dash-to-dock background-color 'rgb(153,193,241)'
 gsettings set org.gnome.shell.extensions.dash-to-dock transparency-mode 'FIXED'
 gsettings set org.gnome.shell.extensions.dash-to-dock background-opacity 0.3
@@ -197,8 +194,14 @@ echo "正在配置auto-move-windows..."
 # gsettings get org.gnome.shell.extensions.auto-move-windows application-list
 gsettings set org.gnome.shell.extensions.auto-move-windows application-list "['org.gnome.Settings.desktop:1', 'org.gnome.Software.desktop:1', 'org.gnome.TextEditor.desktop:1', 'org.gnome.SystemMonitor.desktop:1', 'org.gnome.tweaks.desktop:1', 'org.gnome.Shell.Extensions.desktop:1', 'com.mattjakeman.ExtensionManager.desktop:1', 'org.gnome.Loupe.desktop:1', 'yelp.desktop:1', 'org.gnome.DiskUtility.desktop:1', 'org.gnome.baobab.desktop:1', 'org.gnome.Tour.desktop:1', 'org.gnome.Maps.desktop:1', 'org.gnome.Firmware.desktop:1', 'org.gnome.Calculator.desktop:1', 'org.freedesktop.MalcontentControl.desktop:1', 'org.gnome.Contacts.desktop:1', 'org.gnome.Calendar.desktop:1', 'org.gnome.Totem.desktop:1', 'org.gnome.Weather.desktop:1', 'org.gnome.Evince.desktop:1', 'org.gnome.Snapshot.desktop:1', 'org.gnome.clocks.desktop:1', 'io.missioncenter.MissionCenter.desktop:1', 'org.gnome.Characters.desktop:1', 'org.gnome.font-viewer.desktop:1', 'com.github.tchx84.Flatseal.desktop:1', 'ca.desrt.dconf-editor.desktop:1', 'de.haeckerfelix.Fragments.desktop:1', 'io.github.realmazharhussain.GdmSettings.desktop:1', 'it.mijorus.gearlever.desktop:1', 'gnome-system-monitor-kde.desktop:1', 'io.gitlab.adhami3310.Impression.desktop:1', 'io.github.nokse22.inspector.desktop:1', 'com.obsproject.Studio.desktop:1', 'page.tesk.Refine.desktop:1', 'org.fedoraproject.MediaWriter.desktop:1', 'net.nokyan.Resources.desktop:1', 'org.gnome.Evolution.desktop:1', 'io.github.vikdevelop.SaveDesktop.desktop:1', 'org.gnome.World.PikaBackup.desktop:1', 'timeshift-gtk.desktop:1', 'com.qq.QQ.desktop:2', 'com.tencent.WeChat.desktop:2', 'org.mozilla.firefox.desktop:2', 'com.microsoft.Edge.desktop:2', 'com.google.Chrome.desktop:2', 'com.github.gmg137.netease-cloud-music-gtk.desktop:2', 'io.github.qier222.YesPlayMusic.desktop:2', 'com.github.neithern.g4music.desktop:2', 'cn.feishu.Feishu.desktop:2', 'libreoffice-startcenter.desktop:2', 'libreoffice-calc.desktop:2', 'libreoffice-impress.desktop:2', 'libreoffice-writer.desktop:2', 'io.typora.Typora.desktop:2', 'md.obsidian.Obsidian.desktop:2', 'jetbrains-toolbox.desktop:3', 'jetbrains-idea-1e43afa8-7b74-4314-97e3-6dc2fcd19338.desktop:3', 'jetbrains-datagrip-6221d402-4768-423c-8755-982ae877905f.desktop:3', 'me.iepure.devtoolbox.desktop:3', 'switchhosts.desktop:3', 'com.github.marhkb.Pods.desktop:3', 'io.podman_desktop.PodmanDesktop.desktop:3', 'tabby.desktop:3', 'com.visualstudio.code.desktop:3', 're.sonny.Playhouse.desktop:3', 'org.gnome.Builder.desktop:3']"
 
+
+cd ~/文档
+git clone https://gitee.com/llf2635/linux.git --depth=1
+cp -v ~/文档/linux/壁纸/wallpaper.jpg ~/.local/share/backgrounds/
+gsettings set org.gnome.desktop.background picture-uri 'file:///home/lcqh/.local/share/backgrounds/wallpaper.jpg'
+
 # 进入到下载目录
-cd ~/下载
+cd ~/图片
 # git clone https://gitee.com/llf2635/linux.git --depth=1
 git clone https://gitee.com/llf2635/linux-wallpapers.git --depth=1
 cp -v ~/下载/linux-wallpapers/Gnome/* ~/.local/share/backgrounds/
@@ -217,29 +220,19 @@ if [ ! -d "WhiteSur-wallpapers" ]; then
     git clone https://gitcode.com/gh_mirrors/wh/WhiteSur-wallpapers.git --depth=1
     cd WhiteSur-wallpapers
     # 安装静态壁纸
-    ./install-wallpapers.sh
+    # ./install-wallpapers.sh
     # 安装随时间变化的动态壁纸
     sudo ./install-gnome-backgrounds.sh
     # gsettings set org.gnome.desktop.background picture-uri 'file:///usr/share/backgrounds/WhiteSur/WhiteSur-timed.xml'
     # gsettings set org.gnome.desktop.background picture-uri 'file:///usr/share/backgrounds/Ventura/Ventura-timed.xml'
-    gsettings get org.gnome.desktop.background picture-uri 'file:///home/lcqh/.local/share/backgrounds/wallpaper-10.jpg'
+    gsettings set org.gnome.desktop.background picture-uri 'file:///home/lcqh/.local/share/backgrounds/wallpaper-10.jpg'
     cd ..
     rm -rf WhiteSur-wallpapers
 fi
 
-# 安装 WhiteSur 光标主题
+# 安装 capitaine 光标主题
 echo "准备开始安装WhiteSur-cursors光标主题..."
 sudo dnf install -y la-capitaine-cursor-theme
-# 安装WhiteSur光标
-if [ ! -d "WhiteSur-cursors" ]; then
-    echo "正在安装WhiteSur光标..."
-    # git clone https://github.com/vinceliuice/WhiteSur-cursors.git --depth=1
-    git clone https://gitcode.com/gh_mirrors/wh/WhiteSur-cursors.git --depth=1
-    cd WhiteSur-cursors
-    ./install.sh
-    cd ..
-    rm -rf WhiteSur-cursors
-fi
 
 # 下载并安装 WhiteSur 图标主题
 echo "准备开始安装WhiteSur-icon-theme图标主题..."
@@ -281,11 +274,14 @@ if [ ! -d "WhiteSur-gtk-theme" ]; then   # 检查目录是否存在
     ./install.sh -l -c light
     # 安装 Firefox 主题
     firefox & sleep 1 && pkill firefox	# 初始化 firefox 配置
-    ./tweaks.sh -f flat
+    ./tweaks.sh -o solid
+    ./tweaks.sh -f flat 
     # 安装 GDM 主题，可通过下面的软件自定义调节
     # flatpak install flathub io.github.realmazharhussain.GdmSettings
     # sudo ./tweaks.sh -g -b '/home/lcqh/.local/share/backgrounds/Ventura-light.jpg'
     sudo ./tweaks.sh -g -b '/home/lcqh/.local/share/backgrounds/wallpaper-1.jpg'
+    # 不要模糊自定义背景
+    sudo ./tweaks.sh -g -nb -b "/home/lcqh/.local/share/backgrounds/wallpaper-1.jpg"
     # 将 WhiteSur 主题包连接到 Flatpak 仓库，可以解决部分应用无法使用 WhiteSur 主题问题，例如：Chrome、Edge
     sudo flatpak override --filesystem=xdg-config/gtk-3.0 && sudo flatpak override --filesystem=xdg-config/gtk-4.0
     ./tweaks.sh -F

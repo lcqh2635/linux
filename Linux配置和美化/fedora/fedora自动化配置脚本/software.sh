@@ -86,12 +86,19 @@ flatpak install flathub com.jetbrains.RustRover
 flatpak install flathub com.jetbrains.GoLand
 flatpak install flathub com.jetbrains.PyCharm-Professional
 flatpak install flathub com.jetbrains.DataGrip
+# 配置 Zed 参考官网 https://zed.rust-lang.net.cn/docs/configuring-zed
+flatpak install flathub dev.zed.Zed
+flatpak install flathub com.apifox.Apifox
+flatpak install flathub cn.apipost.apipost
 # 用于 UX/UI 的免费图形设计工具
 flatpak install flathub com.icons8.Lunacy
 # 简单的 UML 和 SysML 建模工具
 flatpak install flathub org.gaphor.Gaphor
 # 注意：要在另一个驱动器上添加游戏库，首先需要授予应用程序访问它的权限：
 # flatpak override --user --filesystem=/path/to/your/Steam/Library com.valvesoftware.Steam
+
+# 将您的文件上传到任何地方，可以使用厂商云存储、或者自建 nas 存储服务器
+flatpak install flathub io.github.pieterdd.RcloneShuttle
 
 
 # Clash Verge 翻墙工具，加速下载地址	https://ghproxylist.com/

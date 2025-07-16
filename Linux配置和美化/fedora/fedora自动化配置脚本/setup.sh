@@ -138,6 +138,9 @@ media.peerconnection.video.h264_enabled
 media.gmp-gmpopenh264.version
 
 
+network.http.pipelining
+network.http.pipelining.maxrequests
+
 # 安装多媒体编解码器
 echo "安装多媒体编解码器..."
 # 作为 Fedora 用户和系统管理员，您可以使用这些步骤来安装额外的多媒体插件，使您能够播放各种视频和音频类型。 
@@ -275,9 +278,6 @@ index = "sparse+https://mirrors.aliyun.com/crates.io-index/"
 EOF
 
 
-
-
-
 # 验证安装
 echo 你刚安装的 rust 版本号为：$(rustc --version)
 echo 你刚安装的 cargo 版本号为：$(cargo --version)
@@ -308,6 +308,51 @@ echo 你刚安装的 java 版本号为：$(java --version)
 echo 你刚安装的 mvn 版本号为：$(mvn --version)
 echo 你刚安装的 gradle 版本号为：$(gradle --version)
 
+
+sudo dnf install -y golang
+
+# 安装 PostgreSQL
+# 参考fedora官方文档 https://docs.fedoraproject.org/zh_CN/quick-docs/postgresql/
+sudo dnf install -y postgresql-server postgresql-contrib
+# 默认情况下，postgresql 服务器未运行且处于禁用状态。要将其设置为在启动时启动，请运行：
+sudo systemctl enable postgresql
+# 初始化数据库
+# 安装后，需要使用初始数据填充数据库。可以使用以下命令完成数据库初始化。它创建配置文件 postgresql.conf 和 pg_hba.conf
+# sudo postgresql-setup --initdb
+sudo postgresql-setup --initdb --unit postgresql
+# 要手动启动 postgresql 服务器，请运行
+sudo systemctl start postgresql
+# systemctl status postgresql
+# psql --version
+# PostgreSQL 在端口 5432（或您在 postgresql.conf 中设置的任何其他内容）上运行。在 firewalld 中，您可以像这样打开它：
+# firewall-cmd --zone=public --list-ports
+sudo firewall-cmd --permanent --add-port=5432/tcp
+sudo firewall-cmd --reload
+# 默认 postgres 管理员密码为空，此处设置为 postgres
+# 在使用 postgres 用户时为 postgres 用户添加密码可能是个好主意：
+# postgres=# \password postgres
+sudo -u postgres psql -c "ALTER USER postgres WITH PASSWORD 'postgres';"
+
+# PostgreSQL 配置文件
+# sudo cat /var/lib/pgsql/data/postgresql.conf
+# 使用 sed 修改 postgresql.conf
+sudo sed -i "s/^#listen_addresses = 'localhost'/listen_addresses = '*'/g" /var/lib/pgsql/data/postgresql.conf
+sudo sh -c "echo 'host    all             all             0.0.0.0/0               md5' >> /var/lib/pgsql/data/pg_hba.conf"
+# 设置数据库后，您需要配置对数据库服务器的访问
+sudo sed -i 's/^host    all             all             127\.0\.0\.1\/32            ident$/host    all             all             127.0.0.1\/32            md5/' /var/lib/pgsql/data/pg_hba.conf
+# nautilus admin:/var/lib/pgsql/data/pg_hba.conf
+# 重启 PostgreSQL 生效
+sudo systemctl restart postgresql
+# 使用默认的 postgres 用户，登录 PostgreSQL 控制台
+sudo -u postgres psql
+# 用户创建和数据库创建
+CREATE USER lcqh WITH PASSWORD '479368';
+CREATE DATABASE test_db OWNER lcqh;
+GRANT ALL PRIVILEGES ON DATABASE test_db TO lcqh;
+# 示例（连接刚创建的 testdb）：
+psql -U lcqh -d test_db -W
+
+
 # 安装Docker
 echo "安装podman..."
 # 安装核心组件（包含 rootless 支持）
@@ -325,38 +370,6 @@ echo 你刚安装的 podman 版本号为：$(podman --version)
 # systemctl start podman
 # Rootless 用户级 socket
 # systemctl --user enable --now podman.socket
-
-# 安装 PostgreSQL
-# 参考fedora官方文档 https://docs.fedoraproject.org/zh_CN/quick-docs/postgresql/
-sudo dnf install -y postgresql-server postgresql-contrib
-# 初始化数据库
-sudo postgresql-setup --initdb
-# 启动服务并设置开机自启
-sudo systemctl enable --now postgresql
-# systemctl status postgresql
-# psql --version
-# 默认 postgres 管理员密码为空，此处设置为 postgres
-sudo -u postgres psql -c "ALTER USER postgres WITH PASSWORD 'postgres';"
-# PostgreSQL 配置文件
-# sudo cat /var/lib/pgsql/data/postgresql.conf
-# 使用 sed 修改 postgresql.conf
-sudo sed -i "s/^#listen_addresses = 'localhost'/listen_addresses = '*'/g" /var/lib/pgsql/data/postgresql.conf
-sudo sh -c "echo 'host    all             all             0.0.0.0/0               md5' >> /var/lib/pgsql/data/pg_hba.conf"
-sudo sed -i 's/^host    all             all             127\.0\.0\.1\/32            ident$/host    all             all             127.0.0.1\/32            md5/' /var/lib/pgsql/data/pg_hba.conf
-# nautilus admin:/var/lib/pgsql/data/pg_hba.conf
-# 重启 PostgreSQL 生效
-sudo systemctl restart postgresql
-# firewall-cmd --zone=public --list-ports
-sudo firewall-cmd --add-port=5432/tcp --permanent
-sudo firewall-cmd --reload
-# 使用默认的 postgres 用户，登录 PostgreSQL 控制台
-sudo -u postgres psql
-CREATE DATABASE testdb;
-CREATE USER lcqh WITH PASSWORD '479368';
-GRANT ALL PRIVILEGES ON DATABASE testdb TO lcqh;
-# 示例（连接刚创建的 testdb）：
-psql -U lcqh -d testdb -W
-
 
 # 安装VirtualBox
 echo "安装VirtualBox..."
