@@ -71,6 +71,11 @@ glib-compile-schemas ~/.local/share/glib-2.0/schemas/
 
 # 列出所有已安装的 Schema
 # gsettings list-schemas
+# gsettings list-recursively org.gnome.shell
+# gsettings list-recursively org.gnome.mutter
+# gsettings list-recursively org.gnome.desktop.interface
+# gsettings list-recursively org.gnome.desktop.wm.preferences
+# gsettings list-recursively org.gnome.Settings
 
 # Hide Top Bar
 # 递归列出某个 Schema 的键值

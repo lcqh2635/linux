@@ -9,6 +9,8 @@
 # gsettings list-recursively org.gnome.mutter
 # gsettings list-recursively org.gnome.desktop.interface
 # gsettings list-recursively org.gnome.desktop.wm.preferences
+# gsettings list-recursively  org.gnome.Settings
+
 # gsettings 修改的是当前用户的 GNOME 配置，必须由 桌面用户（而非 root）执行。如果脚本通过 sudo 运行，命令会被忽略。
 # 设置新窗口居中显示
 gsettings set org.gnome.mutter center-new-windows true
@@ -20,6 +22,13 @@ gsettings set org.gnome.desktop.interface clock-show-weekday true
 # gsettings set org.gnome.desktop.interface clock-show-seconds true
 # 设置窗口按钮位置 (右)
 gsettings set org.gnome.desktop.wm.preferences button-layout 'appmenu:minimize,maximize,close'
+# 开启夜灯
+gsettings set org.gnome.settings-daemon.plugins.color night-light-enabled true
+# 设置夜灯温度（色温，范围 1000~10000，默认约 2700 色温严重偏黄，越小越黄）
+gsettings set org.gnome.settings-daemon.plugins.color night-light-temperature 4000
+# gsettings get org.gnome.settings-daemon.plugins.color night-light-temperature
+# gsettings reset org.gnome.settings-daemon.plugins.color night-light-temperature
+
 # 设置 Background Logo 扩展插件
 # gsettings list-recursively org.fedorahosted.background-logo-extension
 # gsettings set org.fedorahosted.background-logo-extension logo-size 9.0
