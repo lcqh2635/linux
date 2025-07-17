@@ -54,15 +54,12 @@ User Avatar In Quick Settings
 Weather Clock
 Window Gestures
 
-
 # 解决用户 Gnome 扩展无法使用 gsettings 的问题
 for EXT_DIR in ~/.local/share/gnome-shell/extensions/*/; do
     EXT_ID=$(basename "$EXT_DIR")
     echo "处理扩展: $EXT_ID"
-
     if [ -d "$EXT_DIR/schemas" ]; then
         glib-compile-schemas "$EXT_DIR/schemas"
-
         mkdir -p ~/.local/share/glib-2.0/schemas/
         cp "$EXT_DIR/schemas"/*.xml ~/.local/share/glib-2.0/schemas/
     fi
@@ -107,6 +104,8 @@ gsettings set org.gnome.shell.extensions.ibus-tweaker enable-clip-history true
 # gsettings list-recursively org.gnome.shell.extensions.coverflowalttab
 # gsettings set org.gnome.shell.extensions.coverflowalttab switcher-looping-method 'Flip Stack'
 gsettings set org.gnome.shell.extensions.coverflowalttab switcher-looping-method 'Carousel'
+# 设置背景黯淡因素，越大越暗
+gsettings set org.gnome.shell.extensions.coverflowalttab dim-factor 0.0
 gsettings set org.gnome.shell.extensions.coverflowalttab animation-time 0.5
 # gsettings get org.gnome.shell.extensions.coverflowalttab easing-function
 # gsettings set org.gnome.shell.extensions.coverflowalttab easing-function 'ease-out-quad'
@@ -117,6 +116,7 @@ gsettings set org.gnome.shell.extensions.coverflowalttab easing-function 'ease-o
 # gsettings set org.gnome.shell.extensions.coverflowalttab preview-to-monitor-ratio 0.75
 # gsettings get org.gnome.shell.extensions.coverflowalttab preview-to-monitor-ratio
 # gsettings reset org.gnome.shell.extensions.coverflowalttab preview-to-monitor-ratio
+
 # 恢复默认设置
 # gsettings reset-recursively org.gnome.shell.extensions.coverflowalttab
 

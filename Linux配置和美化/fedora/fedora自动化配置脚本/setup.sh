@@ -16,6 +16,11 @@
 # 安装 PostgreSQL 数据库 https://docs.fedoraproject.org/zh_Hans/quick-docs/postgresql/
 
 
+# gsettings list-schemas
+# gsettings list-recursively org.gnome.shell
+# gsettings list-recursively org.gnome.mutter
+# gsettings list-recursively org.gnome.desktop.interface
+# gsettings list-recursively org.gnome.desktop.wm.preferences
 # gsettings 修改的是当前用户的 GNOME 配置，必须由 桌面用户（而非 root）执行。如果脚本通过 sudo 运行，命令会被忽略。
 # 设置新窗口居中显示
 gsettings set org.gnome.mutter center-new-windows true
@@ -29,7 +34,7 @@ gsettings set org.gnome.desktop.interface clock-show-weekday true
 gsettings set org.gnome.desktop.wm.preferences button-layout 'appmenu:minimize,maximize,close'
 # 设置 Background Logo 扩展插件
 # gsettings list-recursively org.fedorahosted.background-logo-extension
-gsettings set org.fedorahosted.background-logo-extension logo-size 9.0
+# gsettings set org.fedorahosted.background-logo-extension logo-size 9.0
 gsettings set org.fedorahosted.background-logo-extension logo-always-visible true
 # 恢复默认设置
 # gsettings reset-recursively org.fedorahosted.background-logo-extension
@@ -66,7 +71,6 @@ gsettings set org.gnome.settings-daemon.plugins.media-keys eject "['F5']"
 gsettings set org.gnome.settings-daemon.plugins.media-keys next "['F8']"
 gsettings set org.gnome.settings-daemon.plugins.media-keys play "['F9']"
 gsettings set org.gnome.settings-daemon.plugins.media-keys previous "['F10']"
-
 
 
 ## 1. 系统基础配置 ==============================================
