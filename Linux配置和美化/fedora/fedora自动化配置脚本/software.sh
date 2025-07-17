@@ -220,6 +220,12 @@ fi
 # 下载 jetbrains-toolbox
 https://www.jetbrains.com/zh-cn/toolbox-app/download/download-thanks.html?platform=linux
 
+
+# 下载  jetbra.zip 以及获取 JetBrains 软件激活码
+# https://3.jetbra.in/
+# https://ipfs.io/ipfs/bafybeih65no5dklpqfe346wyeiak6wzemv5d7z2ya7nssdgwdz4xrmdu6i/
+# https://bafybeih65no5dklpqfe346wyeiak6wzemv5d7z2ya7nssdgwdz4xrmdu6i.ipfs.dweb.link/
+
 # IDEA 虚拟机配置文件存放位置
 cat ~/.config/JetBrains/IntelliJIdea*/idea64.vmoptions
 

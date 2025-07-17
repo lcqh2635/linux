@@ -270,6 +270,9 @@ if [ ! -d "WhiteSur-gtk-theme" ]; then   # 检查目录是否存在
     # 卸载 ./install.sh -r
     # 安装 GTK 主题，设置主题不透明度变体。默认为所有变体
     ./install.sh -o solid -l --round
+    # 设置 panel 图标会导致 overview 增加一个 工作空间列表
+    # ./install.sh -o solid -l --shell -i fedora --round
+    # ./install.sh -o solid -l --shell -i apple --round
     # 修复 libadwaita（不完美）https://github.com/vinceliuice/WhiteSur-gtk-theme?tab=readme-ov-file#fix-for-libadwaita-not-perfect
     # ./install.sh -l
     # ./install.sh -l -c light
