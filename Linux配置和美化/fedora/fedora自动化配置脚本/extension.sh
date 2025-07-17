@@ -5,13 +5,15 @@ echo "开始系统..."
 sudo dnf update -y && sudo dnf upgrade -y
 
 # https://gnome.pages.gitlab.gnome.org/gnome-browser-integration/pages/installation-guide.html
-dnf install gnome-browser-connector
+sudo dnf install -y gnome-browser-connector
 
 # gnome-extensions list
 # gnome-extensions install
 # dnf search gnome-shell-extension*
 # dnf list gnome-shell-extension*
 
+# 可以通过查看插件中的 metadata.json 文件内容中的 settings-schema 配置确定插件配置 schema
+# nautilus ~/.local/share/gnome-shell/extensions
 # 比装用户扩展插件
 Add to Desktop
 Alphabetical App Grid
@@ -38,6 +40,7 @@ Impatience
 # cd ChineseCalendar-20250205
 # ./install.sh
 Lunar Calendar 农历
+# gsettings list-recursively org.gnome.shell.extensions.lunar-calendar
 Net Speed
 Night Theme Switcher
 Privacy Quick Settings
@@ -64,7 +67,6 @@ for EXT_DIR in ~/.local/share/gnome-shell/extensions/*/; do
         cp "$EXT_DIR/schemas"/*.xml ~/.local/share/glib-2.0/schemas/
     fi
 done
-
 glib-compile-schemas ~/.local/share/glib-2.0/schemas/
 
 # 列出所有已安装的 Schema
@@ -116,9 +118,64 @@ gsettings set org.gnome.shell.extensions.coverflowalttab easing-function 'ease-o
 # gsettings set org.gnome.shell.extensions.coverflowalttab preview-to-monitor-ratio 0.75
 # gsettings get org.gnome.shell.extensions.coverflowalttab preview-to-monitor-ratio
 # gsettings reset org.gnome.shell.extensions.coverflowalttab preview-to-monitor-ratio
-
 # 恢复默认设置
 # gsettings reset-recursively org.gnome.shell.extensions.coverflowalttab
+
+
+# Impatience，默认是 0.75
+# gsettings list-recursively org.gnome.shell.extensions.net.gfxmonk.impatience
+gsettings set org.gnome.shell.extensions.net.gfxmonk.impatience speed-factor 1.0
+# gsettings reset-recursively org.gnome.shell.extensions.net.gfxmonk.impatience
+
+# Lunar Calendar 农历
+# gsettings list-recursively org.gnome.shell.extensions.lunar-calendar
+gsettings set org.gnome.shell.extensions.lunar-calendar jrrilinei true
+gsettings set org.gnome.shell.extensions.lunar-calendar show-time false
+gsettings set org.gnome.shell.extensions.lunar-calendar yuyan 0
+# gsettings reset-recursively org.gnome.shell.extensions.lunar-calendar
+
+
+# Quick Settings Tweaks
+# 控制 GNOME 顶部面板快捷设置菜单（Quick Settings）的弹出样式和动画效果
+# gsettings list-recursively org.gnome.shell.extensions.quick-settings-tweaks
+# 启用或禁用 覆盖式菜单样式（即快捷设置面板以独立浮层形式弹出，而非传统的下拉样式）。
+gsettings set org.gnome.shell.extensions.quick-settings-tweaks overlay-menu-enabled true
+# 控制菜单弹出/关闭的 动画时长（毫秒）推荐 200-500（值越大动画越慢）。
+gsettings set org.gnome.shell.extensions.quick-settings-tweaks overlay-menu-animate-duration 500
+gsettings set org.gnome.shell.extensions.quick-settings-tweaks menu-animation-enabled true
+gsettings set org.gnome.shell.extensions.quick-settings-tweaks menu-animation-close-duration 500
+gsettings set org.gnome.shell.extensions.quick-settings-tweaks menu-animation-open-duration 500
+# gsettings reset-recursively org.gnome.shell.extensions.quick-settings-tweaks
+
+
+# Search Light
+# gsettings list-recursively org.gnome.shell.extensions.search-light
+gsettings set org.gnome.shell.extensions.search-light shortcut-search "['<Super>q']"
+# gsettings set org.gnome.shell.extensions.search-light show-panel-icon true
+gsettings set org.gnome.shell.extensions.search-light border-radius 2
+gsettings set org.gnome.shell.extensions.search-light animation-speed 200.0
+gsettings set org.gnome.shell.extensions.search-light background-color (0.0, 0.0, 0.0, 0.25)
+gsettings set org.gnome.shell.extensions.search-light blur-brightness 0.6
+gsettings set org.gnome.shell.extensions.search-light blur-sigma 50.0
+gsettings set org.gnome.shell.extensions.search-light blur-background true
+# gsettings set org.gnome.shell.extensions.search-light background-color (1.0, 1.0, 1.0, 0.25)
+# gsettings reset-recursively org.gnome.shell.extensions.search-light
+
+# Top Bar Organizer
+# gsettings list-recursively org.gnome.shell.extensions.top-bar-organizer
+# gsettings reset-recursively org.gnome.shell.extensions.top-bar-organizer
+gsettings set org.gnome.shell.extensions.top-bar-organizer right-box-order "['netspeed@alynx.one', 'appindicator-kstatusnotifieritem-monit1', 'system-monitor@gnome-shell-extensions.gcampax.github.com', 'workspace-indicator', '/org/gnome/Shell/Extensions/GSConnect/Device/f4357e1331e54396bb61fa530c6fb0db', 'drive-menu', 'FedoraUpdateIndicator', 'ddterm', 'Show Desktop Button Indicator', 'clipboardIndicator', 'screenRecording', 'screenSharing', 'dwellClick', 'a11y', 'keyboard', 'quickSettings']"
+
+# Rounded Window Corners Reborn
+# gsettings list-recursively org.gnome.shell.extensions.rounded-window-corners-reborn
+# 跳过Libadwaita/Libhandy应用（避免与GTK4应用冲突）
+gsettings set org.gnome.shell.extensions.rounded-window-corners-reborn skip-libadwaita-app true
+gsettings set org.gnome.shell.extensions.rounded-window-corners-reborn skip-libhandy-app true
+# 全局圆角设置（核心参数）
+gsettings set org.gnome.shell.extensions.rounded-window-corners-reborn global-rounded-corner-settings "{'padding': <{'left': uint32 1, 'right': 1, 'top': 1, 'bottom': 1}>, 'keepRoundedCorners': <{'maximized': true, 'fullscreen': false}>, 'borderRadius': <uint32 12>, 'smoothing': <0.2>, 'borderColor': <(0.0, 0.0, 0.0, 0.6)>, 'enabled': <true>}"
+# gsettings reset-recursively org.gnome.shell.extensions.rounded-window-corners-reborn
+
+
 
 # Night Theme Switcher
 # 递归列出某个 Schema 的键值
@@ -158,43 +215,6 @@ gsettings set org.gnome.shell.extensions.dash-to-dock background-color 'rgb(26,9
 gsettings set org.gnome.shell.extensions.blur-my-shell.dash-to-dock style-dash-to-dock 2
 
 
-# Search Light
-# gsettings list-recursively org.gnome.shell.extensions.search-light
-gsettings set org.gnome.shell.extensions.search-light shortcut-search "['<Super>q']"
-# gsettings set org.gnome.shell.extensions.search-light show-panel-icon true
-gsettings set org.gnome.shell.extensions.search-light border-radius 2
-gsettings set org.gnome.shell.extensions.search-light animation-speed 200.0
-gsettings set org.gnome.shell.extensions.search-light background-color (0.0, 0.0, 0.0, 0.25)
-gsettings set org.gnome.shell.extensions.search-light blur-brightness 0.6
-gsettings set org.gnome.shell.extensions.search-light blur-sigma 50.0
-gsettings set org.gnome.shell.extensions.search-light blur-background true
-# gsettings set org.gnome.shell.extensions.search-light background-color (1.0, 1.0, 1.0, 0.25)
-# gsettings reset-recursively org.gnome.shell.extensions.search-light
-
-# Top Bar Organizer
-# gsettings list-recursively org.gnome.shell.extensions.top-bar-organizer
-# gsettings reset-recursively org.gnome.shell.extensions.top-bar-organizer
-gsettings set org.gnome.shell.extensions.top-bar-organizer right-box-order "['netspeed@alynx.one', 'appindicator-kstatusnotifieritem-monit1', 'system-monitor@gnome-shell-extensions.gcampax.github.com', 'workspace-indicator', '/org/gnome/Shell/Extensions/GSConnect/Device/f4357e1331e54396bb61fa530c6fb0db', 'drive-menu', 'FedoraUpdateIndicator', 'ddterm', 'Show Desktop Button Indicator', 'clipboardIndicator', 'screenRecording', 'screenSharing', 'dwellClick', 'a11y', 'keyboard', 'quickSettings']"
-
-
-# Rounded Window Corners Reborn
-# gsettings list-recursively org.gnome.shell.extensions.rounded-window-corners-reborn
-# 跳过Libadwaita/Libhandy应用（避免与GTK4应用冲突）
-gsettings set org.gnome.shell.extensions.rounded-window-corners-reborn skip-libadwaita-app true
-gsettings set org.gnome.shell.extensions.rounded-window-corners-reborn skip-libhandy-app true
-# 全局圆角设置（核心参数）
-gsettings set org.gnome.shell.extensions.rounded-window-corners-reborn global-rounded-corner-settings "{'padding': <{'left': uint32 1, 'right': 1, 'top': 1, 'bottom': 1}>, 'keepRoundedCorners': <{'maximized': true, 'fullscreen': false}>, 'borderRadius': <uint32 12>, 'smoothing': <0.2>, 'borderColor': <(0.0, 0.0, 0.0, 0.6)>, 'enabled': <true>}"
-# gsettings reset-recursively org.gnome.shell.extensions.rounded-window-corners-reborn
-
-# Quick Settings Tweaks
-# 控制 GNOME 顶部面板快捷设置菜单（Quick Settings）的弹出样式和动画效果
-# 启用或禁用 覆盖式菜单样式（即快捷设置面板以独立浮层形式弹出，而非传统的下拉样式）。
-gsettings set org.gnome.shell.extensions.quick-settings-tweaks overlay-menu-enabled true
-# 控制菜单弹出/关闭的 动画时长（毫秒）推荐 200-500（值越大动画越慢）。
-gsettings set org.gnome.shell.extensions.quick-settings-tweaks overlay-menu-animate-duration 500
-gsettings set org.gnome.shell.extensions.quick-settings-tweaks menu-animation-enabled true
-gsettings set org.gnome.shell.extensions.quick-settings-tweaks menu-animation-close-duration 500
-gsettings set org.gnome.shell.extensions.quick-settings-tweaks menu-animation-open-duration 500
 
 # 清理无用的包和缓存
 echo "清理未使用的软件包和缓存..."
@@ -202,12 +222,6 @@ sudo dnf autoremove -y
 sudo dnf clean all
 
 echo "系统配置成功完成!"
-
-# 知名禁书
-# git clone https://github.com/michaelfan0310/deep-library.git --depth=1
-
-
-
 
 # 优质推荐 Gnome 扩展
 Add to Desktop
@@ -230,12 +244,9 @@ Lunar Calendar 农历
 IBus Tweaker
 Night Theme Switcher
 Quick Settings Tweaks
-Media Controls
 Search Light
 SettingsCenter
 Top Bar Organizer
-# Tray Icons: Reloaded
-Quick Settings Audio Panel
 Fedora Linux Update Indicator
 Window Gestures
 Show Desktop Button
@@ -281,3 +292,7 @@ gnome-extensions enable hidetopbar@mathieu.bidon.ca
 
 gnome-extensions enable hidetopbar@mathieu.bidon.ca
 gnome-extensions enable rounded-window-corners@fxgn
+
+
+# 知名禁书
+# git clone https://github.com/michaelfan0310/deep-library.git --depth=1
