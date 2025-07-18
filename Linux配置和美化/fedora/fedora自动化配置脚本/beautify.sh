@@ -29,6 +29,9 @@ gsettings set org.gnome.settings-daemon.plugins.color night-light-temperature 40
 # gsettings get org.gnome.settings-daemon.plugins.color night-light-temperature
 # gsettings reset org.gnome.settings-daemon.plugins.color night-light-temperature
 
+# gsettings set org.gnome.shell.weather locations "[<(uint32 2, <('Shenzhen', 'ZGSZ', true, [(0.39357174632472131, 1.9914206765255298)], @a(dd) [])>)>, <(uint32 2, <('Guangzhou', 'ZGGG', false, [(0.4043346158631172, 1.9780398131091426)], [(0.40346195123711998, 1.9765853778835782)])>)>]"
+
+
 # 更新系统并升级所有已安装的包
 echo "开始更新系统并升级所有已安装的包..."
 sudo dnf update -y && sudo dnf upgrade -y
@@ -203,6 +206,7 @@ gsettings set org.gnome.shell.extensions.just-perfection window-demands-attentio
 gsettings set org.gnome.shell.extensions.just-perfection startup-status 0
 # gsettings reset-recursively org.gnome.shell.extensions.just-perfection
 
+# gsettings list-recursively org.gnome.shell.weather
 # gsettings list-recursively org.gnome.mutter
 # gsettings list-recursively org.gnome.desktop.wm.preferences
 # 禁用动态工作区

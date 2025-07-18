@@ -23,6 +23,7 @@ Bluetooth Battery Meter
 Clipboard Indicator
 # Compiz alike magic lamp effect
 Coverflow Alt-Tab
+Color Picker
 ddterm
 # 修复 Hide Top Bar 闪跳 BUG
 Disable unredirect
@@ -32,7 +33,6 @@ Gtk4 Desktop Icons NG (DING)
 Hide Top Bar
 # 右键点击 panel 上的输入法，点击“首选项”，将“候选词排列方向”改为竖直
 IBus Tweaker
-# Logo Menu
 Impatience
 # 安装 Lunar Calendar 农历 扩展插件需要如下内容
 #https://gitlab.gnome.org/Nei/ChineseCalendar/-/archive/20250205/ChineseCalendar-20250205.tar.gz
@@ -40,7 +40,7 @@ Impatience
 # cd ChineseCalendar-20250205
 # ./install.sh
 Lunar Calendar 农历
-# gsettings list-recursively org.gnome.shell.extensions.lunar-calendar
+Logo Menu
 Net Speed
 Night Theme Switcher
 Privacy Quick Settings
@@ -48,6 +48,8 @@ Quick Settings Tweaks
 Rounded Corners
 Rounded Window Corners Reborn
 Search Light
+# 开启模糊搜索
+GNOME Fuzzy App Search
 SettingsCenter
 Show Desktop Button
 # 数值设置为 5
@@ -173,11 +175,20 @@ gsettings set org.gnome.shell.extensions.search-light blur-background true
 # gsettings set org.gnome.shell.extensions.search-light background-color (1.0, 1.0, 1.0, 0.25)
 # gsettings reset-recursively org.gnome.shell.extensions.search-light
 
+# Logo Menu
+# gsettings list-recursively org.gnome.shell.extensions.logo-menu
+gsettings set org.gnome.shell.extensions.logo-menu menu-button-icon-image 1
+gsettings set org.gnome.shell.extensions.logo-menu menu-button-icon-size 20
+gsettings set org.gnome.shell.extensions.logo-menu show-activities-button false
+# 在 Just Profect 中也同时将 activities 隐藏
+gsettings set org.gnome.shell.extensions.just-perfection activities-button false
+# gsettings reset-recursively org.gnome.shell.extensions.logo-menu
+
 # Top Bar Organizer
 # gsettings list-recursively org.gnome.shell.extensions.top-bar-organizer
-gsettings set org.gnome.shell.extensions.top-bar-organizer left-box-order "['activities', 'appMenu']"
+gsettings set org.gnome.shell.extensions.top-bar-organizer left-box-order "['LogoMenu', 'appMenu']"
 gsettings set org.gnome.shell.extensions.top-bar-organizer center-box-order "['dateMenu']"
-gsettings set org.gnome.shell.extensions.top-bar-organizer right-box-order "['appindicator-kstatusnotifieritem-tray-icon tray app', 'netspeed@alynx.one', 'workspace-indicator', 'drive-menu', 'ddterm', 'FedoraUpdateIndicator', 'Show Desktop Button Indicator', 'clipboardIndicator', 'screenRecording', 'screenSharing', 'dwellClick', 'a11y', 'keyboard', 'quickSettings']"
+gsettings set org.gnome.shell.extensions.top-bar-organizer right-box-order "['appindicator-kstatusnotifieritem-tray-icon tray app', 'netspeed@alynx.one', 'workspace-indicator', 'drive-menu', 'ddterm', 'FedoraUpdateIndicator', 'color-picker@tuberry', 'Show Desktop Button Indicator', 'clipboardIndicator', 'screenRecording', 'screenSharing', 'dwellClick', 'a11y', 'keyboard', 'quickSettings']"
 # gsettings set org.gnome.shell.extensions.top-bar-organizer hide "[]"
 # gsettings set org.gnome.shell.extensions.top-bar-organizer show "[]"
 # gsettings reset-recursively org.gnome.shell.extensions.top-bar-organizer
