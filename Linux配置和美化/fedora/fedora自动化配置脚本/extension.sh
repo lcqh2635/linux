@@ -142,6 +142,8 @@ gsettings set com.github.amezin.ddterm background-opacity 1.0
 gsettings set com.github.amezin.ddterm hide-animation-duration 0.3
 gsettings set com.github.amezin.ddterm show-animation-duration 0.2
 # gsettings set com.github.amezin.ddterm window-size 0.6
+gsettings set com.github.amezin.ddterm hide-when-focus-lost true
+gsettings set com.github.amezin.ddterm hide-window-on-esc true
 # gsettings reset-recursively com.github.amezin.ddterm
 
 # Impatience，默认是 0.75
