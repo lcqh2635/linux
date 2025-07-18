@@ -88,6 +88,7 @@ gnome-shell-extension-appindicator \
 gnome-shell-extension-caffeine \
 gnome-shell-extension-auto-move-windows \
 gnome-shell-extension-no-overview \
+gnome-shell-extension-gsconnect \
 gnome-shell-extension-workspace-indicator \
 gnome-shell-extension-forge
 
@@ -107,9 +108,9 @@ gnome-extensions enable appindicatorsupport@rgcjonas.gmail.com
 gnome-extensions enable caffeine@patapon.info
 gnome-extensions enable auto-move-windows@gnome-shell-extensions.gcampax.github.com
 gnome-extensions enable no-overview@fthx
+gnome-extensions enable gsconnect@andyholmes.github.io
 gnome-extensions enable workspace-indicator@gnome-shell-extensions.gcampax.github.com
 gnome-extensions disable forge@jmmaranan.com
-# gnome-extensions enable gsconnect@andyholmes.github.io
 # gnome-extensions enable forge@jmmaranan.com
 
 # 列出所有已安装的 Schema
@@ -191,12 +192,16 @@ gsettings set org.gnome.shell.extensions.blur-my-shell.coverflow-alt-tab blur fa
 
 # Just Perfection（微调 GNOME Shell 的细节，隐藏冗余元素、调整动画速度等）
 echo "正在配置Just Perfection..."
+# gsettings list-recursively org.gnome.shell.extensions.just-perfection
 gsettings set org.gnome.shell.extensions.just-perfection accessibility-menu false
 gsettings set org.gnome.shell.extensions.just-perfection world-clock false
-gsettings set org.gnome.shell.extensions.just-perfection weather false
 gsettings set org.gnome.shell.extensions.just-perfection events-button false
+# gsettings set org.gnome.shell.extensions.just-perfection weather false
+# 概览中工作区切换区缩略图，此处设置为隐藏
+gsettings set org.gnome.shell.extensions.just-perfection workspace false
 gsettings set org.gnome.shell.extensions.just-perfection window-demands-attention-focus true
 gsettings set org.gnome.shell.extensions.just-perfection startup-status 0
+# gsettings reset-recursively org.gnome.shell.extensions.just-perfection
 
 # gsettings list-recursively org.gnome.mutter
 # gsettings list-recursively org.gnome.desktop.wm.preferences

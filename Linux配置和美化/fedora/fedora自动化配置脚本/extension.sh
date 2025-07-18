@@ -76,6 +76,7 @@ glib-compile-schemas ~/.local/share/glib-2.0/schemas/
 # gsettings list-recursively org.gnome.desktop.interface
 # gsettings list-recursively org.gnome.desktop.wm.preferences
 # gsettings list-recursively org.gnome.Settings
+# gsettings list-recursively org.gnome.tweaks
 
 # Hide Top Bar
 # 递归列出某个 Schema 的键值
@@ -133,7 +134,6 @@ gsettings set com.github.amezin.ddterm show-animation-duration 0.2
 # gsettings set com.github.amezin.ddterm window-size 0.6
 # gsettings reset-recursively com.github.amezin.ddterm
 
-
 # Impatience，默认是 0.75
 # gsettings list-recursively org.gnome.shell.extensions.net.gfxmonk.impatience
 gsettings set org.gnome.shell.extensions.net.gfxmonk.impatience speed-factor 1.0
@@ -183,7 +183,12 @@ gsettings set org.gnome.shell.extensions.top-bar-organizer right-box-order "['ap
 # gsettings reset-recursively org.gnome.shell.extensions.top-bar-organizer
 
 
-# 
+# SettingsCenter
+# gsettings list-recursively org.gnome.shell.extensions.SettingsCenter
+gsettings set org.gnome.shell.extensions.SettingsCenter label-menu '快捷应用'
+gsettings set org.gnome.shell.extensions.SettingsCenter show-systemindicator true
+gsettings set org.gnome.shell.extensions.SettingsCenter items '优化;org.gnome.tweaks.desktop;1;org.gnome.tweaks|扩展;org.gnome.Extensions.desktop;1;org.gnome.Extensions|扩展管理器;com.mattjakeman.ExtensionManager.desktop;1;com.mattjakeman.ExtensionManager|密码和密钥;org.gnome.seahorse.Application.desktop;1;org.gnome.seahorse.Application'
+# gsettings reset-recursively org.gnome.shell.extensions.SettingsCenter
 
 
 # Rounded Window Corners Reborn
