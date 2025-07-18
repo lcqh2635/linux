@@ -29,13 +29,6 @@ gsettings set org.gnome.settings-daemon.plugins.color night-light-temperature 40
 # gsettings get org.gnome.settings-daemon.plugins.color night-light-temperature
 # gsettings reset org.gnome.settings-daemon.plugins.color night-light-temperature
 
-# 设置 Background Logo 扩展插件
-# gsettings list-recursively org.fedorahosted.background-logo-extension
-# gsettings set org.fedorahosted.background-logo-extension logo-size 9.0
-gsettings set org.fedorahosted.background-logo-extension logo-always-visible true
-# 恢复默认设置
-# gsettings reset-recursively org.fedorahosted.background-logo-extension
-
 # 更新系统并升级所有已安装的包
 echo "开始更新系统并升级所有已安装的包..."
 sudo dnf update -y && sudo dnf upgrade -y
@@ -95,6 +88,7 @@ gnome-shell-extension-appindicator \
 gnome-shell-extension-caffeine \
 gnome-shell-extension-auto-move-windows \
 gnome-shell-extension-no-overview \
+gnome-shell-extension-workspace-indicator \
 gnome-shell-extension-forge
 
 # sudo dnf install -y gnome-shell-extension-gsconnect
@@ -111,9 +105,11 @@ gnome-extensions enable just-perfection-desktop@just-perfection
 gnome-extensions enable drive-menu@gnome-shell-extensions.gcampax.github.com
 gnome-extensions enable appindicatorsupport@rgcjonas.gmail.com
 gnome-extensions enable caffeine@patapon.info
-gnome-extensions enable gsconnect@andyholmes.github.io
 gnome-extensions enable auto-move-windows@gnome-shell-extensions.gcampax.github.com
 gnome-extensions enable no-overview@fthx
+gnome-extensions enable workspace-indicator@gnome-shell-extensions.gcampax.github.com
+gnome-extensions disable forge@jmmaranan.com
+# gnome-extensions enable gsconnect@andyholmes.github.io
 # gnome-extensions enable forge@jmmaranan.com
 
 # 列出所有已安装的 Schema
@@ -203,12 +199,27 @@ gsettings set org.gnome.shell.extensions.just-perfection window-demands-attentio
 gsettings set org.gnome.shell.extensions.just-perfection startup-status 0
 
 # gsettings list-recursively org.gnome.mutter
+# gsettings list-recursively org.gnome.desktop.wm.preferences
 # 禁用动态工作区
 gsettings set org.gnome.mutter dynamic-workspaces false
 # 设置工作区数量为3（奇数确保有中间位）
 gsettings set org.gnome.desktop.wm.preferences num-workspaces 3
 # 预设工作区名称
-gsettings set org.gnome.desktop.wm.preferences workspace-names "['主工作区', '开发/编程', '网页/娱乐']"
+gsettings set org.gnome.desktop.wm.preferences workspace-names "['休闲区', '工作区', '开发区']"
+# workspace-indicator
+# gsettings list-recursively org.gnome.shell.extensions.workspace-indicator
+gsettings set org.gnome.shell.extensions.workspace-indicator embed-previews false
+# gsettings reset-recursively org.gnome.shell.extensions.workspace-indicator
+
+
+# 设置 Background Logo 扩展插件
+# gsettings list-recursively org.fedorahosted.background-logo-extension
+# gsettings set org.fedorahosted.background-logo-extension logo-size 9.0
+gsettings set org.fedorahosted.background-logo-extension logo-always-visible true
+# 恢复默认设置
+# gsettings reset-recursively org.fedorahosted.background-logo-extension
+
+
 # auto-move-windows
 echo "正在配置auto-move-windows..."
 # gsettings list-recursively org.gnome.shell.extensions.auto-move-windows

@@ -93,7 +93,6 @@ gsettings set org.gnome.shell.extensions.gtk4-ding show-home false
 gsettings set org.gnome.shell.extensions.gtk4-ding show-trash false
 # gsettings reset-recursively org.gnome.shell.extensions.gtk4-ding
 
-
 # Status Area Horizontal Spacing
 gsettings set org.gnome.shell.extensions.status-area-horizontal-spacing hpadding 5
 
@@ -125,6 +124,14 @@ gsettings set org.gnome.shell.extensions.coverflowalttab easing-function 'ease-o
 # gsettings reset org.gnome.shell.extensions.coverflowalttab preview-to-monitor-ratio
 # 恢复默认设置
 # gsettings reset-recursively org.gnome.shell.extensions.coverflowalttab
+
+# ddterm，默认的切换快捷键 F12
+# gsettings list-recursively com.github.amezin.ddterm
+gsettings set com.github.amezin.ddterm background-opacity 1.0
+gsettings set com.github.amezin.ddterm hide-animation-duration 0.3
+gsettings set com.github.amezin.ddterm show-animation-duration 0.2
+# gsettings set com.github.amezin.ddterm window-size 0.6
+# gsettings reset-recursively com.github.amezin.ddterm
 
 
 # Impatience，默认是 0.75
@@ -168,8 +175,16 @@ gsettings set org.gnome.shell.extensions.search-light blur-background true
 
 # Top Bar Organizer
 # gsettings list-recursively org.gnome.shell.extensions.top-bar-organizer
+gsettings set org.gnome.shell.extensions.top-bar-organizer left-box-order "['activities', 'appMenu']"
+gsettings set org.gnome.shell.extensions.top-bar-organizer center-box-order "['dateMenu']"
+gsettings set org.gnome.shell.extensions.top-bar-organizer right-box-order "['appindicator-kstatusnotifieritem-tray-icon tray app', 'netspeed@alynx.one', 'workspace-indicator', 'drive-menu', 'ddterm', 'FedoraUpdateIndicator', 'Show Desktop Button Indicator', 'clipboardIndicator', 'screenRecording', 'screenSharing', 'dwellClick', 'a11y', 'keyboard', 'quickSettings']"
+# gsettings set org.gnome.shell.extensions.top-bar-organizer hide "[]"
+# gsettings set org.gnome.shell.extensions.top-bar-organizer show "[]"
 # gsettings reset-recursively org.gnome.shell.extensions.top-bar-organizer
-gsettings set org.gnome.shell.extensions.top-bar-organizer right-box-order "['netspeed@alynx.one', 'appindicator-kstatusnotifieritem-monit1', 'system-monitor@gnome-shell-extensions.gcampax.github.com', 'workspace-indicator', '/org/gnome/Shell/Extensions/GSConnect/Device/f4357e1331e54396bb61fa530c6fb0db', 'drive-menu', 'FedoraUpdateIndicator', 'ddterm', 'Show Desktop Button Indicator', 'clipboardIndicator', 'screenRecording', 'screenSharing', 'dwellClick', 'a11y', 'keyboard', 'quickSettings']"
+
+
+# 
+
 
 # Rounded Window Corners Reborn
 # gsettings list-recursively org.gnome.shell.extensions.rounded-window-corners-reborn

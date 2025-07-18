@@ -9,6 +9,10 @@ echo "开始更新系统并升级所有已安装的包..."
 sudo dnf update -y && sudo dnf upgrade -y
 echo "系统更新、升级完成..."
 
+# dnf list google-chrome-stable
+sudo dnf install -y google-chrome-stable
+
+
 # 安装一些常用的Flatpak应用（如VSCode, LibreOffice）
 echo "安装基础Flatpak应用程序..."
 flatpak install -y flathub \
