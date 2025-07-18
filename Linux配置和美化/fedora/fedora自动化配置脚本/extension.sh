@@ -90,6 +90,14 @@ gsettings set org.gnome.shell.extensions.hidetopbar animation-time-overview 0.5
 # 恢复默认设置
 # gsettings reset-recursively org.gnome.shell.extensions.hidetopbar
 
+
+# Clipboard Indicator
+# gsettings list-recursively org.gnome.shell.extensions.clipboard-indicator
+gsettings set org.gnome.shell.extensions.clipboard-indicator history-size 10
+gsettings set org.gnome.shell.extensions.clipboard-indicator cache-images false
+# gsettings reset-recursively org.gnome.shell.extensions.clipboard-indicator
+
+
 # Gtk4 Desktop Icons NG
 # gsettings list-recursively org.gnome.shell.extensions.gtk4-ding
 gsettings set org.gnome.shell.extensions.gtk4-ding show-home false
