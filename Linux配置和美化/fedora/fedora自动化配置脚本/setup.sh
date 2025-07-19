@@ -143,26 +143,15 @@ echo "系统更新、升级完成..."
 
 
 
-# 安装必要的多媒体编解码器以支持高效的视频解码	about:support
+# 安装必要的多媒体编解码器以支持高效的视频解码
+# https://gstreamer.freedesktop.org/documentation/installing/on-linux.html?gi-language=c#install-gstreamer-on-fedora
+sudo dnf install -y gstreamer1-devel gstreamer1-plugins-base-tools gstreamer1-doc gstreamer1-plugins-base-devel gstreamer1-plugins-good gstreamer1-plugins-good-extras gstreamer1-plugins-ugly gstreamer1-plugins-bad-free gstreamer1-plugins-bad-free-devel gstreamer1-plugins-bad-free-extras
+
 # dnf list gstreamer1-plugin*
 sudo dnf install -y \
 gstreamer1-plugins-{bad-\*,good-\*,base} \
 gstreamer1-libav \
-gstreamer1-plugin-openh264 mozilla-openh264 \
-gstreamer1-plugins-bad-freeworld
-
-sudo dnf install -y \
-gstreamer1-plugin-fmp4 \
-gstreamer1-plugin-gif \
-gstreamer1-plugin-hsv \
-gstreamer1-plugin-json \
-gstreamer1-plugin-livesync \
-gstreamer1-plugin-mp4 \
-gstreamer1-plugin-reqwest
-
-sudo dnf install -y \
-gstreamer1-plugins-bad-free-extras
-gstreamer1-plugins-good-extras
+gstreamer1-plugins-bad-freeworld \
 gstreamer1-plugins-fc
 
 
@@ -183,9 +172,6 @@ media.peerconnection.video.h264_enabled
 # dnf list mozilla-openh264
 media.gmp-gmpopenh264.version
 
-
-network.http.pipelining
-network.http.pipelining.maxrequests
 
 # 安装多媒体编解码器
 echo "安装多媒体编解码器..."
@@ -282,6 +268,10 @@ echo '[install]
 # 使用阿里云加速仓库，仓库地址可从阿里云官方获取，地址为 https://developer.aliyun.com/mirror/
 registry = "https://registry.npmmirror.com/"
 ' >> ~/.bunfig.toml
+# which nodejs
+# whereis nodejs
+
+
 
 # 配置 Rust Toolchain 反向代理 https://mirrors.ustc.edu.cn/help/rust-static.html
 # 使用 rustup 前，先设置环境变量 RUSTUP_DIST_SERVER （用于更新 toolchain）：
@@ -344,6 +334,11 @@ echo 你刚安装的 cargo 版本号为：$(cargo --version)
 # sudo dnf install -y java-latest-openjdk-headless
 # 仅包含无图形界面的运行时环境（无AWT/Swing的图形依赖）fedora 默认安装这个
 sudo dnf install -y java-21-openjdk-headless
+# which java
+# whereis java
+# ls -l /usr/lib/jvm/
+# 一般为	/usr/lib/jvm/java-21-openjdk
+# 查看 JAVA_HOME 配置    java -XshowSettings:properties -version 2>&1 | grep 'java.home'
 # sudo dnf install -y java-21-openjdk
 # dnf list java-*-openjdk
 # 在 Java 版本之间切换
@@ -399,12 +394,50 @@ GRANT ALL PRIVILEGES ON DATABASE test_db TO lcqh;
 psql -U lcqh -d test_db -W
 
 
-# 安装Docker
+# Fedora 内置 podman，无需安装    https://podman.org.cn/docs/installation#fedora
 echo "安装podman..."
-# 安装核心组件（包含 rootless 支持）
-sudo dnf install -y podman
+# Podman 默认为无守护进程的 rootless 模式（普通用户直接操作）：
+# sudo dnf install -y podman-compose
 # 验证安装
-echo 你刚安装的 podman 版本号为：$(podman --version)
+echo Fedora 内置 podman 版本号为：$(podman --version)
+# 配置国内加速镜像仓库
+cat /etc/containers/registries.conf
+# 备份到同目录（添加 .bak 后缀）
+sudo cp /etc/containers/registries.conf{,.bak}
+# 检查 .bak 文件是否存在
+ls -l /etc/containers
+# 从同目录 .bak 文件恢复
+sudo cp /etc/containers/registries.conf{.bak,}
+# 重启 podman 相关服务（如果使用了 API 服务）
+systemctl restart podman  # 仅当启用了 podman 服务时需执行
+
+sudo sh -c 'cat >> /etc/containers/registries.conf <<EOF
+
+# 定义未指定镜像仓库前缀时，默认搜索的镜像仓库列表
+# 例如执行 `podman pull nginx` 会自动从 "docker.io" 查找 "library/nginx"
+unqualified-search-registries = ["docker.io"]
+
+# Podman 优先尝试从 registry.mirror 拉取镜像，如果加速器不可用/镜像不存在，则自动回退到 location 指定的官方地址
+# 官方仓库地址（最终回退地址）
+[[registry]]
+# 匹配的镜像仓库前缀（支持通配符 `*`）
+# 例如 "docker.io" 会匹配所有 `docker.io/xxx` 的镜像
+prefix = "docker.io"
+# 实际访问的仓库服务器地址
+# Docker Hub 的官方注册表地址
+location = "registry-1.docker.io"
+
+# 镜像加速器地址（优先使用的镜像源）
+# 添加该仓库的镜像加速器（Mirror）以阿里云镜像加速为示例
+[[registry.mirror]]
+# 镜像加速器地址（替换为你的阿里云镜像加速URL）
+location = "mirror.ccs.tencentyun.com"
+# 是否允许不安全的 HTTP 连接（生产环境建议 false）
+insecure = false
+EOF'
+
+
+# podman pull docker.io/library/nginx
 # 后台运行 Nginx
 # podman run -d --name my_nginx -p 8080:80 nginx
 # 查看运行中的容器
