@@ -12,6 +12,15 @@ echo "系统更新、升级完成..."
 # dnf list google-chrome-stable
 sudo dnf install -y google-chrome-stable
 
+# 启用第三方优质库	https://copr.fedorainfracloud.org
+# https://copr.fedorainfracloud.org/coprs/medzik/jetbrains/
+# sudo dnf copr enable medzik/jetbrains
+# https://copr.fedorainfracloud.org/coprs/julianve/open-any-terminal/
+# sudo dnf copr enable julianve/open-any-terminal
+# sudo dnf install open-any-terminal-nautilus
+# https://copr.fedorainfracloud.org/coprs/changyp6/customize/
+# dnf copr enable changyp6/customize 
+
 
 # 安装一些常用的Flatpak应用（如VSCode, LibreOffice）
 echo "安装基础Flatpak应用程序..."
@@ -63,7 +72,6 @@ org.dupot.easyflatpak \
 me.dusansimic.DynamicWallpaper \
 com.github.d4nj1.tlpui \
 app.drey.Warp \
-org.videolan.VLC \
 com.valvesoftware.Steam \
 io.github.Foldex.AdwSteamGtk \
 net.lutris.Lutris \

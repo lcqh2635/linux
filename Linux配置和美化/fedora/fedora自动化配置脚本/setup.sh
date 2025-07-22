@@ -12,6 +12,7 @@
 
 
 # 从源代码安装软件 https://docs.fedoraproject.org/zh_Hans/quick-docs/installing-from-source/
+# tar -zxf archive.tar.gz $ cd archive/ $ ./configure $ make $ sudo make install
 # 在 Fedora 添加或移除软件源 https://docs.fedoraproject.org/zh_Hans/quick-docs/adding-or-removing-software-repositories-in-fedora/
 # 安装 PostgreSQL 数据库 https://docs.fedoraproject.org/zh_Hans/quick-docs/postgresql/
 
@@ -221,7 +222,7 @@ sudo dnf install -y \
     fastfetch \
     flatpak \
     timeshift \
-    evolution \
+    evolution vlc \
     gnome-tweaks \
     gnome-extensions-app \
     libreoffice-langpack-zh-Hans
@@ -318,16 +319,19 @@ EOF
 echo 你刚安装的 rust 版本号为：$(rustc --version)
 echo 你刚安装的 cargo 版本号为：$(cargo --version)
 
-# 安装 SDKMAN!
+# 安装 SDKMAN  https://sdkman.java.net.cn/install/
 # echo "安装SDKMAN..."
 # curl -s "https://get.sdkman.io" | bash
-# source "/home/lcqh/.sdkman/bin/sdkman-init.sh"
+# source "$HOME/.sdkman/bin/sdkman-init.sh"
 # echo 你刚安装的 sdkman 版本号为：$(sdk version)
+# sdk list java
 # sdk install java
 # 安装 Maven/Gradle
 # sdk install maven
 # sdk install mvnd
 # sdk install gradle
+# sdk update && sdk upgrade
+# sdk selfupdate
 
 # 安装 JDK（示例：安装 Temurin JDK 17）https://docs.fedoraproject.org/en-US/quick-docs/installing-java/
 # java-21-openjdk 包含完整的OpenJDK，包括图形化组件（如AWT、Swing、JavaFX等依赖的库）
@@ -350,7 +354,16 @@ echo 你刚安装的 mvn 版本号为：$(mvn --version)
 echo 你刚安装的 gradle 版本号为：$(gradle --version)
 
 
+# 安装 golang	https://learnku.com/go/wikis/38122
 sudo dnf install -y golang
+# 启用 Go Modules 功能
+go env -w GO111MODULE=on
+go env -w GOSUMDB=sum.golang.google.cn
+# 阿里云
+go env -w GOPROXY=https://mirrors.aliyun.com/goproxy/,direct
+# 查看配置是否成功
+go env | grep GOPROXY
+
 
 # 安装 PostgreSQL
 # 参考fedora官方文档 https://docs.fedoraproject.org/zh_CN/quick-docs/postgresql/
@@ -408,20 +421,18 @@ sudo cp /etc/containers/registries.conf{,.bak}
 ls -l /etc/containers
 # 从同目录 .bak 文件恢复
 sudo cp /etc/containers/registries.conf{.bak,}
-# 重启 podman 相关服务（如果使用了 API 服务）
-systemctl restart podman  # 仅当启用了 podman 服务时需执行
 
-sudo sh -c 'cat >> /etc/containers/registries.conf <<EOF
+sudo bash -c 'cat <<EOF >> /etc/containers/registries.conf
 
 # 定义未指定镜像仓库前缀时，默认搜索的镜像仓库列表
-# 例如执行 `podman pull nginx` 会自动从 "docker.io" 查找 "library/nginx"
+# 例如执行 "podman pull nginx" 会自动从 "docker.io" 查找 "library/nginx"
 unqualified-search-registries = ["docker.io"]
 
 # Podman 优先尝试从 registry.mirror 拉取镜像，如果加速器不可用/镜像不存在，则自动回退到 location 指定的官方地址
 # 官方仓库地址（最终回退地址）
 [[registry]]
-# 匹配的镜像仓库前缀（支持通配符 `*`）
-# 例如 "docker.io" 会匹配所有 `docker.io/xxx` 的镜像
+# 匹配的镜像仓库前缀（支持通配符 *）
+# 例如 "docker.io" 会匹配所有 "docker.io/xxx" 的镜像
 prefix = "docker.io"
 # 实际访问的仓库服务器地址
 # Docker Hub 的官方注册表地址
@@ -436,6 +447,16 @@ location = "mirror.ccs.tencentyun.com"
 insecure = false
 EOF'
 
+# 重启 podman 相关服务（如果使用了 API 服务）
+sudo systemctl restart podman  # 仅当启用了 podman 服务时需执行
+systemctl status podman
+# Podman 本身是一个守护进程，但默认不自动启动。可以手动启用
+sudo systemctl enable --now podman.service
+# podman info
+flatpak install -y flathub \
+com.github.marhkb.Pods \
+io.podman_desktop.PodmanDesktop \
+
 
 # podman pull docker.io/library/nginx
 # 后台运行 Nginx
@@ -449,6 +470,7 @@ EOF'
 # systemctl start podman
 # Rootless 用户级 socket
 # systemctl --user enable --now podman.socket
+# podman run -d --name my_container --restart=always nginx
 
 # 安装VirtualBox
 echo "安装VirtualBox..."
@@ -481,8 +503,7 @@ sudo firewall-cmd --reload
 
 # 清理缓存
 echo "清理缓存..."
-dnf autoremove -y
-dnf clean all
+sudo dnf autoremove && sudo dnf clean all
 
 # 完成提示
 echo "==================================================="

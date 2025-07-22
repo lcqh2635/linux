@@ -12,6 +12,13 @@ sudo dnf install -y gnome-browser-connector
 # dnf search gnome-shell-extension*
 # dnf list gnome-shell-extension*
 
+# dnf copr enable huakim/kde-plasma
+gnome-shell-extension-gtk4-ding
+gnome-shell-extension-desktop-icons
+gnome-shell-extension-hidetopbar
+
+
+
 # 可以通过查看插件中的 metadata.json 文件内容中的 settings-schema 配置确定插件配置 schema
 # nautilus ~/.local/share/gnome-shell/extensions
 # 比装用户扩展插件
