@@ -251,6 +251,7 @@ https://www.jetbrains.com/zh-cn/toolbox-app/download/download-thanks.html?platfo
 
 # IDEA 虚拟机配置文件存放位置
 cat ~/.config/JetBrains/IntelliJIdea*/idea64.vmoptions
+nautilus ~/.config/JetBrains
 
 echo "
 -Xms1g

@@ -41,7 +41,8 @@ gsettings set org.gnome.settings-daemon.plugins.color night-light-temperature 40
 # gsettings get org.gnome.settings-daemon.plugins.color night-light-temperature
 # gsettings reset org.gnome.settings-daemon.plugins.color night-light-temperature
 
-# gsettings list-recursively org.gnome.shell.overrides
+# gsettings list-recursively org.gnome.Settings
+# gsettings list-recursively org.gnome.settings-daemon.plugins
 
 # 系统外观主题和Gnome扩展插件优化
 # 自定义快捷键优化，Super-管理窗口、Alt-管理工作区
@@ -217,7 +218,7 @@ sudo dnf install -y libva-utils vulkan-tools
 echo "安装常用应用程序..."
 sudo dnf install -y \
     git wl-clipboard \
-    wget curl htop \
+    wget curl \
     unzip p7zip \
     fastfetch \
     flatpak \
@@ -300,16 +301,13 @@ replace-with = 'ustc'
 # 中国科学技术大学镜像 https://mirrors.ustc.edu.cn/help/crates.io-index.html
 [source.ustc]
 registry = "sparse+https://mirrors.ustc.edu.cn/crates.io-index/"
-
 [registries.ustc]
 index = "sparse+https://mirrors.ustc.edu.cn/crates.io-index/"
-
 
 # 阿里云镜像
 # 使用稀疏协议（sparse）减少元数据下载量，大幅加速
 [source.aliyun]
 registry = "sparse+https://mirrors.aliyun.com/crates.io-index/"
-
 [registries.aliyun]
 index = "sparse+https://mirrors.aliyun.com/crates.io-index/"
 EOF
