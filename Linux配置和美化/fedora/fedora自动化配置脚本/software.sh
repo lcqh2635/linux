@@ -15,11 +15,22 @@ sudo dnf install -y google-chrome-stable
 # 启用第三方优质库	https://copr.fedorainfracloud.org
 # https://copr.fedorainfracloud.org/coprs/medzik/jetbrains/
 # sudo dnf copr enable medzik/jetbrains
+# dnf list goland
+# sudo dnf install -y intellij-idea-ultimate
+# sudo dnf install -y goland webstorm rustrover datagrip android-studio pycharm-professional
 # https://copr.fedorainfracloud.org/coprs/julianve/open-any-terminal/
 # sudo dnf copr enable julianve/open-any-terminal
 # sudo dnf install open-any-terminal-nautilus
 # https://copr.fedorainfracloud.org/coprs/changyp6/customize/
-# dnf copr enable changyp6/customize 
+# dnf copr enable changyp6/customize
+
+# 以下是 VPN 软件
+# https://github.com/clash-verge-rev/clash-verge-rev/releases
+# https://github.com/2dust/v2rayN/releases
+
+# github 下载加速	https://gh-proxy.com/
+# https://gh-proxy.com/github.com/clash-verge-rev/clash-verge-rev/releases/download/v2.3.2/Clash.Verge-2.3.2-1.x86_64.rpm
+# https://gh-proxy.com/github.com/2dust/v2rayN/releases/download/7.13.2/v2rayN-linux-64.AppImage
 
 
 # 安装一些常用的Flatpak应用（如VSCode, LibreOffice）

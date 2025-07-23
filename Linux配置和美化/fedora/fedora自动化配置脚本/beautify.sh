@@ -120,12 +120,11 @@ gnome-extensions disable forge@jmmaranan.com
 # gsettings list-schemas
 # 递归列出某个 Schema 的键值（例如 org.gnome.shell.extensions.dash-to-dock）
 # gsettings list-recursively org.gnome.shell.extensions.dash-to-dock
-# 恢复默认设置
-# gsettings reset-recursively org.gnome.shell.extensions.dash-to-dock
 # 配置 Dash to Dock (自定义Dock栏)
 echo "正在配置Dash to Dock..."
 gsettings set org.gnome.shell.extensions.dash-to-dock dock-position 'BOTTOM'
 gsettings set org.gnome.shell.extensions.dash-to-dock animation-time 0.5
+gsettings set org.gnome.shell.extensions.dash-to-dock show-mounts false
 gsettings set org.gnome.shell.extensions.dash-to-dock hot-keys false
 gsettings set org.gnome.shell.extensions.dash-to-dock click-action 'minimize'
 gsettings set org.gnome.shell.extensions.dash-to-dock scroll-action 'cycle-windows'
@@ -136,6 +135,8 @@ gsettings set org.gnome.shell.extensions.dash-to-dock custom-background-color tr
 gsettings set org.gnome.shell.extensions.dash-to-dock background-color 'rgb(153,193,241)'
 gsettings set org.gnome.shell.extensions.dash-to-dock transparency-mode 'FIXED'
 gsettings set org.gnome.shell.extensions.dash-to-dock background-opacity 0.3
+# 恢复默认设置
+# gsettings reset-recursively org.gnome.shell.extensions.dash-to-dock
 
 # 默认主题色/强调色，蓝色
 # gsettings set org.gnome.shell.extensions.dash-to-dock background-color 'rgb(153,193,241)'

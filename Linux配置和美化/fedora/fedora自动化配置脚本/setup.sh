@@ -228,7 +228,7 @@ sudo dnf install -y \
     libreoffice-langpack-zh-Hans
 # evolution配置qq邮箱授权码： embwnsuwkdjrebge
 
-# 安装 Tauri 2 运行环境依赖包
+# 安装 Tauri 2 运行环境依赖包 https://tauri.app/zh-cn/start/prerequisites/#linux
 sudo dnf check-update
 sudo dnf install -y webkit2gtk4.1-devel \
   openssl-devel \
@@ -253,12 +253,13 @@ sudo dnf install -y @development-tools
 # cat ~/.ssh/id_rsa.pub | wl-copy
 # 配置 Gitee 密钥	https://gitee.com/profile/sshkeys
 # 配置 Github 密钥	https://github.com/settings/keys
+# git add . && git commit -m 'backup' && git push
 
 # 安装Node.js
 echo "安装Node.js..."
 sudo dnf install -y nodejs npm
-echo 你刚安装的 nodejs 版本号为：$(node --version)
-echo 你刚安装的 npm 版本号为：$(npm --version)
+echo 你刚安装的 nodejs 版本号为：$(node -v)
+echo 你刚安装的 npm 版本号为：$(npm -v)
 # 最新地址 淘宝 NPM 镜像站喊你切换新域名啦!
 npm config set registry https://registry.npmmirror.com
 # 安装 Bun
@@ -271,7 +272,6 @@ registry = "https://registry.npmmirror.com/"
 ' >> ~/.bunfig.toml
 # which nodejs
 # whereis nodejs
-
 
 
 # 配置 Rust Toolchain 反向代理 https://mirrors.ustc.edu.cn/help/rust-static.html
