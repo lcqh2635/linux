@@ -17,6 +17,13 @@ ZeroTermux 一开始是不能用sudo命令的，所以需要输入pkg install ts
 ### # 安卓手机使用Termux搭建web服务器（含frp内网穿透、wake on lan远程唤醒）
 参考博客： https://blog.csdn.net/zzj19941115/article/details/121060935
 ZeroTermux 安装SSH： pkg install openssh
+
+
+
+pkg i termux-services
+
+sv-enable ssh-agent && sv-enable sshd
+
 修改ZeroTermux用户/SSH密码： passwd
 启动SSH服务： sshd
 查看本机IP	ifconfig
@@ -40,6 +47,7 @@ Linux管理工具：                                                         pkg
 ```
 pkg install openssh tsu
 passwd
+cat /data/data/com.termux/files/usr/etc/ssh/sshd_config
 sshd && ifccnfig
 echo "sshd" >> ~/.bashrc
 pkg upgrade

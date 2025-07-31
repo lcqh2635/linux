@@ -223,7 +223,7 @@ sudo dnf install -y \
     fastfetch \
     flatpak \
     timeshift \
-    evolution vlc \
+    evolution vlc obs-studio \
     gnome-tweaks \
     gnome-extensions-app \
     libreoffice-langpack-zh-Hans
@@ -258,7 +258,7 @@ sudo dnf install -y @development-tools
 
 # 安装Node.js
 echo "安装Node.js..."
-sudo dnf install -y nodejs npm
+sudo dnf install -y nodejs
 echo 你刚安装的 nodejs 版本号为：$(node -v)
 echo 你刚安装的 npm 版本号为：$(npm -v)
 # 最新地址 淘宝 NPM 镜像站喊你切换新域名啦!
@@ -350,6 +350,44 @@ sudo dnf install -y maven gradle
 echo 你刚安装的 java 版本号为：$(java --version)
 echo 你刚安装的 mvn 版本号为：$(mvn --version)
 echo 你刚安装的 gradle 版本号为：$(gradle --version)
+
+
+# 配置 Gradle 国内加速镜像
+# 创建 Gradle 初始化脚本目录（不存在则新建）
+mkdir -p ~/.gradle/init.d
+
+# 创建镜像配置文件
+cat > ~/.gradle/init.d/mirror.gradle << 'EOF'
+allprojects {
+    buildscript {
+        repositories {
+            // 优先使用阿里云镜像（Spring 官方仓库已包含在内）
+            maven { url "https://maven.aliyun.com/repository/public" }
+            maven { url "https://maven.aliyun.com/repository/spring" } // Spring 专属镜像
+            maven { url "https://maven.aliyun.com/repository/spring-plugin" } // Spring 插件镜像
+            
+            // 备用腾讯云镜像（阿里云故障时自动切换）
+            maven { url "https://mirrors.cloud.tencent.com/nexus/repository/maven-public/" }
+            maven { url "https://mirrors.cloud.tencent.com/nexus/repository/spring/" }
+            
+            // 最后尝试官方仓库（国内通常无法直连）
+            mavenCentral()
+            gradlePluginPortal()
+        }
+    }
+    
+    repositories {
+        // 同上，但移除插件仓库
+        maven { url "https://maven.aliyun.com/repository/public" }
+        maven { url "https://maven.aliyun.com/repository/spring" }
+        maven { url "https://mirrors.cloud.tencent.com/nexus/repository/maven-public/" }
+        mavenCentral()
+    }
+}
+EOF
+
+# 查看配置内容
+cat ~/.gradle/init.d/mirror.gradle
 
 
 # 安装 golang	https://learnku.com/go/wikis/38122

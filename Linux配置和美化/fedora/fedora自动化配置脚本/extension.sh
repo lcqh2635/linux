@@ -340,6 +340,10 @@ git clone https://gitcode.com/gh_mirrors/rou/rounded-window-corners.git --depth=
 cd rounded-window-corners
 just install
 
+git clone https://github.com/flexagoon/rounded-window-corners --depth=1
+cd rounded-window-corners
+just install
+
 # Rounded Corners
 git clone https://github.com/lennart-k/gnome-rounded-corners.git --depth=1
 cd gnome-rounded-corners

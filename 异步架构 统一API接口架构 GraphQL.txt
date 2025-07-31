@@ -1,0 +1,5 @@
+异步架构
+统一API接口架构 GraphQL/如果项目简单更推荐使用Restful API
+函数式编程，避免 OOP
+PostgreSQL
+minio
