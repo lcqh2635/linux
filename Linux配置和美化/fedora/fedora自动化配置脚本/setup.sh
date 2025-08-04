@@ -271,8 +271,12 @@ echo '[install]
 # 使用阿里云加速仓库，仓库地址可从阿里云官方获取，地址为 https://developer.aliyun.com/mirror/
 registry = "https://registry.npmmirror.com/"
 ' >> ~/.bunfig.toml
-# which nodejs
-# whereis nodejs
+# which node
+# whereis node
+# whereis bun
+# 将 IDEA 的 JS/TS 默认运行时环境从 nodejs 改为 bun 操作如下：
+# 1、设置 -> 语言和框架 -> Bun -> /usr/local/bin/bun
+# 2、设置 -> 语言和框架 -> Node.js -> Node解释器 -> /usr/local/bin/bun
 
 
 # 配置 Rust Toolchain 反向代理 https://mirrors.ustc.edu.cn/help/rust-static.html

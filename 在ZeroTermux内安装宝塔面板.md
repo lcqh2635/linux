@@ -3,7 +3,7 @@
 ---
 
 ## **📌 前置条件**
-1. **ZeroTermux 已正确安装**（建议使用最新版）。
+1. **ZeroTermux 已正确安装**（点击 "切换源" 选择 USTC）。
 2. **手机存储授权**（运行 `termux-setup-storage`）。
 3. **稳定的网络**（建议 Wi-Fi，避免流量消耗）。
 4. **至少 2GB 剩余存储空间**（宝塔依赖较多）。
@@ -15,18 +15,40 @@ ZeroTermux 支持 `proot-distro`，可以在其中安装 Ubuntu/Debian，再运�
 
 ### **步骤 1：安装 Ubuntu/Debian**
 ```bash
+# ZeroTermux使用教程 https://zhuanlan.zhihu.com/p/679461195
+
+# chroot 需要 root 权限，手机必须 Root 解锁
+# proot 无法安装宝塔面板，必须使用 chroot
+# 在安装 ZeroTermux 后滑出左侧工具栏，点击 “MOE全能”
+
 pkg install proot-distro
 proot-distro install debian  # 或 Ubuntu
 proot-distro login debian    # 进入 debian 环境
+
+
+proot-distro install archlinux
+# 登录:     
+proot-distro login archlinux
+# 重装:  
+proot-distro reset archlinux
+# 卸载:  
+proot-distro remove archlinux
+
+# 编辑 /etc/pacman.d/mirrorlist，在文件的最顶端添加
+pacman -S vim
+vim /etc/pacman.d/mirrorlist
+Server = https://mirrors.ustc.edu.cn/archlinuxarm/$arch/$repo
 ```
 
 ### **步骤 2：在 Debian 中安装宝塔面板**
 ```bash
 # 更新系统
-apt update && apt upgrade -y
+apt update -y && apt upgrade -y
 
 # 安装必要依赖
-apt install wget curl sudo
+apt install -y wget curl git python neofetch
+yes | apt install pythone git iproute2 locales vim
+
 
 # 宝塔官方推荐安装，已经公测且稳定的版本，每月会更新新功能，推荐使用Debian12系统
 # 宝塔官方地址：https://www.bt.cn/new/download.html
