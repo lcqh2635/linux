@@ -364,6 +364,7 @@ sdk selfupdate
 # sudo dnf install -y maven gradle
 
 echo 你刚安装的 java 版本号为：$(java --version)
+echo 你刚安装的 kotlin 版本号为：$(kotlin --version)
 echo 你刚安装的 mvn 版本号为：$(mvn --version)
 echo 你刚安装的 gradle 版本号为：$(gradle --version)
 

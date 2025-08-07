@@ -24,14 +24,19 @@ sudo dnf install -y google-chrome-stable
 # 下载并安装 Android Studio
 sudo dnf install -y android-studio
 # export JAVA_HOME=/opt/android-studio/jbr
-# 使用 Android Studio 中的 SDK Manager 安装以下内容：
+# 使用 Android Studio 中的 Android SDK 安装以下内容：
     Android SDK Platform
     Android SDK Platform-Tools
     NDK (Side by side)
     Android SDK Build-Tools
     Android SDK Command-line Tools
+# 配置 tauri 安卓 Android 所需的环境变量 https://tauri.app/zh-cn/start/prerequisites/#android    
+echo '
 export ANDROID_HOME="$HOME/Android/Sdk"
 export NDK_HOME="$ANDROID_HOME/ndk/$(ls -1 $ANDROID_HOME/ndk)"
+' >> ~/.bash_profile
+source ~/.bash_profile
+cat ~/.bash_profile
 # 使用 rustup 添加 Android 编译目标：
 rustup target add aarch64-linux-android armv7-linux-androideabi i686-linux-android x86_64-linux-android
 # 创建 tauri 项目
