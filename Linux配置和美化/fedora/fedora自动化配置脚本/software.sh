@@ -32,6 +32,7 @@ sudo dnf install -y android-studio
     Android SDK Command-line Tools
 # 配置 tauri 安卓 Android 所需的环境变量 https://tauri.app/zh-cn/start/prerequisites/#android    
 echo '
+export JAVA_HOME="$HOME/.sdkman/candidates/java/current"
 export ANDROID_HOME="$HOME/Android/Sdk"
 export NDK_HOME="$ANDROID_HOME/ndk/$(ls -1 $ANDROID_HOME/ndk)"
 ' >> ~/.bash_profile

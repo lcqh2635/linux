@@ -284,6 +284,7 @@ registry = "https://registry.npmmirror.com/"
 echo 'export RUSTUP_DIST_SERVER=https://mirrors.ustc.edu.cn/rust-static' >> ~/.bash_profile
 # 以及 RUSTUP_UPDATE_ROOT （用于更新 rustup）：
 echo 'export RUSTUP_UPDATE_ROOT=https://mirrors.ustc.edu.cn/rust-static/rustup' >> ~/.bash_profile
+source ~/.bash_profile
 cat  ~/.bash_profile
 
 echo "安装rust..."
@@ -345,6 +346,14 @@ sdk current
 sdk update && sdk upgrade
 # SDKMAN 自我更新，如果可用，则安装 SDKMAN！的新版本。
 sdk selfupdate
+
+echo '
+export JAVA_HOME="$HOME/.sdkman/candidates/java/current"
+export MAVEN_HOME="$HOME/.sdkman/candidates/maven/current"
+export GRADLE_HOME="$HOME/.sdkman/candidates/gradle/current"
+' >> ~/.bash_profile
+source ~/.bash_profile
+cat ~/.bash_profile
 
 # 安装 JDK（示例：安装 Temurin JDK 17）https://docs.fedoraproject.org/en-US/quick-docs/installing-java/
 # java-21-openjdk 包含完整的OpenJDK，包括图形化组件（如AWT、Swing、JavaFX等依赖的库）
