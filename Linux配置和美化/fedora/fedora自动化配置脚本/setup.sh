@@ -323,23 +323,34 @@ echo 你刚安装的 cargo 版本号为：$(cargo --version)
 
 # 安装 SDKMAN  https://sdkman.java.net.cn/install/
 # echo "安装SDKMAN..."
-# curl -s "https://get.sdkman.io" | bash
-# source "$HOME/.sdkman/bin/sdkman-init.sh"
+curl -s "https://get.sdkman.io" | bash
+source "$HOME/.sdkman/bin/sdkman-init.sh"
+sdk version
 # echo 你刚安装的 sdkman 版本号为：$(sdk version)
-# sdk list java
-# sdk install java
-# 安装 Maven/Gradle
-# sdk install maven
-# sdk install mvnd
-# sdk install gradle
-# sdk update && sdk upgrade
-# sdk selfupdate
+sdk list java
+# sdk uninstall java 24.0.2-graal
+# 默认安装 Temurin(Eclipse) 的最新稳定版 Java，例如：21.0.8-tem
+sdk install java
+sdk install java 24.0.2-graal
+sdk default java 21.0.8-tem
+# 安装 maven/mvnd
+sdk install maven
+sdk install mvnd
+# 安装 Kotlin，他 是一种静态类型编程语言，安卓开发必须搭配 gradle
+sdk install kotlin
+sdk install gradle
+# 查看所有已安装的候选正在使用的版本
+sdk current
+# 刷新 SDKMAN 候选数据库，并检查已安装的候选有哪些可以升级
+sdk update && sdk upgrade
+# SDKMAN 自我更新，如果可用，则安装 SDKMAN！的新版本。
+sdk selfupdate
 
 # 安装 JDK（示例：安装 Temurin JDK 17）https://docs.fedoraproject.org/en-US/quick-docs/installing-java/
 # java-21-openjdk 包含完整的OpenJDK，包括图形化组件（如AWT、Swing、JavaFX等依赖的库）
 # sudo dnf install -y java-latest-openjdk-headless
 # 仅包含无图形界面的运行时环境（无AWT/Swing的图形依赖）fedora 默认安装这个
-sudo dnf install -y java-21-openjdk-headless
+# sudo dnf install -y java-21-openjdk-headless
 # which java
 # whereis java
 # ls -l /usr/lib/jvm/
@@ -350,7 +361,8 @@ sudo dnf install -y java-21-openjdk-headless
 # 在 Java 版本之间切换
 # sudo alternatives --config java
 # nautilus admin:/usr/lib/jvm
-sudo dnf install -y maven gradle
+# sudo dnf install -y maven gradle
+
 echo 你刚安装的 java 版本号为：$(java --version)
 echo 你刚安装的 mvn 版本号为：$(mvn --version)
 echo 你刚安装的 gradle 版本号为：$(gradle --version)

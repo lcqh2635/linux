@@ -99,6 +99,13 @@ gnome-shell-extension-forge
 # sudo dnf install -y gnome-shell-extension-workspace-indicator
 # sudo dnf install -y gnome-shell-extension-system-monitor
 
+# dnf copr enable huakim/kde-plasma
+sudo dnf install -y gradle
+sudo dnf install -y \
+gnome-shell-extension-gtk4-ding \
+gnome-shell-extension-desktop-icons
+
+
 # 启用已安装的扩展
 # gnome-extensions list
 echo "启用已安装的扩展..."
@@ -296,6 +303,7 @@ if [ ! -d "WhiteSur-gtk-theme" ]; then   # 检查目录是否存在
     # git clone https://gitcode.com/gh_mirrors/wh/WhiteSur-gtk-theme.git --depth=1
     # 修改 Nautilus 侧边栏不透明度，参考 https://github.com/vinceliuice/WhiteSur-gtk-theme/issues/1127
     sed -i 's/\$opacity: 0\.96/\$opacity: 1/g' ~/下载/WhiteSur-gtk-theme/src/sass/_colors.scss
+    grep '$opacity' ~/下载/WhiteSur-gtk-theme/src/sass/_colors.scss
     cd WhiteSur-gtk-theme
     # 卸载 ./install.sh -r
     # 安装 GTK 主题，设置主题不透明度变体。默认为所有变体
@@ -310,7 +318,7 @@ if [ ! -d "WhiteSur-gtk-theme" ]; then   # 检查目录是否存在
     ./tweaks.sh -o solid
     # 安装 Firefox 主题
     # firefox & sleep 1 && pkill firefox	# 初始化 firefox 配置
-    ./tweaks.sh -f flat 
+    ./tweaks.sh -f flat
     # 安装 GDM 主题，可通过下面的软件自定义调节
     # flatpak install flathub io.github.realmazharhussain.GdmSettings
     # 不要模糊自定义背景

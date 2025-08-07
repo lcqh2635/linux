@@ -18,19 +18,60 @@ sudo dnf install -y google-chrome-stable
 # dnf list goland
 # sudo dnf install -y intellij-idea-ultimate
 # sudo dnf install -y goland webstorm rustrover datagrip android-studio pycharm-professional
+# sudo dnf install -y jetbrains-fleet
+# 关于 tauri android 应用环境搭建 https://tauri.app/zh-cn/start/prerequisites/#android
+
+# 下载并安装 Android Studio
+sudo dnf install -y android-studio
+# export JAVA_HOME=/opt/android-studio/jbr
+# 使用 Android Studio 中的 SDK Manager 安装以下内容：
+    Android SDK Platform
+    Android SDK Platform-Tools
+    NDK (Side by side)
+    Android SDK Build-Tools
+    Android SDK Command-line Tools
+export ANDROID_HOME="$HOME/Android/Sdk"
+export NDK_HOME="$ANDROID_HOME/ndk/$(ls -1 $ANDROID_HOME/ndk)"
+# 使用 rustup 添加 Android 编译目标：
+rustup target add aarch64-linux-android armv7-linux-androideabi i686-linux-android x86_64-linux-android
+# 创建 tauri 项目
+bun create tauri-app
+# 项目启动前操作
+cd tauri-app
+bun install
+# 如果此处失败了，请在 android-studio 中点击  setting -> 搜索 Android SDK
+bun run tauri android init
+# 启动桌面应用程序
+bun run tauri dev
+# 启动 android 安卓应用程序
+bun run tauri android dev
+  
+
+
 # https://copr.fedorainfracloud.org/coprs/julianve/open-any-terminal/
 # sudo dnf copr enable julianve/open-any-terminal
 # sudo dnf install open-any-terminal-nautilus
 # https://copr.fedorainfracloud.org/coprs/changyp6/customize/
 # dnf copr enable changyp6/customize
 
+
+# sudo dnf copr enable thangckt/thang_foss
+sudo dnf install -y zed rustdesk github-desktop
+
+
 # 以下是 VPN 软件
 # https://github.com/clash-verge-rev/clash-verge-rev/releases
 # https://github.com/2dust/v2rayN/releases
 
 # github 下载加速	https://gh-proxy.com/
-# https://gh-proxy.com/github.com/clash-verge-rev/clash-verge-rev/releases/download/v2.3.2/Clash.Verge-2.3.2-1.x86_64.rpm
+# https://gh-proxy.com/https://github.com/clash-verge-rev/clash-verge-rev/releases/download/autobuild/Clash.Verge-2.4.0+autobuild.0805.44e8a03-1.x86_64.rpm
 # https://gh-proxy.com/github.com/2dust/v2rayN/releases/download/7.13.2/v2rayN-linux-64.AppImage
+
+
+# https://gh-proxy.com/https://github.com/rustdesk/rustdesk/releases/download/1.4.1/rustdesk-1.4.1-0.x86_64.rpm
+# https://github.com/clash-verge-rev/clash-verge-rev/releases/download/autobuild/Clash.Verge-2.4.0+autobuild.0805.44e8a03-1.x86_64.rpm
+# https://gh-proxy.com/https://github.com/2dust/v2rayN/releases/download/7.13.6/v2rayN-linux-64.AppImage
+
 
 
 # 安装一些常用的Flatpak应用（如VSCode, LibreOffice）
