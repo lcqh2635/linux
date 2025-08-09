@@ -226,7 +226,8 @@ sudo dnf install -y \
     evolution vlc obs-studio \
     gnome-tweaks \
     gnome-extensions-app \
-    libreoffice-langpack-zh-Hans
+    libreoffice-langpack-zh-Hans \
+    vagrant VirtualBox virtualbox-guest-additions
 # evolution配置qq邮箱授权码： embwnsuwkdjrebge
 
 # 安装 Tauri 2 运行环境依赖包 https://tauri.app/zh-cn/start/prerequisites/#linux
@@ -346,11 +347,18 @@ sdk current
 sdk update && sdk upgrade
 # SDKMAN 自我更新，如果可用，则安装 SDKMAN！的新版本。
 sdk selfupdate
-
+# 查看环境变量配置，通过 sdkman 安装的所有候选都会自动配置环境变量，用户不需要自己再额外配置
+echo $PATH    
+# 下面的环境变量配置不需要配置，sdkman 已经配置了
 echo '
 export JAVA_HOME="$HOME/.sdkman/candidates/java/current"
+export PATH="$JAVA_HOME/bin:$PATH"
+# 在 ~/.bashrc 或 ~/.zshrc 中确保 SDKMAN! 的 PATH 在最前面
 export MAVEN_HOME="$HOME/.sdkman/candidates/maven/current"
+export PATH="$MAVEN_HOME/bin:$PATH"
+# 替换为你的 Gradle 安装路径
 export GRADLE_HOME="$HOME/.sdkman/candidates/gradle/current"
+export PATH="$GRADLE_HOME/bin:$PATH"
 ' >> ~/.bash_profile
 source ~/.bash_profile
 cat ~/.bash_profile
@@ -371,10 +379,10 @@ cat ~/.bash_profile
 # sudo alternatives --config java
 # nautilus admin:/usr/lib/jvm
 # sudo dnf install -y maven gradle
-
 echo 你刚安装的 java 版本号为：$(java --version)
 echo 你刚安装的 kotlin 版本号为：$(kotlin --version)
-echo 你刚安装的 mvn 版本号为：$(mvn --version)
+echo 你刚安装的 maven 版本号为：$(mvn --version)
+echo 你刚安装的 mvnd 版本号为：$(mvnd --version)
 echo 你刚安装的 gradle 版本号为：$(gradle --version)
 
 
@@ -472,9 +480,12 @@ psql -U lcqh -d test_db -W
 # Fedora 内置 podman，无需安装    https://podman.org.cn/docs/installation#fedora
 echo "安装podman..."
 # Podman 默认为无守护进程的 rootless 模式（普通用户直接操作）：
-# sudo dnf install -y podman-compose
-# 验证安装
 echo Fedora 内置 podman 版本号为：$(podman --version)
+sudo dnf install -y podman-compose
+echo 安装的 podman-compose 版本号为：$(podman-compose --version)
+# 主要用于 登录到容器镜像仓库（Registry），以便拉取（pull）私有镜像或推送（push）镜像到仓库。
+# lcqh2635@gmail.com
+podman login
 # 配置国内加速镜像仓库
 cat /etc/containers/registries.conf
 # 备份到同目录（添加 .bak 后缀）
@@ -504,7 +515,7 @@ location = "registry-1.docker.io"
 # 添加该仓库的镜像加速器（Mirror）以阿里云镜像加速为示例
 [[registry.mirror]]
 # 镜像加速器地址（替换为你的阿里云镜像加速URL）
-location = "mirror.ccs.tencentyun.com"
+location = "docker.1ms.run"
 # 是否允许不安全的 HTTP 连接（生产环境建议 false）
 insecure = false
 EOF'
@@ -520,31 +531,31 @@ com.github.marhkb.Pods \
 io.podman_desktop.PodmanDesktop \
 
 
-# podman pull docker.io/library/nginx
+# podman pull redis
 # 后台运行 Nginx
-# podman run -d --name my_nginx -p 8080:80 nginx
+# podman run -d --name redis_db -p 6379:6379 redis:latest
 # 查看运行中的容器
 # podman ps
 # 查看所有容器（包括已停止的）
 # podman ps -a
+# podman stop redis_db
+# 删除已经运行过，但现在是 stop 停止状态的容器实例，也就是删除 podman run 产生的容器实例。最原始下载的镜像依旧存在
+# podman rm redis_db
+# 删除最原始下载的镜像，也就是删除 podman pull redis 拉取的内容
+# podman rmi redis
 # 查看 Podman 系统服务（适用于 rootful 模式）
 # systemctl status podman
 # systemctl start podman
 # Rootless 用户级 socket
 # systemctl --user enable --now podman.socket
 # podman run -d --name my_container --restart=always nginx
-
-# 安装VirtualBox
-echo "安装VirtualBox..."
-sudo dnf install -y vagrant VirtualBox virtualbox-guest-additions
+podman pull debian:trixie-slim
+podman pull debian:stable-slim
+# -it：分配一个交互式终端（-i 交互式，-t 伪终端）
+# /bin/bash：启动容器后执行的命令（这里是启动 Bash Shell）
+podman run -it --name debian debian:trixie-slim /bin/bash
 
 ## 6. 用户个性化设置 ===========================================
-
-# 设置中文locale
-echo "设置中文locale..."
-sudo dnf install -y langpacks-zh_CN
-localectl set-locale LANG=zh_CN.UTF-8
-
 # 安装 TLP 优化续航
 echo "设置TLP 优化续航..."
 sudo dnf install -y tlp tlp-rdw

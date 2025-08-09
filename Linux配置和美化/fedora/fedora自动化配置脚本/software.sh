@@ -30,9 +30,10 @@ sudo dnf install -y android-studio
     NDK (Side by side)
     Android SDK Build-Tools
     Android SDK Command-line Tools
-# 配置 tauri 安卓 Android 所需的环境变量 https://tauri.app/zh-cn/start/prerequisites/#android    
+# 查看环境变量配置，通过 sdkman 安装的所有候选都会自动配置环境变量，用户不需要自己再额外配置
+echo $PATH    
+# 配置 tauri 安卓 Android 所需的环境变量 https://tauri.app/zh-cn/start/prerequisites/#android   
 echo '
-export JAVA_HOME="$HOME/.sdkman/candidates/java/current"
 export ANDROID_HOME="$HOME/Android/Sdk"
 export NDK_HOME="$ANDROID_HOME/ndk/$(ls -1 $ANDROID_HOME/ndk)"
 ' >> ~/.bash_profile
@@ -43,13 +44,12 @@ rustup target add aarch64-linux-android armv7-linux-androideabi i686-linux-andro
 # 创建 tauri 项目
 bun create tauri-app
 # 项目启动前操作
-cd tauri-app
-bun install
+cd tauri-app && bun install
 # 如果此处失败了，请在 android-studio 中点击  setting -> 搜索 Android SDK
 bun run tauri android init
 # 启动桌面应用程序
 bun run tauri dev
-# 启动 android 安卓应用程序
+# 启动 android 安卓应用程序，在运行该命令之前必须先在 android-studio 中运行内嵌手机，否则执行会卡住没反映
 bun run tauri android dev
   
 

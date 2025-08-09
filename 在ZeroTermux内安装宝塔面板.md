@@ -26,6 +26,33 @@ proot-distro install debian  # 或 Ubuntu
 proot-distro login debian    # 进入 debian 环境
 
 
+# 切换到 root 用户
+su -
+# 安装 sudo
+apt update && apt install -y sudo
+# 显示当前用户（如果是 root，直接操作）
+whoami
+# 将当前用户加入 sudo 组（替换 your_username）
+usermod -aG sudo root
+newgrp sudo
+# 退出重新登录
+exit
+# 配置 debian 中科大加速镜像 https://mirrors.ustc.edu.cn/help/debian.html
+sudo sed -i 's/deb.debian.org/mirrors.ustc.edu.cn/g' /etc/apt/sources.list
+sudo sed -i -e 's|security.debian.org/\? |security.debian.org/debian-security |g' \
+            -e 's|security.debian.org|mirrors.ustc.edu.cn|g' \
+            -e 's|deb.debian.org/debian-security|mirrors.ustc.edu.cn/debian-security|g' \
+            /etc/apt/sources.list
+
+# 配置 ubuntu 中科大加速镜像 https://mirrors.ustc.edu.cn/help/ubuntu.html       
+# podman pull ubuntu:24.04
+# podman run -it --name ubuntu ubuntu:24.04 /bin/bash
+sudo sed -i 's@//.*archive.ubuntu.com@//mirrors.ustc.edu.cn@g' /etc/apt/sources.list.d/ubuntu.sources
+sudo sed -i 's/security.ubuntu.com/mirrors.ustc.edu.cn/g' /etc/apt/sources.list.d/ubuntu.sources
+# sudo sed -i 's/http:/https:/g' /etc/apt/sources.list.d/ubuntu.sources
+# cat /etc/apt/sources.list.d/ubuntu.sources
+
+
 proot-distro install archlinux
 # 登录:     
 proot-distro login archlinux
@@ -60,6 +87,19 @@ wget -O install_panel.sh https://download.bt.cn/install/install_panel.sh && bash
 
 # Ubuntu（宝塔官方）
 wget -O install_panel.sh https://download.bt.cn/install/install_panel.sh && sudo bash install_panel.sh ed8484bec
+
+
+sudo firewall-cmd --add-port=34379/tcp --permanent
+sudo firewall-cmd --reload
+sudo firewall-cmd --list-ports
+# 在 Fedora Linux 系统安装宝塔面板 https://www.bt.cn/new/download.html
+if [ -f /usr/bin/curl ];then sudo curl -sSO https://download.bt.cn/install/install_panel.sh;else wget -O install_panel.sh https://download.bt.cn/install/install_panel.sh;fi;sudo bash install_panel.sh ed8484bec
+# Linux面板 11.0.0 升级企业版命令
+sudo curl https://io.bt.sb/install/update_panel.sh|bash
+# 堡塔命令行工具箱，宝塔常用名 https://www.bt.cn/new/btcode.html
+sudo bt
+# 卸载堡塔
+sudo /etc/init.d/bt stop && sudo chkconfig --del bt && sudo rm -f /etc/init.d/bt && sudo rm -rf /www/server/panel
 ```
 安装完成后，会显示：
 - **面板地址**：`http://<手机IP>:8888`
